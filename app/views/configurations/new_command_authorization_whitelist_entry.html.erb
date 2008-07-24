@@ -1,0 +1,18 @@
+<b style="font-size: 16px;">New Command Authorization Whitelist Entry</b><br /><br />
+
+<%= error_messages_for :command_authorization_whitelist_entry %>
+
+<% form_for(:command_authorization_whitelist_entry, :url => create_command_authorization_whitelist_entry_configuration_url(@configuration)) do |f| %>
+<table>
+  <tr>
+    <td><b>Command:</b></td> 
+    <td><%= f.text_field :command %></td>
+  </tr>
+  <tr><td>&nbsp</td></tr>
+  <tr>
+    <td><%= submit_tag "Create" %></td>
+    <td><input type=button value="Cancel" onclick="window.location.href='<%= command_authorization_whitelist_configuration_url(@configuration) %>'" /></td>
+    <td colspan="2">&nbsp</td>
+  </tr>
+</table>
+<% end %>

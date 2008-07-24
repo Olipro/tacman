@@ -1,0 +1,27 @@
+<b style="font-size: 16px;">New ACL</b><br /><br />
+
+<%= error_messages_for :acl %>
+
+<% form_for(:acl, :url => create_acl_configuration_url(@configuration)) do |f| %>
+<%= text_area_tag :data, @data, :size => '80x15', :wrap => 'off' %>
+    <br /><br />
+    <%= submit_tag "Create" %>
+    <input type=button value="Cancel" onclick="window.location.href='<%= acls_configuration_url(@configuration) %>'" />
+<% end %>
+
+<br /><br />
+<p>
+<b><u>Examples</u></b><br />
+A complete access-list named acl1:<br />
+<pre>
+access-list acl1
+  permit ip 10.0.0.0 0.255.255.255
+  deny network-object-group nog1
+  permit ip any
+</pre>
+
+An empty access-list named acl2:<br />
+<pre>
+access-list acl2
+</pre>
+</p>

@@ -1,0 +1,28 @@
+<b style="font-size: 16px;">Inbox - <%= @manager.name %></b><br />
+<b>Queue Length: <%= @msg_count %></b><br />
+<b>Revision: <%= @manager.inbox_revision %></b><br /><br />
+
+<% if (@manager.inbox_locked?) %>
+<b style="color: #7B2024; font-weight: bold;">Locked until: <%= @manager.inbox_lock.expires_at %></b><br />
+<% end %>
+
+<%= will_paginate @inbox %>
+<table class="index_list">
+<% for message in @inbox %>
+    <tr class="shaded">
+      <td colspan="2" style="border: 1px solid #000000; border-bottom: none;">
+        &nbsp
+        <b>Verb:</b> <i><%=h message.verb %></i>
+        &nbsp&nbsp&nbsp
+        <b>Revision:</b> <%=h message.revision %>
+        &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+        <b>Creation Date/Time:</b> <i><%=h message.created_at.strftime("%Y-%m-%d %H:%M:%S %Z") %></i>
+      </td>
+    </tr>
+    <tr class="shaded">
+      <td style="border: 1px solid #000000;">FILE: <%= message.content_file %><pre><%=h message.content %></pre></td>
+    </tr>
+  <tr><td>&nbsp</td></tr>
+<% end %>
+</table>
+<%= will_paginate @inbox %>

@@ -1,0 +1,3 @@
+-- TacacsPlus Manager log summary --
+
+<% for log in @logs %><%= log.log_fields.join("\t") + "\n" %><% end %>

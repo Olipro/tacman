@@ -1,0 +1,6 @@
+<%= link_to 'Back to Configuration', configuration_url(@configuration) %><br />
+<hr><br />
+
+<% if (@session_user.admin? || @configuration_roles[@configuration.id] == 'admin') %>
+<%= link_to 'Resequence', resequence_whitelist_configuration_url(@configuration), :confirm => "Resequence?", :method => :put %><br />
+<% end %>

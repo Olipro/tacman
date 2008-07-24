@@ -1,0 +1,12 @@
+<%= link_to 'Show All', users_url()%><br />
+
+<% if (!@local_manager.slave?) %>
+    <%= link_to 'Create New', new_user_url()%><br />
+
+    <% if (@session_user.admin?) %>
+    <%= link_to 'Bulk Create', bulk_create_users_url()%><br />
+    <% end %>
+<% end %>
+<hr /><br />
+
+

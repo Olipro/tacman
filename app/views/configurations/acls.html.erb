@@ -1,0 +1,24 @@
+<b style="font-size: 16px;">ACLs</b><br /><br />
+
+<% if @acls.length != 0 %>
+    <% for acl in @acls %>
+        <br /><hr />
+      <% if (@session_user.admin? || @configuration_roles[@configuration.id] == 'admin') %>
+        <% if !acl.in_use? %>
+        <%= link_to "delete", acl_url(acl), :style => "color: #7B2024;",  :confirm => "Delete '#{acl.name}'?", :method => :delete  %>
+        &nbsp &nbsp &nbsp
+        <% end %>
+        <%= link_to "rename", edit_acl_url(acl)  %>
+         &nbsp &nbsp &nbsp
+        <%= link_to "modify", acl_url(acl)  %>
+      <% end %>
+      <%= acl_description(acl) %>
+    <% end %>
+    <hr />
+
+<% else %>
+<b>No ACLs have been created.</b>
+<% end %>
+<br />
+
+

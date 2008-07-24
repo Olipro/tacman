@@ -1,0 +1,15 @@
+<% if (!@user.real_name.blank?) %>
+<%= @user.real_name %>,
+<% else %>
+<%= @user.username %>,
+<% end %>
+<%= @message %>
+
+Your current password information is as follows:
+
+Login password: <%= @login_password %>
+Enable password: <%= @enable_password %>
+
+thank you,
+
+TacacsPlus Manager

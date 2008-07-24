@@ -1,0 +1,62 @@
+<b style="font-size: 24px;"><%= @configuration.name %></b><br /><br /><br />
+
+<%= error_messages_for :configuration %>
+
+<% form_for(:configuration, :url => configuration_url(@configuration), :html => { :method => :put }) do |f| %>
+<table>
+  <tr>
+    <td><b>Name:</b></td> 
+    <td><%= f.text_field :name %></td>
+  </tr>
+  <tr>
+    <td><b>Key:</b></td> 
+    <td><%= f.text_field :key %></td>
+  </tr>
+  <tr>
+    <td><b>Capture Messages for:</b></td> 
+    <td>
+      Accounting<%= f.check_box :log_accounting %> &nbsp
+      Authentication<%= f.check_box :log_authentication %> &nbsp
+      Authorization<%= f.check_box :log_authorization %>
+    </td>
+  </tr>
+  <tr>
+    <td><b>Log level:</b></td> 
+    <td><%= f.select("log_level", [0,1,2,3,4].collect {|x| [ x, x ] }) %> &nbsp <i>*lowering the log level increases verbosity</i></td>
+  </tr>
+  <tr>
+    <td><b>Retain Logs For:</b></td>
+    <td><%= f.text_field(:retain_aaa_logs_for, :size => 1) %> days (0 sets unlimited)</td>
+  </tr>
+  <tr>
+    <td><b>Archive Logs For:</b></td>
+    <td><%= f.text_field(:archive_aaa_logs_for, :size => 1) %> days (0 sets unlimited)</td>
+  </tr>
+  <tr>
+    <td><b>Disabled prompt:</b></td> 
+    <td><%= f.text_area :disabled_prompt, :cols => 50, :rows => 5 %></td>
+  </tr>
+  <tr>
+    <td><b>Login prompt:</b></td> 
+    <td><%= f.text_area :login_prompt, :cols => 50, :rows => 5 %></td>
+  </tr>
+  <tr>
+    <td><b>Password expired prompt:</b></td> 
+    <td><%= f.text_area :password_expired_prompt, :cols => 50, :rows => 5 %></td>
+  </tr>
+  <tr>
+    <td><b>Password prompt:</b></td> 
+    <td><%= f.text_area :password_prompt, :cols => 50, :rows => 5 %></td>
+  </tr>
+  <tr>
+    <td><b>Hide on user home pages:</b></td> 
+    <td><%= f.check_box :is_hidden %></td>
+  </tr>
+  <tr><td>&nbsp</td></tr>
+  <tr>
+    <td><%= submit_tag "Update" %></td>
+    <td><input type=button value="Cancel" onclick="window.location.href='<%= configuration_url(@configuration) %>'" /></td>
+    <td colspan="2">&nbsp</td>
+  </tr>
+</table>
+<% end %>

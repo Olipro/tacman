@@ -1,0 +1,24 @@
+<b style="font-size: 16px;">Authorization AVPairs</b><br /><br />
+
+<% if @author_avpairs.length != 0 %>
+    <% for author_avpair in @author_avpairs %>
+        <br /><hr />
+      <% if (@session_user.admin? || @configuration_roles[@configuration.id] == 'admin') %>
+        <% if !author_avpair.in_use? %>
+        <%= link_to "delete", author_avpair_url(author_avpair), :style => "color: #7B2024;",  :confirm => "Delete '#{author_avpair.name}'?", :method => :delete  %>
+        &nbsp &nbsp &nbsp
+        <% end %>
+        <%= link_to "rename", edit_author_avpair_url(author_avpair)  %>
+         &nbsp &nbsp &nbsp
+        <%= link_to "modify", author_avpair_url(author_avpair)  %>
+      <% end %>
+      <%= author_avpair_description(author_avpair) %>
+    <% end %>
+    <hr />
+
+<% else %>
+<b>No Authorization AVPairs have been created.</b>
+<% end %>
+<br />
+
+

@@ -1,0 +1,14 @@
+<b style="font-size: 16px;">TACACS+ Daemons per Manager</b><br /><br /><br />
+
+<% if (@tacacs_daemons.length > 0) %>
+  <% form_for(:tacacs_daemon, :url => start_stop_selected_tacacs_daemons_url(), :html => { :method => :put }) do |f| %>
+    <%= render :partial => 'list' %>
+  <% end %>
+
+<% else %>
+  <b>No TACACS+ Daemons have been created.</b>
+<% end %>
+
+<br />
+
+

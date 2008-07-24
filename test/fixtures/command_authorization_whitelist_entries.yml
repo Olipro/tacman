@@ -1,0 +1,15 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  acl_id: 1
+  shell_command_object_group_id: 1
+  command: MyString
+  position: 1
+  comment: MyString
+
+two:
+  acl_id: 1
+  shell_command_object_group_id: 1
+  command: MyString
+  position: 1
+  comment: MyString

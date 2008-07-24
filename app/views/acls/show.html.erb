@@ -1,0 +1,56 @@
+<b style="font-size: 16px;">ACL '<%=h @acl.name %>'</b><br /><br />
+
+
+<%= error_messages_for :acl_entry %>
+<%= error_messages_for :acl %>
+
+<%= acl_description(@acl, true) %>
+
+<br /><br /><br /><hr /><br /><br />
+
+<b><u>Add entry</u></b><br /><br />
+<% form_for(:acl_entry, :url => create_entry_acl_url(@acl), :html => {:method => :post} )  do |f| %>
+    <table>
+      <tr>
+        <td><b>Type: </b></td>
+        <td><%= select_tag "kind_of",
+                           "<option value=\"ip\">ip</option><option value=\"nog\">object group</option>",
+                           {:onchange => "if (document.getElementById('kind_of').value == 'ip') {Element.hide('nog'); Element.show('ip');} else {Element.hide('ip'); Element.show('nog');}",
+                            :id => 'kind_of'} %>
+        </td>
+      </tr>
+      <tr> <td><b>Seq: </b></td> <td><%= f.text_field :sequence,:size => 2 %></td></tr>
+      <tr> <td><b>Permission: </b></td> <td><%= f.select :permission, [['permit','permit'], ['deny', 'deny']] %></td></tr>
+      <tr id="nog" style="display: none;">
+        <td><b>Object Group: </b></td>
+        <td>
+          <%= f.select :network_object_group_id,
+                       @acl.configuration.network_object_groups.collect {|p| [ p.name, p.id ] },
+                       { :include_blank => true} %>
+        </td>
+      </tr>
+      <tr id="ip">
+        <td><b>IP: </b></td>
+        <td><%= f.text_field :ip, :size => 15 %></td>
+        <td>&nbsp</td>
+        <td><b>Host Mask: </b></td>
+        <td><%= f.text_field :wildcard_mask, :size => 15  %></td>
+      </tr>
+      <tr> <td><b>Comment: </b></td> <td colspan="4"><%= f.text_field :comment, :size => 50 %></td></tr>
+    </table>
+    <br />
+    <%= submit_tag "Add" %>
+<% end %>
+
+<br />
+    <i>examples:</i><br />
+    <i style="position: relative; left: 50px;" >10.1.0.0 &nbsp 0.0.255.255</i><br />
+    <i style="position: relative; left: 50px;" >10.1.1.128 &nbsp 0.0.0.127</i>
+
+
+
+
+
+
+
+

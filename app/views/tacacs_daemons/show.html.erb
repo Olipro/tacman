@@ -1,0 +1,71 @@
+<b style="font-size: 16px;">TACACS+ Daemon</b><br /><br /><br />
+
+<%= error_messages_for :tacacs_daemon %>
+
+<table>
+  <tr>
+    <td><b>Status:</b></td>
+    <td colspan="2" style="color: #7B2024;"><%= status(@tacacs_daemon) %></td>
+  </tr>
+  <tr>
+    <td><b>serial:</b></td> 
+    <td><%= @tacacs_daemon.serial %></td>
+  </tr>
+  <tr>
+    <td><b>Name:</b></td> 
+    <td><%= @tacacs_daemon.name %></td>
+  </tr>
+  <tr>
+    <td><b>Manager:</b></td> 
+    <% if (@tacacs_daemon.manager_id) %>
+    <td><%= link_to @tacacs_daemon.manager.name, manager_url(@tacacs_daemon.manager) %></td>
+    <% else %>
+    <td><%= link_to @local_manager.name, local_managers_url %></td>
+    <% end %>
+  </tr>
+  <tr>
+    <td><b>Configuration:</b></td> 
+    <td>
+      <% if (@tacacs_daemon.configuration) %>
+        <%= link_to @tacacs_daemon.configuration.name, configuration_url(@tacacs_daemon.configuration) %>
+      <% end %>
+    </td>
+  </tr>
+  <tr>
+    <td><b>Ip:</b></td> 
+    <td><%= @tacacs_daemon.ip %></td>
+  </tr>
+  <tr>
+    <td><b>Port:</b></td> 
+    <td><%= @tacacs_daemon.port %></td>
+  </tr>
+  <tr>
+    <td><b>Maximum Concurrent Clients:</b></td> 
+    <td><%= @tacacs_daemon.max_clients %></td>
+  </tr>
+  <tr>
+    <td><b>Socket Timeout:</b></td> 
+    <td><%= @tacacs_daemon.sock_timeout %></td>
+  </tr>
+  <tr>
+    <td><b>AAA Log File:</b></td> 
+    <td><%= @tacacs_daemon.aaa_log_file %></td>
+  </tr>
+  <tr>
+    <td><b>AAA Scratch File:</b></td> 
+    <td><%= @tacacs_daemon.aaa_scratch_file %></td>
+  </tr>
+  <tr>
+    <td><b>Configuration File:</b></td> 
+    <td><%= @tacacs_daemon.configuration_file %></td>
+  </tr>
+  <tr>
+    <td><b>Error Log File:</b></td> 
+    <td><%= @tacacs_daemon.error_log_file %></td>
+  </tr>
+  <tr>
+    <td><b>PID File:</b></td> 
+    <td><%= @tacacs_daemon.pid_file %></td>
+  </tr>
+</table>
+

@@ -1,0 +1,31 @@
+
+<b style="font-size: 16px;">Shell Command Object Group '<%=h @shell_command_object_group.name %>'</b><br /><br />
+
+
+<%= error_messages_for :shell_command_object_group_entry %>
+<%= error_messages_for :shell_command_object_group %>
+
+<%= scog_description(@shell_command_object_group, true) %>
+
+<br /><br /><br /><hr /><br /><br />
+
+<b><u>Add entry</u></b><br /><br />
+<% form_for(:shell_command_object_group_entry, :url => create_entry_shell_command_object_group_url(@shell_command_object_group), :html => {:method => :post} )  do |f| %>
+    <table>
+      <tr> <td><b>Seq: </b></td> <td><%= f.text_field :sequence,:size => 2 %></td></tr>
+      <tr> <td><b>Command: </b></td> <td><%= f.text_field :command, :size => 50 %></td></tr>
+    </table>
+    <br />
+    <%= submit_tag "Add" %>
+<% end %>
+
+<br />
+    <i>examples:</i><br />
+    <i style="position: relative; left: 50px;" >^show version <cr>$</i><br />
+    <i style="position: relative; left: 50px;" >write (terminal|memory)</i>
+
+
+
+
+
+

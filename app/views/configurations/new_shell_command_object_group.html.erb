@@ -1,0 +1,26 @@
+<b style="font-size: 16px;">New Shell Command Object Group</b><br /><br />
+
+<%= error_messages_for :shell_command_object_group %>
+
+<% form_for(:shell_command_object_group, :url => create_shell_command_object_group_configuration_url(@configuration)) do |f| %>
+<%= text_area_tag :data, @data, :size => '80x15', :wrap => 'off' %>
+    <br /><br />
+    <%= submit_tag "Create" %>
+    <input type=button value="Cancel" onclick="window.location.href='<%= shell_command_object_groups_configuration_url(@configuration) %>'" />
+<% end %>
+
+<br /><br />
+<p>
+<b><u>Examples</u></b><br />
+A complete shell-command-object-group named command_list1:<br />
+<pre>
+shell-command-object-group command_list1
+  ^show version <cr>$
+  ^write terminal <cr>$
+</pre>
+
+An empty shell-command-object-group named command_list2:<br />
+<pre>
+shell-command-object-group command_list2
+</pre>
+</p>

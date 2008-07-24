@@ -1,0 +1,55 @@
+### to dump exception backtrace use error.backtrace.join("\n")
+### curl -i -X POST -d manager[base_url]=https://localhost:3001/managers http://localhost:3000/managers/register
+### script/plugin install acts_as_list
+### gem install mislav-will_paginate --source http://gems.github.com/
+### gem install chronic packet
+### rake gems:install
+### rake gems:unpack GEM=hpricot
+
+
+features & bugs
+---------------
+* per user password history
+
+* verify all workers
+
+* test account lockout
+
+* test revision mismatch
+
+* test custom pw hist length
+
+* test log search of slave logs
+
+* script to port users to new system
+User.find(:all).each {|u| puts "#{u.username}, #{u.hashed_password}, #{u.hashed_enable}, #{u.salt}, #{u.first_name} #{u.last_name}, #{u.email},, #{u.department}\n"}
+
+* script to import nogs, acls, etc...
+
+* import old logs into new system
+
+
+
+questions
+---------
+- if a system message generates an error on a slave, then what happens?
+- what mail notifications are sent from slave?
+
+
+
+tests & doc
+-----------
+
+* help document
+
+* log rotate for various logs
+
+* hash out xml views
+
+* tests for slave system restrictions
+
+* test write_remote_inbox with and without backgroundrb started
+
+* grab latest version of backgroundrb from svn
+
+* make sure un-approved or suspended users arent written to td config file

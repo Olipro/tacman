@@ -1,0 +1,77 @@
+    <b style="font-size: 24px;"><%= @configuration.name %></b><br /><br /><br />
+
+    <b style="font-size: 16px;"><%= pluralize(@configuration.configured_users.count(:conditions => "state = 'approved'"), "User" ) %></b><br />
+    <table class="index_list">
+        <tr><td colspan="8" style="border-bottom: 1px solid #000000;"><%= will_paginate @users %></td></tr>
+        <tr><td>&nbsp</td></tr>
+        <tr>
+            <th>&nbsp</th>
+            <th>Username</th>
+            <th>Role</th>
+            <th>User Group</th>
+            <th>&nbsp</th>
+        </tr>
+    
+        <% shaded = true %>
+        <% for user in @users %>
+          <% cu = user.configured_users.find(:first, :conditions => "configuration_id = #{@configuration.id}") %>
+          <% if (cu.suspended?) %>
+                <tr class="disabled">
+                <% shaded = true %>
+          <% elsif (shaded) %>
+                <tr class="shaded">
+                <% shaded = false %>
+          <% else %>
+                <tr>
+                <% shaded = true %>
+          <% end %>
+
+            <td>
+              <%= link_to( image_tag('delete_button.png', :border => 'none'), configured_user_url(cu), :confirm => "Remove #{user.username} from configuration?", :method => :delete) %>
+              &nbsp
+              <%= link_to( image_tag('edit_button.png', :border => 'none'), edit_configured_user_url(cu)) %>
+            </td>
+
+            <% if (!user.real_name.blank?) %>
+              <td nowrap><a href="#" class="tip"><%= user.username %><span><%= user.real_name %></span></a></td>
+            <% else %>
+              <td><%= user.username %></td>
+            <% end %>
+
+            <td><%= configured_user_role_highlight(cu) %></td>
+            <td>
+              <%= link_to(cu.user_group.name, user_groups_configuration_url(@configuration) ) if (cu.user_group) %>
+            </td>
+
+            <td>
+              <% if (cu.active?) %>
+                <%= image_tag('checked.png', :border => 'none') %> active
+                &nbsp&nbsp
+                <%= link_to(image_tag('unchecked.png', :border => 'none'), suspend_configured_user_url(cu),
+                                        :confirm => "Suspend user?", :method => :put) %> suspended
+              <% else %>
+                <%= link_to(image_tag('unchecked.png', :border => 'none'), activate_configured_user_url(cu),
+                                        :confirm => "Activate user?", :method => :put) %> active
+                &nbsp&nbsp
+                <%= image_tag('checked.png', :border => 'none') %> suspended
+              <% end %>
+            </td>
+
+            <% if (!cu.notes.blank?) %>
+              <td nowrap><a href="#" class="tip"><b><u>notes</u></b><span><pre><%= cu.notes %></pre></span></a></td>
+            <% else %>
+              <td>&nbsp</td>
+            <% end %>
+
+            <td>
+              <% if (cu.overrides_user_group?) %><i style="color: #7B2024;">USER GROUP OVERRIDDEN</i> <% end %>
+            </td>
+        </tr>
+        <% end %>
+        <tr><td>&nbsp</td></tr>
+        <tr><td colspan="8" style="border-top: 1px solid #000000;"><%= will_paginate @users %></td></tr>
+    </table>
+
+
+<br /><br /><br />
+

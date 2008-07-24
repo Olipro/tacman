@@ -1,0 +1,21 @@
+<b style="font-size: 16px;">User Groups</b><br /><br />
+
+<% if @user_groups.length != 0 %>
+    <% for user_group in @user_groups %>
+        <br /><hr />
+        <% if (@session_user.admin? || @configuration_roles[@configuration.id] == 'admin') %>
+          <% if !user_group.in_use? %>
+          <%= link_to "delete", user_group_url(user_group), :style => "color: #7B2024;",  :confirm => "Delete '#{user_group.name}'?", :method => :delete  %>
+          &nbsp &nbsp &nbsp
+          <% end %>
+          <%= link_to "edit", edit_user_group_url(user_group)  %>
+        <% end %>
+        <%= user_group_description(user_group) %>
+    <% end %>
+    <hr />
+<% else %>
+<b>No User Groups have been created.</b>
+<% end %>
+<br />
+
+

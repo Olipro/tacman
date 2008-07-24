@@ -1,0 +1,51 @@
+<b style="font-size: 16px;"><%= pluralize(@log_count, "AAA Log" ) %></b><br /><br />
+
+
+<% if (@log_count != 0) %>
+    <b>Current Time: </b><%= Time.now.strftime("%Y-%m-%d %H:%M:%S %Z") %></b>
+    <table id="logs">
+    <tr>
+      <td colspan="<%= AaaLog.short_log_fields_header.length %>">
+        <% if @search_opts %>
+            <%= will_paginate @logs, :params => @search_opts %>
+        <% else %>
+            <%= will_paginate @logs %>
+        <% end %>
+      </td>
+    </tr>
+
+    <tr>
+        <% for field in AaaLog.short_log_fields_header %>
+        <th><%= field %></th>
+        <% end %>
+    </tr>
+
+    <% shaded = true %>
+    <% for log_entry in @logs %>
+    <tr <% if shaded %> class="shaded" <% end %> >
+        <% for field in log_entry.short_log_fields %>
+        <td><%=h field %></td>
+        <% end %>
+    </tr>
+    <% if shaded
+            shaded = false
+        else
+            shaded = true
+        end
+    %>
+    <% end %>
+
+    <tr>
+        <td colspan="<%= AaaLog.log_fields_header.length %>">
+        <% if @search_opts %>
+            <%= will_paginate @logs, :params => @search_opts %>
+        <% else %>
+            <%= will_paginate @logs %>
+        <% end %>
+        </td>
+    </tr>
+    </table>
+
+    <br /> <br />
+
+<% end %>

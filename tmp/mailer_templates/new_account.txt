@@ -1,0 +1,5 @@
+This message is to inform you of the creation of your TACACS+ account.
+The next steps you need to take are to:
+
+1) log into the system and update your password information
+2) place a membership request to 1 or more configurations within the system

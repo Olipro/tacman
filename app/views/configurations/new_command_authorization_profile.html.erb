@@ -1,0 +1,28 @@
+<b style="font-size: 16px;">New Command Authorization Profile</b><br /><br />
+
+<%= error_messages_for :command_authorization_profile %>
+
+<% form_for(:command_authorization_profile, :url => create_command_authorization_profile_configuration_url(@configuration)) do |f| %>
+<%= text_area_tag :data, @data, :size => '80x15', :wrap => 'off' %>
+    <br /><br />
+    <%= submit_tag "Create" %>
+    <input type=button value="Cancel" onclick="window.location.href='<%= command_authorization_profiles_configuration_url(@configuration) %>'" />
+<% end %>
+
+<br /><br />
+<p>
+<b><u>Examples</u></b><br />
+A complete command-authorization-profile named profile1:<br />
+<pre>
+command-authorization-profile profile1
+  command /show run/ access-list acl1
+  command /sho ver/
+  shell-command-object-group scog1
+  shell-command-object-group command_list1 access-list acl1
+</pre>
+
+An empty command-authorization-profile named profile2:<br />
+<pre>
+command-authorization-profile profile2
+</pre>
+</p>

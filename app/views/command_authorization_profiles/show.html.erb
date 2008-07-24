@@ -1,0 +1,39 @@
+<b style="font-size: 16px;">Command Authorization Profile '<%=h @command_authorization_profile.name %>'</b><br /><br />
+
+
+<%= error_messages_for :command_authorization_profile_entry %>
+<%= error_messages_for :command_authorization_profile %>
+
+<%= command_authorization_profile_description(@command_authorization_profile, true) %>
+
+<br /><br /><br /><hr /><br /><br />
+
+<b><u>Add entry</u></b><br /><br />
+<% form_for(:command_authorization_profile_entry, :url => create_entry_command_authorization_profile_url(@command_authorization_profile), :html => {:method => :post} )  do |f| %>
+    <table>
+      <tr>
+        <td><b>Type: </b></td>
+        <td><%= select_tag "kind_of",
+                           "<option value=\"command\">command</option><option value=\"scog\">object group</option>",
+                           {:onchange => "if (document.getElementById('kind_of').value == 'command') {Element.hide('scog'); Element.show('command');} else {Element.hide('command'); Element.show('scog');}",
+                            :id => 'kind_of'} %>
+        </td>
+      </tr>
+      <tr> <td><b>Seq: </b></td> <td><%= f.text_field :sequence,:size => 2 %></td></tr>
+      <tr> <td><b>ACL: </b></td> <td><%= f.select :acl_id, @command_authorization_profile.configuration.acls.collect {|p| [ p.name, p.id ] }, { :include_blank => true } %></td></tr>
+      <tr id="scog" style="display: none;">
+        <td><b>Object Group: </b></td>
+        <td>
+          <%= f.select :shell_command_object_group_id,
+                       @command_authorization_profile.configuration.shell_command_object_groups.collect {|p| [ p.name, p.id ] },
+                       { :include_blank => true} %>
+        </td>
+      </tr>
+      <tr id="command">
+        <td><b>Command: </b></td>
+        <td><%= f.text_field :command, :size => 20 %></td>
+      </tr>
+    </table>
+    <br />
+    <%= submit_tag "Add" %>
+<% end %>

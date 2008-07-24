@@ -1,0 +1,9 @@
+<b style="font-size: 16px;">Error Log</b><br /><br /><br />
+
+<%= error_messages_for :tacacs_daemon %>
+<% log = @tacacs_daemon.error_log %>
+<pre><%= log %></pre>
+
+<% if (log.length > 0) %>
+<%= link_to "Erase Log", clear_error_log_tacacs_daemon_url(@tacacs_daemon), :method => :put %>
+<% end %>

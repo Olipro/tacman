@@ -1,0 +1,67 @@
+<b style="font-size: 16px;"><%= pluralize(User.count, "User" ) %></b><br /><br />
+
+  <table class="index_list">
+    <tr><td colspan="9" style="border-bottom: 1px solid #000000;"><%= will_paginate @users %></td></tr>
+    <tr><td>&nbsp</td></tr>
+    <tr>
+        <th>&nbsp</th>
+        <th>Username</th>
+        <th>Role</th>
+        <th>Real Name</th>
+        <th>Department</th>
+        <th>Last Login</th>
+        <th>&nbsp</th>
+        <th>&nbsp</th>
+    </tr>
+
+    <% shaded = true %>
+    <% for user in @users %>
+        <% if (user.disabled?) %>
+            <tr class="disabled">
+            <% shaded = true %>
+        <% elsif (shaded) %>
+            <tr class="shaded">
+            <% shaded = false %>
+        <% else %>
+            <tr>
+            <% shaded = true %>
+        <% end %>
+
+        <td>
+          <%= link_to( image_tag('delete_button.png', :border => 'none'), user_url(user), :confirm => "Delete user #{user.username}?", :method => :delete) %>
+          &nbsp
+          <%= link_to( image_tag('edit_button.png', :border => 'none'), edit_user_url(user)) %>
+          &nbsp
+          <%= link_to image_tag('view_button.png', :border => 'none'), user_url(user) %>
+        </td>
+        <td><%= user.username %></td>
+        <td><%= user_role_highlight(user) %></td>
+        <td><%=h user.real_name %></td>
+        <td><%=h user.department %></td>
+
+        <% if (!user.last_login.blank?) %>
+          <td><%= user.last_login %></td>
+        <% else %>
+            <td><i>never</i></td>
+        <% end %>
+
+        <% if (user.allow_web_login) %>
+          <td>&nbsp</td>
+        <% else %>
+            <td><i>NoWebLogin</i></td>
+        <% end %>
+
+        <% if (!user.notes.blank?) %>
+          <td nowrap><a href="#" class="tip"><b><u>notes</u></b><span><pre><%= user.notes %></pre></span></a></td>
+        <% else %>
+          <td>&nbsp</td>
+        <% end %>
+
+        </tr>
+    <% end %>
+    <tr><td>&nbsp</td></tr>
+    <tr><td colspan="9" style="border-top: 1px solid #000000;"><%= will_paginate @users %></td></tr>
+  </table>
+    <br /><br />
+
+

@@ -1,0 +1,2 @@
+module CommandAuthorizationWhitelistEntriesHelper
+end

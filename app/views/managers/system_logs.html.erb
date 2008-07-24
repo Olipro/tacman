@@ -1,0 +1,39 @@
+<b style="font-size: 16px;"><%= pluralize(@log_count, "Log Entry" ) %></b><br /><br />
+
+<% if (@log_count != 0) %>
+    <b>Current Time: </b><%= Time.now.strftime("%Y-%m-%d %H:%M:%S %Z") %></b>
+    <table id="logs">
+    <tr>
+        <td colspan="<%= SystemLog.log_fields_header.length %>">
+        <%= will_paginate @logs %>
+        </td>
+    </tr>
+    <tr>
+    <% for field in SystemLog.log_fields_header %>
+    <th><%= field %></th>
+    <% end %>
+    </tr>
+    <% shaded = true %>
+    <% for log_entry in @logs %>
+    <tr <% if shaded %> class="shaded" <% end %> >
+        <% for field in log_entry.log_fields %>
+        <td><%=h field %></td>
+        <% end %>
+    </tr>
+    <% if shaded
+            shaded = false
+        else
+            shaded = true
+        end
+    %>
+    <% end %>
+    <tr>
+        <td colspan="<%= SystemLog.log_fields_header.length %>">
+        <%= will_paginate @logs %>
+        </td>
+    </tr>
+    </table>
+
+    <br /> <br />
+
+<% end %>

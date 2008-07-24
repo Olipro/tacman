@@ -1,0 +1,17 @@
+<%= link_to 'Back to Configuration', configuration_url(@configuration) %><br />
+<%= link_to 'Show All', user_groups_configuration_url(@configuration) %><br />
+
+<% if (@session_user.admin? || @configuration_roles[@configuration.id] == 'admin') %>
+<%= link_to 'Create New', new_user_group_configuration_url(@configuration) %><br />
+<% end %>
+
+<hr><br />
+<% if (@user_group && (@session_user.admin? || @configuration_roles[@configuration.id] == 'admin') ) %>
+  <%= link_to 'Edit', edit_user_group_url(@user_group) %><br />
+  <%= link_to 'Changelog', changelog_user_group_url(@user_group) %><br />
+  <br />
+
+  <% if (!@user_group.in_use?) %>
+  <%= link_to 'Delete', user_group_url(@user_group), :confirm => "Delete user-group #{@user_group.name}?", :method => :delete %><br />
+  <% end %>
+<% end %>

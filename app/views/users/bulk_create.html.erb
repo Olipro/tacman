@@ -1,0 +1,37 @@
+<b style="font-size: 16px;">Bulk Create Users</b><br /><br />
+
+<% if (@import_errors) %>
+<div class="errorExplanation" id="errorExplanation">
+  <h2>Import Error</h2><br />
+  <% @import_errors.each_pair do |username,errors| %>
+    <% errors.each do |error| %>
+        <%= "User #{username}: #{error}" %>
+    <% end %>
+  <% end %>
+</div>
+<% end %>
+
+
+<p>
+Only one entry per line. Fields should be comma delimited.<br />
+If salt is provided, then passwords are assumed to be SHA1 encrypted based upon that salt.<br />
+If no salt is provided, then passwords are assumed to be cleartext.<br /><br />
+Fields: <i>username, login_password, enable_password, salt, real_name, email, alerts_email, department</i><br />
+</p>
+
+<% form_for(:user, :url => import_users_url) do |f| %>
+    <%= text_area_tag :data, @data, :size => '100x15', :wrap => 'off' %>
+    <br /><br />
+    <%= submit_tag "Create" %>
+<% end %>
+
+<br />
+
+<p>
+<u>Examples</u>
+<pre>
+user1, password, password, , User One, user1@localhost, page.user1@localhost, Networking
+user2, db146920c57a2f5baa02e1da2f7df8d00674b0a6, db146920c57a2f5baa02e1da2f7df8d00674b0a6, kEmi7n4iACMyBDQt
+user3, password, password
+</pre>
+</p>

@@ -1,0 +1,12 @@
+<%= link_to 'Back to Configuration', configuration_url(@command_authorization_profile.configuration) %><br />
+<%= link_to 'Show All', command_authorization_profiles_configuration_url(@command_authorization_profile.configuration) %><br />
+<%= link_to 'Create New', new_command_authorization_profile_configuration_url(@command_authorization_profile.configuration) %><br />
+<hr><br />
+<%= link_to 'Modify', command_authorization_profile_url(@command_authorization_profile) %><br />
+<%= link_to 'Rename', edit_command_authorization_profile_url(@command_authorization_profile) %><br />
+<%= link_to 'Resequence', resequence_command_authorization_profile_url(@command_authorization_profile), :confirm => "Resequence?", :method => :put %><br />
+<%= link_to 'Changelog', changelog_command_authorization_profile_url(@command_authorization_profile) %><br />
+<br />
+<% if !@command_authorization_profile.in_use? %>
+<%= link_to 'Delete', command_authorization_profile_url(@command_authorization_profile), :confirm => "Delete command-authorization-profile #{@command_authorization_profile.name}?", :method => :delete %><br />
+<% end %>

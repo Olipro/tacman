@@ -1,0 +1,41 @@
+<% if (@session_user.admin?) %>
+<%= link_to 'Show All', configurations_url %><br />
+<%= link_to 'Create New', new_configuration_url %><br />
+<hr /><br />
+<% end %>
+
+<% if (@session_user.admin? || @configuration_roles[@configuration.id] == 'admin') %>
+<%= link_to 'Publish', publish_configuration_url(@configuration), :method => :put %><br />
+<% end %>
+
+<%= link_to 'View Settings', settings_configuration_url(@configuration) %><br />
+<%= link_to 'View Members', configuration_url(@configuration) %><br />
+
+<% if (@session_user.admin? || @configuration_roles[@configuration.id] == 'admin') %>
+<%= link_to 'View Requests', membership_requests_configuration_url(@configuration) %><br />
+<%= link_to 'Edit Settings', edit_configuration_url(@configuration) %><br />
+<% end %>
+
+<% if (@session_user.admin?) %>
+<br />
+<%= link_to 'Delete', configuration_url(@configuration), :confirm => "Confirm delete.", :method => :delete %><br />
+<% end %>
+
+<hr /><br />
+
+<%= link_to 'Search Logs', log_search_form_configuration_url(@configuration) %><br />
+<%= link_to 'View Logs', aaa_logs_configuration_url(@configuration) %><br />
+<%= link_to 'Log Archives', aaa_log_archives_configuration_url(@configuration) %><br />
+<%= link_to 'Changelog', changelog_configuration_url(@configuration) %><br />
+
+<hr /><br />
+
+<%= link_to 'ACLs', acls_configuration_url(@configuration) %><br />
+<%= link_to 'Authorization AVPairs', author_avpairs_configuration_url(@configuration) %><br />
+<%= link_to 'Command Auth. Profiles', command_authorization_profiles_configuration_url(@configuration) %><br />
+<%= link_to 'Command Auth. Whitelist', command_authorization_whitelist_configuration_url(@configuration) %><br />
+<%= link_to 'Network Obj. Groups', network_object_groups_configuration_url(@configuration) %><br />
+<%= link_to 'Shell Cmd. Obj. Groups', shell_command_object_groups_configuration_url(@configuration) %><br />
+<%= link_to 'TACACS+ Daemons', tacacs_daemons_configuration_url(@configuration) %><br />
+<%= link_to 'User Groups', user_groups_configuration_url(@configuration) %><br />
+

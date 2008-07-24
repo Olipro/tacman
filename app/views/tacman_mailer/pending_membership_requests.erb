@@ -1,0 +1,11 @@
+TacacsPlus user,
+
+The following users have requested access to your configuration '<%= @configuration.name %>':
+<% for user in @users %>
+<%= user.username %><%= " (#{user.real_name})" if (!user.real_name.blank?) %>
+<% end %>
+You may view these requests by following the link 'View Requests' from your configuration.
+
+thank you,
+
+TacacsPlus Manager

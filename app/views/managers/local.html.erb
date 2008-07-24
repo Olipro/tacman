@@ -1,0 +1,73 @@
+<%= error_messages_for :manager %>
+
+<table>
+    <tr><td><b>Type:</b></td> <td><%= role_checkboxes %></td></tr>
+    <tr><td>&nbsp</td></tr>
+    <tr><td><b>Serial:</b></td> <td><%=h @manager.serial %></td></tr>
+    <tr><td><b>Name:</b></td> <td><%=h @manager.name %></td></tr>
+    <tr><td><b>URL:</b></td> <td><b style="color: #7B2024;"><%=h @manager.base_url %></b></td></tr>
+
+</table>
+
+<br /><br />
+
+<% if !@manager.slave? %>
+<b style="font-size: 16px;"><u>Settings</u></b>
+<br /><br />
+<table>
+    <tr><td><b>Pagination</b></td></tr>
+    <tr><td>Entries per page: </td> <td><%=h @manager.pagination_per_page %> entries</td></tr>
+</table>
+<br />
+<table>
+    <tr><td><b>Inactive Users</b></td></tr>
+    <tr><td>Disable After: </td> <td><%=h @manager.disable_inactive_users_after %> days (0 sets unlimited)</td></tr>
+</table>
+<br />
+<table>
+    <tr><td><b>System Logs</b></td></tr>
+    <tr><td>Retain System Log For: </td> <td><%=h @manager.retain_system_logs_for %> days (0 sets unlimited)</td></tr>
+    <tr><td>Archive System Log For: </td> <td><%=h @manager.archive_system_logs_for %> days (0 sets unlimited)</td></tr>
+</table>
+<br />
+<table>
+    <tr><td><b>AAA Logs</b></td></tr>
+    <tr><td>Maximum AAA Log Retainment: </td> <td><%=h @manager.maximum_aaa_log_retainment %> days (0 sets unlimited)</td></tr>
+    <tr><td>Maximum AAA Archive Retainment: </td> <td><%=h @manager.maximum_aaa_archive_retainment %> days (0 sets unlimited)</td></tr>
+</table>
+<br />
+<table>
+    <tr><td><b>Passwords</b></td></tr>
+    <tr><td>Default Enable Password Lifespan: </td> <td><%= password_lifespan_xlate(@manager.default_enable_password_lifespan) %></td></tr>
+    <tr><td>Default Login Password Lifespan: </td> <td><%= password_lifespan_xlate(@manager.default_login_password_lifespan) %></td></tr>
+    <tr><td>Password History Length: </td> <td><%=h @manager.password_history_length %> entries</td></tr>
+    <tr><td>Minimum Password Length: </td> <td><%=h @manager.password_minimum_length %> characters</td></tr>
+    <tr><td>Require Mixed Case Passwords: </td> <td><%=h @manager.password_require_mixed_case %></td></tr>
+    <tr><td>Require Alphanumeric Passwords: </td> <td><%=h @manager.password_require_alphanumeric %></td></tr>
+</table>
+<br />
+<table>
+    <tr><td><b>ACL/Network-Object-Group Lengths</b></td></tr>
+    <tr><td>Maximum Network Object Group Length: </td> <td><%=h @manager.maximum_network_object_group_length %> lines</td></tr>
+    <tr><td>Maximum ACL Length: </td> <td><%=h @manager.maximum_acl_length %> lines</td></tr>
+</table>
+<br />
+<table>
+    <tr><td><b>Mailer</b></td></tr>
+    <tr><td>Enable Mailer: <%=h @manager.enable_mailer %></td></tr>
+    <% if (@manager.enable_mailer) %>
+    <tr><td>&nbsp</td></tr>
+    <tr><td><u>Account Disabled Message</u></td></tr>
+    <tr><td><textarea readonly rows="15" cols="80"><%=h @manager.mail_account_disabled %></textarea></td></tr>
+    <tr><td><u>New Account Message</u></td></tr>
+    <tr><td><textarea readonly rows="15" cols="80"><%=h @manager.mail_new_account %></textarea></td></tr>
+    <tr><td><u>Password Expired Message</u></td></tr>
+    <tr><td><textarea readonly rows="15" cols="80"><%=h @manager.mail_password_expired %></textarea></td></tr>
+    <tr><td><u>Password Reset Message</u></td></tr>
+    <tr><td><textarea readonly rows="15" cols="80"><%=h @manager.mail_password_reset %></textarea></td></tr>
+    <tr><td><u>Pending Password Expiry Message</u></td></tr>
+    <tr><td><textarea readonly rows="15" cols="80"><%=h @manager.mail_pending_password_expiry %></textarea></td></tr>
+    <% end %>
+</table>
+<% end %>
+<br /><br />

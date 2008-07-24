@@ -1,0 +1,31 @@
+<b style="font-size: 16px;">New Authorization AVPair</b><br /><br />
+
+<%= error_messages_for :author_avpair %>
+
+<% form_for(:author_avpair, :url => create_author_avpair_configuration_url(@configuration)) do |f| %>
+<%= text_area_tag :data, @data, :size => '80x15', :wrap => 'off' %>
+    <br /><br />
+    <%= submit_tag "Create" %>
+    <input type=button value="Cancel" onclick="window.location.href='<%= author_avpairs_configuration_url(@configuration) %>'" />
+<% end %>
+
+<br /><br />
+<p>
+<b><u>Examples</u></b><br />
+A complete author-avpair-list named av_list1:<br />
+<pre>
+author-avpair-list av_list1 10
+  match access-list acl1
+  set service=shell
+  set noescape=true
+
+author-avpair-list av_list1 20
+  set service=shell
+  set priv_lvl=15
+</pre>
+
+An empty author-avpair-list named av_list2:<br />
+<pre>
+command-authorization-profile av_list2
+</pre>
+</p>

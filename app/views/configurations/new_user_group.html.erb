@@ -1,0 +1,34 @@
+<b style="font-size: 16px;">New User Group</b><br /><br />
+
+<%= error_messages_for :user_group %>
+
+<% form_for(:user_group, :url => create_user_group_configuration_url(@configuration)) do |f| %>
+<table>
+  <tr>
+    <td><b>Name:</b></td> 
+    <td><%= f.text_field :name %></td>
+  </tr>
+  <tr>
+    <td><b>Authorization AVPair:</b></td> 
+    <td><%= f.select :author_avpair_id, @configuration.author_avpairs.collect {|x| [ x.name, x.id ] }, { :include_blank => true }  %></td>
+  </tr>
+  <tr>
+    <td><b>Command Authorization Profile:</b></td> 
+    <td><%= f.select :command_authorization_profile_id, @configuration.command_authorization_profiles.collect {|x| [ x.name, x.id ] }, { :include_blank => true }  %></td>
+  </tr>
+  <tr>
+    <td><b>Login ACL:</b></td> 
+    <td><%= f.select :login_acl_id, @configuration.acls.collect {|x| [ x.name, x.id ] }, { :include_blank => true }  %></td>
+  </tr>
+  <tr>
+    <td><b>Enable ACL:</b></td> 
+    <td><%= f.select :enable_acl_id, @configuration.acls.collect {|x| [ x.name, x.id ] }, { :include_blank => true }  %></td>
+  </tr>
+  <tr><td>&nbsp</td></tr>
+  <tr>
+    <td><%= submit_tag "Create" %></td>
+    <td><input type=button value="Cancel" onclick="window.location.href='<%= user_groups_configuration_url(@configuration) %>'" /></td>
+    <td colspan="2">&nbsp</td>
+  </tr>
+</table>
+<% end %>

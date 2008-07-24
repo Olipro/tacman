@@ -1,0 +1,12 @@
+<%= link_to 'Back to Configuration', configuration_url(@acl.configuration) %><br />
+<%= link_to 'Show All', acls_configuration_url(@acl.configuration) %><br />
+<%= link_to 'Create New', new_acl_configuration_url(@acl.configuration) %><br />
+<hr><br />
+<%= link_to 'Modify', acl_url(@acl) %><br />
+<%= link_to 'Rename', edit_acl_url(@acl) %><br />
+<%= link_to 'Resequence', resequence_acl_url(@acl), :confirm => "Resequence?", :method => :put %><br />
+<%= link_to 'Changelog', changelog_acl_url(@acl) %><br />
+<br />
+<% if !@acl.in_use? %>
+<%= link_to 'Delete', acl_url(@acl), :confirm => "Delete access-list #{@acl.name}", :method => :delete %><br />
+<% end %>

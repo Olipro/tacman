@@ -1,0 +1,22 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+num1:
+  id: 1
+  manager_id: 1
+  message: message1
+  level: info
+
+
+num2:
+  id: 2
+  manager_id: 1
+  message: message2
+  level: warn
+
+num3:
+  id: 3
+  manager_id: 1
+  message: message3
+  level: error
+
+

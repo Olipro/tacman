@@ -1,0 +1,24 @@
+<b style="font-size: 16px;">Command Authorization Profiles</b><br /><br />
+
+<% if @command_authorization_profiles.length != 0 %>
+    <% for command_authorization_profile in @command_authorization_profiles %>
+        <br /><hr />
+      <% if (@session_user.admin? || @configuration_roles[@configuration.id] == 'admin') %>
+        <% if !command_authorization_profile.in_use? %>
+        <%= link_to "delete", command_authorization_profile_url(command_authorization_profile), :style => "color: #7B2024;",  :confirm => "Delete '#{command_authorization_profile.name}'?", :method => :delete  %>
+        &nbsp &nbsp &nbsp
+        <% end %>
+        <%= link_to "rename", edit_command_authorization_profile_url(command_authorization_profile)  %>
+         &nbsp &nbsp &nbsp
+        <%= link_to "modify", command_authorization_profile_url(command_authorization_profile)  %>
+      <% end %>
+      <%= command_authorization_profile_description(command_authorization_profile) %>
+    <% end %>
+    <hr />
+
+<% else %>
+<b>No Command Authorization Profiles have been created.</b>
+<% end %>
+<br />
+
+

@@ -1,0 +1,26 @@
+<b style="font-size: 16px;">Outbox - <%= @manager.name %></b><br />
+<b>Queue Length: <%= @msg_count %></b><br />
+<b>Revision: <%= @manager.outbox_revision %></b><br /><br />
+
+<% if (@manager.outbox_locked?) %>
+<b style="color: #7B2024; font-weight: bold;">Locked until: <%= @manager.outbox_lock.expires_at %></b><br />
+<% end %>
+
+<%= will_paginate @outbox %>
+<table class="index_list">
+<% for message in @outbox %>
+    <tr class="shaded">
+      <td colspan="2" style="border: 1px solid #000000; border-bottom: none;">
+        &nbsp
+        <b>Verb:</b> <i><%=h message.verb %></i>
+        &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+        <b>Creation Date/Time:</b> <i><%=h message.created_at.strftime("%Y-%m-%d %H:%M:%S %Z") %></i>
+      </td>
+    </tr>
+    <tr class="shaded">
+      <td style="border: 1px solid #000000;">FILE: <%= message.content_file %><pre><%=h message.content %></pre></td>
+    </tr>
+  <tr><td>&nbsp</td></tr>
+<% end %>
+</table>
+<%= will_paginate @outbox %>

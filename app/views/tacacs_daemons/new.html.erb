@@ -1,0 +1,35 @@
+<b style="font-size: 16px;">New - TACACS+ Daemon</b><br /><br /><br />
+
+<%= error_messages_for :tacacs_daemon %>
+
+<% form_for(:tacacs_daemon, :url => tacacs_daemons_url) do |f| %>
+<table>
+  <tr>
+    <td><b>Name:</b></td> 
+    <td><%= f.text_field :name %></td>
+  </tr>
+  <tr>
+    <td><b>Manager:</b></td> 
+    <td><%= f.select :manager_id, Manager.non_local.collect {|p| [ p.name, p.id ] }, { :include_blank => true } %></td>
+  </tr>
+  <tr>
+    <td><b>Configuration:</b></td> 
+    <td><%= f.select :configuration_id, Configuration.find(:all).collect {|p| [ p.name, p.id ] }, { :include_blank => true } %></td>
+  </tr>
+  <tr>
+    <td><b>Ip:</b></td> 
+    <td><%= f.text_field :ip %></td>
+  </tr>
+  <tr>
+    <td><b>Port:</b></td> 
+    <td><%= f.text_field :port %></td>
+  </tr>
+  
+  <tr><td>&nbsp</td></tr>
+  <tr>
+    <td><%= submit_tag "Create" %></td>
+    <td><input type=button value="Cancel" onclick="window.location.href='<%= tacacs_daemons_url %>'" /></td>
+    <td colspan="2">&nbsp</td>
+  </tr>
+</table>
+<% end %>

@@ -1,0 +1,29 @@
+<b style="font-size: 16px;">Unprocessable - <%= @manager.name %></b><br />
+<b>Queue Length: <%= @msg_count %></b><br />
+
+
+<%= will_paginate @messages %>
+<table class="index_list">
+<% for message in @messages %>
+    <tr class="shaded">
+      <td colspan="2" style="border: 1px solid #000000; border-bottom: none;">
+        &nbsp
+        <b>Verb:</b> <i><%=h message.verb %></i>
+        &nbsp&nbsp&nbsp
+        <b>Revision:</b> <%=h message.revision %>
+        &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+        <b>Creation Date/Time:</b> <i><%=h message.created_at.strftime("%Y-%m-%d %H:%M:%S %Z") %></i>
+        &nbsp&nbsp&nbsp&nbsp
+        <%= link_to 'Delete', system_message_url(message), :style => "color: #7B2024; font-weight: bold;", :method => :delete %>
+      </td>
+    </tr>
+    <tr class="shaded">
+      <td style="border: 1px solid #000000;">FILE: <%= message.content_file %><pre><%=h message.content %></pre></td>
+    </tr>
+    <tr class="shaded">
+      <td style="border: 1px solid #000000; vertical-align: top; background-color: #d3d3d3;"><pre><%=h message.error_log %></pre></td>
+    </tr>
+  <tr><td>&nbsp</td></tr>
+<% end %>
+</table>
+<%= will_paginate @messages %>

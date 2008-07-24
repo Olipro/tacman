@@ -1,0 +1,86 @@
+<%= error_messages_for :manager %>
+
+<% form_for(:manager, :url => manager_url(@manager), :html => { :method => :put }) do |f| %>
+<table>
+<tr><td><b>Name:</b></td><td><%= f.text_field(:name) %></td></tr>
+
+<% if (!@manager.stand_alone?) %>
+   <tr><td><b>URL:</b></td>  <td><%= f.text_field(:base_url) %></td></tr>
+<% end %>
+</table>
+
+<br /><br />
+
+<% if (@manager.is_local && !@manager.slave?) %>
+<b style="font-size: 16px;"><u>Settings</u></b>
+<br /><br />
+<table>
+    <tr><td><b>Pagination</b></td></tr>
+    <tr><td>Entries per page: </td> <td><%= f.text_field(:pagination_per_page, :size => 2) %> entries</td></tr>
+</table>
+<br />
+<table>
+    <tr><td><b>Inactive Users</b></td></tr>
+    <tr><td>Disable After: </td> <td><%= f.text_field(:disable_inactive_users_after, :size => 1) %> days (0 sets unlimited)</td></tr>
+</table>
+<br />
+<table>
+    <tr><td><b>System Logs</b></td></tr>
+    <tr><td>Retain System Log For: </td> <td><%= f.text_field(:retain_system_logs_for, :size => 1) %> days (0 sets unlimited)</td></tr>
+    <tr><td>Archive System Log For: </td> <td><%= f.text_field(:archive_system_logs_for, :size => 1) %> days (0 sets unlimited)</td></tr>
+</table>
+<br />
+<table>
+    <tr><td><b>AAA Logs</b></td></tr>
+    <tr><td>Maximum AAA Log Retainment: </td> <td><%= f.text_field(:maximum_aaa_log_retainment, :size => 1) %> days (0 sets unlimited)</td></tr>
+    <tr><td>Maximum AAA Archive Retainment: </td> <td><%= f.text_field(:maximum_aaa_archive_retainment, :size => 1) %> days (0 sets unlimited)</td></tr>
+</table>
+<br />
+<table>
+    <tr><td><b>Passwords</b></td></tr>
+    <tr><td>Default Enable Password Lifespan: </td> <td><%= f.select :default_enable_password_lifespan, password_lifespan_options %></td></tr>
+    <tr><td>Default Login Password Lifespan: </td> <td><%= f.select :default_login_password_lifespan, password_lifespan_options %></td></tr>
+    <tr><td>Password History Length: </td> <td><%= f.text_field(:password_history_length, :size => 1) %> entries</td></tr>
+    <tr><td>Minimum Password Length: </td> <td><%= f.text_field(:password_minimum_length, :size => 1) %> characters</td></tr>
+    <tr><td>Require Mixed Case Passwords: </td> <td><%= f.check_box(:password_require_mixed_case) %></td></tr>
+    <tr><td>Require Alphanumeric Passwords: </td> <td><%= f.check_box(:password_require_alphanumeric) %></td></tr>
+</table>
+<br />
+<table>
+    <tr><td><b>ACL/Network-Object-Group Lengths</b></td></tr>
+    <tr><td>Maximum Network Object Group Length: </td> <td><%= f.text_field(:maximum_network_object_group_length, :size => 1) %> lines</td></tr>
+    <tr><td>Maximum ACL Length: </td> <td><%= f.text_field(:maximum_acl_length, :size => 1) %> lines</td></tr>
+</table>
+<br />
+<table>
+    <tr><td><b>Mailer</b></td></tr>
+    <tr><td>Enable Mailer: <%= f.check_box(:enable_mailer) %></td></tr>
+    <% if (@manager.enable_mailer) %>
+    <tr><td>&nbsp</td></tr>
+    <tr><td><u>Account Disabled Message</u></td></tr>
+    <tr><td><%= f.text_area :mail_account_disabled, :size => "80x15" %></td></tr>
+    <tr><td><u>New Account Message</u></td></tr>
+    <tr><td><%= f.text_area :mail_new_account, :size => "80x15" %></td></tr>
+    <tr><td><u>Password Expired Message</u></td></tr>
+    <tr><td><%= f.text_area :mail_password_expired, :size => "80x15" %></td></tr>
+    <tr><td><u>Password Reset Message</u></td></tr>
+    <tr><td><%= f.text_area :mail_password_reset, :size => "80x15" %></td></tr>
+    <tr><td><u>Pending Password Expiry Message</u></td></tr>
+    <tr><td><%= f.text_area :mail_pending_password_expiry, :size => "80x15" %></td></tr>
+    <% end %>
+</table>
+
+    <br /><br />
+    <%= submit_tag "Update" %>
+    &nbsp&nbsp
+    <input type=button value="Cancel" onclick="window.location.href='<%= local_managers_url %>'" />
+<% else %>
+    <br /><br />
+    <%= submit_tag "Update" %>
+    &nbsp&nbsp
+    <input type=button value="Cancel" onclick="window.location.href='<%= url_for(:action => :show, :serial => @manager.serial) %>'" />
+<% end %>
+
+
+<% end %>
+<br /><br />

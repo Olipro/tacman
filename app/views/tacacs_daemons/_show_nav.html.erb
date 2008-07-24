@@ -1,0 +1,15 @@
+  <%= link_to 'Show All', tacacs_daemons_url %><br />
+  <%= link_to 'Create New', new_tacacs_daemon_url %><br />
+  <hr><br />
+  <%= link_to 'View', tacacs_daemon_url(@tacacs_daemon) %><br />
+  <% if (!@local_manager.slave?) %>
+    <%= link_to 'Edit', edit_tacacs_daemon_url(@tacacs_daemon) %><br />
+  <% end %>
+  <%= link_to 'Changelog', changelog_tacacs_daemon_url(@tacacs_daemon) %><br />
+
+  <% if (@tacacs_daemon.local?) %>
+  <%= link_to 'Error log', error_log_tacacs_daemon_url(@tacacs_daemon) %><br />
+  <% end %>
+
+  <br />
+  <%= link_to 'Delete', tacacs_daemon_url(@tacacs_daemon), :confirm => "Confirm", :method => :delete %><br />

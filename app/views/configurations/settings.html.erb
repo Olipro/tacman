@@ -1,0 +1,60 @@
+
+  <b style="font-size: 24px;"><%= @configuration.name %></b><br /><br /><br />
+
+  <table>
+      <tr>
+        <td><b>Name:</b></td>
+        <td><%=h @configuration.name %></td>
+      </tr>
+      <tr>
+        <td><b>Key:</b></td>
+        <td><%=h @configuration.key %></td>
+      </tr>
+      <tr>
+        <td><b>Capture Messages for:</b></td>
+        <td>
+        <% if (@configuration.log_accounting) %>Accounting&nbsp<% end %>
+        <% if (@configuration.log_authentication) %>Authentication&nbsp<% end %>
+        <% if (@configuration.log_authorization) %>Authorization&nbsp<% end %>
+        </td>
+      </tr>
+      <tr>
+        <td><b>Log level:</b></td>
+        <td><%=h @configuration.log_level %></td>
+      </tr>
+      <tr>
+        <td><b>Retain Logs For:</b></td>
+        <td><%=h @configuration.retain_aaa_logs_for %> days (0 sets unlimited)</td>
+      </tr>
+      <tr>
+        <td><b>Archive Logs For:</b></td>
+        <td><%=h @configuration.archive_aaa_logs_for %> days (0 sets unlimited)</td>
+      </tr>
+      <tr>
+        <td><b>AAA Log Dir:</b></td> 
+        <td><%= @configuration.aaa_log_dir %></td>
+      </tr>
+      <tr>
+        <td><b>Disabled prompt:</b></td>
+        <td><textarea cols="50" readonly><%=h @configuration.disabled_prompt %></textarea></td>
+      </tr>
+      <tr>
+        <td><b>Login prompt:</b></td>
+        <td><textarea cols="50" readonly><%= @configuration.login_prompt %></textarea></td>
+      </tr>
+      <tr>
+        <td><b>Password expired prompt:</b></td>
+        <td><textarea cols="50" readonly><%=h @configuration.password_expired_prompt %></textarea></td>
+      </tr>
+      <tr>
+        <td><b>Password prompt:</b></td>
+        <td><textarea cols="50" readonly><%=h @configuration.password_prompt %></textarea></td>
+      </tr>
+      <tr>
+        <td><b>Hide on user home pages:</b></td> 
+        <td><%= @configuration.is_hidden %></td>
+      </tr>
+</table>
+
+<br /><br /><br />
+

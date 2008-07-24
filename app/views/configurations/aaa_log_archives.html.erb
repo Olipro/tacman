@@ -1,0 +1,16 @@
+<b style="font-size: 16px;">Archived Logs</b><br /><br />
+
+<%= error_messages_for :configuration %>
+
+<br /><br />
+
+
+<b>Due to the way logs are archived the entries may be out of order. All fields are tab delimited.</b><br /><br />
+
+<% form_for(:configuration, :url => download_archived_log_configuration_url(@configuration), :html => { :method => :post }) do |f| %>
+<b>Filename:</b>&nbsp<%= select_tag("aaa_log_archive_id", options_for_select(@configuration.aaa_log_archives.collect {|x| [File.basename(x.archive_file), x.id  ] }) ) %>
+<%= submit_tag "Download" %>
+<% end %>
+
+
+<br />

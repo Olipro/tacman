@@ -1,0 +1,7 @@
+<%= link_to 'Back to Configuration', configuration_url(@configuration) %><br />
+<%= link_to 'Show All', network_object_groups_configuration_url(@configuration) %><br />
+
+<% if (@session_user.admin? || @configuration_roles[@configuration.id] == 'admin') %>
+<%= link_to 'Create New', new_network_object_group_configuration_url(@configuration) %><br />
+<% end %>
+<hr><br />

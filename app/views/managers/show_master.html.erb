@@ -1,0 +1,33 @@
+<%= error_messages_for :manager %>
+
+<% if (@manager.nil?) %>
+
+  <h2>Register with a master system</h2>
+  <%= error_messages_for :manager %>
+
+  <% form_for(:manager, :url => request_registration_managers_url(), :html => { :method => :post }) do |f| %>
+    <table>
+    <tr><td><b>Masters Web Services URL:</b></td><td><%= f.text_field(:base_url,:size => 50) %></td>
+    </table>
+    <br /><br />
+    <%= submit_tag "Register" %>
+    &nbsp&nbsp
+    <input type=button value="Cancel" onclick="window.location.href='<%= local_managers_url %>'" />
+  <% end %>
+
+<% else %>
+
+<h2>Master system</h2>
+<table>
+    <% if (!@manager.is_approved) %>
+    <tr><td colspan="2" style="text-align:center;"><b style="color:#7B2024;"><i>Awaiting Approval</i></b></td></tr>
+    <% elsif (!@manager.is_enabled) %>
+    <tr><td colspan="2" style="text-align:center;"><b style="color:#7B2024;"><i>Disabled - <%= @manager.disabled_message %></i></b></td></tr>
+    <% end %>
+    <tr><td><b>Serial:</b></td> <td><%=h @manager.serial %></td></tr>
+    <tr><td><b>Name:</b></td> <td><%=h @manager.name %></td></tr>
+    <tr><td><b>URL:</b></td> <td><%=h @manager.base_url %></td></tr>
+    <tr><td>&nbsp</td></tr>
+</table>
+
+<% end %>

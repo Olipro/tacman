@@ -1,0 +1,10 @@
+localhost:
+  ip: 127.0.0.1
+  manager_id: 1
+  name: localhost
+
+localhost2:
+  ip: 127.0.0.1
+  manager_id: 2
+  name: localhost2
+

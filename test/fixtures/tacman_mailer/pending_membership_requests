@@ -1,0 +1,3 @@
+TacmanMailer#pending_membership_requests
+
+Find me in app/views/tacman_mailer/pending_membership_requests.erb

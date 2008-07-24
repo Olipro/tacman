@@ -1,0 +1,25 @@
+<%= link_to 'Show All', users_url()%><br />
+
+<% if (!@local_manager.slave?) %>
+    <%= link_to 'Create New', new_user_url()%><br />
+
+    <% if (@session_user.admin?) %>
+        <%= link_to 'Bulk Create', bulk_create_users_url()%><br />
+    <% end %>
+<% end %>
+<hr /><br />
+
+<%= link_to 'View Settings', user_url(@user) %><br />
+<% if (!@local_manager.slave?) %>
+    <%= link_to 'Reset Login Password', reset_password_user_url(@user) %><br />
+    <%= link_to 'Reset Enable Password', reset_enable_user_url(@user) %><br />
+    <%= link_to 'Publish', publish_user_url(@user), :method => :put %><br />
+    <%= link_to 'Edit', edit_user_url(@user) %><br />
+    <br />
+    <%= link_to 'Delete', user_url(@user), :confirm => "Delete user #{@user.username}?", :method => :delete %>
+<% end %>
+<hr /><br />
+
+<%= link_to 'TACACS+ Logs', aaa_logs_user_url(@user) %><br />
+<%= link_to 'System Logs', system_logs_user_url(@user) %><br />
+<%= link_to 'Changelog', changelog_user_url(@user) %><br />

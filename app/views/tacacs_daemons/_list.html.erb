@@ -1,0 +1,54 @@
+<% 
+    managers_by_name = {}
+    td_by_manager = {}
+    @managers.each {|m| td_by_manager[m.id] = []; managers_by_name[m.name] = m}
+
+    tds_by_name = {}
+    @tacacs_daemons.each do |td|
+        tds_by_name[td.name] = td
+        if (td.local?)
+            td_by_manager[@local_manager.id].push(td.name)
+        else
+            td_by_manager[td.manager_id].push(td.name)
+        end
+    end
+%>
+        <input type="button" value="Check All" onclick="toggle_check(true);" />
+        <input type="button" value="Uncheck All" onclick="toggle_check(false);" />
+        &nbsp&nbsp&nbsp
+        <%= select_tag :command, '<option value="read">view status</option><option>start</option><option>stop</option><option>reload</option><option>restart</option>' %>
+        <input type="submit" value="Go" />
+        <br /><br /><br />
+
+        <% for m_name in managers_by_name.keys.sort %>
+        <% manager = managers_by_name[m_name] %>
+        <% next if (td_by_manager[manager.id].length == 0) %>
+        <b>
+          <%= manager.name %>
+          <% if (manager.errors.length > 0) %>
+            <i style="color: #7B2024;"> - <%= manager.errors.full_messages.join(" ") %></i>
+          <% end %>
+        </b>
+        <% for td_name in td_by_manager[manager.id].sort %>
+            <% tacacs_daemon = tds_by_name[td_name] %>
+            <table style="border-collapse: collapse;">
+              <tr>
+                <td><%= check_box_tag "selected[#{tacacs_daemon.id}]" %></td>
+                <td>&nbsp&nbsp</td>
+                <td><%= status_icon(tacacs_daemon) %></td>
+
+                <% if (@session_user.admin?) %>
+                <td><%= link_to tacacs_daemon.name, tacacs_daemon_url(tacacs_daemon) %></td>
+                <% else%>
+                <td><%= tacacs_daemon.name %></td>
+                <% end %>
+
+                <td>&nbsp&nbsp</td>
+                <td><%= "#{tacacs_daemon.ip}:#{tacacs_daemon.port}" %></td>
+                <td>&nbsp&nbsp</td>
+                <td style="font-size: 10px; color: #7B2024; font-weight: bold;"><%= tacacs_daemon.errors.full_messages.join("<br />") %></td>
+              </tr>
+            </table>
+        <% end %>
+        <br /> <br />
+        <% end %>

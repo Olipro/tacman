@@ -1,0 +1,15 @@
+<b style="font-size: 16px;">Configurations</b><br /><br />
+
+<% if @configurations.length != 0 %>
+<ol>
+<% for configuration in @configurations %>
+    <li><%= link_to configuration.name, configuration_url(configuration) %></li>
+  </tr>
+<% end %>
+</ol>
+<% else %>
+<b>No Configurations have been created.</b>
+<% end %>
+<br />
+
+

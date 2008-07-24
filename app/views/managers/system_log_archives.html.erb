@@ -1,0 +1,12 @@
+<b style="font-size: 16px;">Archived Logs</b><br /><br />
+
+
+<b>Due to the way logs are archived the entries may be out of order. All fields are tab delimited.</b><br /><br />
+
+<% form_for(:manager, :url => download_archived_log_managers_url(), :html => { :method => :post }) do |f| %>
+<b>Filename:</b>&nbsp<%= select_tag("system_log_archive_id", options_for_select(SystemLogArchive.find(:all, :order => :archived_on).collect {|x| [File.basename(x.archive_file), x.id  ] }) ) %>
+<%= submit_tag "Download" %>
+<% end %>
+
+
+<br />

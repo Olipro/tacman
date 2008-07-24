@@ -1,0 +1,24 @@
+<b style="font-size: 16px;">Network Object Groups</b><br /><br />
+
+<% if @network_object_groups.length != 0 %>
+    <% for network_object_group in @network_object_groups %>
+        <br /><hr />
+      <% if (@session_user.admin? || @configuration_roles[@configuration.id] == 'admin') %>
+        <% if !network_object_group.in_use? %>
+        <%= link_to "delete", network_object_group_url(network_object_group), :style => "color: #7B2024;", :confirm => "Delete '#{network_object_group.name}'?", :method => :delete  %>
+        &nbsp &nbsp &nbsp
+        <% end %>
+        <%= link_to "rename", edit_network_object_group_url(network_object_group)  %>
+         &nbsp &nbsp &nbsp
+        <%= link_to "modify", network_object_group_url(network_object_group)  %>
+      <% end %>
+      <%= nog_description(network_object_group) %>
+    <% end %>
+    <hr />
+
+<% else %>
+<b>No Network Object Groups have been created.</b>
+<% end %>
+<br />
+
+

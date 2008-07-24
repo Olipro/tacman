@@ -1,0 +1,41 @@
+<b style="font-size: 16px;">Author AVPair '<%=h @author_avpair.name %>'</b><br /><br />
+
+
+<%= error_messages_for :author_avpair_entry %>
+<%= error_messages_for :author_avpair %>
+
+<%= author_avpair_description(@author_avpair, true) %>
+
+<br /><br /><br /><hr /><br /><br />
+
+<b><u>Add entry</u></b><br /><br />
+<% form_for(:author_avpair_entry, :url => create_entry_author_avpair_url(@author_avpair), :html => {:method => :post} )  do |f| %>
+     <table>
+        <tr>
+          <td>seq</td><td><%= f.text_field :sequence,:size => 2 %></td>
+        </tr>
+        <tr>
+          <td>match access-list</td> <td><%= f.select :acl_id, @author_avpair.configuration.acls.collect {|p| [ p.name, p.id ] }, { :include_blank => true } %></td>
+        </tr>
+        <tr>
+          <td>set service</td> <td><%= f.text_field :service, :value => 'shell', :size => 20 %></td>
+        </tr>
+        <tr><td>set autocmd</td> <td><%= text_field_tag 'avpairs[autocmd]' %></td> <td></td></tr>
+        <tr><td>set callback-line</td> <td><%= text_field_tag 'avpairs[callback-line]' %></td></tr>
+        <tr><td>set callback-rotary</td> <td><%= text_field_tag 'avpairs[callback-rotary]' %></td></tr>
+        <tr><td>set idletime</td> <td><%= text_field_tag 'avpairs[idletime]' %></td></tr>
+        <tr><td>set nocallback-verify</td> <td><%= check_box_tag 'avpairs[nocallback-verify]', true %></td></tr>
+        <tr><td>set noescape</td> <td><%= check_box_tag 'avpairs[noescape]', true %></td></tr>
+        <tr><td>set nohangup</td> <td><%= check_box_tag 'avpairs[nohangup]', true %></td></tr>
+        <tr><td>set priv_lvl</td> <td><%= select_tag 'avpairs[priv_lvl]', options_for_select([''].concat( (0..15). collect {|n| [n,n] }) ) %></td></tr>
+        <tr><td>set timeout</td> <td><%= text_field_tag 'avpairs[timeout]' %></td></tr>
+        <tr><td>&nbsp</td></tr>
+        <tr><td>set custom</td> <td><%= text_field_tag 'avpairs[custom]', nil, :size => 50 %></td></tr>
+        <tr><td>&nbsp</td> <td><i>Example: shell:Admin*Admin default-domain</i></td></tr>
+        <tr><td>&nbsp</td></tr>
+      </table>
+    <br />
+    <%= submit_tag "Add" %>
+<% end %>
+
+<br /><br />

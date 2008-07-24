@@ -1,0 +1,70 @@
+
+msg1:
+  id: 1
+  manager_id: 1
+  verb: save
+  content: <data></data>
+  queue: inbox
+
+msg2:
+  id: 2
+  manager_id: 1
+  verb: destroy
+  content: <data></data>
+  queue: inbox
+
+msg3:
+  id: 3
+  manager_id: 1
+  verb: save
+  content: <data></data>
+  queue: outbox
+
+msg4:
+  id: 4
+  manager_id: 1
+  verb: sync
+  content: <data></data>
+  queue: outbox
+
+msg5:
+  id: 5
+  manager_id: 2
+  verb: save
+  content: <data></data>
+  queue: inbox
+
+msg6:
+  id: 6
+  manager_id: 2
+  verb: destroy
+  content: <data></data>
+  queue: inbox
+
+msg7:
+  id: 7
+  manager_id: 2
+  verb: save
+  content: <data></data>
+  queue: outbox
+
+msg8:
+  id: 8
+  manager_id: 2
+  verb: sync
+  content: <data></data>
+  queue: outbox
+
+msg9:
+  id: 9
+  manager_id: 1
+  verb: add
+  content: <data></data>
+  queue: unprocessable
+
+msg10:
+  id: 10
+  manager_id: 2
+  verb: add
+  content: <data></data>
+  queue: unprocessable

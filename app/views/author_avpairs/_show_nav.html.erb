@@ -1,0 +1,12 @@
+<%= link_to 'Back to Configuration', configuration_url(@author_avpair.configuration) %><br />
+<%= link_to 'Show All', author_avpairs_configuration_url(@author_avpair.configuration) %><br />
+<%= link_to 'Create New', new_author_avpair_configuration_url(@author_avpair.configuration) %><br />
+<hr><br />
+<%= link_to 'Modify', author_avpair_url(@author_avpair) %><br />
+<%= link_to 'Rename', edit_author_avpair_url(@author_avpair) %><br />
+<%= link_to 'Resequence', resequence_author_avpair_url(@author_avpair), :confirm => "Resequence?", :method => :put %><br />
+<%= link_to 'Changelog', changelog_author_avpair_url(@author_avpair) %><br />
+<br />
+<% if !@author_avpair.in_use? %>
+<%= link_to 'Delete', author_avpair_url(@author_avpair), :confirm => "Delete author-avpair-list #{@author_avpair.name}?", :method => :delete %><br />
+<% end %>

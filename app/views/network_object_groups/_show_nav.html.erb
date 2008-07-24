@@ -1,0 +1,13 @@
+<%= link_to 'Back to Configuration', configuration_url(@network_object_group.configuration) %><br />
+<%= link_to 'Show All', network_object_groups_configuration_url(@network_object_group.configuration) %><br />
+<%= link_to 'Create New', new_network_object_group_configuration_url(@network_object_group.configuration) %><br />
+<hr><br />
+<%= link_to 'Modify', network_object_group_url(@network_object_group) %><br />
+<%= link_to 'Rename', edit_network_object_group_url(@network_object_group) %><br />
+<%= link_to 'Optimize', optimize_network_object_group_url(@network_object_group), :confirm => "Optimize?", :method => :put %><br />
+<%= link_to 'Resequence', resequence_network_object_group_url(@network_object_group), :confirm => "Resequence?", :method => :put %><br />
+<%= link_to 'Changelog', changelog_network_object_group_url(@network_object_group) %><br />
+<br />
+<% if !@network_object_group.in_use? %>
+<%= link_to 'Delete', network_object_group_url(@network_object_group), :confirm => "Delete network-object-group #{@network_object_group.name}?", :method => :delete %><br />
+<% end %>

@@ -1,0 +1,103 @@
+<b style="font-size: 16px;">New User</b><br /><br />
+
+<%= error_messages_for :user %>
+
+<%
+   password = User.random_password(@local_manager.password_minimum_length)
+   enable = User.random_password(@local_manager.password_minimum_length)
+%>
+
+<% form_for(:user, :url => users_path) do |f| %>
+<%= hidden_field_tag(:password, password) %>
+<%=  hidden_field_tag(:enable, enable) %>
+<table class="form">
+  <tr>
+    <td><b>Username:</b></td> <td><%= f.text_field :username, {:tabindex => 1} %></td>
+  </tr>
+
+  <tr>
+    <td><b>Real Name:</b></td> <td><%= f.text_field :real_name, {:tabindex => 2} %></td>
+  </tr>
+
+  <tr>
+    <td><b>Email:</b></td> <td><%= f.text_field :email, {:tabindex => 4} %></td>
+  </tr>
+
+  <tr>
+    <td><b>Alerts Email:</b></td> <td><%= f.text_field :alerts_email, {:tabindex => 5} %></td>
+  </tr>
+
+  <tr>
+    <td><b>Department:</b></td>
+    <td style="text-align: left;">
+      <a href="#" id="new_department" onclick="document.getElementById('form_exdept').disabled = true;document.getElementById('form_newdept').disabled = false;Element.toggle('form_exdept');Element.toggle('form_newdept');Element.toggle('existing_department');Element.toggle('new_department');">New</a>
+      <a href="#" id="existing_department" style="display: none;" onclick="document.getElementById('form_newdept').disabled = true;document.getElementById('form_exdept').disabled = false;Element.toggle('form_exdept');Element.toggle('form_newdept');Element.toggle('existing_department');Element.toggle('new_department');">Existing</a>
+      <%= f.select :department,
+                   User.find_by_sql("select distinct department from users where department != '' order by department").collect {|x| [ x.department, x.department ] },
+                   { :include_blank => true},
+                   { :id => 'form_exdept', :tabindex => 6} %>
+      <%= f.text_field :department, { :id => 'form_newdept', :style => "display: none;", :tabindex => 7 }%>
+    </td>
+  </tr>
+
+</table>
+
+<br /><br />
+
+<table>
+
+  <tr>
+    <td><b>Login Password:</b></td> <td style="text-align: left; color: #7B2024; font-weight: bold;"><%= password %></td>
+  </tr>
+  <tr>
+    <td><b>Login password Lifespan:</b></td>
+    <td><%= f.select :login_password_lifespan, password_lifespan_options %></td>
+  </tr>
+  <tr><td>&nbsp</td></tr>
+  <tr>
+    <td><b>Enable Password:</b></td> <td style="text-align: left; color: #7B2024; font-weight: bold;"><%= enable %></td>
+  </tr>
+  <tr>
+    <td><b>Enable password Lifespan:</b></td>
+    <td><%= f.select :enable_password_lifespan, password_lifespan_options %></td>
+  </tr>
+  <tr><td>&nbsp</td></tr>
+  <tr>
+    <td><b>Do Not Expire Passwords:</b></td>
+    <td><%= check_box_tag :no_expire, 1, false %></td>
+  </tr>
+
+  <% if (@local_manager.enable_mailer) %>
+  <tr>
+    <td><b>Email passwords to user:</b></td>
+    <td><%= check_box_tag :notify, 1, true %></td>
+  </tr>
+  <% end %>
+
+  <tr><td>&nbsp</td></tr>
+  <tr>
+    <td><b>Password History Length:</b></td>
+    <td><%= f.text_field :password_history_length, {:size => 1, :tabindex => 8} %> <i>(overrides global setting)</i></td>
+  </tr>
+
+</table>
+
+<br /><br />
+
+<table>
+  <tr>
+    <td><b>Notes:</b></td> 
+  </tr>
+  <tr>
+    <td><%= f.text_area :notes, :cols => 40, :rows => 8, :wrap => 'off' %></td>
+  </tr>
+</table>
+
+<br /><br />
+
+<%= submit_tag "Create" %>
+&nbsp&nbsp
+<input type=button value="Cancel" onclick="window.location.href='<%= users_url() %>'" />
+
+
+<% end %>

@@ -1,0 +1,16 @@
+<%= error_messages_for :author_avpair %>
+
+<% form_for(:author_avpair, :url => author_avpair_url(@author_avpair), :html => { :method => :put }) do |f| %>
+<table>
+  <tr>
+    <td><b>Name:</b></td> 
+    <td><%= f.text_field :name %></td>
+  </tr>
+  <tr><td>&nbsp</td></tr>
+  <tr>
+    <td><%= submit_tag "Update" %></td>
+    <td><input type=button value="Cancel" onclick="window.location.href='<%= author_avpair_url(@author_avpair) %>'" /></td>
+    <td colspan="2">&nbsp</td>
+  </tr>
+</table>
+<% end %>

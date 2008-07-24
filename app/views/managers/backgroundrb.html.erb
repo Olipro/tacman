@@ -1,0 +1,23 @@
+<p>
+<u><b style="font-size: 16px;">BackgrounDRB</u></b><br />
+...is the daemon that manages all back end services such as monitoring
+the message queue between master/slaveTacacsPlus Manager systems,<br />
+mailing logs, monitoring TACACS+ daemons, etc...It is critical that this daemon continue running while the system is in production.
+</p>
+
+<br /><br />
+
+<% form_for(:manager, :url => backgroundrb_managers_url(), :html => { :method => :post}) do |f| %>
+  <%= select_tag :command, '<option value="read">view status</option><option>start</option><option>stop</option>' %>
+  <input type="submit" value="Go" />
+<% end %>
+
+<p>
+<u><b>Current Status</b></u> <br />
+<i style="color: #7B2024;"><%=h @status[:status] %></i><br /><br />
+
+<% if (!@status[:message].blank?) %>
+<u><b>Message</b></u>
+<pre><%=h @status[:message] %></pre>
+<% end %>
+</p>

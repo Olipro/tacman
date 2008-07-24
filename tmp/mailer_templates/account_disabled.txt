@@ -1,0 +1,2 @@
+This message is to inform you that your TACACS+ account has been disabled.
+If you feel this is in error, then please contact your TACACS+ system administrator.

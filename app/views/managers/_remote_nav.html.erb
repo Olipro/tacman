@@ -1,0 +1,49 @@
+<% if (@manager) %>
+    <%= link_to 'Local System', local_managers_url %><br />
+
+    <% if (@manager.slave?) %>
+    <%= link_to 'Slave Systems', managers_url %><br />
+    <% else %>
+    <%= link_to 'Master System', show_master_managers_url %><br />
+    <% end %>
+    <hr /><br />
+
+    <% if (!@manager.is_approved) %>
+    <%= link_to 'Approve', approve_manager_url(@manager), :confirm => "Confirm Approval", :method => :put %><br />
+    <% end %>
+
+    <% if (@manager.is_approved && !@manager.is_enabled) %>
+    <%= link_to 'Enable', enable_manager_url(@manager), :confirm => "Confirm Enable", :method => :put %><br />
+    <% end %>
+
+    <% if (@manager.master?) %>
+        <%= link_to 'View Settings', show_master_managers_url %><br />
+    <% else %>
+        <%= link_to 'View Settings', manager_url(@manager) %><br />
+    <% end %>
+
+    <%= link_to 'View Inbox', inbox_manager_url(@manager) %><br />
+    <%= link_to 'View Outbox', outbox_manager_url(@manager) %><br />
+    <%= link_to 'View Unprocessable', unprocessable_messages_manager_url(@manager) %><br />
+    <%= link_to 'Search Logs', log_search_form_manager_url(@manager) %><br />
+    <%= link_to 'View Logs', system_logs_manager_url(@manager) %><br />
+    <%= link_to 'Changelog', changelog_manager_url(@manager) %><br />
+    <%= link_to 'Edit', edit_manager_url(@manager) %><br />
+    <br />
+    <%= link_to 'Delete', manager_url(@manager), :confirm => "Delete manager #{@manager.name}?", :method => :delete %><br />
+
+    <% if (@manager.slave?) %>
+    <hr /><br />
+    <%= link_to 'Synchronize', system_sync_manager_url(@manager), :confirm => "Confirm System Synchronization", :method => :post %><br />
+    <% end %>
+
+<% else %>
+    <%= link_to 'Local System', local_managers_url %><br />
+
+    <% if (@local_manager.master?) %>
+    <%= link_to 'Slave Systems', managers_url %><br />
+    <% elsif (@local_manager.slave?) %>
+    <%= link_to 'Master System', show_master_managers_url %><br />
+    <% end %>
+
+<% end %>

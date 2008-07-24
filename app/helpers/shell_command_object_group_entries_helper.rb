@@ -1,0 +1,2 @@
+module ShellCommandObjectGroupEntriesHelper
+end

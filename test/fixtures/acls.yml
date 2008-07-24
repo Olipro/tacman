@@ -1,0 +1,3 @@
+permit_all:
+  configuration_id: 1
+  name: permit_all

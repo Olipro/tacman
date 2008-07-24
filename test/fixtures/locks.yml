@@ -1,0 +1,13 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  manager_id: 1
+  tacacs_daemon_id: 1
+  lock_type: MyString
+  expires_at: 2008-06-16 08:51:10
+
+two:
+  manager_id: 1
+  tacacs_daemon_id: 1
+  lock_type: MyString
+  expires_at: 2008-06-16 08:51:10

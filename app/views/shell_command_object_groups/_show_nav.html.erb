@@ -1,0 +1,12 @@
+<%= link_to 'Back to Configuration', configuration_url(@shell_command_object_group.configuration) %><br />
+<%= link_to 'Show All', shell_command_object_groups_configuration_url(@shell_command_object_group.configuration) %><br />
+<%= link_to 'Create New', new_shell_command_object_group_configuration_url(@shell_command_object_group.configuration) %><br />
+<hr><br />
+<%= link_to 'Modify', shell_command_object_group_url(@shell_command_object_group) %><br />
+<%= link_to 'Rename', edit_shell_command_object_group_url(@shell_command_object_group) %><br />
+<%= link_to 'Resequence', resequence_shell_command_object_group_url(@shell_command_object_group), :confirm => "Resequence?", :method => :put %><br />
+<%= link_to 'Changelog', changelog_shell_command_object_group_url(@shell_command_object_group) %><br />
+<br />
+<% if !@shell_command_object_group.in_use? %>
+<%= link_to 'Delete', shell_command_object_group_url(@shell_command_object_group), :confirm => "Delete shell-command-object-group #{@shell_command_object_group.name}?", :method => :delete %><br />
+<% end %>

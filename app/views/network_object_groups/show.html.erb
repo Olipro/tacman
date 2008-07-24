@@ -1,0 +1,27 @@
+<b style="font-size: 16px;">Network Object Group '<%=h @network_object_group.name %>'</b><br /><br />
+
+
+<%= error_messages_for :network_object_group_entry %>
+<%= error_messages_for :network_object_group %>
+
+<%= nog_description(@network_object_group, true) %>
+
+<br /><br /><br /><hr /><br /><br />
+
+<b><u>Add entry</u></b><br /><br />
+<% form_for(:network_object_group_entry, :url => create_entry_network_object_group_url(@network_object_group), :html => {:method => :post} )  do |f| %>
+    <table>
+      <tr> <td><b>Seq: </b></td> <td><%= f.text_field :sequence, :size => 2 %></td></tr>
+      <tr> <td><b>Network: </b></td> <td><%= f.text_field :cidr, :size => 15 %></td></tr>
+    </table>
+    <br />
+    <%= submit_tag "Add" %>
+<% end %>
+
+<br />
+    <i>examples:</i><br />
+    <i style="position: relative; left: 50px;" >10.1.0.0/16</i><br />
+    <i style="position: relative; left: 50px;" >10.2.0.0 255.255.0.0</i>
+
+
+

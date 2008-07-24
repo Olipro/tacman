@@ -1,0 +1,32 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+local:
+  id: 1
+  is_local: true
+  manager_type: master
+  name: TacacsPlus Manager
+  serial: <%= Manager.serial %>
+  base_url: http://localhost:3000/managers
+  system_log_retention: 90
+  default_enable_password_lifespan: 90
+  default_login_password_lifespan: 90
+  password_history_length: 3
+  password_minimum_length: 8
+  password_require_mixed_case: false
+  password_require_alphanumeric: true
+
+remote1:
+  id: 2
+  manager_type: slave
+  name: remote1
+  serial: <%= Manager.serial %>
+  password: password
+  base_url: http://localhost:3001/managers
+
+remote2:
+  id: 3
+  manager_type: slave
+  name: remote2
+  serial: <%= Manager.serial %>
+  password: password2
+  base_url: http://localhost:3002/managers

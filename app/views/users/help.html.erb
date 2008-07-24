@@ -1,0 +1,203 @@
+<h3><a name="system_overview" style="color: #000000;">System Overview</a></h3>
+
+<p>
+The TacacsPlus Manager acts as a central management portal for managing user accounts and TACACS+ daemons.
+The system may be set up in one of three modes: stand-alone, master, or slave. Stand-alone systems are
+meant for small deployments which involve only a single system. For larger deployoments where redundant
+systems or geographically separate systems are required, a master/slave setup would be used.
+In a master/slave setup a single master is athorative for multiple slaves.
+</p>
+
+<br /><br />
+
+
+<h3><a name="system_components" style="color: #000000;">System Components</a></h3>
+
+<p>
+The system comprises of three major components:
+<ul>
+  <li><b>Users</b></li>
+  <li><b>TACACS+ Daemons</b></li>
+  <li><b>Configurations</b></li>
+</ul>
+</p>
+
+<br />
+
+<h4><u>Users</u></h4>
+<p>
+There are 3 types of user roles in the system:
+<ul>
+  <li>admistrators</li>
+  <li>user administrators</li>
+  <li>standard users</li>
+</ul>
+Standard users may only log into the system, change their passwords, and request membership to configurations.
+<br />
+User administrators may perform basic administration of user accounts within the system. They may manually
+add users to configurations, add/remove accounts, reset passwords, and enable/disable accounts. They may not
+change the role of users within the system.
+<br />
+Administrators have the ability to manage the entire system.
+
+<p>
+Each user within the system will have unique login and enable passwords. Each of these passwords will
+have a lifespan which determines how long the password is valid before it must be changed. An additional
+security feature on user accounts is the ability to disable web interface logins. This is useful
+for non-human accounts which should not normally accessed through the web interface.
+</p>
+
+<br />
+
+<h4><u>TACACS+ Daemons</u></h4>
+<p>
+TACACS+ Daemons represent actual instances of the daemons on the system. They will have a few unique
+attributes such as IP and port but will derive most of their setup from the configuration to which they 
+subscribe. TACACS+ Daemons may either run on the local system or may be configured to run on remote systems
+(in the case of a master/slave setup).
+</p>
+
+<br />
+
+<h4><u>Configurations</u></h4>
+<p>
+Configurations make up the most complex part of the system. They will define what user accounts are
+added to what TACACS+ daemons, and what permissions those users have on those daemons.
+As users are added to configurations, they will be granted one of 3 roles within that configuration:
+<ul>
+  <li>admistrator</li>
+  <li>viewer</li>
+  <li>standard user</li>
+</ul>
+Standard users may not interact with the configuration in any way. They are simply part of it.<br />
+Viewers may view the configuration and any logs within that configuration.<br />
+Administrators may make modifications to the configuration as well as start/stop TACACS+ daemons
+which subscribe to that configuration.
+</p>
+
+<p>
+There are several elements available for use within a configuration:
+<ul>
+  <li>
+    <b>shell-command-object groups</b> - Contain lists of shell commands as regular expressions.
+  </li>
+  <li>
+    <b>network-object-groups</b> - Contain list of IP blocks in CIDR format.
+  </li>
+  <li>
+    <b>access-lists</b> - Define access controls for various tasks by permitting or denying based on source IP of the clients.
+    They have an implicit deny at the end.
+  </li>
+  <li>
+    <b>author-avpair-lists</b> - Define the shell settings a user is granted upon login to specific devices.
+  </li>
+  <li>
+    <b>command-authorization-profiles</b> - Define the shell commands a user may run, and from which devices they may run them.
+    They have an implicit deny at the end.
+  </li>
+  <li>
+    <b>command-authorization whitelists</b> - Authorization for any command listed here will always pass regardless
+    of the user who is requesting the authorization. This essentially bypasses normal authorization proceedures, thus it is useful for basic
+    commands such as 'login' or 'exit' which should always be available to all users (very useful for situations where you find
+    yourself locked out of a device due to AAA Authentication errors)
+  </li>
+  <li>
+    <b>user-groups</b> - Allows various settings to be granted to a collection of users.
+  </li>
+</ul>
+</p>
+
+<br />
+
+<h3><a name="system_configuration" style="color: #000000;">System Configuration</a></h3>
+
+<h4><u>System Settings</u></h4>
+<p>
+Basic system configuration may be performed by clicking on the <i>System</i> menu on the top nav bar.
+Below is a description of each setting:
+<ul>
+  <li>Serial - a unique identifier assigned to each system</li>
+  <li>Name - a human readable name for the system</li>
+  <li>URL - the base url used for web services requests when a master/slave setup is used</li>
+  <li>Pagination:entries per page - how many entries to show on index pages (such as when viewing logs)</li>
+  <li>Inactive Users: disable after - how long a user may go without logging in before their account is disabled</li>
+  <li>System Logs: Retain System Log For - how many days to keep logs in the database</li>
+  <li>System Logs: Archive System Log For - how many days to keep archive files</li>
+  <li>AAA Logs: same as for system logs</li>
+  <li>Passwords - used for password restrictions</li>
+  <li>ACL/Network-Object-Group Lengths - used to restrict the length of acls and object groups.</li>
+  <li>Mailer - used to enable disable email from the system</li>
+</ul>
+</p>
+
+<br />
+
+<h4><u>Master/Slave Setups</u></h4>
+<p>
+When you configure 2 or more systems in a master/slave setup you implitily enable the messaging system of TacacsPlus Manager.
+Once the messaging system is enabled any changes which are made to the master system will be reliably delivered to the slave
+systems. In turn, logs are delivered from the slaves to the master in order that the master may serve as the aggregation
+point for all system and AAA logs. <b style="color: red;">NEED TO FINISH THIS PART</b>
+</p>
+
+
+<br />
+
+<h4><u>BackgrounDRB</u></h4>
+<p>
+BackgrounDRB is the backend daemon responsible for performing maintenance on the system. It is very important that this
+daemon continue running while the TacacsPlus Manager is in production mode.
+</p>
+
+<br />
+
+<h3><a name="user_administration" style="color: #000000;">User Administration</a></h3>
+
+<h4><u>New Accounts</u></h4>
+<p>
+When creating a new account you must provide, at minimum, a unique username. By default each new
+user account will have auto-generated login and enable passwords which will be immediately expired
+upon creation. If email is enabled on the system and an email address is provided for the user, then
+their passwords will be mailed to them by the system. Users will be required to change their passwords
+upon their first login.
+</p>
+
+<p>
+After account creation additional actions may be taken from the user account details page. Such things
+as user role and account enable/disable may be set from this page. Additionally, users may be added and
+removed to configurations from this page. When a user is manually added to a configuration their profile
+within that configuration is automatically suspended and must be manually activated by a configuration
+administrator or a system administrator.
+</p>
+
+<br />
+
+<h4><u>Configuration Membership Requests</u></h4>
+<p>
+From their home page, users may request memberships to the various configurations within the system.
+Once a request is made it must be approved by a configuration administrator before the membership
+will become active. A user may withdraw their request at any time unless that request has be explicitly
+denied by the configuration administrator.
+</p>
+
+<br />
+
+<h3><a name="tacacs_daemon_administration" style="color: #000000;">TACACS+ Daemon Administration</a></h3>
+
+<h4><u></u></h4>
+<p>
+
+</p>
+
+<br />
+
+<h3></h3>
+
+<h3><a name="configuration_administration" style="color: #000000;">Configuration Administration</a></h3>
+<p>
+
+</p>
+
+<br /><br /><br /><br />
+
+

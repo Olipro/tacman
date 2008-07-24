@@ -1,0 +1,37 @@
+admin:
+  id: 1
+  enable_password_lifespan: 0
+  login_password_lifespan: 0
+  role: admin
+  username: admin
+
+user_admin:
+  id: 2
+  enable_password_lifespan: 0
+  login_password_lifespan: 0
+  role: user_admin
+  username: user_admin
+
+user:
+  id: 3
+  enable_password_lifespan: 0
+  login_password_lifespan: 0
+  username: user
+
+user2:
+  id: 4
+  enable_password_lifespan: 0
+  login_password_lifespan: 0
+  username: user2
+
+user3:
+  id: 5
+  enable_password_lifespan: 0
+  login_password_lifespan: 0
+  username: user3
+
+user4:
+  id: 6
+  enable_password_lifespan: 0
+  login_password_lifespan: 0
+  username: user4

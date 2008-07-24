@@ -1,0 +1,4 @@
+<% if (!@local_manager.slave?) %>
+<%= link_to 'Change Login Password', change_password_users_url %><br />
+<%= link_to 'Change Enable Password', change_enable_users_url %><br />
+<% end %>

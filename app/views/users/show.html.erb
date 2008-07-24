@@ -1,0 +1,76 @@
+<%= error_messages_for :user %>
+
+<table>
+  <tr><td><b><u>Accout Information</u></b></td></tr>
+  <tr><td><b>Username:</b></td> <td><%= @user.username %></td></tr>
+  <tr><td><b>Last Login:</b></td> <td><%= @user.last_login %></td></tr>
+  <tr><td><b>Created:</b></td> <td><%= @user.created_at %></td></tr>
+  <tr><td><b>Real Name:</b></td> <td><%= @user.real_name %></td></tr>
+  <tr><td><b>Department:</b></td> <td><%= @user.department %></td></tr>
+  <tr><td><b>Email:</b></td> <td><%= @user.email %></td></tr>
+  <tr><td><b>Alerts Email:</b></td> <td><%= @user.alerts_email %></td></tr>
+  <% if (@session_user.admin?) %>
+  <tr><td><b>Role:</b></td><td><%= user_role_checkboxes(@user) %></td></tr>
+  <% else %>
+  <tr><td><b>Role:</b></td><td><%=h @user.role %></td></tr>
+  <% end %>
+  <tr><td>&nbsp</td></tr>
+  <tr><td><%= user_active_checkbox(@user) %><b>Account Enabled</b></td></tr>
+  <tr><td><%= user_web_login_checkbox(@user) %><b>Web Login Allowed</b></td></tr>
+  <tr><td>&nbsp</td></tr>
+  <tr><td><b><u>Login Password</u></b></td></tr>
+  <tr><td><b>Lifespan:</b></td> <td><%= password_lifespan_xlate(@user.login_password_lifespan) %></td></tr>
+  <tr><td><b>Status:</b></td> <td><%= password_expiry_checkboxes(@user) %></td></tr>
+  <% if @user.password_history_length %>
+  <tr><td><b>History:</b></td> <td><%= pluralize(@user.password_history_length, "entry" ) %></td></tr>
+  <% end %>
+  <tr><td>&nbsp</td></tr>
+  <tr><td><b><u>Enable Password</u></b></td></tr>
+  <tr><td><b>Lifespan:</b></td> <td><%= password_lifespan_xlate(@user.enable_password_lifespan) %></td></tr>
+  <tr><td><b>Status:</b></td> <td><%= enable_expiry_checkboxes(@user) %></td></tr>
+  <% if @user.password_history_length %>
+  <tr><td><b>History:</b></td> <td><%= pluralize(@user.password_history_length, "entry" ) %></td></tr>
+  <% end %>
+</table>
+
+<br /><br />
+
+<table class="spaced">
+  <tr><td colspan="4"><b><u>Configuration Memberships</u></b></td></tr>
+  <tr> <td><b>Name</b></td> <td><b>State</b></td> <td><b>Status</b></td> <td><b>Role</b></td> </tr>
+  <% shaded = true %>
+  <% for configuration in @configurations %>
+    <% if (@memberships.has_key?(configuration.id) && @memberships[configuration.id].suspended?) %>
+            <tr class="disabled">
+            <% shaded = true %>
+    <% elsif (shaded) %>
+            <tr class="shaded">
+            <% shaded = false %>
+    <% else %>
+            <tr>
+            <% shaded = true %>
+    <% end %>
+    <% if (@memberships.has_key?(configuration.id)) %>
+      <td><%= link_to configuration.name, configuration_url(configuration), :style => "color: #21517b;" %></td>
+      <td><%= @memberships[configuration.id].state %></td>
+      <td><%= @memberships[configuration.id].status %></td>
+      <td><%= @memberships[configuration.id].role %></td>
+      <td><%= link_to '-remove-', {:action => :force_withdraw, :id => @user.id, :configuration => configuration.id},
+                                   :style => "color: #7B2024;", :confirm => "Remove from configuration?", :method => :post %></td>
+
+    <% else %>
+      <td><%= link_to configuration.name, configuration_url(configuration), :style => "color: #21517b;" %></td>
+      <td><i>not a member</i></td>
+      <td><i>n/a</i></td>
+      <td><i>n/a</i></td>
+      <td><%= link_to '-add-', {:action => :force_join, :id => @user.id, :configuration => configuration.id}, :confirm => "Add to configuration?", :method => :post %></td>
+    <% end %>
+  </tr>
+  <% end %>
+</table>
+
+<br /><br />
+
+<b><u>Notes</u></b><br />
+<pre><%=h @user.notes %></pre>
+<br /><br />

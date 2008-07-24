@@ -1,0 +1,24 @@
+<b style="font-size: 16px;">Change Enable Password</b><br /><br />
+
+<%= error_messages_for :user %>
+
+<% form_for(:user, :url => update_change_enable_users_url, :html => { :method => :put }) do |f| %>
+<table>
+  </tr>
+    <td><b>Current Enable Password:</b></td> <td><%= password_field_tag :current_password %></td>
+    <td colspan="2">&nbsp</td>
+  </tr>
+  </tr>
+    <td><b>New Enable Password:</b></td> <td><%= password_field_tag :new_password %></td>
+    <td><b>Confirm:</b></td> <td><%= password_field_tag :password_confirmation %></td>
+  </tr>
+  </tr>
+    <td colspan="4">&nbsp</td>
+  </tr>
+  <tr>
+    <td><%= submit_tag "Update" %></td>
+    <td><input type=button value="Cancel" onclick="window.location.href='<%= home_users_url() %>'" /></td>
+    <td colspan="2">&nbsp</td>
+  </tr>
+</table>
+<% end %>

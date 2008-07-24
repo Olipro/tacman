@@ -1,0 +1,60 @@
+--- 
+:backgroundrb: 
+  :ip: 0.0.0.0
+  :port: 11006
+
+:development:
+  :backgroundrb:
+    :log: foreground # foreground mode,print log messages on console
+
+:production:
+  :backgroundrb:
+    :debug_log: false # disable log workers and other logging 
+
+:schedules:
+  # daily archiver runs at midnight
+  :archiver_worker:
+    :daily_archive:
+      :trigger_args: 0 0 0 * * * *
+
+  # check the inbox periodically
+  :inbox_manager_worker:
+    :process_all_inbox:
+      :trigger_args: 0 0,5,10,15,20,25,30,35,40,45,50,55 * * * * *
+
+  # check outbox every minute
+  :outbox_manager_worker:
+    :write_all_remote:
+      :trigger_args: 30 * * * * * *
+
+  # tacacs daemons
+  :daemon_manager_worker:
+    # monitor every minute
+    :check_status:
+      :trigger_args: 30 * * * * * *
+
+    # gather up aaa logs every 5 minutes
+    :gather_aaa_logs:
+      :trigger_args: 0 5,10,15,20,25,30,35,40,45,50,55 * * * * *
+
+  # users
+  :user_manager_worker:
+    # cleanup sessions
+    :cleanup_sessions:
+      :trigger_args: 0 0 * * * * *
+
+    # mail logs daily
+    :daily_logs:
+      :trigger_args: 59 59 23 * * * *
+
+    # mail configuration changelogs
+    :configuration_changelog:
+      :trigger_args: 59 59 23 * * * *
+
+    # disable inactive users
+    :disable_inactive:
+      :trigger_args: 0 0 0 * * * *
+
+    # mail pending membership requests
+    :pending_membership_requests:
+      :trigger_args: 0 0 3 * * * *

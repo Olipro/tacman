@@ -1,0 +1,7 @@
+<%= link_to 'Back to Configuration', configuration_url(@configuration) %><br />
+<%= link_to 'Show All', command_authorization_profiles_configuration_url(@configuration) %><br />
+
+<% if (@session_user.admin? || @configuration_roles[@configuration.id] == 'admin') %>
+<%= link_to 'Create New', new_command_authorization_profile_configuration_url(@configuration) %><br />
+<% end %>
+<hr><br />

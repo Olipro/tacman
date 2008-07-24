@@ -1,0 +1,44 @@
+<%= error_messages_for :configured_user %>
+
+<hr>
+<b style="font-size: 16px;">Account Settings</b><br /><br />
+
+<% form_for(:configured_user, :url => configured_user_url(@configured_user), :html => { :method => :put }) do |f| %>
+<%= hidden_field_tag :referer, @referer %>
+<table>
+  <tr>
+    <td><b>User Group:</b></td> 
+    <td><%= f.select :user_group_id, @configuration.user_groups.collect {|x| [ x.name, x.id ] }, { :include_blank => true }  %></td>
+  </tr>
+  <tr>
+    <td><b>Role:</b></td>
+    <td><%= f.select(:role, ['user','viewer','admin'].collect {|x| [ x, x ] }) %></td>
+  </tr>
+  <tr><td>&nbsp</td></tr>
+  <tr><td colspan="2"><b><u>User Specific Settings</u></b> &nbsp&nbsp <i>(overrides group settings)</i></td></tr>
+  <tr>
+    <td><b>Authorization AVPair:</b></td> 
+    <td><%= f.select :author_avpair_id, @configuration.author_avpairs.collect {|x| [ x.name, x.id ] }, { :include_blank => true }  %></td>
+  </tr>
+  <tr>
+    <td><b>Command Authorization Profile:</b></td> 
+    <td><%= f.select :command_authorization_profile_id, @configuration.command_authorization_profiles.collect {|x| [ x.name, x.id ] }, { :include_blank => true }  %></td>
+  </tr>
+  <tr>
+    <td><b>Login ACL:</b></td> 
+    <td><%= f.select :login_acl_id, @configuration.acls.collect {|x| [ x.name, x.id ] }, { :include_blank => true }  %></td>
+  </tr>
+  <tr>
+    <td><b>Enable ACL:</b></td> 
+    <td><%= f.select :enable_acl_id, @configuration.acls.collect {|x| [ x.name, x.id ] }, { :include_blank => true }  %></td>
+  </tr>
+  <tr><td>&nbsp</td></tr>
+  <tr><td colspan="2"><b><u>Notes</u></b></td></tr>
+  <tr><td colspan="2"><%= f.text_area :notes, :cols => 40, :rows => 8, :wrap => 'off' %></td></tr>
+</table>
+<br /><br />
+
+<%= submit_tag "Update" %>
+<input type=button value="Cancel" onclick="window.location.href='<%= @referer %>'" />
+<% end %>
+
