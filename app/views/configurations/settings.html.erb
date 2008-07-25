@@ -6,6 +6,10 @@
         <td><b>Name:</b></td>
         <td><%=h @configuration.name %></td>
       </tr>
+        <tr>
+            <td><b>Department:</b></td>
+            <td><%= @configuration.department.name if (@configuration.department) %></td>
+        </tr>
       <tr>
         <td><b>Key:</b></td>
         <td><%=h @configuration.key %></td>
@@ -49,10 +53,6 @@
       <tr>
         <td><b>Password prompt:</b></td>
         <td><textarea cols="50" readonly><%=h @configuration.password_prompt %></textarea></td>
-      </tr>
-      <tr>
-        <td><b>Hide on user home pages:</b></td> 
-        <td><%= @configuration.is_hidden %></td>
       </tr>
 </table>
 

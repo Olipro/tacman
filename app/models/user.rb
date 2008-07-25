@@ -1,6 +1,7 @@
 class User < ActiveRecord::Base
     attr_protected :role, :salt
 
+    belongs_to :department
     has_one :user_last_login, :dependent => :destroy
     has_many :password_histories, :dependent => :destroy
     has_many :configured_users, :dependent => :destroy

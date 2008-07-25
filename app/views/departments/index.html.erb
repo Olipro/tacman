@@ -1,0 +1,15 @@
+<b style="font-size: 16px;">Departments</b><br /><br />
+
+<% if @departments.length != 0 %>
+<ol>
+<% for department in @departments %>
+    <li><%= link_to department.name, edit_department_url(department) %></li>
+  </tr>
+<% end %>
+</ol>
+<% else %>
+<b>No Departments have been created.</b>
+<% end %>
+<br />
+
+

@@ -11,6 +11,7 @@ class CreateSystemLogs < ActiveRecord::Migration
       t.integer :manager_id
       t.integer :user_id
       t.integer :configuration_id
+      t.integer :department_id
       t.integer :tacacs_daemon_id
       t.integer :configured_user_id
       t.integer :author_avpair_id

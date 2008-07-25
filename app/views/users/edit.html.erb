@@ -22,15 +22,7 @@
 
   <tr>
     <td><b>Department:</b></td>
-    <td style="text-align: left;">
-      <a href="#" id="new_department" onclick="document.getElementById('form_exdept').disabled = true;document.getElementById('form_newdept').disabled = false;Element.toggle('form_exdept');Element.toggle('form_newdept');Element.toggle('existing_department');Element.toggle('new_department');">New</a>
-      <a href="#" id="existing_department" style="display: none;" onclick="document.getElementById('form_newdept').disabled = true;document.getElementById('form_exdept').disabled = false;Element.toggle('form_exdept');Element.toggle('form_newdept');Element.toggle('existing_department');Element.toggle('new_department');">Existing</a>
-      <%= f.select :department,
-                   User.find_by_sql("select distinct department from users where department != '' order by department").collect {|x| [ x.department, x.department ] },
-                   { :include_blank => true},
-                   { :id => 'form_exdept', :tabindex => 6} %>
-      <%= f.text_field :department, { :id => 'form_newdept', :style => "display: none;", :tabindex => 7 }%>
-    </td>
+    <td style="text-align: left;"><%= f.select :department_id, Department.find(:all, :order => :name).collect {|p| [ p.name, p.id ] }, { :include_blank => true } %></td>
   </tr>
 </table>
 

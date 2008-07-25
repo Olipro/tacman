@@ -1,6 +1,7 @@
 class Configuration < ActiveRecord::Base
     attr_protected :aaa_log_dir, :serial
 
+    belongs_to :department
     has_many :aaa_log_archives, :dependent => :destroy, :order => :archived_on
     has_many :aaa_logs, :dependent => :destroy, :order => :timestamp
     has_many :acls, :dependent => :destroy

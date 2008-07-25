@@ -43,7 +43,9 @@
 
             <div id="nav_bar">
               <span style="padding-left: 170px;"></span>
+
               <% if (@session_user.admin?) %>
+              <%= link_to 'Departments', departments_url, :style => "padding-left: 20px; font-size: 12px; font-weight: bold;" %>
               <%= link_to 'Configurations', configurations_url, :style => "padding-left: 20px; font-size: 12px; font-weight: bold;" %>
               <% end %>
 

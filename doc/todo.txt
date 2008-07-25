@@ -10,6 +10,13 @@
 features & bugs
 ---------------
 
+* make 'department' model. configs belong to a dept. users belong to a dept.
+* get rid of approval process for users, config admins should see a list of users only in their department
+* user_admin may add users to configs not belonging to their dept
+* remove 'is_hidden' from configuration
+* system log support
+* need support under messaging system
+
 * verify all workers
 
 * test account lockout

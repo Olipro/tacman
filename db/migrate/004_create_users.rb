@@ -11,6 +11,12 @@ class CreateUsers < ActiveRecord::Migration
       t.timestamps
     end
 
+    # departments
+    create_table :departments do |t|
+      t.string :name
+      t.timestamps
+    end
+
     # last logins
     create_table :user_last_logins do |t|
       t.integer :user_id
@@ -19,9 +25,9 @@ class CreateUsers < ActiveRecord::Migration
 
     # users
     create_table :users do |t|
+      t.integer :department_id
       t.string :alerts_email
       t.boolean :allow_web_login, :default => true
-      t.string :department
       t.boolean :disabled, :default => false
       t.string :email
       t.integer :enable_password_lifespan
@@ -47,6 +53,7 @@ class CreateUsers < ActiveRecord::Migration
 
   def self.down
     drop_table :password_histories
+    drop_table :departments
     drop_table :user_last_logins
     drop_table :users
   end

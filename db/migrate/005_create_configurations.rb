@@ -2,6 +2,7 @@ class CreateConfigurations < ActiveRecord::Migration
   def self.up
     #configurations
     create_table :configurations do |t|
+      t.integer :department_id
       t.string :serial
       t.string :name
       t.string :default_policy, :default => 'deny' # permit, deny
@@ -17,7 +18,6 @@ class CreateConfigurations < ActiveRecord::Migration
       t.boolean :log_authorization, :default => true
       t.integer :retain_aaa_logs_for, :default => 21
       t.integer :archive_aaa_logs_for, :default => 365
-      t.boolean :is_hidden, :default => false
 
       t.timestamps
     end

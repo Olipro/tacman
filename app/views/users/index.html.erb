@@ -37,7 +37,7 @@
         <td><%= user.username %></td>
         <td><%= user_role_highlight(user) %></td>
         <td><%=h user.real_name %></td>
-        <td><%=h user.department %></td>
+        <td><%=h user.department.name if (user.department) %></td>
 
         <% if (!user.last_login.blank?) %>
           <td><%= user.last_login %></td>

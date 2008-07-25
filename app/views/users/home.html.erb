@@ -4,7 +4,7 @@
   <tr><td><b><u>Accout Information</u></b></td></tr>
   <tr><td><b>Username:</b></td> <td><%= @user.username %></td></tr>
   <tr><td><b>Real Name:</b></td> <td><%= @user.real_name %></td></tr>
-  <tr><td><b>Department:</b></td> <td><%= @user.department %></td></tr>
+  <tr><td><b>Department:</b></td> <td><%= @user.department.name if (@user.department) %></td></tr>
   <tr><td><b>Email:</b></td> <td><%= @user.email %></td></tr>
   <tr><td><b>Alerts Email:</b></td> <td><%= @user.alerts_email %></td></tr>
   <tr><td>&nbsp</td></tr>

@@ -6,7 +6,7 @@
   <tr><td><b>Last Login:</b></td> <td><%= @user.last_login %></td></tr>
   <tr><td><b>Created:</b></td> <td><%= @user.created_at %></td></tr>
   <tr><td><b>Real Name:</b></td> <td><%= @user.real_name %></td></tr>
-  <tr><td><b>Department:</b></td> <td><%= @user.department %></td></tr>
+  <tr><td><b>Department:</b></td> <td><%= @user.department.name if (@user.department) %></td></tr>
   <tr><td><b>Email:</b></td> <td><%= @user.email %></td></tr>
   <tr><td><b>Alerts Email:</b></td> <td><%= @user.alerts_email %></td></tr>
   <% if (@session_user.admin?) %>

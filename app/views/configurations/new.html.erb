@@ -9,6 +9,10 @@
     <td><%= f.text_field :name %></td>
   </tr>
   <tr>
+    <td><b>Department:</b></td>
+    <td style="text-align: left;"><%= f.select :department_id, Department.find(:all, :order => :name).collect {|p| [ p.name, p.id ] }, { :include_blank => true } %></td>
+  </tr>
+  <tr>
     <td><b>Key:</b></td> 
     <td><%= f.text_field :key %></td>
   </tr>
@@ -48,11 +52,7 @@
     <td><b>Password prompt:</b></td> 
     <td><%= f.text_area :password_prompt, :cols => 50, :rows => 5 %></td>
   </tr>
-  <tr>
-    <td><b>Hide on user home pages:</b></td> 
-    <td><%= f.check_box :is_hidden %></td>
-  </tr>
-  
+
   <tr><td>&nbsp</td></tr>
   <tr>
     <td><%= submit_tag "Create" %></td>

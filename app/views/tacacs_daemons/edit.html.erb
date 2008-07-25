@@ -10,7 +10,7 @@
   </tr>
   <tr>
     <td><b>Configuration:</b></td> 
-    <td><%= f.select :configuration_id, Configuration.find(:all).collect {|p| [ p.name, p.id ] }, { :include_blank => true } %></td>
+    <td><%= f.select :configuration_id, Configuration.find(:all, :order => :name).collect {|p| [ p.name, p.id ] }, { :include_blank => true } %></td>
   </tr>
   <tr>
     <td><b>Ip:</b></td> 
