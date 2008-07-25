@@ -41,11 +41,11 @@ ActionController::Routing::Routes.draw do |map|
                 :member => {:activate => :put, :approve => :put, :approve_active => :put, :deny => :put, :suspend => :put}
 
   map.resources :tacacs_daemons,
-                :member => {:changelog => :get, :error_log => :get, :clear_error_log => :put},
+                :member => {:aaa_log => :get, :changelog => :get, :error_log => :get, :clear_error_log => :put},
                 :collection => {:start_stop_selected => :put}
 
   map.resources :configurations,
-                :member => {:aaa_log_archives => :get, :aaa_logs => :get, :download_archived_log => :post,
+                :member => {:aaa_log_archives => :get, :aaa_log_file => :get, :aaa_logs => :get, :download_archived_log => :post,
                             :acls => :get, :new_acl => :get, :create_acl => :post,
                             :author_avpairs => :get, :new_author_avpair => :get, :create_author_avpair => :post,
                             :command_authorization_profiles => :get, :new_command_authorization_profile => :get, :create_command_authorization_profile => :post,
@@ -81,7 +81,7 @@ ActionController::Routing::Routes.draw do |map|
                                 :request_registration => :post, :resync => :post,
                                 :show_master => :get, :backgroundrb => :post,
                                 :system_export => :get, :tacacs_daemon_control => :post,
-                                :write_to_inbox => :post,
+                                :read_log_file => :post, :write_to_inbox => :post,
                                 :system_log_archives => :get, :download_archived_log => :post},
                 :member => {:approve => :put, :enable => :put, :inbox => :get, :outbox => :get, :system_sync => :post,
                             :system_logs => :get, :unprocessable_messages => :get,

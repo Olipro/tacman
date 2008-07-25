@@ -617,6 +617,40 @@ class Manager < ActiveRecord::Base
         self.inbox_revision = rev
     end
 
+    # attempt to read remote log file. return string or false.
+    def read_remote_log_file(tacacs_daemon,log)
+        http, uri = prepare_http_request("/read_log_file")
+        data = "serial=#{self.serial}&password=#{self.password}&tacacs_daemon=#{tacacs_daemon.id}&log=#{log}"
+
+        begin
+            response = http.post(uri.path, data, {'Accept' => 'text/xml'})
+
+            if ( response.kind_of?(Net::HTTPOK) )
+                doc = REXML::Document.new(response.body)
+                if (doc.root.name == 'log')
+                     return(doc.root.text)
+                end
+            elsif ( response.kind_of?(Net::HTTPForbidden) )
+                self.errors.add_to_base("Authentication failure.")
+                Manager.local.log(:manager_id => self.id, :message => "Authorization failure on Manager #{self.name}. Disabling messaging.")
+                self.disable!('authentication failure.')
+            elsif (response.kind_of?(Net::HTTPNotAcceptable))
+                body = response.body
+                doc = REXML::Document.new(body)
+                if (doc.root.name == 'errors')
+                     doc.root.each_element {|e| self.errors.add_to_base(e.text) }
+                end
+            else
+                self.errors.add_to_base("Unexpected response: #{response.class}")
+            end
+
+        rescue Exception => error
+            self.errors.add_to_base("Web services call raised errors: #{error}")
+        end
+
+        return(false)
+    end
+
     def request_system_sync!
         http, uri = prepare_http_request("/resync")
         data = "serial=#{self.serial}&password=#{self.password}"

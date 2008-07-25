@@ -1,0 +1,8 @@
+<b style="font-size: 16px;">AAA Log</b><br /><br /><br />
+
+<p>Entries here are being updated in real time by the TACACS+ daemon, and have not yet been imported into the database.</p>
+
+<%= error_messages_for :tacacs_daemon %>
+<% log = @tacacs_daemon.aaa_log %>
+<pre><%= log %></pre>
+

@@ -3,6 +3,13 @@ class TacacsDaemonsController < ApplicationController
     before_filter :authorize_admin
     before_filter :force_pw_change
 
+    def aaa_log
+        @tacacs_daemon = TacacsDaemon.find(params[:id])
+        respond_to do |format|
+            format.html {@nav = 'show_nav'}
+        end
+    end
+
     def changelog
         @tacacs_daemon = TacacsDaemon.find(params[:id])
         @log_count = SystemLog.count_by_sql("SELECT COUNT(*) FROM system_logs WHERE tacacs_daemon_id=#{@tacacs_daemon.id}")

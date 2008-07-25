@@ -9,7 +9,6 @@
 
 features & bugs
 ---------------
-* per user password history
 
 * verify all workers
 
@@ -28,6 +27,10 @@ User.find(:all).each {|u| puts "#{u.username}, #{u.hashed_password}, #{u.hashed_
 
 * import old logs into new system
 
+
+before rollout
+--------------
+* unpack rails and all required gems
 
 
 questions

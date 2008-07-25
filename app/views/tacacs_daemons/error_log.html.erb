@@ -4,6 +4,6 @@
 <% log = @tacacs_daemon.error_log %>
 <pre><%= log %></pre>
 
-<% if (log.length > 0) %>
+<% if (@tacacs_daemon.local? && log.length > 0) %>
 <%= link_to "Erase Log", clear_error_log_tacacs_daemon_url(@tacacs_daemon), :method => :put %>
 <% end %>

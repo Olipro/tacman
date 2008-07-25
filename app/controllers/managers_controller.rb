@@ -1,7 +1,7 @@
 class ManagersController < ApplicationController
-    before_filter :define_session_user, :except => [:register, :resync, :tacacs_daemon_control, :write_to_inbox]
-    before_filter :authorize_admin, :except => [:register, :resync, :tacacs_daemon_control, :write_to_inbox]
-    before_filter :force_pw_change, :except => [:register, :resync, :tacacs_daemon_control, :write_to_inbox]
+    before_filter :define_session_user, :except => [:register, :resync, :read_log_file, :tacacs_daemon_control, :write_to_inbox]
+    before_filter :authorize_admin, :except => [:register, :resync, :read_log_file, :tacacs_daemon_control, :write_to_inbox]
+    before_filter :force_pw_change, :except => [:register, :resync, :read_log_file, :tacacs_daemon_control, :write_to_inbox]
 
     filter_parameter_logging :password
 
@@ -217,6 +217,47 @@ class ManagersController < ApplicationController
             format.xml {render :xml => @manager.outbox.to_xml}
         end
     end
+
+    # used by remote manager to real tacacs daemon log files
+    def read_log_file
+        get_remote_addr()
+        respond_to do |format|
+            begin
+                serial = params[:serial]
+                pw = params[:password]
+                if (serial && pw)
+                    manager = Manager.find_by_serial(serial)
+                    if ( manager && manager.authenticate(pw) )
+                        tacacs_daemon = TacacsDaemon.find(params[:tacacs_daemon])
+                        if (params[:log] == 'error')
+                            log = tacacs_daemon.error_log
+                        elsif (params[:log] == 'aaa')
+                            log = tacacs_daemon.aaa_log
+                        else
+                            log = ''
+                        end
+
+                        if (tacacs_daemon.errors.length != 0)
+                            format.xml  { render :xml => tacacs_daemon.errors.to_xml, :status => :not_acceptable }
+                        else
+                            format.xml  { render :xml => "<log>#{log}</log>" }
+                        end
+                    else
+                        Manager.local.log(:level => 'warn', :message => "Authentication failed for #{serial} from #{@remote_addr}.")
+                        manager = Manager.new if (!manager)
+                        manager.errors.add_to_base("Authentication failed for Manager #{serial}.")
+                        format.xml  { render :xml => manager.errors.to_xml, :status => :forbidden }
+                    end
+                else
+                    format.xml  { render :xml => "<errors><error>XML document must contain a valid Manager serial and password.</error></errors>", :status => :not_acceptable }
+                end
+
+            rescue Exception => error
+                format.xml  { render :xml => "<errors><error>Error processing input for Manager: #{error}</error></errors>", :status => :not_acceptable }
+            end
+        end
+    end
+
 
     def register
         get_remote_addr()

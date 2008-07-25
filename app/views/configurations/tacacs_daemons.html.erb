@@ -5,6 +5,13 @@
     <%= render :partial => 'tacacs_daemons/list' %>
   <% end %>
 
+  <b><u>AAA Log Files</u></b><br />
+  <ol>
+  <% for td in @tacacs_daemons %>
+    <li><%= link_to td.name, :action => :aaa_log_file, :id => @configuration.id, :tacacs_daemon_id => td.id %></li>
+  <% end %>
+  <ol>
+
 <% else %>
   <b>No TACACS+ Daemons have been created.</b>
 <% end %>

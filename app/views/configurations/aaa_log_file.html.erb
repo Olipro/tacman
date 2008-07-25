@@ -1,0 +1,9 @@
+<b style="font-size: 16px;"><%= @tacacs_daemon.name %> - AAA Log</b><br /><br /><br />
+
+<p>Entries here are being updated in real time by the TACACS+ daemon, and have not yet been imported into the database.</p>
+
+<%= error_messages_for :tacacs_daemon %>
+
+<%= link_to '<-- Back', tacacs_daemons_configuration_url(@configuration) %>
+<pre><%= @log %></pre>
+<%= link_to '<-- Back', tacacs_daemons_configuration_url(@configuration) %>

@@ -1,3 +1,0 @@
-  [4;36;1mSQL (0.001266)[0m   [0;1mDELETE FROM schema_migrations WHERE version = '1'[0m
-  [4;35;1mSQL (0.000144)[0m   [0mSELECT version FROM schema_migrations[0m
-  [4;36;1mSQL (0.000134)[0m   [0;1mSHOW TABLES[0m

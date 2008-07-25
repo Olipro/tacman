@@ -1,5 +1,5 @@
 class ConfigurationsController < ApplicationController
-    viewer_access = [:aaa_log_archives, :aaa_logs, :acls, :author_avpairs, :changelog, :command_authorization_profiles,
+    viewer_access = [:aaa_log_archives, :aaa_log_file, :aaa_logs, :acls, :author_avpairs, :changelog, :command_authorization_profiles,
                      :command_authorization_whitelist, :download_archived_log, :log_search_form, :network_object_groups,
                      :search_aaa_logs, :settings, :shell_command_object_groups, :show, :tacacs_daemons, :tacacs_daemon_control,
                      :user_groups]
@@ -20,6 +20,31 @@ class ConfigurationsController < ApplicationController
         respond_to do |format|
             @nav = 'show_nav'
             format.html
+        end
+    end
+
+    def aaa_log_file
+        @tacacs_daemon = TacacsDaemon.find(params[:tacacs_daemon_id])
+        @configuration = Configuration.find(params[:id])
+
+        if (@tacacs_daemon.local?)
+            @log = @tacacs_daemon.aaa_log
+        else
+            manager = @tacacs_daemon.manager
+            log = manager.read_remote_log_file(@tacacs_daemon,'aaa')
+            if (manager.errors.length != 0)
+                @log = ''
+                @tacacs_daemon.errors.add_to_base("Error collecting remote log.")
+                manager.errors.each_full {|e| @tacacs_daemon.errors.add_to_base(e) }
+            else
+                @log = log
+            end
+        end
+
+        respond_to do |format|
+            @nav = 'tacacs_daemon_nav'
+            format.html
+            format.xml  { render :xml => "<log>#{@log}</log>" }
         end
     end
 

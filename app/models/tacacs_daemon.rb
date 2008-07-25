@@ -28,6 +28,34 @@ class TacacsDaemon < ActiveRecord::Base
         return(false)
     end
 
+    def aaa_log
+        if (local?)
+            log = ''
+            begin
+                if ( File.exists?(self.aaa_log_file) )
+                    file = File.open(self.aaa_log_file)
+                    log = file.read
+                    file.close
+                else
+                    log = ''
+                end
+            rescue Exception => error
+                self.errors.add_to_base("Error reading aaa_log_file: #{error}")
+            end
+
+        else
+            manager = self.manager
+            log = manager.read_remote_log_file(self,'aaa')
+            if (manager.errors.length != 0)
+                log = ''
+                self.errors.add_to_base("Error collecting remote log.")
+                manager.errors.each_full {|e| self.errors.add_to_base(e) }
+            end
+        end
+
+        return(log)
+    end
+
     def clear_error_log!
         if (!local?)
             self.errors.add_to_base("Action prohibited on a non-local TACACS+ Daemon.")
@@ -49,23 +77,30 @@ class TacacsDaemon < ActiveRecord::Base
     end
 
     def error_log
-        if (!local?)
-            self.errors.add_to_base("Action prohibited on a non-local TACACS+ Daemon.")
-            return(nil)
+        if (local?)
+            log = ''
+            begin
+                if (File.size(self.error_log_file) < 1000000)
+                    file = File.open(self.error_log_file)
+                    log = file.read
+                    file.close
+                else
+                    log = "Error log too large"
+                end
+            rescue Exception => error
+                self.errors.add_to_base("Error reading error_log file: #{error}")
+            end
+
+        else
+            manager = self.manager
+            log = manager.read_remote_log_file(self,'error')
+            if (manager.errors.length != 0)
+                log = ''
+                self.errors.add_to_base("Error collecting remote log.")
+                manager.errors.each_full {|e| self.errors.add_to_base(e) }
+            end
         end
 
-        log = ''
-        begin
-            if (File.size(self.error_log_file) < 1000000)
-                file = File.open(self.error_log_file)
-                log = file.read
-                file.close
-            else
-                log = "Error log too large"
-            end
-        rescue Exception => error
-            self.errors.add_to_base("Error reading error_log file: #{error}")
-        end
         return(log)
     end
 
