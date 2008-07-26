@@ -37,7 +37,7 @@
 
 <table class="spaced">
   <tr><td colspan="4"><b><u>Configuration Memberships</u></b></td></tr>
-  <tr> <td><b>Name</b></td> <td><b>State</b></td> <td><b>Status</b></td> <td><b>Role</b></td> </tr>
+  <tr> <td>&nbsp</td> <td><b>Name</b></td> <td><b>Status</b></td> <td><b>Role</b></td> <td><b>User Group</b></td> </tr>
   <% shaded = true %>
   <% for configuration in @configurations %>
     <% if (@memberships.has_key?(configuration.id) && @memberships[configuration.id].suspended?) %>
@@ -51,19 +51,24 @@
             <% shaded = true %>
     <% end %>
     <% if (@memberships.has_key?(configuration.id)) %>
+      <td>
+        <%= link_to image_tag('checked.png', :border => 'none'), {:action => :remove_from_configuration, :id => @user.id, :configuration => configuration.id},
+                                                                    :confirm => "Remove from configuration?", :method => :post %>
+      </td>
       <td><%= link_to configuration.name, configuration_url(configuration), :style => "color: #21517b;" %></td>
-      <td><%= @memberships[configuration.id].state %></td>
       <td><%= @memberships[configuration.id].status %></td>
       <td><%= @memberships[configuration.id].role %></td>
-      <td><%= link_to '-remove-', {:action => :force_withdraw, :id => @user.id, :configuration => configuration.id},
-                                   :style => "color: #7B2024;", :confirm => "Remove from configuration?", :method => :post %></td>
+      <td><%= @memberships[configuration.id].user_group.name if (@memberships[configuration.id].user_group) %></td>
 
     <% else %>
+      <td>
+        <%= link_to image_tag('unchecked.png', :border => 'none'), {:action => :add_to_configuration, :id => @user.id, :configuration => configuration.id},
+                                                                    :confirm => "Add to configuration?", :method => :post %>
+      </td>
       <td><%= link_to configuration.name, configuration_url(configuration), :style => "color: #21517b;" %></td>
-      <td><i>not a member</i></td>
       <td><i>n/a</i></td>
       <td><i>n/a</i></td>
-      <td><%= link_to '-add-', {:action => :force_join, :id => @user.id, :configuration => configuration.id}, :confirm => "Add to configuration?", :method => :post %></td>
+      <td><i>n/a</i></td>
     <% end %>
   </tr>
   <% end %>

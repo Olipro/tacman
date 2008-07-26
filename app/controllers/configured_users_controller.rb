@@ -24,9 +24,9 @@ class ConfiguredUsersController < ApplicationController
     end
 
 
-    def approve
-        @user = @configured_user.user
-        @configuration = @configured_user.configuration
+    def add
+        @user = User.find(params[:user])
+        @configuration = Configuration.find(params[:configuration])
 
         respond_to do |format|
             @nav = "configurations/show_nav"
@@ -35,52 +35,14 @@ class ConfiguredUsersController < ApplicationController
                 format.html { render configuration_url(@configured_user.configuration) }
                 format.xml  { render :xml => @@configured_user.errors, :status => :not_acceptable }
             else
-                @configured_user.approve!
-                @local_manager.log(:username => @session_user.username, :configured_user_id => @configured_user.id, :configuration_id => @configuration.id, :message => "Approved membership for user '#{@user.username}' within configuration '#{@configuration.name}'.")
-                format.html { redirect_to membership_requests_configuration_url(@configured_user.configuration)}
+                cu = @user.configured_users.build()
+                cu.configuration_id = @configuration.id
+                cu.save
+                format.html { redirect_to add_users_configuration_url(@configuration)}
                 format.xml  { head :ok }
             end
         end
     end
-
-    def approve_active
-        @user = @configured_user.user
-        @configuration = @configured_user.configuration
-
-        respond_to do |format|
-            @nav = "configurations/show_nav"
-            if (@local_manager.slave?)
-                @configured_user.errors.add_to_base("This action is prohibited on slave systems.")
-                format.html { render configuration_url(@configured_user.configuration) }
-                format.xml  { render :xml => @@configured_user.errors, :status => :not_acceptable }
-            else
-                @configured_user.approve_active!
-                @local_manager.log(:username => @session_user.username, :configured_user_id => @configured_user.id, :configuration_id => @configuration.id, :message => "Approved membership for user '#{@user.username}' within configuration '#{@configuration.name}'.")
-                format.html { redirect_to membership_requests_configuration_url(@configured_user.configuration)}
-                format.xml  { head :ok }
-            end
-        end
-    end
-
-    def deny
-        @user = @configured_user.user
-        @configuration = @configured_user.configuration
-
-        respond_to do |format|
-            @nav = "configurations/show_nav"
-            if (@local_manager.slave?)
-                @configured_user.errors.add_to_base("This action is prohibited on slave systems.")
-                format.html { render configuration_url(@configured_user.configuration) }
-                format.xml  { render :xml => @@configured_user.errors, :status => :not_acceptable }
-            else
-                @configured_user.deny!
-                @local_manager.log(:username => @session_user.username, :configured_user_id => @configured_user.id, :configuration_id => @configuration.id, :message => "Denied membership for user '#{@user.username}' within configuration '#{@configuration.name}'.")
-                format.html { redirect_to membership_requests_configuration_url(@configured_user.configuration)}
-                format.xml  { head :ok }
-            end
-        end
-    end
-
 
     def destroy
         @user = @configured_user.user
@@ -89,13 +51,13 @@ class ConfiguredUsersController < ApplicationController
         respond_to do |format|
             @nav = "configurations/show_nav"
             if (@local_manager.slave?)
-                @configured_user.errors.add_to_base("This action is prohibited on slave systems.")
-                format.html { render configuration_url(@configured_user.configuration) }
+                flash[:warning] = "This action is prohibited on slave systems."
+                format.html { redirect_to( request.env["HTTP_REFERER"] ) }
                 format.xml  { render :xml => @@configured_user.errors, :status => :not_acceptable }
             else
                 @configured_user.destroy
                 @local_manager.log(:username => @session_user.username, :configured_user_id => @configured_user.id, :configuration_id => @configuration.id, :message => "Removed user '#{@user.username}' from configuration '#{@configuration.name}'.")
-                format.html { redirect_to(configuration_url(@configured_user.configuration)) }
+                format.html { redirect_to( request.env["HTTP_REFERER"] ) }
                 format.xml  { head :ok }
             end
         end
@@ -104,7 +66,6 @@ class ConfiguredUsersController < ApplicationController
 
     def edit
         @configuration = @configured_user.configuration
-        @referer = request.env["HTTP_REFERER"]
         respond_to do |format|
             format.html {@nav = "configurations/show_nav"}
         end
@@ -144,7 +105,7 @@ class ConfiguredUsersController < ApplicationController
                 format.xml  { render :xml => @configured_user.errors, :status => :not_acceptable }
             elsif @configured_user.update_attributes(params[:configured_user])
                 @local_manager.log(:username => @session_user.username, :configured_user_id => @configured_user.id, :configuration_id => @configuration.id, :message => "Updated settings for user '#{@user.username}' within configuration '#{@configuration.name}'.")
-                format.html { redirect_to( params[:referer] ) }
+                format.html { redirect_to( configuration_url(@configuration) ) }
                 format.xml  { head :ok }
             else
                 format.html { render :action => "edit" }

@@ -2,11 +2,11 @@ class UsersController < ApplicationController
     filter_parameter_logging :password, :enable
 
     user_pages = [:authenticate, :change_password, :change_enable, :help, :home, :login, :logout,
-                  :request_join, :update_change_password, :update_change_enable, :withdraw_join]
-    user_admin_pages = [:aaa_logs, :changelog, :create, :destroy, :edit, :force_join, :force_withdraw,
-                        :index, :new, :publish, :reset_enable, :reset_password, :show, :system_logs,
-                        :toggle_allow_web_login, :toggle_disabled, :toggle_enable_expiry, :toggle_password_expiry,
-                        :update, :update_reset_enable, :update_reset_password ]
+                  :update_change_password, :update_change_enable]
+    user_admin_pages = [:aaa_logs, :add_to_configuration, :changelog, :create, :destroy, :edit,
+                        :index, :new, :publish, :reset_enable, :reset_password, :remove_from_configuration, 
+                        :show, :system_logs, :toggle_allow_web_login, :toggle_disabled, :toggle_enable_expiry,
+                        :toggle_password_expiry, :update, :update_reset_enable, :update_reset_password ]
     su_exclude = user_pages.concat(user_admin_pages)
 
     before_filter :define_session_user, :except => [:authenticate, :login, :logout]
@@ -33,8 +33,32 @@ class UsersController < ApplicationController
         end
     end
 
-    # POST /users
-    # POST /users.xml
+    def add_to_configuration
+        @user = User.find(params[:id])
+        configuration = Configuration.find(params[:configuration])
+
+        respond_to do |format|
+            @nav = 'show_nav'
+            if (@local_manager.slave?)
+                flash[:warning] = "This action is prohibited on slave systems."
+                format.html { redirect_to user_url(@user) }
+                format.xml  { render :xml => '<errors><error>This action is prohibited on slave systems.</error></errors>', :status => :not_acceptable }
+            elsif (configuration)
+                cu = @user.configured_users.build()
+                cu.configuration_id = configuration.id
+                cu.save
+                @local_manager.log(:username => @session_user.username, :configuration_id => configuration.id, :user_id=> @user.id, :message => "Manually added user '#{@user.username}' to Configuration '#{configuration.name}'")
+                flash[:notice] = "#{@user.username} added to #{configuration.name}."
+                format.html { redirect_to user_url(@user) }
+                format.xml  { head :ok }
+            else
+                @user.errors.add_to_base("Unknown Configuration #{configuration.id}.")
+                format.html { render :action => :show }
+                format.xml  { render :xml => @user.errors, :status => :not_acceptable }
+            end
+        end
+    end
+
     def authenticate
         get_remote_addr()
         pass = false
@@ -151,9 +175,6 @@ class UsersController < ApplicationController
         end
     end
 
-
-    # DELETE /users/1
-    # DELETE /users/1.xml
     def destroy
         @user = User.find(params[:id])
         respond_to do |format|
@@ -187,62 +208,6 @@ class UsersController < ApplicationController
     def edit
         @user = User.find(params[:id])
         @nav = 'show_nav'
-    end
-
-
-    def force_join
-        @user = User.find(params[:id])
-        configuration = Configuration.find(params[:configuration])
-
-        respond_to do |format|
-            @nav = 'show_nav'
-            if (@local_manager.slave?)
-                flash[:warning] = "This action is prohibited on slave systems."
-                format.html { redirect_to user_url(@user) }
-                format.xml  { render :xml => '<errors><error>This action is prohibited on slave systems.</error></errors>', :status => :not_acceptable }
-            elsif (configuration)
-                cu = @user.configured_users.build()
-                cu.configuration_id = configuration.id
-                cu.state = 'approved'
-                cu.save
-                @local_manager.log(:username => @session_user.username, :configuration_id => configuration.id, :user_id=> @user.id, :message => "Manually added user '#{@user.username}' to Configuration '#{configuration.name}'")
-                flash[:notice] = "Membership created and approved."
-                format.html { redirect_to user_url(@user) }
-                format.xml  { head :ok }
-            else
-                @user.errors.add_to_base("Unknown Configuration #{configuration.id}.")
-                format.html { render :action => :show }
-                format.xml  { render :xml => @user.errors, :status => :not_acceptable }
-            end
-        end
-    end
-
-
-    def force_withdraw
-        @user = User.find(params[:id])
-        configuration = Configuration.find(params[:configuration])
-
-        respond_to do |format|
-            @nav = 'show_nav'
-            if (@local_manager.slave?)
-                flash[:warning] = "This action is prohibited on slave systems."
-                format.html { redirect_to user_url(@user) }
-                format.xml  { render :xml => '<errors><error>This action is prohibited on slave systems.</error></errors>', :status => :not_acceptable }
-            elsif (configuration)
-                cu = ConfiguredUser.find(:first, :conditions => "user_id = #{@user.id} and configuration_id = #{configuration.id}")
-                if (cu)
-                    cu.destroy
-                    @local_manager.log(:username => @session_user.username, :configuration_id => configuration.id, :user_id=> @user.id, :message => "Withdrew user '#{@user.username}' from Configuration '#{configuration.name}'.")
-                    flash[:notice] = "Membership has been withdrawn."
-                end
-                format.html { redirect_to user_url(@user) }
-                format.xml  { head :ok }
-            else
-                @user.errors.add_to_base("Unknown Configuration #{configuration.id}.")
-                format.html { render :action => :show }
-                format.xml  { render :xml => @user.errors, :status => :not_acceptable }
-            end
-        end
     end
 
     def help
@@ -290,8 +255,6 @@ class UsersController < ApplicationController
     end
 
 
-    # GET /users
-    # GET /users.xml
     def index
         @users = User.paginate(:page => params[:page], :per_page => @local_manager.pagination_per_page,
                                :order => :username)
@@ -303,15 +266,11 @@ class UsersController < ApplicationController
     end
 
 
-    # GET /users
-    # GET /users.xml
     def login
         session[:user_id] = nil
     end
 
 
-    # GET /users
-    # GET /users.xml
     def logout
         session[:user_id] = nil
         session[:original_uri] = nil
@@ -322,8 +281,7 @@ class UsersController < ApplicationController
         end
     end
 
-    # GET /users/new
-    # GET /users/new.xml
+
     def new
         @user = User.new(:login_password_lifespan => @local_manager.default_login_password_lifespan,
                          :enable_password_lifespan => @local_manager.default_enable_password_lifespan)
@@ -347,49 +305,43 @@ class UsersController < ApplicationController
         end
     end
 
-    def request_join
+    def remove_from_configuration
         @user = User.find(params[:id])
         configuration = Configuration.find(params[:configuration])
 
         respond_to do |format|
-            @nav = 'home_nav'
+            @nav = 'show_nav'
             if (@local_manager.slave?)
                 flash[:warning] = "This action is prohibited on slave systems."
-                format.html { redirect_to home_users_url }
+                format.html { redirect_to user_url(@user) }
                 format.xml  { render :xml => '<errors><error>This action is prohibited on slave systems.</error></errors>', :status => :not_acceptable }
-            elsif (configuration && !configuration.is_hidden)
-                cu = @user.configured_users.build()
-                cu.configuration_id = configuration.id
-                cu.save
-                @local_manager.log(:username => @session_user.username, :configuration_id => configuration.id, :user_id=> @session_user.id, :message => "Requested membership to Configuration '#{configuration.name}'.")
-                flash[:notice] = "Membership requested and is currently pending approval."
-                format.html { redirect_to home_users_url() }
+            elsif (configuration)
+                cu = ConfiguredUser.find(:first, :conditions => "user_id = #{@user.id} and configuration_id = #{configuration.id}")
+                if (cu)
+                    cu.destroy
+                    @local_manager.log(:username => @session_user.username, :configuration_id => configuration.id, :user_id=> @user.id, :message => "Withdrew user '#{@user.username}' from Configuration '#{configuration.name}'.")
+                    flash[:notice] = "#{@user.username} removed from #{configuration.name}."
+                end
+                format.html { redirect_to user_url(@user) }
                 format.xml  { head :ok }
             else
-                flash[:warning] = "Unknown Configuration #{configuration.id}."
-                format.html { redirect_to home_users_url }
+                @user.errors.add_to_base("Unknown Configuration #{configuration.id}.")
+                format.html { render :action => :show }
                 format.xml  { render :xml => @user.errors, :status => :not_acceptable }
             end
         end
     end
 
-
-    # GET /users/1/reset_enable
     def reset_enable
         @user = User.find(params[:id])
         @nav = 'show_nav'
     end
 
-
-    # GET /users/1/reset_password
     def reset_password
         @user = User.find(params[:id])
         @nav = 'show_nav'
     end
 
-
-    # PUT /users/1
-    # PUT /users/1.xml
     def set_role_admin
         @user = User.find(params[:id])
 
@@ -462,9 +414,6 @@ class UsersController < ApplicationController
         end
     end
 
-
-    # GET /users/1
-    # GET /users/1.xml
     def show
         @user = User.find(params[:id])
         @configurations = Configuration.find(:all, :order => :name)
@@ -497,8 +446,6 @@ class UsersController < ApplicationController
     end
 
 
-    # PUT /users/1
-    # PUT /users/1.xml
     def toggle_allow_web_login
         @user = User.find(params[:id])
 
@@ -741,33 +688,6 @@ class UsersController < ApplicationController
             else
                 format.html { render :action => "reset_password" }
                 format.xml  { render :xml => @user.errors, :status => :unprocessable_entity }
-            end
-        end
-    end
-
-    def withdraw_join
-        @user = User.find(params[:id])
-        configuration = Configuration.find(params[:configuration])
-
-        respond_to do |format|
-            @nav = 'home_nav'
-            if (@local_manager.slave?)
-                flash[:warning] = "This action is prohibited on slave systems."
-                format.html { redirect_to home_users_url }
-                format.xml  { render :xml => '<errors><error>This action is prohibited on slave systems.</error></errors>', :status => :not_acceptable }
-            elsif (configuration)
-                cu = ConfiguredUser.find(:first, :conditions => "user_id = #{@user.id} and configuration_id = #{configuration.id}")
-                if (cu && !cu.denied?)
-                    cu.destroy
-                    @local_manager.log(:username => @session_user.username, :configuration_id => configuration.id, :user_id=> @session_user.id, :message => "Withdrew membership request from Configuration '#{configuration.name}'.")
-                    flash[:notice] = "Membership withdrawn."
-                end
-                format.html { redirect_to home_users_url() }
-                format.xml  { head :ok }
-            else
-                @user.errors.add_to_base("Unknown Configuration #{configuration.id}.")
-                format.html { render :action => :home }
-                format.xml  { render :xml => @user.errors, :status => :not_acceptable }
             end
         end
     end

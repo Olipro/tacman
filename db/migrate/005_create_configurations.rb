@@ -26,7 +26,6 @@ class CreateConfigurations < ActiveRecord::Migration
     create_table :configured_users do |t|
       t.integer :configuration_id
       t.integer :user_id
-      t.string :state, :default => 'pending' #requested, approved, denied
       t.string :role, :default => 'user' #admin, viewer, user
       t.boolean :is_active, :default => false
       t.text :notes

@@ -40,7 +40,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :command_authorization_whitelist_entries
 
   map.resources :configured_users,
-                :member => {:activate => :put, :approve => :put, :approve_active => :put, :deny => :put, :suspend => :put}
+                :member => {:activate => :put, :add => :post, :suspend => :put}
 
   map.resources :tacacs_daemons,
                 :member => {:aaa_log => :get, :changelog => :get, :error_log => :get, :clear_error_log => :put},
@@ -56,7 +56,7 @@ ActionController::Routing::Routes.draw do |map|
                             :shell_command_object_groups => :get, :new_shell_command_object_group => :get, :create_shell_command_object_group => :post,
                             :tacacs_daemons => :get, :tacacs_daemon_control => :put,
                             :user_groups => :get, :new_user_group => :get, :create_user_group => :post,
-                            :membership_requests => :get, :settings => :get,
+                            :add_users => :get, :settings => :get,
                             :resequence_whitelist => :put, :search_aaa_logs => :get, :log_search_form => :get,
                             :changelog => :get, :publish => :put}
 
@@ -64,10 +64,9 @@ ActionController::Routing::Routes.draw do |map|
                 :collection => {:authenticate => :put, :home => :get, :help => :get,
                                 :change_password => :get, :change_enable => :get,
                                 :login => :get, :logout => :get,
-                                :request_join => :post, :withdraw_join => :post,
                                 :update_change_password => :put, :update_change_enable => :put,
                                 :bulk_create => :get, :import => :post},
-                :member => {:aaa_logs => :get, :system_logs => :get, :force_join => :post, :force_withdraw => :post,
+                :member => {:aaa_logs => :get, :system_logs => :get, :add_to_configuration => :post, :remove_from_configuration => :post,
                             :reset_password => :get, :reset_enable => :get,
                             :set_role_admin => :put, :set_role_user => :put, :set_role_user_admin => :put,
                             :toggle_allow_web_login => :put, :toggle_allow_web_services => :put, :toggle_disabled => :put,

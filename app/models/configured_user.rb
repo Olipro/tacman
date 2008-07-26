@@ -13,7 +13,6 @@ class ConfiguredUser < ActiveRecord::Base
     validates_presence_of :configuration_id
     validates_presence_of :user_id
     validates_uniqueness_of :user_id, :scope => :configuration_id
-    validates_format_of :state, :with => /(pending|approved|denied)/, :message => "must be either 'pending', 'approved', or 'denied'."
     validates_format_of :role, :with => /(admin|viewer|user)/, :message => "must be either 'admin', 'viewer', or 'user'."
 
     after_create :create_on_remote_managers!
@@ -27,7 +26,7 @@ class ConfiguredUser < ActiveRecord::Base
     end
 
     def active?
-        return(true) if (self.is_active && self.approved?)
+        return(true) if (self.is_active)
         return(false)
     end
 
@@ -41,44 +40,12 @@ class ConfiguredUser < ActiveRecord::Base
         return(false)
     end
 
-    def approve!
-        self.state = 'approved'
-        self.save
-    end
-
-    def approve_active!
-        self.state = 'approved'
-        self.is_active = true
-        self.save
-    end
-
-    def approved?
-        return(true) if self.state == 'approved'
-        return(false)
-    end
-
-    def deny!
-        self.state = 'denied'
-        self.save
-    end
-
-    def denied?
-        return(true) if self.state == 'denied'
-        return(false)
-    end
-
     def overrides_user_group?
         return(true) if (self.author_avpair_id || self.command_authorization_profile_id || self.login_acl_id || self.enable_acl_id)
         return(false)
     end
 
-    def pending?
-        return(true) if self.state == 'pending'
-        return(false)
-    end
-
     def status
-        return('n/a') if (!self.approved?)
         return('active') if (self.is_active)
         return('suspended')
     end
@@ -89,7 +56,7 @@ class ConfiguredUser < ActiveRecord::Base
     end
 
     def suspended?
-        return(true) if (!self.is_active && self.approved?)
+        return(true) if (!self.is_active)
         return(false)
     end
 

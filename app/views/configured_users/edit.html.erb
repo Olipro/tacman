@@ -4,7 +4,6 @@
 <b style="font-size: 16px;">Account Settings</b><br /><br />
 
 <% form_for(:configured_user, :url => configured_user_url(@configured_user), :html => { :method => :put }) do |f| %>
-<%= hidden_field_tag :referer, @referer %>
 <table>
   <tr>
     <td><b>User Group:</b></td> 
@@ -39,6 +38,6 @@
 <br /><br />
 
 <%= submit_tag "Update" %>
-<input type=button value="Cancel" onclick="window.location.href='<%= @referer %>'" />
+<input type=button value="Cancel" onclick="window.location.href='<%= configuration_url(@configuration) %>'" />
 <% end %>
 

@@ -1,6 +1,6 @@
     <b style="font-size: 24px;"><%= @configuration.name %></b><br /><br /><br />
 
-    <b style="font-size: 16px;"><%= pluralize(@configuration.configured_users.count(:conditions => "state = 'approved'"), "User" ) %></b><br />
+    <b style="font-size: 16px;"><%= pluralize(@configuration.configured_users.count, "User" ) %></b><br />
     <table class="index_list">
         <tr><td colspan="8" style="border-bottom: 1px solid #000000;"><%= will_paginate @users %></td></tr>
         <tr><td>&nbsp</td></tr>
@@ -11,19 +11,13 @@
             <th>User Group</th>
             <th>&nbsp</th>
         </tr>
-    
-        <% shaded = true %>
+
         <% for user in @users %>
           <% cu = user.configured_users.find(:first, :conditions => "configuration_id = #{@configuration.id}") %>
           <% if (cu.suspended?) %>
                 <tr class="disabled">
-                <% shaded = true %>
-          <% elsif (shaded) %>
-                <tr class="shaded">
-                <% shaded = false %>
           <% else %>
-                <tr>
-                <% shaded = true %>
+                <tr class="shaded">
           <% end %>
 
             <td>
