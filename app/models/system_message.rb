@@ -52,7 +52,7 @@ class SystemMessage < ActiveRecord::Base
             begin
                 if (key == 'system_export')
                     expected_revision = 1
-                    ordered = ['users','password_histories','configurations',
+                    ordered = ['departments','users','password_histories','configurations',
                                'network_object_groups','network_object_group_entries',
                                'shell_command_object_groups', 'shell_command_object_group_entries','acls',
                                'acl_entries','author_avpairs','author_avpair_entries','avpairs',
@@ -81,6 +81,7 @@ class SystemMessage < ActiveRecord::Base
                         NetworkObjectGroupEntry.delete_all
                         NetworkObjectGroup.delete_all
                         Configuration.destroy_all
+                        Department.destroy_all
 
                         ordered.each do |type|
                             if ( val.has_key?(type) && val[type].kind_of?(Array) )
@@ -172,6 +173,19 @@ private
             else
                 tacacs_daemon = TacacsDaemon.find(fields['id'])
                 raise( tacacs_daemon.errors.full_messages.join("\n") ) if ( !tacacs_daemon.destroy )
+            end
+
+        elsif (type == 'department')
+            if (self.verb == 'update')
+                department = Deparment.find(fields['id'])
+                raise( department.errors.full_messages.join("\n") ) if ( !department.update_attributes(fields) )
+            elsif (self.verb == 'create')
+                department = Department.new(fields)
+                department.id = fields['id']
+                raise( department.errors.full_messages.join("\n") ) if ( !department.save )
+            else
+                department = Department.find(fields['id'])
+                raise( department.errors.full_messages.join("\n") ) if ( !department.destroy )
             end
 
         elsif (type == 'configured_user')

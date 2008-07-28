@@ -9,7 +9,7 @@
     <td><%= f.text_field :name %></td>
   </tr>
   <tr>
-    <td><b>Department:</b></td>
+    <td><b>Owning Department:</b></td>
     <td style="text-align: left;"><%= f.select :department_id, Department.find(:all, :order => :name).collect {|p| [ p.name, p.id ] }, { :include_blank => true } %></td>
   </tr>
   <tr>

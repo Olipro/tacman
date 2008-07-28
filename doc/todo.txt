@@ -10,13 +10,6 @@
 features & bugs
 ---------------
 
-* system log support
-* need support under messaging system
-* fix user bulk create
-* rename action/view to add_remove_users
-
-* get rid of alternating shaded/non-shaded?
-
 * verify all workers
 
 * test account lockout

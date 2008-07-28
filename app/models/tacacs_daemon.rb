@@ -428,7 +428,7 @@ private
         self.pid_file = File.expand_path("#{RAILS_ROOT}/tmp/pids/tacacs_daemon_pid_files/") + "/#{self.serial}"
         self.configuration_file = File.expand_path("#{RAILS_ROOT}/tmp/configurations/") + "/#{self.serial}"
         self.aaa_log_file = File.expand_path("#{RAILS_ROOT}/tmp/aaa_logs/") + "/#{self.serial}"
-        self.aaa_scratch_file = File.expand_path("#{RAILS_ROOT}/tmp/aaa_logs/scratch/") + "/#{self.serial}"
+        self.aaa_scratch_file = File.expand_path("#{RAILS_ROOT}/tmp/aaa_logs_scratch/") + "/#{self.serial}"
         self.save
     end
 

@@ -3,7 +3,7 @@ class ConfigurationsController < ApplicationController
                      :command_authorization_whitelist, :download_archived_log, :log_search_form, :network_object_groups,
                      :search_aaa_logs, :settings, :shell_command_object_groups, :show, :tacacs_daemons, :tacacs_daemon_control,
                      :user_groups]
-    admin_access = [:add_users, :create_acl, :create_author_avpair, :create_command_authorization_profile,
+    admin_access = [:add_remove_users, :create_acl, :create_author_avpair, :create_command_authorization_profile,
                     :create_command_authorization_whitelist_entry,:create_network_object_group, 
                     :create_shell_command_object_group, :create_user_group, :edit, :new_acl, :new_author_avpair,
                     :new_command_authorization_profile, :new_command_authorization_whitelist_entry,
@@ -75,7 +75,28 @@ class ConfigurationsController < ApplicationController
         end
     end
 
-    def add_users
+    def add_user
+        @configuration = Configuration.find(params[:id])
+        @user = User.find(params[:user_id])
+
+        respond_to do |format|
+            @nav = "configurations/show_nav"
+            if (@local_manager.slave?)
+                @configuration.errors.add_to_base("This action is prohibited on slave systems.")
+                format.html { render add_remove_users_configuration_url(@configuration) }
+                format.xml  { render :xml => @configuration.errors, :status => :not_acceptable }
+            else
+                cu = @configuration.configured_users.build()
+                cu.user_id = @user.id
+                cu.save
+                @local_manager.log(:username => @session_user.username, :user_id => @user.id, :configured_user_id => cu.id, :configuration_id => @configuration.id, :message => "Added user '#{@user.username}' to configuration '#{@configuration.name}'.")
+                format.html { redirect_to add_remove_users_configuration_url(@configuration)}
+                format.xml  { head :ok }
+            end
+        end
+    end
+
+    def add_remove_users
         if (@configuration.department_id)
             @users = User.paginate(:page => params[:page], :per_page => @local_manager.pagination_per_page,
                                    :conditions => "department_id = #{@configuration.department_id}", :order => :username)
@@ -460,7 +481,7 @@ class ConfigurationsController < ApplicationController
         @configuration.publish
         respond_to do |format|
             @nav = 'show_nav'
-            flash[:notice] = "Changes published but may take a few minutes to take effect."
+            flash[:notice] = "Changes published, but may take a few minutes to propagate."
             @local_manager.log(:username => @session_user.username, :configuration_id => @configuration.id, :message => "Published configuration '#{@configuration.name}'.")
             format.html { redirect_to configuration_url(@configuration) }
             format.xml  { head :ok }
@@ -561,7 +582,7 @@ class ConfigurationsController < ApplicationController
     end
 
     def show
-        sql = "select users.id,users.username,users.real_name from users,configured_users " +
+        sql = "select users.id,users.username,users.real_name,users.department_id from users,configured_users " +
               "where configured_users.configuration_id = #{@configuration.id} and configured_users.user_id = users.id " +
               "order by users.username"
         @users = User.paginate_by_sql(sql, :page => params[:page], :per_page => @local_manager.pagination_per_page)

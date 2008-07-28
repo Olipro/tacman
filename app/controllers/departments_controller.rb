@@ -4,6 +4,23 @@ class DepartmentsController < ApplicationController
     before_filter :authorize_admin
 
 
+    def changelog
+        @department = Department.find(params[:id])
+        @log_count = SystemLog.count_by_sql("SELECT COUNT(*) FROM system_logs WHERE department_id=#{@department.id}")
+        if ( params.has_key?(:page) )
+            page = params[:page]
+        elsif (@log_count > 0)
+            page = @log_count / @local_manager.pagination_per_page
+            page = page + 1 if (@log_count % @local_manager.pagination_per_page > 0)
+        end
+        @logs = SystemLog.paginate(:page => page, :per_page => @local_manager.pagination_per_page,
+                                   :conditions => "department_id=#{@department.id}", :order => :created_at)
+        respond_to do |format|
+            @nav = 'index_nav'
+            format.html {render :template => 'managers/system_logs'}
+        end
+    end
+
     def create
         @department = Department.new(params[:department])
 
@@ -20,6 +37,24 @@ class DepartmentsController < ApplicationController
             else
                 format.html { render :action => "new" }
                 format.xml  { render :xml => @department.errors, :status => :unprocessable_entity }
+            end
+        end
+    end
+
+    def destroy
+        @department = Department.find(params[:id])
+
+        respond_to do |format|
+            @nav = 'show_nav'
+            if (@local_manager.slave?)
+                flash[:warning] = "This action is prohibited on slave systems."
+                format.html { redirect_to departments_url }
+                format.xml  { render :xml => @department.errors, :status => :not_acceptable }
+            else
+                @department.destroy
+                @local_manager.log(:username => @session_user.username, :message => "Deleted Department '#{@department.name}'.")
+                format.html { redirect_to(departments_url) }
+                format.xml  { head :ok }
             end
         end
     end

@@ -47,7 +47,7 @@ class UsersController < ApplicationController
                 cu = @user.configured_users.build()
                 cu.configuration_id = configuration.id
                 cu.save
-                @local_manager.log(:username => @session_user.username, :configuration_id => configuration.id, :user_id=> @user.id, :message => "Manually added user '#{@user.username}' to Configuration '#{configuration.name}'")
+                @local_manager.log(:username => @session_user.username, :configuration_id => configuration.id, :user_id=> @user.id, :message => "Added user '#{@user.username}' to Configuration '#{configuration.name}'")
                 flash[:notice] = "#{@user.username} added to #{configuration.name}."
                 format.html { redirect_to user_url(@user) }
                 format.xml  { head :ok }
@@ -319,7 +319,7 @@ class UsersController < ApplicationController
                 cu = ConfiguredUser.find(:first, :conditions => "user_id = #{@user.id} and configuration_id = #{configuration.id}")
                 if (cu)
                     cu.destroy
-                    @local_manager.log(:username => @session_user.username, :configuration_id => configuration.id, :user_id=> @user.id, :message => "Withdrew user '#{@user.username}' from Configuration '#{configuration.name}'.")
+                    @local_manager.log(:username => @session_user.username, :configuration_id => configuration.id, :user_id=> @user.id, :message => "Removed user '#{@user.username}' from Configuration '#{configuration.name}'.")
                     flash[:notice] = "#{@user.username} removed from #{configuration.name}."
                 end
                 format.html { redirect_to user_url(@user) }

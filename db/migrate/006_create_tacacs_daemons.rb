@@ -28,7 +28,7 @@ class CreateTacacsDaemons < ActiveRecord::Migration
         FileUtils.rm( Dir.glob("#{RAILS_ROOT}/log/tacacs_daemon_error_logs/*") )
         FileUtils.rm( Dir.glob("#{RAILS_ROOT}/tmp/configurations/*") )
         FileUtils.rm( Dir.glob("#{RAILS_ROOT}/tmp/aaa_logs/*") )
-        FileUtils.rm( Dir.glob("#{RAILS_ROOT}/tmp/aaa_logs/scratch/*") )
+        FileUtils.rm( Dir.glob("#{RAILS_ROOT}/tmp/aaa_logs_scratch/*") )
     rescue Exception => error
         puts "error deleting tacacs_daemon files: #{error}"
     end

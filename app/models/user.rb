@@ -47,6 +47,8 @@ class User < ActiveRecord::Base
     def User.import(data)
         errors = {}
         username = nil
+        departments = {}
+        Department.find(:all).each {|x| departments[x.name] = x.id}
         begin
             User.transaction do
                 data.each_line do |line|
@@ -56,8 +58,13 @@ class User < ActiveRecord::Base
                     user.real_name = real_name.strip if (real_name)
                     user.email = email.strip if (email)
                     user.alerts_email = alerts_email.strip if (alerts_email)
-                    user.department = department.strip if (department)
                     user.salt = salt.strip if (salt)
+
+                    if (department)
+                        department.strip!
+                        user.department_id = departments[department] if ( departments.has_key?(department) )
+                    end
+
                     if (user.save)
                         raise "Login and/or enable password missing." if (!login_password || !enable_password)
                         if (salt)
@@ -168,16 +175,14 @@ class User < ActiveRecord::Base
     def configuration_hash
         config = {:disabled => false }
         config[:disabled] = true if (self.disabled?)
-        if (!self.disabled)
-            config[:enable_password] = self.enable_password.password_hash
-            config[:enable_password_expires_on] = self.enable_password.expires_on.to_s if (self.enable_password_lifespan != 0)
-            config[:enable_password_lifespan] =  self.enable_password_lifespan if (self.enable_password_lifespan != 0)
-            config[:encryption] = 'sha1'
-            config[:login_password] = self.login_password.password_hash
-            config[:login_password_expires_on] = self.login_password.expires_on.to_s if (self.login_password_lifespan != 0)
-            config[:login_password_lifespan] =  self.login_password_lifespan if (self.login_password_lifespan != 0)
-            config[:salt] = self.salt
-        end
+        config[:enable_password] = self.enable_password.password_hash
+        config[:enable_password_expires_on] = self.enable_password.expires_on.to_s if (self.enable_password_lifespan != 0)
+        config[:enable_password_lifespan] =  self.enable_password_lifespan if (self.enable_password_lifespan != 0)
+        config[:encryption] = 'sha1'
+        config[:login_password] = self.login_password.password_hash
+        config[:login_password_expires_on] = self.login_password.expires_on.to_s if (self.login_password_lifespan != 0)
+        config[:login_password_lifespan] =  self.login_password_lifespan if (self.login_password_lifespan != 0)
+        config[:salt] = self.salt
         return(config)
     end
 

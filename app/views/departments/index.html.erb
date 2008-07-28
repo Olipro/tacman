@@ -1,12 +1,19 @@
 <b style="font-size: 16px;">Departments</b><br /><br />
 
 <% if @departments.length != 0 %>
-<ol>
+<ul style="list-style-type:none">
 <% for department in @departments %>
-    <li><%= link_to department.name, edit_department_url(department) %></li>
+    <li>
+    <%= link_to( image_tag('delete_button.png', :border => 'none'), department_url(department), :confirm => "Delete department #{department.name}?", :method => :delete) %>
+    &nbsp
+    <%= link_to( image_tag('edit_button.png', :border => 'none'), edit_department_url(department)) %>
+    &nbsp&nbsp
+    <%= department.name %>
+    <i>(<%= link_to 'changes', changelog_department_url(department) %>)</i>
+    </li>
   </tr>
 <% end %>
-</ol>
+</ul>
 <% else %>
 <b>No Departments have been created.</b>
 <% end %>

@@ -1,5 +1,6 @@
 ActionController::Routing::Routes.draw do |map|
-  map.resources :departments
+  map.resources :departments,
+                :member => {:changelog => :get}
 
 
   map.resources :avpairs
@@ -40,14 +41,14 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :command_authorization_whitelist_entries
 
   map.resources :configured_users,
-                :member => {:activate => :put, :add => :post, :suspend => :put}
+                :member => {:activate => :put, :suspend => :put}
 
   map.resources :tacacs_daemons,
                 :member => {:aaa_log => :get, :changelog => :get, :error_log => :get, :clear_error_log => :put},
                 :collection => {:start_stop_selected => :put}
 
   map.resources :configurations,
-                :member => {:aaa_log_archives => :get, :aaa_log_file => :get, :aaa_logs => :get, :download_archived_log => :post,
+                :member => {:aaa_log_archives => :get, :aaa_log_file => :get, :aaa_logs => :get, :add => :post, :download_archived_log => :post,
                             :acls => :get, :new_acl => :get, :create_acl => :post,
                             :author_avpairs => :get, :new_author_avpair => :get, :create_author_avpair => :post,
                             :command_authorization_profiles => :get, :new_command_authorization_profile => :get, :create_command_authorization_profile => :post,
@@ -56,7 +57,7 @@ ActionController::Routing::Routes.draw do |map|
                             :shell_command_object_groups => :get, :new_shell_command_object_group => :get, :create_shell_command_object_group => :post,
                             :tacacs_daemons => :get, :tacacs_daemon_control => :put,
                             :user_groups => :get, :new_user_group => :get, :create_user_group => :post,
-                            :add_users => :get, :settings => :get,
+                            :add_remove_users => :get, :settings => :get,
                             :resequence_whitelist => :put, :search_aaa_logs => :get, :log_search_form => :get,
                             :changelog => :get, :publish => :put}
 

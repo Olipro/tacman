@@ -38,18 +38,8 @@
 <table class="spaced">
   <tr><td colspan="4"><b><u>Configuration Memberships</u></b></td></tr>
   <tr> <td>&nbsp</td> <td><b>Name</b></td> <td><b>Status</b></td> <td><b>Role</b></td> <td><b>User Group</b></td> </tr>
-  <% shaded = true %>
   <% for configuration in @configurations %>
-    <% if (@memberships.has_key?(configuration.id) && @memberships[configuration.id].suspended?) %>
-            <tr class="disabled">
-            <% shaded = true %>
-    <% elsif (shaded) %>
-            <tr class="shaded">
-            <% shaded = false %>
-    <% else %>
-            <tr>
-            <% shaded = true %>
-    <% end %>
+    <tr class="shaded">
     <% if (@memberships.has_key?(configuration.id)) %>
       <td>
         <%= link_to image_tag('checked.png', :border => 'none'), {:action => :remove_from_configuration, :id => @user.id, :configuration => configuration.id},
@@ -66,9 +56,9 @@
                                                                     :confirm => "Add to configuration?", :method => :post %>
       </td>
       <td><%= link_to configuration.name, configuration_url(configuration), :style => "color: #21517b;" %></td>
-      <td><i>n/a</i></td>
-      <td><i>n/a</i></td>
-      <td><i>n/a</i></td>
+      <td>&nbsp</td>
+      <td>&nbsp</td>
+      <td>&nbsp</td>
     <% end %>
   </tr>
   <% end %>

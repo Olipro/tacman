@@ -24,26 +24,6 @@ class ConfiguredUsersController < ApplicationController
     end
 
 
-    def add
-        @user = User.find(params[:user])
-        @configuration = Configuration.find(params[:configuration])
-
-        respond_to do |format|
-            @nav = "configurations/show_nav"
-            if (@local_manager.slave?)
-                @configured_user.errors.add_to_base("This action is prohibited on slave systems.")
-                format.html { render configuration_url(@configured_user.configuration) }
-                format.xml  { render :xml => @@configured_user.errors, :status => :not_acceptable }
-            else
-                cu = @user.configured_users.build()
-                cu.configuration_id = @configuration.id
-                cu.save
-                format.html { redirect_to add_users_configuration_url(@configuration)}
-                format.xml  { head :ok }
-            end
-        end
-    end
-
     def destroy
         @user = @configured_user.user
         @configuration = @configured_user.configuration
@@ -56,7 +36,7 @@ class ConfiguredUsersController < ApplicationController
                 format.xml  { render :xml => @@configured_user.errors, :status => :not_acceptable }
             else
                 @configured_user.destroy
-                @local_manager.log(:username => @session_user.username, :configured_user_id => @configured_user.id, :configuration_id => @configuration.id, :message => "Removed user '#{@user.username}' from configuration '#{@configuration.name}'.")
+                @local_manager.log(:username => @session_user.username, :user_id => @user.id, :configured_user_id => @configured_user.id, :configuration_id => @configuration.id, :message => "Removed user '#{@user.username}' from configuration '#{@configuration.name}'.")
                 format.html { redirect_to( request.env["HTTP_REFERER"] ) }
                 format.xml  { head :ok }
             end

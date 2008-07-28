@@ -314,7 +314,7 @@ class Configuration < ActiveRecord::Base
         tacacs_daemon[:log_authorization] = self.log_authorization
 
         self.configured_users.each do |configured_user|
-            next if (!configured_user.approved? || configured_user.suspended?)
+            next if (configured_user.suspended?)
             user = configured_user.user
             attrs = user.configuration_hash
             users[user.username] = attrs

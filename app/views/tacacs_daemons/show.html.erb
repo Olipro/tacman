@@ -8,12 +8,12 @@
     <td colspan="2" style="color: #7B2024;"><%= status(@tacacs_daemon) %></td>
   </tr>
   <tr>
-    <td><b>serial:</b></td> 
-    <td><%= @tacacs_daemon.serial %></td>
-  </tr>
-  <tr>
     <td><b>Name:</b></td> 
     <td><%= @tacacs_daemon.name %></td>
+  </tr>
+  <tr>
+    <td><b>Serial:</b></td> 
+    <td><%= @tacacs_daemon.serial %></td>
   </tr>
   <tr>
     <td><b>Manager:</b></td> 
@@ -68,4 +68,9 @@
     <td><%= @tacacs_daemon.pid_file %></td>
   </tr>
 </table>
+
+<br /><br />
+
+<b><u>YAML Configuration</u></b><br />
+<pre><%= @tacacs_daemon.yaml_config %></pre>
 

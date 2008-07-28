@@ -12,12 +12,18 @@
             <th>&nbsp</th>
         </tr>
 
+        <% shaded = true %>
         <% for user in @users %>
           <% cu = user.configured_users.find(:first, :conditions => "configuration_id = #{@configuration.id}") %>
           <% if (cu.suspended?) %>
                 <tr class="disabled">
-          <% else %>
+                <% shaded = true %>
+          <% elsif (shaded) %>
                 <tr class="shaded">
+                <% shaded = false %>
+          <% else %>
+                <tr class="light_shaded">
+                <% shaded = true %>
           <% end %>
 
             <td>
@@ -41,11 +47,9 @@
               <% if (cu.active?) %>
                 <%= image_tag('checked.png', :border => 'none') %> active
                 &nbsp&nbsp
-                <%= link_to(image_tag('unchecked.png', :border => 'none'), suspend_configured_user_url(cu),
-                                        :confirm => "Suspend user?", :method => :put) %> suspended
+                <%= link_to(image_tag('unchecked.png', :border => 'none'), suspend_configured_user_url(cu),:method => :put) %> suspended
               <% else %>
-                <%= link_to(image_tag('unchecked.png', :border => 'none'), activate_configured_user_url(cu),
-                                        :confirm => "Activate user?", :method => :put) %> active
+                <%= link_to(image_tag('unchecked.png', :border => 'none'), activate_configured_user_url(cu),:method => :put) %> active
                 &nbsp&nbsp
                 <%= image_tag('checked.png', :border => 'none') %> suspended
               <% end %>
@@ -58,7 +62,17 @@
             <% end %>
 
             <td>
-              <% if (cu.overrides_user_group?) %><i style="color: #7B2024;">USER GROUP OVERRIDDEN</i> <% end %>
+              <% if (user.department_id != @configuration.department_id) %>
+                <% if (user.department_id) %>
+                    <%= user.department.name %>
+                <% else %>
+                    <i>no department</i>
+                <% end %>
+              <% end %>
+            </td>
+
+            <td>
+              <% if (cu.overrides_user_group?) %><i style="color: #7B2024;">overrides in place</i> <% end %>
             </td>
         </tr>
         <% end %>
