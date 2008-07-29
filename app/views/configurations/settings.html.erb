@@ -15,6 +15,10 @@
         <td><%= @configuration.department.name if (@configuration.department) %></td>
       </tr>
       <tr>
+        <td><b>Default Policy:</b></td>
+        <td><%=h @configuration.default_policy %></td>
+      </tr>
+      <tr>
         <td><b>Key:</b></td>
         <td><%=h @configuration.key %></td>
       </tr>

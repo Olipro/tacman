@@ -531,6 +531,17 @@ class ManagersController < ApplicationController
         end
     end
 
+    def toggle_maintenance_mode
+        respond_to do |format|
+            @nav = 'local_nav'
+            @local_manager.toggle_maintenance_mode!
+            @local_manager.log(:username => @session_user.username, :message => "Toggled maintenance mode (current=#{@local_manager.in_maintenance_mode}).")
+            CGI::Session::ActiveRecordStore::Session.delete_all("session_id != '#{session.session_id}'") if (@local_manager.in_maintenance_mode)
+            format.html { redirect_to local_managers_url }
+            format.xml  { head :ok }
+        end
+    end
+
     def unprocessable_messages
         @manager = Manager.find(params[:id])
         @msg_count = @manager.system_messages.count(:conditions => "queue = 'unprocessable'")

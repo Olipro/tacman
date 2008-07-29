@@ -84,10 +84,11 @@ ActionController::Routing::Routes.draw do |map|
                                 :show_master => :get, :backgroundrb => :post,
                                 :system_export => :get, :tacacs_daemon_control => :post,
                                 :read_log_file => :post, :write_to_inbox => :post,
-                                :system_log_archives => :get, :download_archived_log => :post},
+                                :system_log_archives => :get, :download_archived_log => :post,
+                                :toggle_maintenance_mode => :post},
                 :member => {:approve => :put, :enable => :put, :inbox => :get, :outbox => :get, :system_sync => :post,
                             :system_logs => :get, :unprocessable_messages => :get,
-                            :changelog => :get, :search_logs => :get, :log_search_form => :get,}
+                            :changelog => :get, :search_logs => :get, :log_search_form => :get}
 
 
   # The priority is based upon order of creation: first created -> highest priority.

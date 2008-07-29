@@ -22,6 +22,7 @@ class CreateManagers < ActiveRecord::Migration
       t.boolean :is_approved, :default => false
       t.boolean :is_enabled, :default => false
       t.boolean :is_local, :default => false
+      t.boolean :in_maintenance_mode, :default => false
 
       t.string :base_url
       t.string :manager_type, :default => 'stand_alone' # master, slave, stand_alone

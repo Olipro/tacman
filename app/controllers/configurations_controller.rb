@@ -3,7 +3,7 @@ class ConfigurationsController < ApplicationController
                      :command_authorization_whitelist, :download_archived_log, :log_search_form, :network_object_groups,
                      :search_aaa_logs, :settings, :shell_command_object_groups, :show, :tacacs_daemons, :tacacs_daemon_control,
                      :user_groups]
-    admin_access = [:add_remove_users, :create_acl, :create_author_avpair, :create_command_authorization_profile,
+    admin_access = [:add_remove_users, :add_user, :create_acl, :create_author_avpair, :create_command_authorization_profile,
                     :create_command_authorization_whitelist_entry,:create_network_object_group, 
                     :create_shell_command_object_group, :create_user_group, :edit, :new_acl, :new_author_avpair,
                     :new_command_authorization_profile, :new_command_authorization_whitelist_entry,

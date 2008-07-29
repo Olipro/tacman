@@ -35,6 +35,12 @@ class Manager < ActiveRecord::Base
             return(false)
         end
 
+        # only local system can be in maintenance mode
+        if (!self.is_local && self.in_maintenance_mode)
+            self.errors.add(:in_maintenance_mode, "may only be set on the local system.")
+            return(false)
+        end
+
         if (self.pagination_per_page < 5)
             self.errors.add(:pagination_per_page, "must be 5 or greater.")
             return(false)
@@ -727,6 +733,15 @@ class Manager < ActiveRecord::Base
             self.errors.add_to_base("Only the local system may be set as 'stand_alone'.")
             return(false)
         end
+    end
+
+    def toggle_maintenance_mode!
+        if (self.in_maintenance_mode)
+            self.in_maintenance_mode = false
+        else
+            self.in_maintenance_mode = true
+        end
+        self.save
     end
 
     def unlock_inbox()

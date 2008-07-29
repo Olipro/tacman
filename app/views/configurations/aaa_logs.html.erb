@@ -22,18 +22,17 @@
 
     <% shaded = true %>
     <% for log_entry in @logs %>
-    <tr <% if shaded %> class="shaded" <% end %> >
+      <% if (shaded) %>
+          <tr class="shaded">
+          <% shaded = false %>
+      <% else %>
+          <tr class="light_shaded">
+          <% shaded = true %>
+      <% end %>
         <% for field in log_entry.short_log_fields %>
         <td><%=h field %></td>
         <% end %>
     </tr>
-    <% if shaded
-            shaded = false
-        else
-            shaded = true
-        end
-    %>
-    <% end %>
 
     <tr>
         <td colspan="<%= AaaLog.log_fields_header.length %>">

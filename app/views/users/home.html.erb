@@ -30,7 +30,7 @@
 
 <table class="spaced">
   <tr><td colspan="4"><b><u>Current Configuration Memberships</u></b></td></tr>
-  <tr> <td><b>Name</b></td> <td><b>Status</b></td> </tr>
+  <tr> <td><b>Name</b></td> <td><b>Status</b></td> <td><b>User Group</b></td> </tr>
   <% shaded = true %>
   <% for configuration in @configurations %>
     <% next if ( !@memberships.has_key?(configuration.id) ) %>
@@ -50,6 +50,7 @@
       <% end %>
     </td>
     <td><%= @memberships[configuration.id].status %></td>
+    <td><%= @memberships[configuration.id].user_group.name if (@memberships[configuration.id].user_group) %></td>
   </tr>
   <% end %>
 </table>

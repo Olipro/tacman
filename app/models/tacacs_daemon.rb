@@ -12,7 +12,6 @@ class TacacsDaemon < ActiveRecord::Base
     validates_presence_of :name
     validates_uniqueness_of :name
     validates_inclusion_of :port, :in => (1..65535)
-    validates_uniqueness_of :port, :scope => [:manager_id, :ip], :message => "must be uniqe per IP per Manager."
 
 
     after_create :setup

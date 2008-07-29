@@ -45,7 +45,7 @@
         <%= link_to image_tag('checked.png', :border => 'none'), {:action => :remove_from_configuration, :id => @user.id, :configuration => configuration.id},
                                                                     :confirm => "Remove from configuration?", :method => :post %>
       </td>
-      <td><%= link_to configuration.name, configuration_url(configuration), :style => "color: #21517b;" %></td>
+      <td><%= configuration.name %></td>
       <td><%= @memberships[configuration.id].status %></td>
       <td><%= @memberships[configuration.id].role %></td>
       <td><%= @memberships[configuration.id].user_group.name if (@memberships[configuration.id].user_group) %></td>
@@ -55,7 +55,7 @@
         <%= link_to image_tag('unchecked.png', :border => 'none'), {:action => :add_to_configuration, :id => @user.id, :configuration => configuration.id},
                                                                     :confirm => "Add to configuration?", :method => :post %>
       </td>
-      <td><%= link_to configuration.name, configuration_url(configuration), :style => "color: #21517b;" %></td>
+      <td><%= configuration.name %></td>
       <td>&nbsp</td>
       <td>&nbsp</td>
       <td>&nbsp</td>

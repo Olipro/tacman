@@ -44,6 +44,7 @@
             </td>
 
             <td>
+            <% if (@configuration_roles[@configuration.id] == 'admin') %>
               <% if (cu.active?) %>
                 <%= image_tag('checked.png', :border => 'none') %> active
                 &nbsp&nbsp
@@ -53,6 +54,7 @@
                 &nbsp&nbsp
                 <%= image_tag('checked.png', :border => 'none') %> suspended
               <% end %>
+            <% end %>
             </td>
 
             <% if (!cu.notes.blank?) %>

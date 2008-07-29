@@ -35,7 +35,6 @@ before rollout
 
 questions
 ---------
-- if a system message generates an error on a slave, then what happens?
 - what mail notifications are sent from slave?
 
 

@@ -36,10 +36,16 @@
         <b style="font-size: 24px; position: absolute; left: 30px; top: 10px; color: #ffffff;">TacacsPlus Manager</b>
 
         <% if @session_user %>
-          <div style="position: absolute; bottom: 5px; right: 10px;">
-            <b> Welcome to <%= @local_manager.name %>!</b> &nbsp &nbsp
-            <%= link_to "sign off - #{@session_user.username}", logout_users_url, :style => "color: #ffffff; text-decoration: underline;" %> &nbsp &nbsp
-          </div>
+            <% if @local_manager.in_maintenance_mode %>
+            <div style="position: absolute; bottom: 5px; left: 400px;">
+              <b style="font-size: 24px; color: #ffff00;">MAINTENANCE MODE</b>
+            </div>
+            <% end %>
+
+            <div style="position: absolute; bottom: 5px; right: 10px;">
+              <b> Welcome to <%= @local_manager.name %>!</b> &nbsp &nbsp
+              <%= link_to "sign off - #{@session_user.username}", logout_users_url, :style => "color: #ffffff; text-decoration: underline;" %> &nbsp &nbsp
+            </div>
 
             <div id="nav_bar">
               <span style="padding-left: 170px;"></span>

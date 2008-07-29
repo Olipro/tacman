@@ -14,9 +14,10 @@ In a master/slave setup a single master is athorative for multiple slaves.
 <h3><a name="system_components" style="color: #000000;">System Components</a></h3>
 
 <p>
-The system comprises of three major components:
+The system comprises of four major components:
 <ul>
   <li><b>Users</b></li>
+  <li><b>Departments</b></li>
   <li><b>TACACS+ Daemons</b></li>
   <li><b>Configurations</b></li>
 </ul>
@@ -45,6 +46,18 @@ Each user within the system will have unique login and enable passwords. Each of
 have a lifespan which determines how long the password is valid before it must be changed. An additional
 security feature on user accounts is the ability to disable web interface logins. This is useful
 for non-human accounts which should not normally accessed through the web interface.
+</p>
+
+<br />
+
+<h4><u>Departments</u></h4>
+<p>
+Departments are used to define a loose administrative boundary for user accounts and configurations. The most
+practical use of a department is to filter the list of available usernames which are viewable by a configuration
+administrator. For example, assume that I create user1 as a member of department Dept1 and user2 as a member of
+Dept2. I then create a configuration belonging to Dept1. As an administrator of this configuration, only the
+user1 account would be visible to me (user2 would be hidden). Of course, any system admin or user_admin would
+be able to manually add user2 to this configuration.
 </p>
 
 <br />
@@ -134,10 +147,12 @@ Below is a description of each setting:
 
 <h4><u>Master/Slave Setups</u></h4>
 <p>
-When you configure 2 or more systems in a master/slave setup you implitily enable the messaging system of TacacsPlus Manager.
+When you configure 2 or more systems in a master/slave setup you implicitly enable the messaging system of TacacsPlus Manager.
 Once the messaging system is enabled any changes which are made to the master system will be reliably delivered to the slave
 systems. In turn, logs are delivered from the slaves to the master in order that the master may serve as the aggregation
-point for all system and AAA logs. <b style="color: red;">NEED TO FINISH THIS PART</b>
+point for all system and AAA logs. The message delivery process may be monitored through the Inbox, Outbox, and Unprocessable
+queue views on the master or slave system. These queues will have a revision number which will guarantee that no messages have
+been dropped during delivery. In the event of a revision mismatch between a master and slave a system re-sync will be performed.
 </p>
 
 
@@ -145,8 +160,8 @@ point for all system and AAA logs. <b style="color: red;">NEED TO FINISH THIS PA
 
 <h4><u>BackgrounDRB</u></h4>
 <p>
-BackgrounDRB is the backend daemon responsible for performing maintenance on the system. It is very important that this
-daemon continue running while the TacacsPlus Manager is in production mode.
+BackgrounDRB is the backend daemon responsible for performing maintenance on the system as well as for monitoring the
+system messaging queues. It is very important that this daemon continue running while the TacacsPlus Manager is in production mode.
 </p>
 
 <br />
@@ -172,30 +187,41 @@ administrator or a system administrator.
 
 <br />
 
-<h4><u>Configuration Membership Requests</u></h4>
-<p>
-From their home page, users may request memberships to the various configurations within the system.
-Once a request is made it must be approved by a configuration administrator before the membership
-will become active. A user may withdraw their request at any time unless that request has be explicitly
-denied by the configuration administrator.
-</p>
-
-<br />
 
 <h3><a name="tacacs_daemon_administration" style="color: #000000;">TACACS+ Daemon Administration</a></h3>
 
-<h4><u></u></h4>
 <p>
-
+When creating TACACS+ Daemons a unique name and an IP/port must be provided. Additionally, a Manager must be
+selected which will act as the owning system for this daemon. If no Manager is provided, then the daemon
+will run on the local system. Before the daemon may be started it must subscribe to a configuration. After
+a configuration is selected the daemon may be started/stopped by the configuration administrator.
 </p>
 
 <br />
 
-<h3></h3>
-
 <h3><a name="configuration_administration" style="color: #000000;">Configuration Administration</a></h3>
-<p>
 
+<h4><u>New Configurations</u></h4>
+<p>
+Configurations must be given a unique name on the system. Additionally, they may be assigned to a department.
+When creating a new configuration a TACACS+ encryption key (used by any subscribing TACACS+ daemons) is auto generated.
+Log retention (how long logs are searchable and how long they are archived) may be specified here, as well as
+any custom prompts (for client systems that display prompts). The default policy defines how the system will handle
+users with no Command Authorization Profile defined. 
+</p>
+
+<h4><u>User Account Administration</u></h4>
+<p>
+From the configuration view users may be added by clicking the 'Add/Remove Users' link on the left nav. Users
+are added/removed simply by checking/unchecking their name on the list. The only users that will be present in
+this list are users which belong to the owning department of the configuration. If additional users need to be added
+then they must be added manually by a system admin from that user's main view page.
+</p>
+
+<p>
+Once a user is added to a configuration their account must be activated. This may be done from the 'View Users' link
+on the left nav. It is highly recommended that the user be configured (placed into a user group or otherwise) before
+enabling the user.
 </p>
 
 <br /><br /><br /><br />

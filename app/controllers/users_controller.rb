@@ -69,18 +69,24 @@ class UsersController < ApplicationController
         respond_to do |format|
             if (pass)
                 @session_user = user
-                session[:user_id] = @session_user.id
-                uri = session[:original_uri]
-                @local_manager.log(:username => user.username, :message => "Login to #{@local_manager.name} from #{@remote_addr}")
-                user.last_login = Time.now
-                format.html do
-                    if (uri)
-                        redirect_to(uri)
-                    else
-                        redirect_to(home_users_url)
+                if (@local_manager.in_maintenance_mode && !@session_user.admin?)
+                    flash[:warning] = "System is undergoing maintenance. Please try again later."
+                    format.html {redirect_to(login_users_url)  }
+                    format.xml {render :xml => "<errors><error>#{flash[:warning]}</error></errors>", :status => :forbidden}
+                else
+                    session[:user_id] = @session_user.id
+                    uri = session[:original_uri]
+                    @local_manager.log(:username => user.username, :message => "Login to #{@local_manager.name} from #{@remote_addr}")
+                    user.last_login = Time.now
+                    format.html do
+                        if (uri)
+                            redirect_to(uri)
+                        else
+                            redirect_to(home_users_url)
+                        end
                     end
+                    format.xml  { head :ok }
                 end
-                format.xml  { head :ok }
             else
                 @local_manager.log(:username => params[:user][:username], :message => "Failed login attempted on #{@local_manager.name} from #{@remote_addr}")
                 flash[:warning] = "Username or password incorrect. This attempt has been logged."
