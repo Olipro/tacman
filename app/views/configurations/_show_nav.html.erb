@@ -13,7 +13,7 @@
 <%= link_to 'Edit Settings', edit_configuration_url(@configuration) %><br />
 <% end %>
 
-<%= link_to 'View Users', configuration_url(@configuration) %><br />
+<%= link_to 'View User Settings', configuration_url(@configuration) %><br />
 <% if (@session_user.admin? || @configuration_roles[@configuration.id] == 'admin') %>
 <%= link_to 'Add/Remove Users', add_remove_users_configuration_url(@configuration) %><br />
 <% end %>

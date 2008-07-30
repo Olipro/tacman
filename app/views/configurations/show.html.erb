@@ -44,11 +44,11 @@
             </td>
 
             <td>
-            <% if (@configuration_roles[@configuration.id] == 'admin') %>
+            <% if (@configuration_roles[@configuration.id] == 'admin' || @session_user.admin?) %>
               <% if (cu.active?) %>
                 <%= image_tag('checked.png', :border => 'none') %> active
                 &nbsp&nbsp
-                <%= link_to(image_tag('unchecked.png', :border => 'none'), suspend_configured_user_url(cu),:method => :put) %> suspended
+                <%= link_to(image_tag('unchecked.png', :border => 'none'), suspend_configured_user_url(cu),:method => :put, :confirm => "Suspend #{user.username}?") %> suspended
               <% else %>
                 <%= link_to(image_tag('unchecked.png', :border => 'none'), activate_configured_user_url(cu),:method => :put) %> active
                 &nbsp&nbsp

@@ -4,6 +4,7 @@ class UserGroupsController < ApplicationController
     before_filter :force_pw_change
 
     def changelog
+        @configuration = @user_group.configuration
         @log_count = SystemLog.count_by_sql("SELECT COUNT(*) FROM system_logs WHERE user_group_id=#{@user_group.id}")
         if ( params.has_key?(:page) )
             page = params[:page]

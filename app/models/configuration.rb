@@ -151,6 +151,7 @@ class Configuration < ActiveRecord::Base
                     line.strip!
                     elements = line.split(' ')
                     if (elements[0] == 'author-avpair-list')
+                        acl = nil
                         entry = nil
                         if (author_avpair.name.blank?)
                             author_avpair.name = elements[1]

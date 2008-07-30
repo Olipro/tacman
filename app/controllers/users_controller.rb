@@ -306,7 +306,7 @@ class UsersController < ApplicationController
             @nav = 'show_nav'
             flash[:notice] = "Changes published but may take a few minutes to take effect."
             @local_manager.log(:username => @session_user.username, :user_id => @user.id, :message => "Published user '#{@user.username}'.")
-            format.html { redirect_to user_url(@user) }
+            format.html { redirect_to( request.env["HTTP_REFERER"] ) }
             format.xml  { head :ok }
         end
     end

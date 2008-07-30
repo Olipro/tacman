@@ -131,21 +131,23 @@ class TacacsDaemonsController < ApplicationController
             if ( params.has_key?(:selected) )
                 cmd = params[:command]
                 cmd = 'read' if ( cmd != 'reload' && cmd != 'restart' && cmd != 'start' && cmd != 'stop' )
-                names = []
+                op_on = []
                 ids = params[:selected].keys
                 tds = []
                 excluded = []
                 TacacsDaemon.find(:all, :order => :name).each do |td|
                     if ( ids.include?(td.id.to_s) )
                         tds.push(td)
-                        names.push(td.name)
+                        op_on.push(td)
                     else
                         excluded.push(td)
                     end
                 end
 
                 if (cmd != 'read')
-                    @local_manager.log(:username => @session_user.username, :message => "Issued command '#{cmd}' on Tacacs Daemons (#{names.join(',')}).")
+                    op_on.each do |td|
+                        @local_manager.log(:username => @session_user.username, :configuration_id => td.configuration_id, :tacacs_daemon_id => td.id, :message => "Issued command '#{cmd}' on daemon #{td.name}.")
+                    end
                 end
 
                 start_stop = Manager.start_stop_tacacs_daemons(tds,cmd)

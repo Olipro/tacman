@@ -1,8 +1,8 @@
 class ConfigurationsController < ApplicationController
     viewer_access = [:aaa_log_archives, :aaa_log_file, :aaa_logs, :acls, :author_avpairs, :changelog, :command_authorization_profiles,
                      :command_authorization_whitelist, :download_archived_log, :log_search_form, :network_object_groups,
-                     :search_aaa_logs, :settings, :shell_command_object_groups, :show, :tacacs_daemons, :tacacs_daemon_control,
-                     :user_groups]
+                     :search_aaa_logs, :settings, :shell_command_object_groups, :show, :tacacs_daemons, :tacacs_daemon_changelog,
+                     :tacacs_daemon_control, :user_groups]
     admin_access = [:add_remove_users, :add_user, :create_acl, :create_author_avpair, :create_command_authorization_profile,
                     :create_command_authorization_whitelist_entry,:create_network_object_group, 
                     :create_shell_command_object_group, :create_user_group, :edit, :new_acl, :new_author_avpair,
@@ -255,7 +255,7 @@ class ConfigurationsController < ApplicationController
             @nav = 'command_authorization_whitelist_nav'
             if (@local_manager.slave?)
                 @command_authorization_whitelist_entry.errors.add_to_base("This action is prohibited on slave systems.")
-                format.html { render :action => "new_command_authorization_whitelist_entry" }
+                format.html { render :action => :command_authorization_whitelist, :id => @configuration }
                 format.xml  { render :xml => @command_authorization_whitelist_entry.errors, :status => :not_acceptable }
             elsif @command_authorization_whitelist_entry.save
                 @local_manager.log(:username => @session_user.username, :configuration_id => @configuration.id, :message => "Added whitelist entry '#{@command_authorization_whitelist_entry.description}'.")
@@ -263,7 +263,7 @@ class ConfigurationsController < ApplicationController
                 format.xml  { render :xml => @command_authorization_whitelist_entry, :status => :created, :location => @command_authorization_whitelist_entry }
             else
                 @configuration.reload
-                format.html { render :action => "new_command_authorization_whitelist_entry" }
+                format.html { render :action => :command_authorization_whitelist, :id => @configuration }
                 format.xml  { render :xml => @command_authorization_whitelist_entry.errors, :status => :unprocessable_entity }
             end
         end
@@ -483,7 +483,7 @@ class ConfigurationsController < ApplicationController
             @nav = 'show_nav'
             flash[:notice] = "Changes published, but may take a few minutes to propagate."
             @local_manager.log(:username => @session_user.username, :configuration_id => @configuration.id, :message => "Published configuration '#{@configuration.name}'.")
-            format.html { redirect_to configuration_url(@configuration) }
+            format.html { redirect_to( request.env["HTTP_REFERER"] ) }
             format.xml  { head :ok }
         end
     end
@@ -603,27 +603,47 @@ class ConfigurationsController < ApplicationController
         end
     end
 
+    def tacacs_daemon_changelog
+        @tacacs_daemon = TacacsDaemon.find(params[:id])
+        @configuration = @tacacs_daemon.configuration
+        @log_count = SystemLog.count_by_sql("SELECT COUNT(*) FROM system_logs WHERE tacacs_daemon_id=#{@tacacs_daemon.id}")
+        if ( params.has_key?(:page) )
+            page = params[:page]
+        elsif (@log_count > 0)
+            page = @log_count / @local_manager.pagination_per_page
+            page = page + 1 if (@log_count % @local_manager.pagination_per_page > 0)
+        end
+        @logs = SystemLog.paginate(:page => page, :per_page => @local_manager.pagination_per_page,
+                                   :conditions => "tacacs_daemon_id=#{@tacacs_daemon.id}", :order => :created_at)
+        respond_to do |format|
+            @nav = 'tacacs_daemon_nav'
+            format.html {render :template => 'managers/system_logs'}
+        end
+    end
+
     def tacacs_daemon_control
         respond_to do |format|
             @nav = 'tacacs_daemon_nav'
             if ( params.has_key?(:selected) )
                 cmd = params[:command]
                 cmd = 'read' if ( cmd != 'reload' && cmd != 'restart' && cmd != 'start' && cmd != 'stop' )
-                names = []
+                op_on = []
                 ids = params[:selected].keys
                 tds = []
                 excluded = []
                 @configuration.tacacs_daemons.each do |td|
                     if ( ids.include?(td.id.to_s) )
                         tds.push(td)
-                        names.push(td.name)
+                        op_on.push(td)
                     else
                         excluded.push(td)
                     end
                 end
 
                 if (cmd != 'read')
-                    @local_manager.log(:username => @session_user.username, :message => "Issued command '#{cmd}' on Tacacs Daemons (#{names.join(',')}).")
+                    op_on.each do |td|
+                        @local_manager.log(:username => @session_user.username, :configuration_id => @configuration.id, :tacacs_daemon_id => td.id, :message => "Issued command '#{cmd}' on daemon #{td.name}.")
+                    end
                 end
 
                 start_stop = Manager.start_stop_tacacs_daemons(tds,cmd)
