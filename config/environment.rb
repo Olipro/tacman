@@ -68,4 +68,3 @@ end
 require 'resolv'
 require 'net/http'
 require 'rexml/formatters/pretty'
-require "#{RAILS_ROOT}/vendor/plugins/backgroundrb/lib/backgroundrb.rb"
