@@ -67,3 +67,4 @@ end
 # Include your application configuration below
 require 'resolv'
 require 'net/http'
+require 'rexml/formatters/pretty'
