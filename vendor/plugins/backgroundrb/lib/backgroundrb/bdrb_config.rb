@@ -1,3 +1,4 @@
+require 'optparse'
 module BackgrounDRb
   class Config
     def self.parse_cmd_options(argv)
