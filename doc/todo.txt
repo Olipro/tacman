@@ -10,6 +10,8 @@
 features & bugs
 ---------------
 
+* user_admin should be able to crud departments
+
 * verify all workers
 
 * test account lockout
