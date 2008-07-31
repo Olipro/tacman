@@ -203,7 +203,7 @@ class Manager < ActiveRecord::Base
         end
 
         xml << "</system-export>"
-        return( REXML::Document.new(xml).to_s(1) )
+        return( REXML::Document.new(xml).to_s )
     end
 
     # add message to outbox of master
