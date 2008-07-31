@@ -129,7 +129,13 @@ class Manager < ActiveRecord::Base
     def Manager.backgroundrb_control(cmd=nil)
         status = 'stopped'
         msg = ''
-        conf = BackgrounDRb::Config.read_config("#{RAILS_ROOT}/config/backgroundrb.yml")
+        conf = ''
+        begin
+            conf = YAML.load_file("#{RAILS_ROOT}/config/backgroundrb.yml")
+        rescue Exception => error
+            msg = "Error reading backgroundrb.yml: #{error}"
+            return({:status => status, :message => msg})
+        end
         pid_file = "#{RAILS_ROOT}/tmp/pids/backgroundrb_#{conf[:backgroundrb][:port]}.pid"
 
         if (cmd == 'start')
