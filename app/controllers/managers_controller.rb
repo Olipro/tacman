@@ -289,7 +289,7 @@ class ManagersController < ApplicationController
                 format.html { redirect_to manager_url(@manager) }
                 format.xml  { head :ok }
             else
-                format.html { render :action => "show" }
+                format.html { render :action => "show_master" }
                 format.xml  { render :xml => @manager.errors, :status => :unprocessable_entity }
             end
         end
