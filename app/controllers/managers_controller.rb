@@ -282,7 +282,7 @@ class ManagersController < ApplicationController
 
     def request_registration
         respond_to do |format|
-            @nav = "index_nav"
+            @nav = "remote_nav"
             @manager = Manager.request_registration( params[:manager][:base_url].strip )
             if (@manager.errors.length == 0)
                 @local_manager.log(:username => @session_user.username, :manager_id=> @manager.id, :message => "Registered with master system at #{@manager.base_url}")
