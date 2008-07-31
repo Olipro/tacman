@@ -139,7 +139,7 @@ class Manager < ActiveRecord::Base
                 # TCPServer IO from mongrel
                 ObjectSpace.each_object(TCPSocket) {|sock| sock.reopen('/dev/null', 'r'); sock.close}
 
-                exec "#{RAILS_ROOT}/script/backgroundrb start"
+                exec "#{RAILS_ROOT}/script/backgroundrb start -e #{RAILS_ENV}"
             end
             Process.wait(child_pid)
             return(Manager.backgroundrb_control)
