@@ -1,7 +1,7 @@
 class DepartmentsController < ApplicationController
     before_filter :define_session_user
     before_filter :force_pw_change
-    before_filter :authorize_admin
+    before_filter :authorize_user_admin
 
 
     def changelog

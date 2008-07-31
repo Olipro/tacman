@@ -10,15 +10,11 @@
 features & bugs
 ---------------
 
-* user_admin should be able to crud departments
-
 * verify all workers
 
 * test account lockout
 
 * test revision mismatch
-
-* test custom pw hist length
 
 * test log search of slave logs
 
@@ -28,16 +24,6 @@ User.find(:all).each {|u| puts "#{u.username}, #{u.hashed_password}, #{u.hashed_
 * script to import nogs, acls, etc...
 
 * import old logs into new system
-
-
-before rollout
---------------
-* unpack rails and all required gems
-
-
-questions
----------
-- what mail notifications are sent from slave?
 
 
 

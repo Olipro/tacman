@@ -12,15 +12,16 @@
     :debug_log: false # disable log workers and other logging 
 
 :schedules:
+
   # daily archiver runs at midnight
   :archiver_worker:
     :daily_archive:
       :trigger_args: 0 0 0 * * * *
 
-  # check the inbox periodically
+  # check the inbox every 5 minutes
   :inbox_manager_worker:
     :process_all_inbox:
-      :trigger_args: 0 0,5,10,15,20,25,30,35,40,45,50,55 * * * * *
+      :trigger_args: 0 */5 * * * * *
 
   # check outbox every minute
   :outbox_manager_worker:
@@ -35,13 +36,16 @@
 
     # gather up aaa logs every 20 minutes
     :gather_aaa_logs:
-      :trigger_args: 0 0,20,40 * * * * *
+      :trigger_args: 0 */20 * * * * *
 
   # users
   :user_manager_worker:
-    # cleanup sessions
+
     :cleanup_sessions:
       :trigger_args: 0 0 * * * * *
+
+    :disable_inactive:
+      :trigger_args: 0 0 0 * * * *
 
     # mail logs daily
     :daily_logs:
@@ -50,10 +54,6 @@
     # mail configuration changelogs
     :configuration_changelog:
       :trigger_args: 59 59 23 * * * *
-
-    # disable inactive users
-    :disable_inactive:
-      :trigger_args: 0 0 0 * * * *
 
     # mail pending membership requests
     :pending_membership_requests:

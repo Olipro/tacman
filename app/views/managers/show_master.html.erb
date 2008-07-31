@@ -1,22 +1,6 @@
 <%= error_messages_for :manager %>
 
-<% if (@manager.nil?) %>
-
-  <h2>Register with a master system</h2>
-  <%= error_messages_for :manager %>
-
-  <% form_for(:manager, :url => request_registration_managers_url(), :html => { :method => :post }) do |f| %>
-    <table>
-    <tr><td><b>Masters Web Services URL:</b></td><td><%= f.text_field(:base_url,:size => 50) %></td>
-    </table>
-    <br /><br />
-    <%= submit_tag "Register" %>
-    &nbsp&nbsp
-    <input type=button value="Cancel" onclick="window.location.href='<%= local_managers_url %>'" />
-  <% end %>
-
-<% else %>
-
+<% if (@manager && @manager.master?) %>
 <h2>Master system</h2>
 <table>
     <% if (!@manager.is_approved) %>
@@ -29,5 +13,17 @@
     <tr><td><b>URL:</b></td> <td><%=h @manager.base_url %></td></tr>
     <tr><td>&nbsp</td></tr>
 </table>
+
+<% else %>
+<h2>Register with a master system</h2>
+  <% form_for(:manager, :url => request_registration_managers_url(), :html => { :method => :post }) do |f| %>
+    <table>
+    <tr><td><b>Masters Web Services URL:</b></td><td><%= f.text_field(:base_url,:size => 50) %></td>
+    </table>
+    <br /><br />
+    <%= submit_tag "Register" %>
+    &nbsp&nbsp
+    <input type=button value="Cancel" onclick="window.location.href='<%= local_managers_url %>'" />
+  <% end %>
 
 <% end %>

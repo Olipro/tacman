@@ -329,7 +329,7 @@ class Manager < ActiveRecord::Base
             end
 
         rescue Exception => error
-            m.errors.add_to_base("Web services call raised errors: #{error}\n#{error.backtrace.join("\n")}")
+            m.errors.add_to_base("Web services call raised errors: #{error}")
         end
 
         return(m)

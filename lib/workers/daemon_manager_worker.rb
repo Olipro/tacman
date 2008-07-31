@@ -24,19 +24,21 @@ class DaemonManagerWorker < BackgrounDRb::MetaWorker
                     message = "TACACS+ Daemon #{td.name} (#{td.ip}:#{td.port}) failed to respond to monitoring."
                     local_manager.log(:level => 'warn', :tacacs_daemon_id => td.id, :message => message)
 
-                    configurations[td.configuration_id].configured_users.find(:all, :conditions => "role = 'admin'").each do |cu|
-                        user = cu.user
-                        if (!user.alerts_email.blank?)
-                            mail_to.push(user.alerts_email)
-                        elsif (!user.email.blank?)
-                            mail_to.push(user.email)
+                    if (local_manager.enable_mailer)
+                        configurations[td.configuration_id].configured_users.find(:all, :conditions => "role = 'admin'").each do |cu|
+                            user = cu.user
+                            if (!user.alerts_email.blank?)
+                                mail_to.push(user.alerts_email)
+                            elsif (!user.email.blank?)
+                                mail_to.push(user.email)
+                            end
                         end
-                    end
 
-                    if (mail_to.length > 0)
-                        begin
-                            TacmanMailer.deliver_alert(local_manager, mail_to, subj, message)
-                        rescue Exception => error
+                        if (mail_to.length > 0)
+                            begin
+                                TacmanMailer.deliver_alert(local_manager, mail_to, subj, message)
+                            rescue Exception => error
+                            end
                         end
                     end
                 end

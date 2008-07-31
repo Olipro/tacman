@@ -1,4 +1,4 @@
-<% if (@manager) %>
+<% if (@manager && @manager.id) %>
     <%= link_to 'Local System', local_managers_url %><br />
 
     <% if (@manager.slave?) %>

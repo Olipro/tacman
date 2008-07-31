@@ -126,6 +126,10 @@ module BackgrounDRb
           if next_hour < hour
             hour = next_hour
             day += 1
+            if day > month_days(year, month)
+               day -= month_days(year, month)
+               month += 1
+            end
             retry
           end
           hour = next_hour
