@@ -29,7 +29,7 @@ class NetworkObjectGroupsController < ApplicationController
                 format.html { render :action => "show" }
                 format.xml  { render :xml => @network_object_group_entry.errors, :status => :not_acceptable }
             elsif @network_object_group_entry.save
-                @local_manager.log(:username => @session_user.username, :configuration_id => @network_object_group.configuration_id, :network_object_group_id => @network_object_group.id, :message => "Created entry '#{@network_object_group_entry.cidr}' of Network Object Group '#{@network_object_group.name}'.")
+                @local_manager.log(:username => @session_user.username, :configuration_id => @network_object_group.configuration_id, :network_object_group_id => @network_object_group.id, :message => "Created entry #{@network_object_group_entry.cidr} of Network Object Group #{@network_object_group.name}.")
                 format.html { redirect_to network_object_group_url(@network_object_group) }
                 format.xml  { render :xml => @network_object_group_entry.to_xml }
             else
@@ -50,7 +50,7 @@ class NetworkObjectGroupsController < ApplicationController
                 format.html { render :action => "show" }
                 format.xml  { render :xml => @network_object_group.errors, :status => :not_acceptable }
             elsif (@network_object_group.destroy)
-                @local_manager.log(:username => @session_user.username, :configuration_id => @configuration.id, :message => "Deleted Network Object Group '#{@network_object_group.name}'.")
+                @local_manager.log(:username => @session_user.username, :configuration_id => @configuration.id, :message => "Deleted Network Object Group #{@network_object_group.name}.")
                 format.html { redirect_to network_object_groups_configuration_url(@configuration) }
                 format.xml  { head :ok }
             else
@@ -84,7 +84,7 @@ class NetworkObjectGroupsController < ApplicationController
                 format.html { render :action => "show" }
                 format.xml  { render :xml => @network_object_group.errors, :status => :not_acceptable }
             elsif (@network_object_group.optimize!)
-                @local_manager.log(:username => @session_user.username, :configuration_id => @network_object_group.configuration_id, :network_object_group_id => @network_object_group.id, :message => "Optimized Network Object Group '#{@network_object_group.name}'.")
+                @local_manager.log(:username => @session_user.username, :configuration_id => @network_object_group.configuration_id, :network_object_group_id => @network_object_group.id, :message => "Optimized Network Object Group #{@network_object_group.name}.")
                 format.html { redirect_to network_object_group_url(@network_object_group) }
                 format.xml  { head :ok }
             else
@@ -102,7 +102,7 @@ class NetworkObjectGroupsController < ApplicationController
                 format.html { render :action => "show" }
                 format.xml  { render :xml => @network_object_group.errors, :status => :not_acceptable }
             elsif (@network_object_group.resequence!)
-                @local_manager.log(:username => @session_user.username, :configuration_id => @network_object_group.configuration_id, :network_object_group_id => @network_object_group.id, :message => "Resequenced Network Object Group '#{@network_object_group.name}'.")
+                @local_manager.log(:username => @session_user.username, :configuration_id => @network_object_group.configuration_id, :network_object_group_id => @network_object_group.id, :message => "Resequenced Network Object Group #{@network_object_group.name}.")
                 format.html { redirect_to network_object_group_url(@network_object_group) }
                 format.xml  { head :ok }
             else
@@ -121,7 +121,7 @@ class NetworkObjectGroupsController < ApplicationController
                 format.html { render :action => "edit" }
                 format.xml  { render :xml => @network_object_group.errors, :status => :not_acceptable }
             elsif @network_object_group.update_attributes(params[:network_object_group])
-                @local_manager.log(:username => @session_user.username, :configuration_id => @network_object_group.configuration_id, :network_object_group_id => @network_object_group.id, :message => "Renamed Network Object Group '#{@network_object_group.name}'.")
+                @local_manager.log(:username => @session_user.username, :configuration_id => @network_object_group.configuration_id, :network_object_group_id => @network_object_group.id, :message => "Renamed Network Object Group #{@network_object_group.name}.")
                 format.html { redirect_to network_object_group_url(@network_object_group) }
                 format.xml  { head :ok }
             else

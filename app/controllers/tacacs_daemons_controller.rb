@@ -52,7 +52,7 @@ class TacacsDaemonsController < ApplicationController
                 format.html { render :action => "new" }
                 format.xml  { render :xml => @tacacs_daemon.errors, :status => :not_acceptable }
             elsif @tacacs_daemon.save
-                @local_manager.log(:username => @session_user.username, :tacacs_daemon_id => @tacacs_daemon.id, :message => "Created Tacacs Daemon '#{@tacacs_daemon.name}'.")
+                @local_manager.log(:username => @session_user.username, :tacacs_daemon_id => @tacacs_daemon.id, :message => "Created Tacacs Daemon #{@tacacs_daemon.name}.")
                 format.html { redirect_to tacacs_daemon_url(@tacacs_daemon) }
                 format.xml  { render :xml => @tacacs_daemon, :status => :created, :location => @tacacs_daemon }
             else
@@ -74,7 +74,7 @@ class TacacsDaemonsController < ApplicationController
                 format.xml  { render :xml => @tacacs_daemon.errors, :status => :not_acceptable }
             else
                 @tacacs_daemon.destroy
-                @local_manager.log(:username => @session_user.username, :message => "Deleted Tacacs Daemon '#{@tacacs_daemon.name}'.")
+                @local_manager.log(:username => @session_user.username, :message => "Deleted Tacacs Daemon #{@tacacs_daemon.name}.")
                 format.html { redirect_to(tacacs_daemons_url) }
                 format.xml  { head :ok }
             end
@@ -174,7 +174,7 @@ class TacacsDaemonsController < ApplicationController
                 format.xml  { render :xml => @tacacs_daemon.errors, :status => :not_acceptable }
             elsif @tacacs_daemon.update_attributes(params[:tacacs_daemon])
                 @local_manager.log(:username => @session_user.username, :tacacs_daemon_id => @tacacs_daemon.id,
-                                   :message => "Updated Tacacs Daemon '#{@tacacs_daemon.name}'.")
+                                   :message => "Updated Tacacs Daemon #{@tacacs_daemon.name}.")
 
                 format.html { redirect_to tacacs_daemon_url(@tacacs_daemon) }
                 format.xml  { head :ok }

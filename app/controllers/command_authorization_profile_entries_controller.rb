@@ -11,7 +11,7 @@ class CommandAuthorizationProfileEntriesController < ApplicationController
                 format.html { render command_authorization_profile_url(@command_authorization_profile)  }
                 format.xml  { render :xml => @command_authorization_profile_entry.errors, :status => :not_acceptable }
             elsif (@command_authorization_profile_entry.destroy)
-                @local_manager.log(:username => @session_user.username, :configuration_id => @command_authorization_profile.configuration_id, :command_authorization_profile_id => @command_authorization_profile.id, :message => "Deleted entry '#{@command_authorization_profile_entry.description}' of Command Authorization Profile '#{@command_authorization_profile.name}'.")
+                @local_manager.log(:username => @session_user.username, :configuration_id => @command_authorization_profile.configuration_id, :command_authorization_profile_id => @command_authorization_profile.id, :message => "Deleted entry #{@command_authorization_profile_entry.description} of Command Authorization Profile #{@command_authorization_profile.name}.")
                 format.html { redirect_to command_authorization_profile_url(@command_authorization_profile) }
                 format.xml  { head :ok }
             else

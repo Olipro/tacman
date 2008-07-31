@@ -47,7 +47,7 @@ class UsersController < ApplicationController
                 cu = @user.configured_users.build()
                 cu.configuration_id = configuration.id
                 cu.save
-                @local_manager.log(:username => @session_user.username, :configuration_id => configuration.id, :user_id=> @user.id, :message => "Added user '#{@user.username}' to Configuration '#{configuration.name}'")
+                @local_manager.log(:username => @session_user.username, :configuration_id => configuration.id, :user_id=> @user.id, :message => "Added user #{@user.username} to Configuration #{configuration.name}")
                 flash[:notice] = "#{@user.username} added to #{configuration.name}."
                 format.html { redirect_to user_url(@user) }
                 format.xml  { head :ok }
@@ -169,7 +169,7 @@ class UsersController < ApplicationController
                             end
                         end
 
-                        @local_manager.log(:username => @session_user.username, :user_id=> @user.id, :message => "Created user '#{@user.username}'.")
+                        @local_manager.log(:username => @session_user.username, :user_id=> @user.id, :message => "Created user #{@user.username}.")
                         format.html { redirect_to user_url(@user) }
                         format.xml  { render :xml => @user, :status => :created, :location => @user }
                     end
@@ -198,7 +198,7 @@ class UsersController < ApplicationController
                 format.html { redirect_to user_url(@user) }
                 format.xml  { render :xml => @user.errors, :status => :not_acceptable }
             elsif (@user.destroy)
-                @local_manager.log(:username => @session_user.username, :message => "Deleted user '#{@user.username}'.")
+                @local_manager.log(:username => @session_user.username, :message => "Deleted user #{@user.username}.")
                 format.html { redirect_to(users_url) }
                 format.xml  { head :ok }
             else
@@ -305,7 +305,7 @@ class UsersController < ApplicationController
         respond_to do |format|
             @nav = 'show_nav'
             flash[:notice] = "Changes published but may take a few minutes to take effect."
-            @local_manager.log(:username => @session_user.username, :user_id => @user.id, :message => "Published user '#{@user.username}'.")
+            @local_manager.log(:username => @session_user.username, :user_id => @user.id, :message => "Published user #{@user.username}.")
             format.html { redirect_to( request.env["HTTP_REFERER"] ) }
             format.xml  { head :ok }
         end
@@ -325,7 +325,7 @@ class UsersController < ApplicationController
                 cu = ConfiguredUser.find(:first, :conditions => "user_id = #{@user.id} and configuration_id = #{configuration.id}")
                 if (cu)
                     cu.destroy
-                    @local_manager.log(:username => @session_user.username, :configuration_id => configuration.id, :user_id=> @user.id, :message => "Removed user '#{@user.username}' from Configuration '#{configuration.name}'.")
+                    @local_manager.log(:username => @session_user.username, :configuration_id => configuration.id, :user_id=> @user.id, :message => "Removed user #{@user.username} from Configuration #{configuration.name}.")
                     flash[:notice] = "#{@user.username} removed from #{configuration.name}."
                 end
                 format.html { redirect_to user_url(@user) }
@@ -363,7 +363,7 @@ class UsersController < ApplicationController
                 format.xml  { render :xml => @user.errors, :status => :not_acceptable }
             else
                 @user.admin!
-                @local_manager.log(:username => @session_user.username, :user_id=> @user.id, :message => "Set role to 'admin' for '#{@user.username}'.")
+                @local_manager.log(:username => @session_user.username, :user_id=> @user.id, :message => "Set role to 'admin' for user #{@user.username}.")
                 format.html { redirect_to user_url(@user) }
                 format.xml  { head :ok }
             end
@@ -388,7 +388,7 @@ class UsersController < ApplicationController
                 format.xml  { render :xml => @user.errors, :status => :not_acceptable }
             else
                 @user.user!
-                @local_manager.log(:username => @session_user.username, :user_id=> @user.id, :message => "Set role to 'user' for '#{@user.username}'.")
+                @local_manager.log(:username => @session_user.username, :user_id=> @user.id, :message => "Set role to 'user' for user #{@user.username}.")
                 format.html { redirect_to user_url(@user) }
                 format.xml  { head :ok }
             end
@@ -413,7 +413,7 @@ class UsersController < ApplicationController
                 format.xml  { render :xml => @user.errors, :status => :not_acceptable }
             else
                 @user.user_admin!
-                @local_manager.log(:username => @session_user.username, :user_id=> @user.id, :message => "Set role to 'user_admin' for '#{@user.username}'.")
+                @local_manager.log(:username => @session_user.username, :user_id=> @user.id, :message => "Set role to 'user_admin' for user #{@user.username}.")
                 format.html { redirect_to user_url(@user) }
                 format.xml  { head :ok }
             end
@@ -467,7 +467,7 @@ class UsersController < ApplicationController
                 format.xml  { render :xml => @user.errors, :status => :not_acceptable }
             else
                 @user.toggle_allow_web_login!
-                @local_manager.log(:username => @session_user.username, :user_id=> @user.id, :message => "Toggled web login access (current=#{@user.allow_web_login}) for '#{@user.username}'.")
+                @local_manager.log(:username => @session_user.username, :user_id=> @user.id, :message => "Toggled web login access (current=#{@user.allow_web_login}) for user #{@user.username}.")
                 format.html { redirect_to user_url(@user) }
                 format.xml  { head :ok }
             end
@@ -491,7 +491,7 @@ class UsersController < ApplicationController
                 format.xml  { render :xml => @user.errors, :status => :not_acceptable }
             else
                 @user.toggle_disabled!
-                @local_manager.log(:username => @session_user.username, :user_id=> @user.id, :message => "Set account status = #{@user.account_status} for '#{@user.username}'.")
+                @local_manager.log(:username => @session_user.username, :user_id=> @user.id, :message => "Set account status = #{@user.account_status} for user #{@user.username}.")
                 format.html { redirect_to user_url(@user) }
                 format.xml  { head :ok }
             end
@@ -512,7 +512,7 @@ class UsersController < ApplicationController
                 format.xml  { render :xml => '<errors><error>This action is prohibited on slave systems.</error></errors>', :status => :not_acceptable }
             else
                 @user.toggle_enable_expiry!
-                @local_manager.log(:username => @session_user.username, :user_id=> @user.id, :message => "Toggled enable expiry (current=#{@user.enable_password_expired?}) for '#{@user.username}'.")
+                @local_manager.log(:username => @session_user.username, :user_id=> @user.id, :message => "Toggled enable expiry (current=#{@user.enable_password_expired?}) for user #{@user.username}.")
                 format.html { redirect_to user_url(@user) }
                 format.xml  { head :ok }
             end
@@ -533,7 +533,7 @@ class UsersController < ApplicationController
                 format.xml  { render :xml => '<errors><error>This action is prohibited on slave systems.</error></errors>', :status => :not_acceptable }
             else
                 @user.toggle_password_expiry!
-                @local_manager.log(:username => @session_user.username, :user_id=> @user.id, :message => "Toggled password expiry (current=#{@user.login_password_expired?}) for '#{@user.username}'.")
+                @local_manager.log(:username => @session_user.username, :user_id=> @user.id, :message => "Toggled password expiry (current=#{@user.login_password_expired?}) for user #{@user.username}.")
                 format.html { redirect_to user_url(@user) }
                 format.xml  { head :ok }
             end
@@ -558,7 +558,7 @@ class UsersController < ApplicationController
                 format.html { redirect_to user_url(@user) }
                 format.xml  { render :xml => @user.errors, :status => :not_acceptable }
             elsif @user.update_attributes(params[:user])
-                @local_manager.log(:username => @session_user.username, :user_id=> @user.id, :message => "Edited '#{@user.username}'.")
+                @local_manager.log(:username => @session_user.username, :user_id=> @user.id, :message => "Edited user #{@user.username}.")
                 format.html { redirect_to user_url(@user) }
                 format.xml  { head :ok }
             else
@@ -652,7 +652,7 @@ class UsersController < ApplicationController
                     end
                 end
 
-                @local_manager.log(:username => @session_user.username, :user_id=> @user.id, :message => "Reset enable password for '#{@user.username}'.")
+                @local_manager.log(:username => @session_user.username, :user_id=> @user.id, :message => "Reset enable password for user #{@user.username}.")
                 flash[:notice] = "Change won't be effective on TACACS+ daemons until it is published."
                 format.html { redirect_to user_url(@user) }
                 format.xml  { head :ok }
@@ -687,7 +687,7 @@ class UsersController < ApplicationController
                     end
                 end
 
-                @local_manager.log(:username => @session_user.username, :user_id=> @user.id, :message => "Reset password for '#{@user.username}'.")
+                @local_manager.log(:username => @session_user.username, :user_id=> @user.id, :message => "Reset password for user #{@user.username}.")
                 flash[:notice] = "Change won't be effective on TACACS+ daemons until it is published."
                 format.html { redirect_to user_url(@user) }
                 format.xml  { head :ok }

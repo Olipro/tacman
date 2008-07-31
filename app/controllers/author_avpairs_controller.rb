@@ -45,7 +45,7 @@ class AuthorAvpairsController < ApplicationController
                         @author_avpair_entry.avpairs.create!(:avpair => avpair)
                     end
                 end
-                @local_manager.log(:username => @session_user.username, :configuration_id => @author_avpair.configuration_id, :author_avpair_id => @author_avpair.id, :message => "Created entry #{@author_avpair_entry.sequence} of Author AVPair '#{@author_avpair.name}'.")
+                @local_manager.log(:username => @session_user.username, :configuration_id => @author_avpair.configuration_id, :author_avpair_id => @author_avpair.id, :message => "Created entry #{@author_avpair_entry.sequence} of Author AVPair #{@author_avpair.name}.")
                 format.html { redirect_to author_avpair_url(@author_avpair) }
                 format.xml  { render :xml => @author_avpair_entry.to_xml }
 
@@ -68,7 +68,7 @@ class AuthorAvpairsController < ApplicationController
                 format.html { render :action => "show" }
                 format.xml  { render :xml => @author_avpair.errors, :status => :not_acceptable }
             elsif (@author_avpair.destroy)
-                @local_manager.log(:username => @session_user.username, :configuration_id => @configuration.id, :message => "Deleted Author AVPair '#{@author_avpair.name}'.")
+                @local_manager.log(:username => @session_user.username, :configuration_id => @configuration.id, :message => "Deleted Author AVPair #{@author_avpair.name}.")
                 format.html { redirect_to author_avpairs_configuration_url(@configuration) }
                 format.xml  { head :ok }
             else
@@ -120,7 +120,7 @@ class AuthorAvpairsController < ApplicationController
                 format.html { render :action => "edit" }
                 format.xml  { render :xml => @author_avpair.errors, :status => :not_acceptable }
             elsif @author_avpair.update_attributes(params[:author_avpair])
-                @local_manager.log(:username => @session_user.username, :configuration_id => @author_avpair.configuration_id, :author_avpair_id => @author_avpair.id, :message => "Renamed Author AVPair '#{@author_avpair.name}'.")
+                @local_manager.log(:username => @session_user.username, :configuration_id => @author_avpair.configuration_id, :author_avpair_id => @author_avpair.id, :message => "Renamed Author AVPair #{@author_avpair.name}.")
                 format.html { redirect_to author_avpair_url(@author_avpair) }
                 format.xml  { head :ok }
             else

@@ -89,7 +89,7 @@ class ConfigurationsController < ApplicationController
                 cu = @configuration.configured_users.build()
                 cu.user_id = @user.id
                 cu.save
-                @local_manager.log(:username => @session_user.username, :user_id => @user.id, :configured_user_id => cu.id, :configuration_id => @configuration.id, :message => "Added user '#{@user.username}' to configuration '#{@configuration.name}'.")
+                @local_manager.log(:username => @session_user.username, :user_id => @user.id, :configured_user_id => cu.id, :configuration_id => @configuration.id, :message => "Added user #{@user.username} to configuration #{@configuration.name}.")
                 format.html { redirect_to add_remove_users_configuration_url(@configuration)}
                 format.xml  { head :ok }
             end
@@ -165,7 +165,7 @@ class ConfigurationsController < ApplicationController
                 format.html { redirect_to configurations_url }
                 format.xml  { render :xml => @configuration.errors, :status => :not_acceptable }
             elsif @configuration.save
-                @local_manager.log(:username => @session_user.username, :configuration_id => @configuration.id, :message => "Created Configuration '#{@configuration.name}'.")
+                @local_manager.log(:username => @session_user.username, :configuration_id => @configuration.id, :message => "Created configuration #{@configuration.name}.")
                 format.html { redirect_to configuration_url(@configuration) }
                 format.xml  { render :xml => @configuration, :status => :created, :location => @configuration }
             else
@@ -188,7 +188,7 @@ class ConfigurationsController < ApplicationController
             else
                 @acl = @configuration.acl_from_string(@data)
                 if (@acl.errors.length == 0)
-                    @local_manager.log(:username => @session_user.username, :configuration_id => @configuration.id, :acl_id => @acl.id, :message => "Created ACL '#{@acl.name}'.")
+                    @local_manager.log(:username => @session_user.username, :configuration_id => @configuration.id, :acl_id => @acl.id, :message => "Created ACL #{@acl.name}.")
                     format.html { redirect_to acl_url(@acl) }
                     format.xml  { render :xml => @acl, :status => :created, :location => @acl }
                 else
@@ -213,7 +213,7 @@ class ConfigurationsController < ApplicationController
             else
                 @author_avpair = @configuration.author_avpair_from_string(@data)
                 if (@author_avpair.errors.length == 0)
-                    @local_manager.log(:username => @session_user.username, :configuration_id => @configuration.id, :author_avpair_id => @author_avpair.id, :message => "Created Author AVPair '#{@author_avpair.name}'.")
+                    @local_manager.log(:username => @session_user.username, :configuration_id => @configuration.id, :author_avpair_id => @author_avpair.id, :message => "Created Author AVPair #{@author_avpair.name}.")
                     format.html { redirect_to author_avpair_url(@author_avpair) }
                     format.xml  { render :xml => @author_avpair, :status => :created, :location => @author_avpair }
                 else
@@ -237,7 +237,7 @@ class ConfigurationsController < ApplicationController
             else
                 @command_authorization_profile = @configuration.command_authorization_profile_from_string(@data)
                 if (@command_authorization_profile.errors.length == 0)
-                    @local_manager.log(:username => @session_user.username, :configuration_id => @configuration.id, :command_authorization_profile_id => @command_authorization_profile.id, :message => "Created Command Authorization Profile '#{@command_authorization_profile.name}'.")
+                    @local_manager.log(:username => @session_user.username, :configuration_id => @configuration.id, :command_authorization_profile_id => @command_authorization_profile.id, :message => "Created Command Authorization Profile #{@command_authorization_profile.name}.")
                     format.html { redirect_to command_authorization_profile_url(@command_authorization_profile) }
                     format.xml  { render :xml => @command_authorization_profile, :status => :created, :location => @command_authorization_profile }
                 else
@@ -258,7 +258,7 @@ class ConfigurationsController < ApplicationController
                 format.html { render :action => :command_authorization_whitelist, :id => @configuration }
                 format.xml  { render :xml => @command_authorization_whitelist_entry.errors, :status => :not_acceptable }
             elsif @command_authorization_whitelist_entry.save
-                @local_manager.log(:username => @session_user.username, :configuration_id => @configuration.id, :message => "Added whitelist entry '#{@command_authorization_whitelist_entry.description}'.")
+                @local_manager.log(:username => @session_user.username, :configuration_id => @configuration.id, :message => "Added whitelist entry #{@command_authorization_whitelist_entry.description}.")
                 format.html { redirect_to command_authorization_whitelist_configuration_url(@configuration) }
                 format.xml  { render :xml => @command_authorization_whitelist_entry, :status => :created, :location => @command_authorization_whitelist_entry }
             else
@@ -282,7 +282,7 @@ class ConfigurationsController < ApplicationController
             else
                 @network_object_group = @configuration.network_object_group_from_string(@data)
                 if (@network_object_group.errors.length == 0)
-                    @local_manager.log(:username => @session_user.username, :configuration_id => @configuration.id, :network_object_group_id => @network_object_group.id, :message => "Created Network Object Group '#{@network_object_group.name}'.")
+                    @local_manager.log(:username => @session_user.username, :configuration_id => @configuration.id, :network_object_group_id => @network_object_group.id, :message => "Created Network Object Group #{@network_object_group.name}.")
                     format.html { redirect_to network_object_group_url(@network_object_group) }
                     format.xml  { render :xml => @network_object_group, :status => :created, :location => @network_object_group }
                 else
@@ -306,7 +306,7 @@ class ConfigurationsController < ApplicationController
             else
                 @shell_command_object_group = @configuration.shell_command_object_group_from_string(@data)
                 if (@shell_command_object_group.errors.length == 0)
-                    @local_manager.log(:username => @session_user.username, :configuration_id => @configuration.id, :shell_command_object_group_id => @shell_command_object_group.id, :message => "Created Shell Command Object Group '#{@shell_command_object_group.name}'.")
+                    @local_manager.log(:username => @session_user.username, :configuration_id => @configuration.id, :shell_command_object_group_id => @shell_command_object_group.id, :message => "Created Shell Command Object Group #{@shell_command_object_group.name}.")
                     format.html { redirect_to shell_command_object_group_url(@shell_command_object_group) }
                     format.xml  { render :xml => @shell_command_object_group, :status => :created, :location => @shell_command_object_group }
                 else
@@ -327,7 +327,7 @@ class ConfigurationsController < ApplicationController
                 format.html { render :action => "new_user_group" }
                 format.xml  { render :xml => @user_group.errors, :status => :not_acceptable }
             elsif @user_group.save
-                @local_manager.log(:username => @session_user.username, :configuration_id => @configuration.id, :user_group_id => @user_group.id, :message => "Created User Group '#{@user_group.name}'.")
+                @local_manager.log(:username => @session_user.username, :configuration_id => @configuration.id, :user_group_id => @user_group.id, :message => "Created User Group #{@user_group.name}.")
                 format.html { redirect_to user_groups_configuration_url(@configuration) }
                 format.xml  { render :xml => @user_group, :status => :created, :location => @user_group }
             else
@@ -348,7 +348,7 @@ class ConfigurationsController < ApplicationController
                 format.xml  { render :xml => @configuration.errors, :status => :not_acceptable }
             else
                 @configuration.destroy
-                @local_manager.log(:username => @session_user.username, :message => "Deleted Configuration '#{@configuration.name}'.")
+                @local_manager.log(:username => @session_user.username, :message => "Deleted configuration #{@configuration.name}.")
                 format.html { redirect_to(configurations_url) }
                 format.xml  { head :ok }
             end
@@ -482,7 +482,7 @@ class ConfigurationsController < ApplicationController
         respond_to do |format|
             @nav = 'show_nav'
             flash[:notice] = "Changes published, but may take a few minutes to propagate."
-            @local_manager.log(:username => @session_user.username, :configuration_id => @configuration.id, :message => "Published configuration '#{@configuration.name}'.")
+            @local_manager.log(:username => @session_user.username, :configuration_id => @configuration.id, :message => "Published configuration #{@configuration.name}.")
             format.html { redirect_to( request.env["HTTP_REFERER"] ) }
             format.xml  { head :ok }
         end
@@ -496,7 +496,7 @@ class ConfigurationsController < ApplicationController
                 format.html { render :action => "command_authorization_whitelist" }
                 format.xml  { render :xml => @configuration.errors, :status => :not_acceptable }
             elsif (@configuration.resequence_whitelist!)
-                @local_manager.log(:username => @session_user.username, :configuration_id => @configuration.id, :message => "Resequenced whitelist for Configuration '#{@configuration.name}'.")
+                @local_manager.log(:username => @session_user.username, :configuration_id => @configuration.id, :message => "Resequenced whitelist for configuration #{@configuration.name}.")
                 format.html { redirect_to command_authorization_whitelist_configuration_url(@configuration) }
                 format.xml  { head :ok }
             else
@@ -667,7 +667,7 @@ class ConfigurationsController < ApplicationController
                 format.html { render :action => "edit" }
                 format.xml  { render :xml => @configuration.errors, :status => :not_acceptable }
             elsif @configuration.update_attributes(params[:configuration])
-                @local_manager.log(:username => @session_user.username, :configuration_id => @configuration.id, :message => "Updated Configuration '#{@configuration.name}'.")
+                @local_manager.log(:username => @session_user.username, :configuration_id => @configuration.id, :message => "Updated configuration #{@configuration.name}.")
                 format.html { redirect_to settings_configuration_url(@configuration) }
                 format.xml  { head :ok }
             else
@@ -693,14 +693,14 @@ private
         if (!@session_user.admin?)
             if ( !@configuration_roles.has_key?(@configuration.id) ) # deny if not my config
                 flash[:warning] = "Authorization failed. This attempt has been logged."
-                @local_manager.log(:level => 'warn', :user_id => @session_user.id, :configuration_id => @configuration.id, :username => @session_user.username, :message => "Unauthorized access attempted for configuration '#{@configuration.name}'.")
+                @local_manager.log(:level => 'warn', :user_id => @session_user.id, :configuration_id => @configuration.id, :username => @session_user.username, :message => "Unauthorized access attempted for configuration #{@configuration.name}.")
                 respond_to do |format|
                     format.html {redirect_to home_users_url}
                     format.xml {render :xml => "<errors><error>Authorization failed. This attempt has been logged.</error></errors>", :status => :forbidden}
                 end
             elsif (@configuration_roles[@configuration.id] != 'admin') # deny if i'm not an admin of this config
                 flash[:warning] = "Authorization failed. This attempt has been logged."
-                @local_manager.log(:level => 'warn', :user_id => @session_user.id, :configuration_id => @configuration.id, :username => @session_user.username, :message => "Unauthorized access attempted for configuration '#{@configuration.name}' by non administrator.")
+                @local_manager.log(:level => 'warn', :user_id => @session_user.id, :configuration_id => @configuration.id, :username => @session_user.username, :message => "Unauthorized access attempted for configuration #{@configuration.name} by non administrator.")
                 respond_to do |format|
                     format.html {redirect_to home_users_url}
                     format.xml {render :xml => "<errors><error>Authorization failed. This attempt has been logged.</error></errors>", :status => :forbidden}
@@ -714,14 +714,14 @@ private
         if (!@session_user.admin?)
             if ( !@configuration_roles.has_key?(@configuration.id) ) # deny if not my config
                 flash[:warning] = "Authorization failed. This attempt has been logged."
-                @local_manager.log(:level => 'warn', :user_id => @session_user.id, :configuration_id => @configuration.id, :username => @session_user.username, :message => "Unauthorized access attempted for configuration '#{@configuration.name}'.")
+                @local_manager.log(:level => 'warn', :user_id => @session_user.id, :configuration_id => @configuration.id, :username => @session_user.username, :message => "Unauthorized access attempted for configuration #{@configuration.name}.")
                 respond_to do |format|
                     format.html {redirect_to home_users_url}
                     format.xml {render :xml => "<errors><error>Authorization failed. This attempt has been logged.</error></errors>", :status => :forbidden}
                 end
             elsif (@configuration_roles[@configuration.id] != 'admin' && @configuration_roles[@configuration.id] != 'viewer') # deny if i'm not an admin/viewer of thisconfig
                 flash[:warning] = "Authorization failed. This attempt has been logged."
-                @local_manager.log(:level => 'warn', :user_id => @session_user.id, :configuration_id => @configuration.id, :username => @session_user.username, :message => "Unauthorized access attempted for configuration '#{@configuration.name}' by non viewer.")
+                @local_manager.log(:level => 'warn', :user_id => @session_user.id, :configuration_id => @configuration.id, :username => @session_user.username, :message => "Unauthorized access attempted for configuration #{@configuration.name} by non viewer.")
                 respond_to do |format|
                     format.html {redirect_to home_users_url}
                     format.xml {render :xml => "<errors><error>Authorization failed. This attempt has been logged.</error></errors>", :status => :forbidden}

@@ -29,7 +29,7 @@ class AclsController < ApplicationController
                 format.html { render :action => "show" }
                 format.xml  { render :xml => @acl_entry.errors, :status => :not_acceptable }
             elsif @acl_entry.save
-                @local_manager.log(:username => @session_user.username, :configuration_id => @acl.configuration_id, :acl_id => @acl.id, :message => "Added entry '#{@acl_entry.description}' to ACL '#{@acl.name}'.")
+                @local_manager.log(:username => @session_user.username, :configuration_id => @acl.configuration_id, :acl_id => @acl.id, :message => "Added entry '#{@acl_entry.description}' to ACL #{@acl.name}.")
                 format.html { redirect_to acl_url(@acl) }
                 format.xml  { render :xml => @acl_entry.to_xml }
             else
@@ -50,7 +50,7 @@ class AclsController < ApplicationController
                 format.html { render :action => "show" }
                 format.xml  { render :xml => @acl.errors, :status => :not_acceptable }
             elsif (@acl.destroy)
-                @local_manager.log(:username => @session_user.username, :configuration_id => @configuration.id, :message => "Deleted ACL '#{@acl.name}'.")
+                @local_manager.log(:username => @session_user.username, :configuration_id => @configuration.id, :message => "Deleted ACL #{@acl.name}.")
                 format.html { redirect_to acls_configuration_url(@configuration) }
                 format.xml  { head :ok }
             else
@@ -75,7 +75,7 @@ class AclsController < ApplicationController
                 format.html { render :action => "show" }
                 format.xml  { render :xml => @acl.errors, :status => :not_acceptable }
             elsif (@acl.resequence!)
-                @local_manager.log(:username => @session_user.username, :configuration_id => @acl.configuration_id, :acl_id => @acl.id, :message => "Resequenced ACL '#{@acl.name}'.")
+                @local_manager.log(:username => @session_user.username, :configuration_id => @acl.configuration_id, :acl_id => @acl.id, :message => "Resequenced ACL #{@acl.name}.")
                 format.html { redirect_to acl_url(@acl) }
                 format.xml  { head :ok }
             else
@@ -102,7 +102,7 @@ class AclsController < ApplicationController
                 format.html { render :action => "edit" }
                 format.xml  { render :xml => @acl.errors, :status => :not_acceptable }
             elsif @acl.update_attributes(params[:acl])
-                @local_manager.log(:username => @session_user.username, :configuration_id => @acl.configuration_id, :acl_id => @acl.id, :message => "Renamed ACL to '#{@acl.name}'.")
+                @local_manager.log(:username => @session_user.username, :configuration_id => @acl.configuration_id, :acl_id => @acl.id, :message => "Renamed ACL to #{@acl.name}.")
                 format.html { redirect_to acl_url(@acl) }
                 format.xml  { head :ok }
             else

@@ -11,7 +11,7 @@ class AclEntriesController < ApplicationController
                 format.html { render acl_url(@acl) }
                 format.xml  { render :xml => @acl_entry.errors, :status => :not_acceptable }
             elsif (@acl_entry.destroy)
-                @local_manager.log(:username => @session_user.username, :configuration_id => @acl.configuration_id, :acl_id => @acl.id, :message => "Deleted entry '#{@acl_entry.description}' of ACL '#{@acl.name}'.")
+                @local_manager.log(:username => @session_user.username, :configuration_id => @acl.configuration_id, :acl_id => @acl.id, :message => "Deleted entry '#{@acl_entry.description}' of ACL #{@acl.name}.")
                 format.html { redirect_to acl_url(@acl) }
                 format.xml  { head :ok }
             else

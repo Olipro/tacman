@@ -30,7 +30,7 @@ class UserGroupsController < ApplicationController
                 format.html { render :action => "user_groups" }
                 format.xml  { render :xml => @user_group.errors, :status => :not_acceptable }
             elsif (@user_group.destroy)
-                @local_manager.log(:username => @session_user.username, :configuration_id => @configuration.id, :message => "Deleted User Group '#{@user_group.name}'.")
+                @local_manager.log(:username => @session_user.username, :configuration_id => @configuration.id, :message => "Deleted User Group #{@user_group.name}.")
                 format.html { redirect_to user_groups_configuration_url(@configuration) }
                 format.xml  { head :ok }
             else
@@ -59,7 +59,7 @@ class UserGroupsController < ApplicationController
                 format.html { render :action => "edit" }
                 format.xml  { render :xml => @user_group.errors, :status => :not_acceptable }
             elsif @user_group.update_attributes(params[:user_group])
-                @local_manager.log(:username => @session_user.username, :user_group_id => @user_group.id, :configuration_id => @configuration.id, :message => "Updated User Group '#{@user_group.name}'.")
+                @local_manager.log(:username => @session_user.username, :user_group_id => @user_group.id, :configuration_id => @configuration.id, :message => "Updated User Group #{@user_group.name}.")
                 format.html { redirect_to user_groups_configuration_url(@configuration) }
                 format.xml  { head :ok }
             else

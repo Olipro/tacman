@@ -10,8 +10,6 @@
 features & bugs
 ---------------
 
-* quotes in logs are messy
-
 * verify all workers
 
 * test account lockout

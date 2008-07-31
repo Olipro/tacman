@@ -12,7 +12,7 @@ class NetworkObjectGroupEntriesController < ApplicationController
                 format.html { render network_object_group_url(@network_object_group) }
                 format.xml  { render :xml => @network_object_group_entry.errors, :status => :not_acceptable }
             elsif (@network_object_group_entry.destroy)
-                @local_manager.log(:username => @session_user.username, :configuration_id => @network_object_group.configuration_id, :network_object_group_id => @network_object_group.id, :message => "Deleted entry '#{@network_object_group_entry.cidr}' of Network Object Group '#{@network_object_group.name}'.")
+                @local_manager.log(:username => @session_user.username, :configuration_id => @network_object_group.configuration_id, :network_object_group_id => @network_object_group.id, :message => "Deleted entry #{@network_object_group_entry.cidr} of Network Object Group #{@network_object_group.name}.")
                 format.html { redirect_to network_object_group_url(@network_object_group) }
                 format.xml  { head :ok }
             else

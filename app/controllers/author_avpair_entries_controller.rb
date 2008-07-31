@@ -11,7 +11,7 @@ class AuthorAvpairEntriesController < ApplicationController
                 format.html { render author_avpairs_configuration_url(@author_avpair.configuration) }
                 format.xml  { render :xml => @author_avpair.errors, :status => :not_acceptable }
             elsif (@author_avpair_entry.destroy)
-                @local_manager.log(:username => @session_user.username, :configuration_id => @author_avpair.configuration_id, :author_avpair_id => @author_avpair.id, :message => "Deleted entry #{@author_avpair_entry.sequence} of Author AVPair '#{@author_avpair.name}'.")
+                @local_manager.log(:username => @session_user.username, :configuration_id => @author_avpair.configuration_id, :author_avpair_id => @author_avpair.id, :message => "Deleted entry #{@author_avpair_entry.sequence} of Author AVPair #{@author_avpair.name}.")
                 format.html { redirect_to author_avpair_url(@author_avpair) }
                 format.xml  { head :ok }
             else
@@ -53,7 +53,7 @@ class AuthorAvpairEntriesController < ApplicationController
                     end
                 end
                 raise if (@author_avpair_entry.errors.length > 0)
-                @local_manager.log(:username => @session_user.username, :configuration_id => @author_avpair.configuration_id, :author_avpair_id => @author_avpair.id, :message => "Updated entry #{@author_avpair_entry.sequence} of Author AVPair '#{@author_avpair.name}'.")
+                @local_manager.log(:username => @session_user.username, :configuration_id => @author_avpair.configuration_id, :author_avpair_id => @author_avpair.id, :message => "Updated entry #{@author_avpair_entry.sequence} of Author AVPair #{@author_avpair.name}.")
                 format.html { redirect_to author_avpair_url(@author_avpair) }
                 format.xml  { render :xml => @author_avpair_entry.to_xml }
 

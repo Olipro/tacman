@@ -15,7 +15,7 @@ class ConfiguredUsersController < ApplicationController
                 format.xml  { render :xml => @configured_user.errors, :status => :not_acceptable }
             else
                 @configured_user.activate!
-                @local_manager.log(:username => @session_user.username, :configured_user_id => @configured_user.id, :configuration_id => @configuration.id, :message => "Activated user '#{@user.username}' within configuration '#{@configuration.name}'.")
+                @local_manager.log(:username => @session_user.username, :configured_user_id => @configured_user.id, :configuration_id => @configuration.id, :message => "Activated user #{@user.username} within configuration #{@configuration.name}.")
                 flash[:notice] = "User has been activated."
                 format.html { redirect_to configuration_url(@configuration)}
                 format.xml  { head :ok }
@@ -36,7 +36,7 @@ class ConfiguredUsersController < ApplicationController
                 format.xml  { render :xml => @@configured_user.errors, :status => :not_acceptable }
             else
                 @configured_user.destroy
-                @local_manager.log(:username => @session_user.username, :user_id => @user.id, :configured_user_id => @configured_user.id, :configuration_id => @configuration.id, :message => "Removed user '#{@user.username}' from configuration '#{@configuration.name}'.")
+                @local_manager.log(:username => @session_user.username, :user_id => @user.id, :configured_user_id => @configured_user.id, :configuration_id => @configuration.id, :message => "Removed user #{@user.username} from configuration #{@configuration.name}.")
                 format.html { redirect_to( request.env["HTTP_REFERER"] ) }
                 format.xml  { head :ok }
             end
@@ -64,7 +64,7 @@ class ConfiguredUsersController < ApplicationController
                 format.xml  { render :xml => @@configured_user.errors, :status => :not_acceptable }
             else
                 @configured_user.suspend!
-                @local_manager.log(:username => @session_user.username, :configured_user_id => @configured_user.id, :configuration_id => @configuration.id, :message => "Suspended user '#{@user.username}' within configuration '#{@configuration.name}'.")
+                @local_manager.log(:username => @session_user.username, :configured_user_id => @configured_user.id, :configuration_id => @configuration.id, :message => "Suspended user #{@user.username} within configuration #{@configuration.name}.")
                 flash[:notice] = "User has been suspended."
                 format.html { redirect_to configuration_url(@configuration)}
                 format.xml  { head :ok }
@@ -84,7 +84,7 @@ class ConfiguredUsersController < ApplicationController
                 format.html { render :action => "edit" }
                 format.xml  { render :xml => @configured_user.errors, :status => :not_acceptable }
             elsif @configured_user.update_attributes(params[:configured_user])
-                @local_manager.log(:username => @session_user.username, :configured_user_id => @configured_user.id, :configuration_id => @configuration.id, :message => "Updated settings for user '#{@user.username}' within configuration '#{@configuration.name}'.")
+                @local_manager.log(:username => @session_user.username, :configured_user_id => @configured_user.id, :configuration_id => @configuration.id, :message => "Updated settings for user #{@user.username} within configuration #{@configuration.name}.")
                 format.html { redirect_to( configuration_url(@configuration) ) }
                 format.xml  { head :ok }
             else
