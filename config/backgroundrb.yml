@@ -35,7 +35,7 @@
 
     # gather up aaa logs every 20 minutes
     :gather_aaa_logs:
-      :trigger_args: 0,20,40 * * * * *
+      :trigger_args: 0 0,20,40 * * * * *
 
   # users
   :user_manager_worker:
