@@ -161,14 +161,16 @@ class Manager < ActiveRecord::Base
         else
             if ( File.exists?(pid_file) )
                 pid = File.open(pid_file).read.to_i
-                begin
-                    Process.kill(0, pid)
-                    status = 'started'
-                    msg = "Running with pid #{pid}."
-                rescue Errno::ESRCH
-                rescue Exception => error
-                    status = 'error'
-                    msg = "Error reading BackgrounDRB status: #{error}"
+                if (pid > 0)
+                    begin
+                        Process.kill(0, pid)
+                        status = 'started'
+                        msg = "Running with pid #{pid}."
+                    rescue Errno::ESRCH
+                    rescue Exception => error
+                        status = 'error'
+                        msg = "Error reading BackgrounDRB status: #{error}"
+                    end
                 end
             end
         end
