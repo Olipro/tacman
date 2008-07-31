@@ -1,4 +1,3 @@
-require "#{RAILS_ROOT}/vendor/plugins/backgroundrb/lib/backgroundrb.rb"
 class OutboxManagerWorker < BackgrounDRb::MetaWorker
     set_worker_name :outbox_manager_worker
 
