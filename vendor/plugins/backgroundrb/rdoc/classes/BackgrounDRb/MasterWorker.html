@@ -1,0 +1,352 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>Class: BackgrounDRb::MasterWorker</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'><tr>
+  <td class="file-title"><span class="file-title-prefix">Class</span><br />BackgrounDRb::MasterWorker</td>
+  <td align="right">
+    <table cellspacing="0" cellpadding="2">
+      <tr valign="top">
+        <td>In:</td>
+        <td>
+<a href="../../files/server/master_worker_rb.html">server/master_worker.rb</a>
+        </td>
+      </tr>
+    <tr>
+      <td>Parent:</td>
+      <td>
+        <a href="../Object.html">
+Object
+         </a>
+     </td>
+   </tr>
+         </table>
+        </td>
+        </tr>
+      </table>
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+
+
+
+  <div class="sectiontitle">Methods</div>
+  <ul>
+  <li><a href="#M000130">connection_completed</a></li>
+  <li><a href="#M000122">delete_drb_worker</a></li>
+  <li><a href="#M000129">post_init</a></li>
+  <li><a href="#M000126">process_request</a></li>
+  <li><a href="#M000125">process_status</a></li>
+  <li><a href="#M000124">process_work</a></li>
+  <li><a href="#M000121">query_all_worker_status</a></li>
+  <li><a href="#M000120">receive_data</a></li>
+  <li><a href="#M000123">start_worker_request</a></li>
+  <li><a href="#M000128">unbind</a></li>
+  <li><a href="#M000127">worker_receive</a></li>
+  </ul>
+
+
+
+
+
+  <div class="sectiontitle">Attributes</div>
+  <table border='0' cellpadding='5'>
+  <tr valign='top'>
+    <td class='attr-rw'>
+[RW]
+    </td>
+    <td class='attr-name'>debug_logger</td>
+    <td class='attr-desc'></td>
+  </tr>
+  </table>
+
+<div class="sectiontitle">Public Instance methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000130"></a><b>connection_completed</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000130_source')" id="l_M000130_source">show source</a> ]</p>
+  <div id="M000130_source" class="dyn-source">
+<pre>
+     <span class="ruby-comment cmt"># File server/master_worker.rb, line 121</span>
+121:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">connection_completed</span>; <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000122"></a><b>delete_drb_worker</b>(t_data)
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000122_source')" id="l_M000122_source">show source</a> ]</p>
+  <div id="M000122_source" class="dyn-source">
+<pre>
+    <span class="ruby-comment cmt"># File server/master_worker.rb, line 50</span>
+50:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">delete_drb_worker</span>(<span class="ruby-identifier">t_data</span>)
+51:       <span class="ruby-identifier">worker_name</span> = <span class="ruby-identifier">t_data</span>[<span class="ruby-identifier">:worker</span>]
+52:       <span class="ruby-identifier">job_key</span> = <span class="ruby-identifier">t_data</span>[<span class="ruby-identifier">:job_key</span>]
+53:       <span class="ruby-identifier">worker_name_key</span> = <span class="ruby-identifier">gen_worker_key</span>(<span class="ruby-identifier">worker_name</span>,<span class="ruby-identifier">job_key</span>)
+54:       <span class="ruby-keyword kw">begin</span>
+55:         <span class="ruby-identifier">ask_worker</span>(<span class="ruby-identifier">worker_name</span>,<span class="ruby-identifier">:job_key</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">t_data</span>[<span class="ruby-identifier">:job_key</span>],<span class="ruby-identifier">:type</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">:request</span>, <span class="ruby-identifier">:data</span> =<span class="ruby-operator">&gt;</span> { <span class="ruby-identifier">:worker_method</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">:exit</span>})
+56:       <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Packet</span><span class="ruby-operator">::</span><span class="ruby-constant">DisconnectError</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">sock_error</span>
+57:         <span class="ruby-identifier">workers</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">worker_name_key</span>)
+58:       <span class="ruby-keyword kw">rescue</span>
+59:         <span class="ruby-identifier">debug_logger</span>.<span class="ruby-identifier">info</span>(<span class="ruby-identifier">$!</span>.<span class="ruby-identifier">to_s</span>)
+60:         <span class="ruby-identifier">debug_logger</span>.<span class="ruby-identifier">info</span>(<span class="ruby-identifier">$!</span>.<span class="ruby-identifier">backtrace</span>.<span class="ruby-identifier">join</span>(<span class="ruby-value str">&quot;\n&quot;</span>))
+61:         <span class="ruby-keyword kw">return</span>
+62:       <span class="ruby-keyword kw">end</span>
+63:     <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000129"></a><b>post_init</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000129_source')" id="l_M000129_source">show source</a> ]</p>
+  <div id="M000129_source" class="dyn-source">
+<pre>
+     <span class="ruby-comment cmt"># File server/master_worker.rb, line 118</span>
+118:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">post_init</span>
+119:       <span class="ruby-ivar">@tokenizer</span> = <span class="ruby-constant">BinParser</span>.<span class="ruby-identifier">new</span>
+120:     <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000126"></a><b>process_request</b>(t_data)
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000126_source')" id="l_M000126_source">show source</a> ]</p>
+  <div id="M000126_source" class="dyn-source">
+<pre>
+     <span class="ruby-comment cmt"># File server/master_worker.rb, line 94</span>
+ 94:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">process_request</span>(<span class="ruby-identifier">t_data</span>)
+ 95:       <span class="ruby-identifier">worker_name</span> = <span class="ruby-identifier">t_data</span>[<span class="ruby-identifier">:worker</span>]
+ 96:       <span class="ruby-identifier">worker_name_key</span> = <span class="ruby-identifier">gen_worker_key</span>(<span class="ruby-identifier">worker_name</span>,<span class="ruby-identifier">t_data</span>[<span class="ruby-identifier">:job_key</span>])
+ 97:       <span class="ruby-identifier">t_data</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:worker</span>)
+ 98:       <span class="ruby-identifier">t_data</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:type</span>)
+ 99:       <span class="ruby-keyword kw">begin</span>
+100:         <span class="ruby-identifier">ask_worker</span>(<span class="ruby-identifier">worker_name</span>,<span class="ruby-identifier">:data</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">t_data</span>, <span class="ruby-identifier">:type</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">:request</span>)
+101:       <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Packet</span><span class="ruby-operator">::</span><span class="ruby-constant">DisconnectError</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">sock_error</span>
+102:         <span class="ruby-identifier">workers</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">worker_name_key</span>)
+103:       <span class="ruby-keyword kw">rescue</span>
+104:         <span class="ruby-identifier">debug_logger</span>.<span class="ruby-identifier">info</span>(<span class="ruby-identifier">$!</span>.<span class="ruby-identifier">to_s</span>)
+105:         <span class="ruby-identifier">debug_logger</span>.<span class="ruby-identifier">info</span>(<span class="ruby-identifier">$!</span>.<span class="ruby-identifier">backtrace</span>.<span class="ruby-identifier">join</span>(<span class="ruby-value str">&quot;\n&quot;</span>))
+106:         <span class="ruby-keyword kw">return</span>
+107:       <span class="ruby-keyword kw">end</span>
+108:     <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000125"></a><b>process_status</b>(t_data)
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000125_source')" id="l_M000125_source">show source</a> ]</p>
+  <div id="M000125_source" class="dyn-source">
+<pre>
+    <span class="ruby-comment cmt"># File server/master_worker.rb, line 86</span>
+86:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">process_status</span>(<span class="ruby-identifier">t_data</span>)
+87:       <span class="ruby-identifier">worker_name</span> = <span class="ruby-identifier">t_data</span>[<span class="ruby-identifier">:worker</span>]
+88:       <span class="ruby-identifier">job_key</span> = <span class="ruby-identifier">t_data</span>[<span class="ruby-identifier">:job_key</span>]
+89:       <span class="ruby-identifier">worker_name_key</span> = <span class="ruby-identifier">gen_worker_key</span>(<span class="ruby-identifier">worker_name</span>,<span class="ruby-identifier">job_key</span>)
+90:       <span class="ruby-identifier">status_data</span> = <span class="ruby-identifier">reactor</span>.<span class="ruby-identifier">result_hash</span>[<span class="ruby-identifier">worker_name_key</span>.<span class="ruby-identifier">to_sym</span>]
+91:       <span class="ruby-identifier">send_object</span>(<span class="ruby-identifier">status_data</span>)
+92:     <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000124"></a><b>process_work</b>(t_data)
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000124_source')" id="l_M000124_source">show source</a> ]</p>
+  <div id="M000124_source" class="dyn-source">
+<pre>
+    <span class="ruby-comment cmt"># File server/master_worker.rb, line 69</span>
+69:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">process_work</span>(<span class="ruby-identifier">t_data</span>)
+70:       <span class="ruby-identifier">worker_name</span> = <span class="ruby-identifier">t_data</span>[<span class="ruby-identifier">:worker</span>]
+71:       <span class="ruby-identifier">worker_name_key</span> = <span class="ruby-identifier">gen_worker_key</span>(<span class="ruby-identifier">worker_name</span>,<span class="ruby-identifier">t_data</span>[<span class="ruby-identifier">:job_key</span>])
+72:       <span class="ruby-identifier">t_data</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:worker</span>)
+73:       <span class="ruby-identifier">t_data</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:type</span>)
+74:       <span class="ruby-keyword kw">begin</span>
+75:         <span class="ruby-identifier">ask_worker</span>(<span class="ruby-identifier">worker_name</span>,<span class="ruby-identifier">:data</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">t_data</span>, <span class="ruby-identifier">:type</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">:request</span>)
+76:       <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Packet</span><span class="ruby-operator">::</span><span class="ruby-constant">DisconnectError</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">sock_error</span>
+77:         <span class="ruby-identifier">workers</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">worker_name_key</span>)
+78:       <span class="ruby-keyword kw">rescue</span>
+79:         <span class="ruby-identifier">debug_logger</span>.<span class="ruby-identifier">info</span>(<span class="ruby-identifier">$!</span>.<span class="ruby-identifier">to_s</span>)
+80:         <span class="ruby-identifier">debug_logger</span>.<span class="ruby-identifier">info</span>(<span class="ruby-identifier">$!</span>.<span class="ruby-identifier">backtrace</span>.<span class="ruby-identifier">join</span>(<span class="ruby-value str">&quot;\n&quot;</span>))
+81:         <span class="ruby-keyword kw">return</span>
+82:       <span class="ruby-keyword kw">end</span>
+83: 
+84:     <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000121"></a><b>query_all_worker_status</b>(p_data)
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000121_source')" id="l_M000121_source">show source</a> ]</p>
+  <div id="M000121_source" class="dyn-source">
+<pre>
+    <span class="ruby-comment cmt"># File server/master_worker.rb, line 44</span>
+44:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">query_all_worker_status</span>(<span class="ruby-identifier">p_data</span>)
+45:       <span class="ruby-identifier">dumpable_status</span> = { }
+46:       <span class="ruby-identifier">workers</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">key</span>,<span class="ruby-identifier">value</span><span class="ruby-operator">|</span> <span class="ruby-identifier">dumpable_status</span>[<span class="ruby-identifier">key</span>] = <span class="ruby-identifier">value</span>.<span class="ruby-identifier">worker_status</span> }
+47:       <span class="ruby-identifier">send_object</span>(<span class="ruby-identifier">dumpable_status</span>)
+48:     <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000120"></a><b>receive_data</b>(p_data)
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000120_source')" id="l_M000120_source">show source</a> ]</p>
+  <div id="M000120_source" class="dyn-source">
+<pre>
+    <span class="ruby-comment cmt"># File server/master_worker.rb, line 28</span>
+28:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">receive_data</span> <span class="ruby-identifier">p_data</span>
+29:       <span class="ruby-identifier">debug_logger</span>.<span class="ruby-identifier">info</span>(<span class="ruby-identifier">p_data</span>)
+30:       <span class="ruby-ivar">@tokenizer</span>.<span class="ruby-identifier">extract</span>(<span class="ruby-identifier">p_data</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">b_data</span><span class="ruby-operator">|</span>
+31:         <span class="ruby-identifier">t_data</span> = <span class="ruby-constant">Marshal</span>.<span class="ruby-identifier">load</span>(<span class="ruby-identifier">b_data</span>)
+32:         <span class="ruby-identifier">debug_logger</span>.<span class="ruby-identifier">info</span>(<span class="ruby-identifier">t_data</span>)
+33:         <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">t_data</span>[<span class="ruby-identifier">:type</span>]
+34:         <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:do_work</span><span class="ruby-operator">:</span> <span class="ruby-identifier">process_work</span>(<span class="ruby-identifier">t_data</span>)
+35:         <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:get_status</span><span class="ruby-operator">:</span> <span class="ruby-identifier">process_status</span>(<span class="ruby-identifier">t_data</span>)
+36:         <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:get_result</span><span class="ruby-operator">:</span> <span class="ruby-identifier">process_request</span>(<span class="ruby-identifier">t_data</span>)
+37:         <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:start_worker</span><span class="ruby-operator">:</span> <span class="ruby-identifier">start_worker_request</span>(<span class="ruby-identifier">t_data</span>)
+38:         <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:delete_worker</span><span class="ruby-operator">:</span> <span class="ruby-identifier">delete_drb_worker</span>(<span class="ruby-identifier">t_data</span>)
+39:         <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:all_worker_status</span><span class="ruby-operator">:</span> <span class="ruby-identifier">query_all_worker_status</span>(<span class="ruby-identifier">t_data</span>)
+40:         <span class="ruby-keyword kw">end</span>
+41:       <span class="ruby-keyword kw">end</span>
+42:     <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000123"></a><b>start_worker_request</b>(p_data)
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000123_source')" id="l_M000123_source">show source</a> ]</p>
+  <div id="M000123_source" class="dyn-source">
+<pre>
+    <span class="ruby-comment cmt"># File server/master_worker.rb, line 65</span>
+65:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">start_worker_request</span>(<span class="ruby-identifier">p_data</span>)
+66:       <span class="ruby-identifier">start_worker</span>(<span class="ruby-identifier">p_data</span>)
+67:     <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000128"></a><b>unbind</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000128_source')" id="l_M000128_source">show source</a> ]</p>
+  <div id="M000128_source" class="dyn-source">
+<pre>
+     <span class="ruby-comment cmt"># File server/master_worker.rb, line 115</span>
+115:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">unbind</span>
+116:       <span class="ruby-identifier">debug_logger</span>.<span class="ruby-identifier">info</span>(<span class="ruby-value str">&quot;Client disconected&quot;</span>)
+117:     <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000127"></a><b>worker_receive</b>(p_data)
+  </div>
+  <div class="description">
+  <p>
+this method can receive one shot status reports or proper results
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000127_source')" id="l_M000127_source">show source</a> ]</p>
+  <div id="M000127_source" class="dyn-source">
+<pre>
+     <span class="ruby-comment cmt"># File server/master_worker.rb, line 111</span>
+111:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">worker_receive</span> <span class="ruby-identifier">p_data</span>
+112:       <span class="ruby-identifier">send_object</span>(<span class="ruby-identifier">p_data</span>)
+113:     <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+</div>
+
+  </div>
+
+    </body>
+</html>

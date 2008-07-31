@@ -1,0 +1,32 @@
+Hi Folks,
+
+Thank you for feedback and error reports.
+I have fixed most of the errors that were reported and were valid.
+
+I have also removed some cruft that was way too clunky.
+
+Here is a brief summary of changes :
+
+ - Now, you don't define method process_request method in your worker.
+   Its no longer required. Whatever methods, you want to call from
+   rails should be directly defined in your worker and you are good to
+   go. Thus, please remove process_request method that was created
+   by worker generator.
+ - Worker generator has been updated to take care of case #1.
+ - Some issues were found with bin_parser class and they are fixed now.
+ - In most of the cases, now a invalid object dump won't result in
+   worker crash and you should be moving happily even after that. But
+   keep an eye on  your log file.
+
+ - Introduced a :log: foreground option for debugging purpose.
+
+Also, make sure to read the README file available at
+http://backgroundrb.rubyforge.org/ . I have updated the documenation
+according to fixes and changes.
+
+Again, thank you all for bug reports and feedbacks.
+
+
+
+
+

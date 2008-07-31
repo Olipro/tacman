@@ -1,0 +1,424 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>Class: BackgrounDRb::CronTrigger</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'><tr>
+  <td class="file-title"><span class="file-title-prefix">Class</span><br />BackgrounDRb::CronTrigger</td>
+  <td align="right">
+    <table cellspacing="0" cellpadding="2">
+      <tr valign="top">
+        <td>In:</td>
+        <td>
+<a href="../../files/server/cron_trigger_rb.html">server/cron_trigger.rb</a>
+        </td>
+      </tr>
+    <tr>
+      <td>Parent:</td>
+      <td>
+        <a href="../Object.html">
+Object
+         </a>
+     </td>
+   </tr>
+         </table>
+        </td>
+        </tr>
+      </table>
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+
+
+
+  <div class="sectiontitle">Methods</div>
+  <ul>
+  <li><a href="#M000159">cron_expr=</a></li>
+  <li><a href="#M000164">day=</a></li>
+  <li><a href="#M000160">fire_time_after</a></li>
+  <li><a href="#M000163">hour=</a></li>
+  <li><a href="#M000162">min=</a></li>
+  <li><a href="#M000165">month=</a></li>
+  <li><a href="#M000158">new</a></li>
+  <li><a href="#M000161">sec=</a></li>
+  <li><a href="#M000167">wday=</a></li>
+  <li><a href="#M000166">year=</a></li>
+  </ul>
+
+
+
+
+  <div class="sectiontitle">Constants</div>
+  <table border='0' cellpadding='5'>
+  <tr valign='top'>
+    <td class="attr-name">LeapYearMonthDays</td>
+    <td>=</td>
+    <td class="attr-value">[31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]</td>
+  </tr>
+  <tr valign='top'>
+    <td class="attr-name">CommonYearMonthDays</td>
+    <td>=</td>
+    <td class="attr-value">[31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]</td>
+  </tr>
+  </table>
+
+  <div class="sectiontitle">Attributes</div>
+  <table border='0' cellpadding='5'>
+  <tr valign='top'>
+    <td class='attr-rw'>
+[R]
+    </td>
+    <td class='attr-name'>cron_expr</td>
+    <td class='attr-desc'></td>
+  </tr>
+  <tr valign='top'>
+    <td class='attr-rw'>
+[R]
+    </td>
+    <td class='attr-name'>day</td>
+    <td class='attr-desc'></td>
+  </tr>
+  <tr valign='top'>
+    <td class='attr-rw'>
+[R]
+    </td>
+    <td class='attr-name'>hour</td>
+    <td class='attr-desc'></td>
+  </tr>
+  <tr valign='top'>
+    <td class='attr-rw'>
+[R]
+    </td>
+    <td class='attr-name'>min</td>
+    <td class='attr-desc'></td>
+  </tr>
+  <tr valign='top'>
+    <td class='attr-rw'>
+[R]
+    </td>
+    <td class='attr-name'>month</td>
+    <td class='attr-desc'></td>
+  </tr>
+  <tr valign='top'>
+    <td class='attr-rw'>
+[R]
+    </td>
+    <td class='attr-name'>sec</td>
+    <td class='attr-desc'></td>
+  </tr>
+  <tr valign='top'>
+    <td class='attr-rw'>
+[R]
+    </td>
+    <td class='attr-name'>wday</td>
+    <td class='attr-desc'></td>
+  </tr>
+  <tr valign='top'>
+    <td class='attr-rw'>
+[R]
+    </td>
+    <td class='attr-name'>year</td>
+    <td class='attr-desc'></td>
+  </tr>
+  </table>
+
+<div class="sectiontitle">Public Class methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000158"></a><b>new</b>(expr)
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000158_source')" id="l_M000158_source">show source</a> ]</p>
+  <div id="M000158_source" class="dyn-source">
+<pre>
+   <span class="ruby-comment cmt"># File server/cron_trigger.rb, line 6</span>
+6:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">expr</span>)
+7:       <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">cron_expr</span> = <span class="ruby-identifier">expr</span>
+8:     <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="sectiontitle">Public Instance methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000159"></a><b>cron_expr=</b>(expr)
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000159_source')" id="l_M000159_source">show source</a> ]</p>
+  <div id="M000159_source" class="dyn-source">
+<pre>
+    <span class="ruby-comment cmt"># File server/cron_trigger.rb, line 10</span>
+10:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cron_expr=</span>(<span class="ruby-identifier">expr</span>)
+11:       <span class="ruby-ivar">@cron_expr</span> = <span class="ruby-identifier">expr</span>
+12:       <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">sec</span>, <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">min</span>, <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">hour</span>, <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">day</span>, <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">month</span>, <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">wday</span>, <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">year</span> = <span class="ruby-ivar">@cron_expr</span>.<span class="ruby-identifier">split</span>(<span class="ruby-value str">' '</span>)
+13:       <span class="ruby-comment cmt"># puts inspect</span>
+14:     <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000164"></a><b>day=</b>(day)
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000164_source')" id="l_M000164_source">show source</a> ]</p>
+  <div id="M000164_source" class="dyn-source">
+<pre>
+     <span class="ruby-comment cmt"># File server/cron_trigger.rb, line 109</span>
+109:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">day=</span>(<span class="ruby-identifier">day</span>)
+110:       <span class="ruby-ivar">@day</span> = <span class="ruby-identifier">parse_part</span>(<span class="ruby-identifier">day</span>, <span class="ruby-value">1</span> <span class="ruby-operator">..</span> <span class="ruby-value">31</span>)
+111:     <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000160"></a><b>fire_time_after</b>(time)
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000160_source')" id="l_M000160_source">show source</a> ]</p>
+  <div id="M000160_source" class="dyn-source">
+<pre>
+    <span class="ruby-comment cmt"># File server/cron_trigger.rb, line 16</span>
+16:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">fire_time_after</span>(<span class="ruby-identifier">time</span>)
+17:       <span class="ruby-identifier">sec</span>, <span class="ruby-identifier">min</span>, <span class="ruby-identifier">hour</span>, <span class="ruby-identifier">day</span>, <span class="ruby-identifier">month</span>, <span class="ruby-identifier">year</span>, <span class="ruby-identifier">wday</span>, <span class="ruby-identifier">yday</span>, <span class="ruby-identifier">isdst</span>, <span class="ruby-identifier">zone</span> = <span class="ruby-identifier">time</span>.<span class="ruby-identifier">to_a</span>
+18: 
+19:       <span class="ruby-identifier">loop</span> <span class="ruby-keyword kw">do</span>
+20:         <span class="ruby-comment cmt"># year</span>
+21:         <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@year</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-keyword kw">or</span> <span class="ruby-ivar">@year</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">year</span>)
+22:           <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">nil</span>  <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">year</span> <span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@year</span>.<span class="ruby-identifier">max</span>
+23:           <span class="ruby-identifier">year</span> = <span class="ruby-ivar">@year</span>.<span class="ruby-identifier">detect</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">y</span><span class="ruby-operator">|</span> <span class="ruby-identifier">y</span> <span class="ruby-operator">&gt;</span> <span class="ruby-identifier">year</span> <span class="ruby-keyword kw">end</span>  <span class="ruby-comment cmt"># next allowable year</span>
+24:         <span class="ruby-keyword kw">end</span>
+25: 
+26:         <span class="ruby-comment cmt"># month</span>
+27:         <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@month</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">month</span>)
+28:           <span class="ruby-comment cmt"># next allowable month</span>
+29:           <span class="ruby-identifier">next_month</span> = <span class="ruby-ivar">@month</span>.<span class="ruby-identifier">detect</span>(<span class="ruby-identifier">lambda</span> { <span class="ruby-ivar">@month</span>.<span class="ruby-identifier">min</span> }) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">m</span><span class="ruby-operator">|</span> <span class="ruby-identifier">m</span> <span class="ruby-operator">&gt;</span> <span class="ruby-identifier">month</span> <span class="ruby-keyword kw">end</span>
+30:           <span class="ruby-comment cmt"># reset everything lower</span>
+31:           <span class="ruby-identifier">day</span>, <span class="ruby-identifier">hour</span>, <span class="ruby-identifier">min</span>, <span class="ruby-identifier">sec</span> = <span class="ruby-ivar">@day</span>.<span class="ruby-identifier">min</span>, <span class="ruby-ivar">@hour</span>.<span class="ruby-identifier">min</span>, <span class="ruby-ivar">@min</span>.<span class="ruby-identifier">min</span>, <span class="ruby-ivar">@sec</span>.<span class="ruby-identifier">min</span>
+32:           <span class="ruby-comment cmt"># carry case</span>
+33:           <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">next_month</span> <span class="ruby-operator">&lt;</span> <span class="ruby-identifier">month</span>
+34:             <span class="ruby-identifier">month</span> = <span class="ruby-identifier">next_month</span>
+35:             <span class="ruby-identifier">year</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span>
+36:             <span class="ruby-keyword kw">retry</span>
+37:           <span class="ruby-keyword kw">end</span>
+38:           <span class="ruby-identifier">month</span> = <span class="ruby-identifier">next_month</span>
+39:         <span class="ruby-keyword kw">end</span>
+40: 
+41:         <span class="ruby-comment cmt"># day</span>
+42:         <span class="ruby-identifier">month_days</span> = (<span class="ruby-value">1</span> <span class="ruby-operator">..</span> <span class="ruby-identifier">month_days</span>(<span class="ruby-identifier">year</span>, <span class="ruby-identifier">month</span>))
+43:         <span class="ruby-identifier">days</span> = <span class="ruby-ivar">@day</span>.<span class="ruby-identifier">select</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">d</span><span class="ruby-operator">|</span> <span class="ruby-identifier">month_days</span> <span class="ruby-operator">===</span> <span class="ruby-identifier">d</span> <span class="ruby-keyword kw">end</span>
+44:         <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">days</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">day</span>)
+45:           <span class="ruby-identifier">next_day</span> = <span class="ruby-identifier">days</span>.<span class="ruby-identifier">detect</span>(<span class="ruby-identifier">lambda</span> { <span class="ruby-identifier">days</span>.<span class="ruby-identifier">min</span> }) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">d</span><span class="ruby-operator">|</span> <span class="ruby-identifier">d</span> <span class="ruby-operator">&gt;</span> <span class="ruby-identifier">day</span> <span class="ruby-keyword kw">end</span>
+46:           <span class="ruby-identifier">hour</span>, <span class="ruby-identifier">min</span>, <span class="ruby-identifier">sec</span> = <span class="ruby-ivar">@hour</span>.<span class="ruby-identifier">min</span>, <span class="ruby-ivar">@min</span>.<span class="ruby-identifier">min</span>, <span class="ruby-ivar">@sec</span>.<span class="ruby-identifier">min</span>
+47:           <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">next_day</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-keyword kw">or</span> <span class="ruby-identifier">next_day</span> <span class="ruby-operator">&lt;</span> <span class="ruby-identifier">day</span>
+48:             <span class="ruby-identifier">day</span> = <span class="ruby-identifier">next_day</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-value">? </span><span class="ruby-ivar">@day</span>.<span class="ruby-identifier">min</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">next_day</span>
+49:             <span class="ruby-identifier">month</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span>
+50:             <span class="ruby-keyword kw">retry</span>
+51:           <span class="ruby-keyword kw">end</span>
+52:           <span class="ruby-identifier">day</span> = <span class="ruby-identifier">next_day</span>
+53:         <span class="ruby-keyword kw">end</span>
+54: 
+55:         <span class="ruby-comment cmt"># hour</span>
+56:         <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@hour</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">hour</span>)
+57:           <span class="ruby-identifier">next_hour</span> = <span class="ruby-ivar">@hour</span>.<span class="ruby-identifier">detect</span>(<span class="ruby-identifier">lambda</span> { <span class="ruby-ivar">@hour</span>.<span class="ruby-identifier">min</span> }) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">h</span><span class="ruby-operator">|</span> <span class="ruby-identifier">h</span> <span class="ruby-operator">&gt;</span> <span class="ruby-identifier">hour</span> <span class="ruby-keyword kw">end</span>
+58:           <span class="ruby-identifier">min</span>, <span class="ruby-identifier">sec</span> = <span class="ruby-ivar">@min</span>.<span class="ruby-identifier">min</span>, <span class="ruby-ivar">@sec</span>.<span class="ruby-identifier">min</span>
+59:           <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">next_hour</span> <span class="ruby-operator">&lt;</span> <span class="ruby-identifier">hour</span>
+60:             <span class="ruby-identifier">hour</span> = <span class="ruby-identifier">next_hour</span>
+61:             <span class="ruby-identifier">day</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span>
+62:             <span class="ruby-keyword kw">retry</span>
+63:           <span class="ruby-keyword kw">end</span>
+64:           <span class="ruby-identifier">hour</span> = <span class="ruby-identifier">next_hour</span>
+65:         <span class="ruby-keyword kw">end</span>
+66: 
+67:         <span class="ruby-comment cmt"># min</span>
+68:         <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@min</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">min</span>)
+69:           <span class="ruby-identifier">next_min</span> = <span class="ruby-ivar">@min</span>.<span class="ruby-identifier">detect</span>(<span class="ruby-identifier">lambda</span> { <span class="ruby-ivar">@min</span>.<span class="ruby-identifier">min</span> }) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">m</span><span class="ruby-operator">|</span> <span class="ruby-identifier">m</span> <span class="ruby-operator">&gt;</span> <span class="ruby-identifier">min</span> <span class="ruby-keyword kw">end</span>
+70:           <span class="ruby-identifier">sec</span> = <span class="ruby-ivar">@sec</span>.<span class="ruby-identifier">min</span>
+71:           <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">next_min</span> <span class="ruby-operator">&lt;</span> <span class="ruby-identifier">min</span>
+72:             <span class="ruby-identifier">min</span> = <span class="ruby-identifier">next_min</span>
+73:             <span class="ruby-identifier">hour</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span>
+74:             <span class="ruby-keyword kw">retry</span>
+75:           <span class="ruby-keyword kw">end</span>
+76:           <span class="ruby-identifier">min</span> = <span class="ruby-identifier">next_min</span>
+77:         <span class="ruby-keyword kw">end</span>
+78: 
+79:         <span class="ruby-comment cmt"># sec</span>
+80:         <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@sec</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">sec</span>)
+81:           <span class="ruby-identifier">next_sec</span> = <span class="ruby-ivar">@sec</span>.<span class="ruby-identifier">detect</span>(<span class="ruby-identifier">lambda</span> { <span class="ruby-ivar">@sec</span>.<span class="ruby-identifier">min</span> }) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">s</span><span class="ruby-operator">|</span> <span class="ruby-identifier">s</span> <span class="ruby-operator">&gt;</span> <span class="ruby-identifier">sec</span> <span class="ruby-keyword kw">end</span>
+82:           <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">next_sec</span> <span class="ruby-operator">&lt;</span> <span class="ruby-identifier">sec</span>
+83:             <span class="ruby-identifier">sec</span> = <span class="ruby-identifier">next_sec</span>
+84:             <span class="ruby-identifier">min</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span>
+85:             <span class="ruby-keyword kw">retry</span>
+86:           <span class="ruby-keyword kw">end</span>
+87:           <span class="ruby-identifier">sec</span> = <span class="ruby-identifier">next_sec</span>
+88:         <span class="ruby-keyword kw">end</span>
+89: 
+90:         <span class="ruby-keyword kw">break</span>
+91:       <span class="ruby-keyword kw">end</span>
+92: 
+93:       <span class="ruby-constant">Time</span>.<span class="ruby-identifier">local</span> <span class="ruby-identifier">sec</span>, <span class="ruby-identifier">min</span>, <span class="ruby-identifier">hour</span>, <span class="ruby-identifier">day</span>, <span class="ruby-identifier">month</span>, <span class="ruby-identifier">year</span>, <span class="ruby-identifier">wday</span>, <span class="ruby-identifier">yday</span>, <span class="ruby-identifier">isdst</span>, <span class="ruby-identifier">zone</span>
+94:     <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000163"></a><b>hour=</b>(hour)
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000163_source')" id="l_M000163_source">show source</a> ]</p>
+  <div id="M000163_source" class="dyn-source">
+<pre>
+     <span class="ruby-comment cmt"># File server/cron_trigger.rb, line 105</span>
+105:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">hour=</span>(<span class="ruby-identifier">hour</span>)
+106:       <span class="ruby-ivar">@hour</span> = <span class="ruby-identifier">parse_part</span>(<span class="ruby-identifier">hour</span>, <span class="ruby-value">0</span> <span class="ruby-operator">..</span> <span class="ruby-value">23</span>)
+107:     <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000162"></a><b>min=</b>(min)
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000162_source')" id="l_M000162_source">show source</a> ]</p>
+  <div id="M000162_source" class="dyn-source">
+<pre>
+     <span class="ruby-comment cmt"># File server/cron_trigger.rb, line 101</span>
+101:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">min=</span>(<span class="ruby-identifier">min</span>)
+102:       <span class="ruby-ivar">@min</span> = <span class="ruby-identifier">parse_part</span>(<span class="ruby-identifier">min</span>, <span class="ruby-value">0</span> <span class="ruby-operator">..</span> <span class="ruby-value">59</span>)
+103:     <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000165"></a><b>month=</b>(month)
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000165_source')" id="l_M000165_source">show source</a> ]</p>
+  <div id="M000165_source" class="dyn-source">
+<pre>
+     <span class="ruby-comment cmt"># File server/cron_trigger.rb, line 113</span>
+113:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">month=</span>(<span class="ruby-identifier">month</span>)
+114:       <span class="ruby-ivar">@month</span> = <span class="ruby-identifier">parse_part</span>(<span class="ruby-identifier">month</span>, <span class="ruby-value">1</span> <span class="ruby-operator">..</span> <span class="ruby-value">12</span>)
+115:     <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000161"></a><b>sec=</b>(sec)
+  </div>
+  <div class="description">
+  <p>
+TODO: mimic attr_reader to define all of these
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000161_source')" id="l_M000161_source">show source</a> ]</p>
+  <div id="M000161_source" class="dyn-source">
+<pre>
+    <span class="ruby-comment cmt"># File server/cron_trigger.rb, line 97</span>
+97:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">sec=</span>(<span class="ruby-identifier">sec</span>)
+98:       <span class="ruby-ivar">@sec</span> = <span class="ruby-identifier">parse_part</span>(<span class="ruby-identifier">sec</span>, <span class="ruby-value">0</span> <span class="ruby-operator">..</span> <span class="ruby-value">59</span>)
+99:     <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000167"></a><b>wday=</b>(wday)
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000167_source')" id="l_M000167_source">show source</a> ]</p>
+  <div id="M000167_source" class="dyn-source">
+<pre>
+     <span class="ruby-comment cmt"># File server/cron_trigger.rb, line 121</span>
+121:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">wday=</span>(<span class="ruby-identifier">wday</span>)
+122:       <span class="ruby-ivar">@wday</span> = <span class="ruby-identifier">parse_part</span>(<span class="ruby-identifier">wday</span>, <span class="ruby-value">0</span> <span class="ruby-operator">..</span> <span class="ruby-value">6</span>)
+123:     <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000166"></a><b>year=</b>(year)
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000166_source')" id="l_M000166_source">show source</a> ]</p>
+  <div id="M000166_source" class="dyn-source">
+<pre>
+     <span class="ruby-comment cmt"># File server/cron_trigger.rb, line 117</span>
+117:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">year=</span>(<span class="ruby-identifier">year</span>)
+118:       <span class="ruby-ivar">@year</span> = <span class="ruby-identifier">parse_part</span>(<span class="ruby-identifier">year</span>)
+119:     <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+</div>
+
+  </div>
+
+    </body>
+</html>

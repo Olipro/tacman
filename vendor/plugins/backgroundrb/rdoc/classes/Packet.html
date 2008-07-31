@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>Module: Packet</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href=".././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'><tr>
+  <td class="file-title"><span class="file-title-prefix">Module</span><br />Packet</td>
+  <td align="right">
+    <table cellspacing="0" cellpadding="2">
+      <tr valign="top">
+        <td>In:</td>
+        <td>
+<a href="../files/framework/disconnect_error_rb.html">framework/disconnect_error.rb</a>
+<a href="../files/framework/nbio_rb.html">framework/nbio.rb</a>
+<a href="../files/framework/worker_rb.html">framework/worker.rb</a>
+<a href="../files/framework/packet_guid_rb.html">framework/packet_guid.rb</a>
+<a href="../files/framework/periodic_event_rb.html">framework/periodic_event.rb</a>
+<a href="../files/framework/callback_rb.html">framework/callback.rb</a>
+<a href="../files/framework/deferrable_rb.html">framework/deferrable.rb</a>
+<a href="../files/framework/connection_rb.html">framework/connection.rb</a>
+<a href="../files/framework/cpu_worker_rb.html">framework/cpu_worker.rb</a>
+<a href="../files/framework/packet_master_rb.html">framework/packet_master.rb</a>
+<a href="../files/framework/pimp_rb.html">framework/pimp.rb</a>
+<a href="../files/framework/packet_rb.html">framework/packet.rb</a>
+<a href="../files/framework/event_rb.html">framework/event.rb</a>
+<a href="../files/framework/core_rb.html">framework/core.rb</a>
+<a href="../files/framework/io_worker_rb.html">framework/io_worker.rb</a>
+        </td>
+      </tr>
+         </table>
+        </td>
+        </tr>
+      </table>
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+  <div class="description"><p>
+FIXME: timer implementation can be optimized
+</p>
+</div>
+
+
+
+
+
+
+  <div class="sectiontitle">Classes and Modules</div>
+  Module <a href="Packet/Connection.html" class="link">Packet::Connection</a><br />
+Module <a href="Packet/Core.html" class="link">Packet::Core</a><br />
+Module <a href="Packet/Deferrable.html" class="link">Packet::Deferrable</a><br />
+Module <a href="Packet/NbioHelper.html" class="link">Packet::NbioHelper</a><br />
+Class <a href="Packet/CPUWorker.html" class="link">Packet::CPUWorker</a><br />
+Class <a href="Packet/Callback.html" class="link">Packet::Callback</a><br />
+Class <a href="Packet/DefaultDeferrable.html" class="link">Packet::DefaultDeferrable</a><br />
+Class <a href="Packet/DisconnectError.html" class="link">Packet::DisconnectError</a><br />
+Class <a href="Packet/Event.html" class="link">Packet::Event</a><br />
+Class <a href="Packet/Guid.html" class="link">Packet::Guid</a><br />
+Class <a href="Packet/IOWorker.html" class="link">Packet::IOWorker</a><br />
+Class <a href="Packet/MetaPimp.html" class="link">Packet::MetaPimp</a><br />
+Class <a href="Packet/PeriodicEvent.html" class="link">Packet::PeriodicEvent</a><br />
+Class <a href="Packet/Pimp.html" class="link">Packet::Pimp</a><br />
+Class <a href="Packet/Reactor.html" class="link">Packet::Reactor</a><br />
+Class <a href="Packet/Worker.html" class="link">Packet::Worker</a><br />
+
+
+  <div class="sectiontitle">Constants</div>
+  <table border='0' cellpadding='5'>
+  <tr valign='top'>
+    <td class="attr-name">VERSION</td>
+    <td>=</td>
+    <td class="attr-value">'0.1.0'</td>
+  </tr>
+  </table>
+
+
+</div>
+
+  </div>
+
+    </body>
+</html>
