@@ -129,7 +129,6 @@ class Manager < ActiveRecord::Base
     def Manager.backgroundrb_control(cmd=nil)
         status = 'stopped'
         msg = ''
-        pid_file = "#{RAILS_ROOT}/log/backgroundrb.pid"
 
         if (cmd == 'start')
             child_pid = Process.fork do
@@ -158,8 +157,12 @@ class Manager < ActiveRecord::Base
             return(Manager.backgroundrb_control)
 
         else
-            if ( File.exists?(pid_file) )
-                pid = File.open(pid_file).read.to_i
+            conf_file = "#{RAILS_ROOT}/conf/backgroundrb.yml"
+            begin
+                config = YAML.load_file(conf_file)
+                pid_file = "#{RAILS_ROOT}/tmp/pids/backgroundrb_#{config[:backgroundrb][:port]}.pid"
+                pid = File.open(pid_file).read.to_i if ( File.exists?(pid_file) )
+
                 if (pid > 0)
                     begin
                         Process.kill(0, pid)
@@ -171,6 +174,9 @@ class Manager < ActiveRecord::Base
                         msg = "Error reading BackgrounDRB status: #{error}"
                     end
                 end
+
+            rescue Exception => error
+                msg = "Error opening #{conf_file}: #{error}"
             end
         end
 
