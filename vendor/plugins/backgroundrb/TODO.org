@@ -1,4 +1,0 @@
-* Implement a way to share code between workers.
-* Implement a way to test workers.
-* Implement cron and normal UNIX schedulers.
-
