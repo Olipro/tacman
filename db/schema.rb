@@ -188,7 +188,7 @@ ActiveRecord::Schema.define(:version => 6) do
     t.integer  "maximum_aaa_log_retainment",          :limit => 11
     t.integer  "maximum_aaa_archive_retainment",      :limit => 11
     t.boolean  "enable_mailer"
-    t.string   "mail_from"
+    t.string   "mail_from",                                         :default => "noreply@localhost.localdomain"
     t.text     "mail_account_disabled"
     t.text     "mail_new_account"
     t.text     "mail_password_expired"
@@ -331,7 +331,6 @@ ActiveRecord::Schema.define(:version => 6) do
 
   create_table "users", :force => true do |t|
     t.integer  "department_id",            :limit => 11
-    t.string   "alerts_email"
     t.boolean  "allow_web_login",                        :default => true
     t.boolean  "disabled",                               :default => false
     t.string   "email"

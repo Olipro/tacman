@@ -57,12 +57,6 @@
             <% end %>
             </td>
 
-            <% if (!cu.notes.blank?) %>
-              <td nowrap><a href="#" class="tip"><b><u>notes</u></b><span><pre><%= cu.notes %></pre></span></a></td>
-            <% else %>
-              <td>&nbsp</td>
-            <% end %>
-
             <td>
               <% if (user.department_id != @configuration.department_id) %>
                 <% if (user.department_id) %>
@@ -78,6 +72,12 @@
               <a href="#" class="tip" style="color: #7B2024" >settings<span><%= configured_user_settings_description(cu) %></span></a>
               <% end %>
             </td>
+
+            <% if (!cu.notes.blank?) %>
+              <td nowrap><a href="#" class="tip">notes<span><pre><%= cu.notes %></pre></span></a></td>
+            <% else %>
+              <td>&nbsp</td>
+            <% end %>
         </tr>
         <% end %>
         <tr><td>&nbsp</td></tr>

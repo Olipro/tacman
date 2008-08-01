@@ -1,0 +1,280 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head>
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+
+
+
+  
+  <head>
+    <title>Install</title>
+  </head>
+  <body>
+    <div id="content">
+
+
+    <h1>TacacsPlus Manager Install</h1>
+
+    <p>
+      <b>Install packages</b>
+
+      </p><ol>
+        <li> Su to root <br>
+             <code>
+               sudo su - <br />
+               cd /tmp <br />
+             </code>
+        </li> <br>
+        <li> Install packages <br>
+             <code>
+                   yum install subversion http openssl httpd-devel mod_ssl <br />
+                   yum install httpd-devel mysql-server mysql-devel libxml2-devel <br />
+                   yum install ruby ruby-devel ruby-libs ruby-irb ruby-rdoc ruby-tcltk subversion-ruby mysql-server mysql-devel gcc-c++ <br />
+                <br />
+                get the latest ruby build from <a href="http://rubyworks.rubyforge.org/installation/centos.html">here</a>
+             </code>
+        </li> <br>
+        <li> Install RubyGems (http://rubyforge.org/projects/rubygems/)
+          Setup MySQL<br />
+          <code>
+            /sbin/chkconfig mysqld on <br />
+            service mysqld start <br />
+            mysql_secure_installation <br />
+          </code>
+        </li> <br />
+        <li> Install RubyGems (http://rubyforge.org/projects/rubygems/)<br />
+          <code>
+            wget http://rubyforge.org/frs/download.php/38646/rubygems-1.2.0.tgz <br />
+            tar xzf rubygems-1.2.0.tgz <br />
+            cd rubygems-1.2.0 <br />
+            ruby setup.rb <br />
+            cd .. <br />
+            rm -rf rubygems-1.2.0* <br />
+            gem update <br />
+          </code>
+        </li> <br>
+
+        <li> Install required gems <br>
+             <code>
+               gem install rails --include-dependencies --no-rdoc --no-ri <br>
+               gem install mongrel --include-dependencies --no-rdoc --no-ri
+               gem install capistrano --include-dependencies --no-rdoc --no-ri <br>
+               gem install mislav-will_paginate --source http://gems.github.com/  --no-rdoc --no-ri <br>
+               gem install chronic --no-rdoc --no-ri <br>
+               gem install packet --no-rdoc --no-ri <br>
+               gem install -v 1.5.0 netaddr --no-rdoc --no-ri <br>
+               gem install -v 1.0.0 tacacs_plus  --no-rdoc --no-ri <br>
+               <br />
+               <b><i>64-bit RHEL 5</i></b><br />
+               gem install mysql -- --with-mysql-dir=/usr/bin/ --with-mysql-lib=/usr/lib64/mysql/ --with-mysql-include=/usr/include/mysql/ <br>
+               <br />
+               <b><i>32-bit RHEL 5</i></b><br />
+               gem install mysql -- --with-mysql-dir=/usr/bin/ --with-mysql-lib=/usr/lib/mysql/ --with-mysql-include=/usr/include/mysql/ <br>
+             </code>
+        </li> <br />
+
+        <li> Install passenger <br>
+             <code>
+               gem install passenger <br>
+               passenger-install-apache2-module <br>
+             </code>
+        </li> <br />
+      </ol>
+
+    <br>
+    <p>
+      <b>Install TacacsPlus Manager</b>
+      </p><ol>
+      <li>
+        Checkout subversion repository<br>
+        <code>
+          cd /var <br />
+          svn co http://tacacs-plus.rubyforge.org/svn/tacman/
+        </code>
+      </li><br>
+      <li>
+        Set up database<br>
+        <code>
+          mysql<br>
+          create database tacman_production;<br>
+          grant all privileges on tacman_production.* to 'apache'@'localhost' identified by 'password' with grant option;<br>
+          quit
+        </code>
+      </li> <br>
+      <li>
+        Edit database.yml<br>
+        <code>
+          cd tacman <br />
+          cp config/database.yml.tmpl config/database.yml<br><br>
+         </code>
+          <textarea cols="80" rows="7" readonly="readonly"># edit this section of the file to look like this:
+production:
+  adapter: mysql
+  database: tacman_production
+  username: apache
+  password: password
+  socket: /var/lib/mysql/mysql.sock
+          </textarea>
+       </li> <br>
+       <li>
+         Install the database tables<br>
+        <code>rake db:migrate RAILS_ENV=production</code> <br>
+        <code>rake backgroundrb:setup RAILS_ENV=production</code> <br>
+       </li> <br>
+       <li>
+         Set up permissions for tacman user<br>
+         <code>chown -R apache:apache /var/tacman</code><br>
+         <i><b>*Note - make sure you rerun this command after downloading updates</b></i>
+       </li> <br>
+      </ol>
+    
+    <br>
+
+    <p>
+      <b>Configure Apache</b>
+      </p><ol>
+        <li>
+          Add the following lines to /etc/httpd/conf/httpd.conf<br>
+          <code>
+          <b><i>64-bit RHEL 5</i></b> <br />
+          LoadModule passenger_module /usr/lib64/ruby/gems/1.8/gems/passenger-2.0.2/ext/apache2/mod_passenger.so <br />
+          PassengerRoot /usr/lib64/ruby/gems/1.8/gems/passenger-2.0.2 <br />
+          PassengerRuby /usr/bin/ruby
+          <br /><br />
+          <b><i>32-bit RHEL 5</i></b> <br />
+          LoadModule passenger_module /usr/lib/ruby/gems/1.8/gems/passenger-2.0.2/ext/apache2/mod_passenger.so <br />
+          PassengerRoot /usr/lib/ruby/gems/1.8/gems/passenger-2.0.2 <br />
+          PassengerRuby /usr/bin/ruby
+         </code>
+       </li> <br>
+       <li>
+         Setup access to the application (/etc/httpd/conf/httpd.conf) <br />
+           <textarea cols="80" rows="5" readonly="readonly">
+           DocumentRoot "/var/tacman/public"
+           RewriteEngine On
+           RewriteCond %{HTTPS} off
+           RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI}
+           &lt;Directory "/var/tacman/public"&gt;
+           ...
+         </textarea>
+       </li> <br>
+       <li>
+         Configure SSL<br>
+         <code>
+           mkdir /etc/httpd/ssl <br />
+           cd /etc/pki/tls/certs/ <br />
+           /usr/bin/openssl genrsa -des3 1024  > /etc/httpd/ssl/apache.key <br />
+           /usr/bin/openssl req -new -key /etc/httpd/ssl/apache.key -out /etc/httpd/ssl/apache.csr -set_serial 0 <br />
+           /usr/bin/openssl req -new -key /etc/httpd/ssl/apache.key -x509 -days 365 -out /etc/httpd/ssl/apache.crt  <br />
+           cat /etc/httpd/ssl/apache.csr >  /etc/httpd/ssl/apache.pem <br />
+           echo ""    >> /etc/httpd/ssl/apache.pem <br />
+           cat /etc/httpd/ssl/apache.crt >> /etc/httpd/ssl/apache.pem <br />
+         </code>
+       </li> <br>
+       <li>Restart apache</li>
+      </ol>
+    </p>
+    <br>
+
+    <p>
+      <b>Set up logrotate to manage logs.</b><br><br>
+
+      edit /etc/logrotate.conf and add the following entries:<br>
+<textarea cols="100" rows="7" readonly>
+# rotate web logs when they reach 500k
+/home/tacman/tacman/log/*.log {
+    size 500k
+    create 0664 tacman tacman
+    rotate 3
+}
+</textarea>
+    </p>
+    <br>
+
+    <p>
+      <b>Set up cron to restart BackgrounDRb nightly.</b><br><br>
+
+    </p>
+    <br>
+
+    <p>
+      <b>Modify IPTables</b><br /><br />
+
+      TACACS+ clients expect to send requests to TCP port 49. In order to avoid having to run the Tacacs Daemon script
+      as root, iptables will need to be configured to redirect traffic from TCP 49 to a port greater than
+      1023. For example, the daemon could be set to bind to TCP 4949 and iptables could then be configured
+      to redirect TCP 49 to TCP 4949. <br /><br />
+
+      An example iptables rules file would be:<br />
+      <textarea cols="100" rows="40" readonly>
+# FILTER TABLE #
+*filter
+:INPUT DROP [0:0]
+:FORWARD ACCEPT [0:0]
+:OUTPUT ACCEPT [0:0]
+
+# allow all to loopback
+-A INPUT -d 127.0.0.1/32 -j ACCEPT
+
+# allow inbound icmp
+-A INPUT -p icmp -m icmp --icmp-type any -j ACCEPT
+
+# allow inbound ssh
+-A INPUT -p tcp -m tcp --dport 22 --syn -j ACCEPT
+
+# allow inbound web
+-A INPUT -p tcp -m tcp --dport 80 --syn -j ACCEPT
+-A INPUT -p tcp -m tcp --dport 443 --syn -j ACCEPT
+
+# allow inbound tacacs
+-A INPUT -p tcp -m tcp --dport 49 --syn -j ACCEPT
+-A INPUT -p tcp -m tcp --dport 4949 --syn -j ACCEPT
+
+# allow all established connections back in
+-A INPUT -p all -m state --state ESTABLISHED -j ACCEPT
+
+COMMIT
+
+
+# NAT TABLE #
+*nat
+:PREROUTING ACCEPT [0:0]
+:POSTROUTING ACCEPT [0:0]
+:OUTPUT ACCEPT [0:0]
+
+# you need to configure the following for each ip which will listen on tcp 49
+-A PREROUTING -p tcp -m tcp --dport 49  -d 127.0.0.1 -j DNAT --to-destination 127.0.0.1:4949
+
+COMMIT
+        </textarea><br /><br />
+      <b> *IMPORTANT REMINDER -- Using this setup, you will need to remember to configure your daemons to listen on port 4949 instead of the default port
+      of 49.</b><br /><br />
+
+    To complete this setup you must enable IP forwarding in the kernel.
+    Add the following setting to /etc/sysctl.conf: net.ipv4.ip_forward = 1
+    </p>
+    <br />
+
+    <p>
+      <b>Backing up the database</b><br><br>
+
+      It is a good idea to back up your database from time to time. In order to dump the DB to a text file, run the following:
+      <br><br>
+      <code><i>mysqldump --add-drop-table -u [username] -p [password] tacman_production &gt; tacman_production.sql</i></code>
+      <br>
+      <br><br>
+      In order to restore the database from backup, run the following:
+      <br><br>
+      <code><i>mysql -u [username] -p [password] tacman_production &lt; tacman_production.sql</i></code>
+    </p>
+    <br><br>
+
+    <p>
+      <b>Log in to the system</b><br><br>
+
+      To log into the system, visit <i>https://yourserver.here</i> and log in with 'admin', 'password'.
+    </p>
+
+
+      </div>
+
+  </body></html>

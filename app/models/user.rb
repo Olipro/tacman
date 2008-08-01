@@ -52,12 +52,11 @@ class User < ActiveRecord::Base
         begin
             User.transaction do
                 data.each_line do |line|
-                    username,login_password,enable_password,salt,real_name,email,alerts_email,department = line.split(",")
+                    username,login_password,enable_password,salt,real_name,email,department = line.split(",")
                     user = User.new
                     user.username = username.strip if (username)
                     user.real_name = real_name.strip if (real_name)
                     user.email = email.strip if (email)
-                    user.alerts_email = alerts_email.strip if (alerts_email)
                     user.salt = salt.strip if (salt)
 
                     if (department)

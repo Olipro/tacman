@@ -14,6 +14,7 @@ class OutboxManagerWorker < BackgrounDRb::MetaWorker
     def write_remote(manager_id)
         m = Manager.find(manager_id)
         if (m.is_enabled && !m.outbox_locked?)
+            sleep(30) # wait 30 seconds just in case multiple updates are happening to the system
             m.lock_outbox(1800) # 30 min lock
             m.write_remote_inbox!
             if (m.errors.length > 0)

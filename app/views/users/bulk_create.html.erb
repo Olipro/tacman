@@ -16,7 +16,7 @@
 Only one entry per line. Fields should be comma delimited.<br />
 If salt is provided, then passwords are assumed to be SHA1 encrypted based upon that salt.<br />
 If no salt is provided, then passwords are assumed to be cleartext.<br /><br />
-Fields: <b><i>username, login_password, enable_password, salt, real_name, email, alerts_email, department</i></b><br />
+Fields: <b><i>username, login_password, enable_password, salt, real_name, email, department</i></b><br />
 </p>
 
 <% form_for(:user, :url => import_users_url) do |f| %>
@@ -30,7 +30,7 @@ Fields: <b><i>username, login_password, enable_password, salt, real_name, email,
 <p>
 <u>Examples</u>
 <pre>
-user1, password, password, , User One, user1@localhost, page.user1@localhost, Networking
+user1, password, password, , User One, user1@localhost, Networking
 user2, db146920c57a2f5baa02e1da2f7df8d00674b0a6, db146920c57a2f5baa02e1da2f7df8d00674b0a6, kEmi7n4iACMyBDQt
 user3, password, password
 </pre>

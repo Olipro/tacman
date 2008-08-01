@@ -222,6 +222,12 @@ class Manager < ActiveRecord::Base
         if (Manager.local.slave?)
             master = Manager.find(:first, :conditions => "manager_type = 'master'")
             master.add_to_outbox(verb, message) if (master)
+
+            begin
+                MiddleMan.worker(:outbox_manager_worker).async_write_remote(:arg => master.id)
+            rescue Exception => error
+                Manager.local.log(:level => 'error', :message => "Manager#replicate_to_master - Error with BackgrounDRB: #{error}")
+            end
         end
         return(master)
     end
@@ -234,6 +240,12 @@ class Manager < ActiveRecord::Base
             non_local = Manager.non_local
             non_local.each do |rs|
                 rs.add_to_outbox(verb, message)
+            end
+
+            begin
+                MiddleMan.worker(:outbox_manager_worker).async_write_all_remote
+            rescue Exception => error
+                Manager.local.log(:level => 'error', :message => "Manager#replicate_to_slaves - Error with BackgrounDRB: #{error}")
             end
         end
         return(non_local)
@@ -702,7 +714,7 @@ class Manager < ActiveRecord::Base
         if (!self.is_local && self.is_enabled && self.slave?)
             SystemMessage.delete_all("manager_id = #{self.id} and queue = 'outbox'")
             self.outbox_revision = 0
-            self.add_to_outbox('create', Manager.export)
+            Manager.replicate_to_slaves('create', Manager.export)
         end
         return(true)
     end
@@ -886,7 +898,7 @@ private
                                         :is_enabled, :is_local, :base_url, :manager_type, :name, :password, :serial,
                                         :disabled_message, :created_at, :updated_at]) )
         elsif (self.is_enabled && self.slave?)
-            self.add_to_outbox( 'update', self.to_xml(:skip_instruct => true, :only => [:name, :base_url]) )
+            Manager.replicate_to_master( 'update', self.to_xml(:skip_instruct => true, :only => [:name, :base_url]) )
         end
     end
 

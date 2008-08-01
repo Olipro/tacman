@@ -19,21 +19,18 @@
     :daily_archive:
       :trigger_args: 0 0 0 * * * *
 
-  # check the inbox every 15 minutes
+  # check the inbox every hour
   :inbox_manager_worker:
     :process_all_inbox:
-      :trigger_args: 0 */15 * * * * *
+      :trigger_args: 0 10 * * * * *
 
-  # check outbox every minute
+  # check outbox every hour
   :outbox_manager_worker:
     :write_all_remote:
-      :trigger_args: 30 * * * * * *
+      :trigger_args: 0 5 * * * * *
 
   # tacacs daemons
   :daemon_manager_worker:
-    # monitor every 2 minutes
-    :check_status:
-      :trigger_args: 15 */2 * * * * *
 
     # gather up aaa logs every 20 minutes
     :gather_aaa_logs:
@@ -56,6 +53,3 @@
     :configuration_changelog:
       :trigger_args: 59 59 23 * * * *
 
-    # mail pending membership requests
-    :pending_membership_requests:
-      :trigger_args: 0 0 3 * * * *

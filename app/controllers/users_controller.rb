@@ -689,7 +689,7 @@ class UsersController < ApplicationController
             elsif @user.set_password(params[:password],params[:password_confirmation], false, expire)
                 if ( params.has_key?(:notify) )
                     begin
-                        TacmanMailer.deliver_password_reset(@local_manager, @user, params[:enable], 'login') if (!@user.email.blank?)
+                        TacmanMailer.deliver_password_reset(@local_manager, @user, params[:password], 'login') if (!@user.email.blank?)
                     rescue Exception => error
                         @local_manager.log(:level => 'error', :user_id=> @user.id, :message => "Failed to notify #{@user.username} of login password reset - #{error}")
                     end

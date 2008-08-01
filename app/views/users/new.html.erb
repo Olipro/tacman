@@ -24,10 +24,6 @@
   </tr>
 
   <tr>
-    <td><b>Alerts Email:</b></td> <td><%= f.text_field :alerts_email, {:tabindex => 5} %></td>
-  </tr>
-
-  <tr>
     <td><b>Department:</b></td>
     <td style="text-align: left;"><%= f.select :department_id, Department.find(:all, :order => :name).collect {|p| [ p.name, p.id ] }, { :include_blank => true } %></td>
   </tr>

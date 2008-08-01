@@ -6,7 +6,6 @@
   <tr><td><b>Real Name:</b></td> <td><%= @user.real_name %></td></tr>
   <tr><td><b>Department:</b></td> <td><%= @user.department.name if (@user.department) %></td></tr>
   <tr><td><b>Email:</b></td> <td><%= @user.email %></td></tr>
-  <tr><td><b>Alerts Email:</b></td> <td><%= @user.alerts_email %></td></tr>
   <tr><td>&nbsp</td></tr>
   <tr><td><b><u>Login Password</u></b></td></tr>
   <tr><td><b>Lifespan:</b></td> <td><%= password_lifespan_xlate(@user.login_password_lifespan) %></td></tr>

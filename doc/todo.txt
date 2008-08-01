@@ -11,15 +11,14 @@ features & bugs
 ---------------
 
 * need a way to periodically restart backgroundrb. maybe a cron job for user 'apache'
-* no mail should be sent from slaves
+
+* test changes to outbox_manager_worker and writing to outbox
 
 * verify all workers
 
+* test publishing
+
 * test account lockout
-
-* test revision mismatch
-
-* test log search of slave logs
 
 * script to port users to new system
 User.find(:all).each {|u| puts "#{u.username}, #{u.hashed_password}, #{u.hashed_enable}, #{u.salt}, #{u.first_name} #{u.last_name}, #{u.email},, #{u.department}\n"}

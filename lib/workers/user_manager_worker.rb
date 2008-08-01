@@ -53,7 +53,7 @@ class UserManagerWorker < BackgrounDRb::MetaWorker
                 begin
                     TacmanMailer.deliver_logs(local_manager, mail_to, logs)
                 rescue Exception => error
-                    local_manager.log(:message => "Failed to deliver daily logs - #{error}")
+                    local_manager.log(:level => 'error', :message => "Failed to deliver daily logs - #{error}")
                     return(false)
                 end
             end
@@ -73,7 +73,7 @@ class UserManagerWorker < BackgrounDRb::MetaWorker
                 begin
                     TacmanMailer.deliver_account_disabled(local_manager, user.email) if (!user.email.blank?)
                 rescue Exception => error
-                    local_manager.log(:message => "Failed to deliver daily logs - #{error}")
+                    local_manager.log(:level => 'error', :message => "Failed to deliver daily logs - #{error}")
                     return(false)
                 end
             end
@@ -112,7 +112,7 @@ class UserManagerWorker < BackgrounDRb::MetaWorker
         begin
             TacmanMailer.deliver_pending_password_expiry(local_manager, mail_to, 7)
         rescue Exception => error
-            local_manager.log(:message => "Failed to deliver password expiry notifications - #{error}")
+            local_manager.log(:level => 'error', :message => "Failed to deliver password expiry notifications - #{error}")
         end
 
         mail_to = []
@@ -122,7 +122,7 @@ class UserManagerWorker < BackgrounDRb::MetaWorker
         begin
             TacmanMailer.deliver_pending_password_expiry(local_manager, mail_to, 3)
         rescue Exception => error
-            local_manager.log(:message => "Failed to deliver password expiry notifications - #{error}")
+            local_manager.log(:level => 'error', :message => "Failed to deliver password expiry notifications - #{error}")
         end
 
         mail_to = []
@@ -132,7 +132,7 @@ class UserManagerWorker < BackgrounDRb::MetaWorker
         begin
             TacmanMailer.deliver_password_expired(local_manager, mail_to)
         rescue Exception => error
-            local_manager.log(:message => "Failed to deliver password expiry notifications - #{error}")
+            local_manager.log(:level => 'error', :message => "Failed to deliver password expiry notifications - #{error}")
         end
 
         return(true)
@@ -169,7 +169,7 @@ class UserManagerWorker < BackgrounDRb::MetaWorker
                 begin
                     TacmanMailer.deliver_pending_membership_requests(local_manager, mail_to, users, configuration)
                 rescue Exception => error
-                    local_manager.log(:message => "Failed to deliver password expiry notifications - #{error}")
+                    local_manager.log(:level => 'error', :message => "Failed to deliver password expiry notifications - #{error}")
                 end
             end
         end

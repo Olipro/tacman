@@ -26,7 +26,6 @@ class CreateUsers < ActiveRecord::Migration
     # users
     create_table :users do |t|
       t.integer :department_id
-      t.string :alerts_email
       t.boolean :allow_web_login, :default => true
       t.boolean :disabled, :default => false
       t.string :email
