@@ -25,6 +25,7 @@ class CreateSessions < ActiveRecord::Migration
 
   def self.down
     drop_table :sessions
+    drop_table :bdrb_job_queues
     begin
         prod = File.expand_path("#{RAILS_ROOT}/log/") + "/production.log"
         dev = File.expand_path("#{RAILS_ROOT}/log/") + "/development.log"

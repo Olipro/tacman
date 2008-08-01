@@ -67,7 +67,7 @@ class User < ActiveRecord::Base
 
                     if (user.save)
                         raise "Login and/or enable password missing." if (!login_password || !enable_password)
-                        if (salt)
+                        if (!salt.blank?)
                             user.password_histories.create(:password_hash => login_password.strip) if (login_password)
                             user.password_histories.create(:password_hash => enable_password.strip, :is_enable => true) if (enable_password)
                         else
