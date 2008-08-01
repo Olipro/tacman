@@ -714,7 +714,7 @@ class Manager < ActiveRecord::Base
         if (!self.is_local && self.is_enabled && self.slave?)
             SystemMessage.delete_all("manager_id = #{self.id} and queue = 'outbox'")
             self.outbox_revision = 0
-            Manager.replicate_to_slaves('create', Manager.export)
+            self.write_to_outbox('create', Manager.export)
         end
         return(true)
     end

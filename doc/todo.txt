@@ -10,6 +10,9 @@
 features & bugs
 ---------------
 
+* fix approval process
+* look into write_to_outbox
+
 * need a way to periodically restart backgroundrb. maybe a cron job for user 'apache'
 
 * test changes to outbox_manager_worker and writing to outbox
