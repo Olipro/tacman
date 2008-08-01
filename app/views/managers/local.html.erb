@@ -56,6 +56,7 @@
     <tr><td><b>Mailer</b></td></tr>
     <tr><td>Enable Mailer: <%=h @manager.enable_mailer %></td></tr>
     <% if (@manager.enable_mailer) %>
+    <tr><td>Mail From: <%=h @manager.mail_from %></td></tr>
     <tr><td>&nbsp</td></tr>
     <tr><td><u>Account Disabled Message</u></td></tr>
     <tr><td><textarea readonly rows="15" cols="80"><%=h @manager.mail_account_disabled %></textarea></td></tr>

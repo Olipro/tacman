@@ -50,6 +50,7 @@ class CreateManagers < ActiveRecord::Migration
       t.integer :maximum_aaa_archive_retainment
 
       t.boolean :enable_mailer
+      t.string :mail_from, :default => 'noreply@localhost.localdomain'
       t.text :mail_account_disabled
       t.text :mail_new_account
       t.text :mail_password_expired

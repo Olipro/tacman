@@ -10,6 +10,9 @@
 features & bugs
 ---------------
 
+* need a way to periodically restart backgroundrb. maybe a cron job for user 'apache'
+* no mail should be sent from slaves
+
 * verify all workers
 
 * test account lockout

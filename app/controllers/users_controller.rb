@@ -165,7 +165,7 @@ class UsersController < ApplicationController
                             begin
                                 TacmanMailer.deliver_new_account(@local_manager, @user, params[:password], params[:enable]) if (!@user.email.blank?)
                             rescue Exception => error
-                                @local_manager.log(:user_id=> @user.id, :message => "Failed to notify #{@user.username} of account creation - #{error}")
+                                @local_manager.log(:level => 'error', :user_id=> @user.id, :message => "Failed to notify #{@user.username} of account creation - #{error}")
                             end
                         end
 
@@ -652,7 +652,7 @@ class UsersController < ApplicationController
                     begin
                         TacmanMailer.deliver_password_reset(@local_manager, @user, params[:enable], 'enable') if (!@user.email.blank?)
                     rescue Exception => error
-                        @local_manager.log(:user_id=> @user.id, :message => "Failed to notify #{@user.username} of enable password reset - #{error}")
+                        @local_manager.log(:level => 'error', :user_id=> @user.id, :message => "Failed to notify #{@user.username} of enable password reset - #{error}")
                     end
                 end
 
@@ -691,7 +691,7 @@ class UsersController < ApplicationController
                     begin
                         TacmanMailer.deliver_password_reset(@local_manager, @user, params[:enable], 'login') if (!@user.email.blank?)
                     rescue Exception => error
-                        @local_manager.log(:user_id=> @user.id, :message => "Failed to notify #{@user.username} of login password reset - #{error}")
+                        @local_manager.log(:level => 'error', :user_id=> @user.id, :message => "Failed to notify #{@user.username} of login password reset - #{error}")
                     end
                 end
 

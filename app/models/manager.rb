@@ -18,6 +18,7 @@ class Manager < ActiveRecord::Base
     validates_presence_of :name
     validates_uniqueness_of :name, :if => Proc.new { |x| !x.name.blank?}
     validates_presence_of :password, :if => Proc.new { |x| !x.is_local}
+    validates_presence_of :mail_from, :if => Proc.new { |x| !x.enable_mailer}
 
 
     before_destroy :prevent_local_manager_delete
