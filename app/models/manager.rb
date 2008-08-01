@@ -157,7 +157,7 @@ class Manager < ActiveRecord::Base
             return(Manager.backgroundrb_control)
 
         else
-            conf_file = "#{RAILS_ROOT}/conf/backgroundrb.yml"
+            conf_file = "#{RAILS_ROOT}/config/backgroundrb.yml"
             begin
                 config = YAML.load_file(conf_file)
                 pid_file = "#{RAILS_ROOT}/tmp/pids/backgroundrb_#{config[:backgroundrb][:port]}.pid"
