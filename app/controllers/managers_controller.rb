@@ -17,7 +17,7 @@ class ManagersController < ApplicationController
                 format.xml  { render :xml => @manager.errors, :status => :not_acceptable }
             elsif (@manager.approve!)
                 begin
-                    MiddleMan.worker(:outbox_manager_worker).write_remote(@manager.id)
+                    MiddleMan.worker(:outbox_manager_worker).async_write_remote(:arg => @manager.id)
                 rescue Exception => error
                     @manager.errors.add_to_base("Error writing remote: #{error}")
                 end

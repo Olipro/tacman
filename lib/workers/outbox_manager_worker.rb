@@ -7,16 +7,7 @@ class OutboxManagerWorker < BackgrounDRb::MetaWorker
 
     def write_all_remote
         Manager.non_local.each do |manager|
-            thread_pool.defer(manager) do |m|
-                if (m.is_enabled && !m.outbox_locked?)
-                    m.lock_outbox(1800) # 30 min lock
-                    m.write_remote_inbox!
-                    if (m.errors.length > 0)
-                        m.errors.each_full {|e| Manager.local.log(:message => "#{m.name}#write_remote_inbox! - #{e}") }
-                    end
-                    m.unlock_outbox()
-                end
-            end
+            thread_pool.defer(:write_remote, manager.id)
         end
     end
 
@@ -26,7 +17,7 @@ class OutboxManagerWorker < BackgrounDRb::MetaWorker
             m.lock_outbox(1800) # 30 min lock
             m.write_remote_inbox!
             if (m.errors.length > 0)
-                m.errors.each_full {|e| Manager.local.log(:message => "#{m.name}#write_remote_inbox! - #{e}") }
+                m.errors.each_full {|e| Manager.local.log(:message => "#{m.name}#write_remote_inbox! Peer returned - #{e}") }
             end
             m.unlock_outbox()
         end

@@ -587,7 +587,7 @@ class Configuration < ActiveRecord::Base
         managers.each_value do |m|
             m.add_to_outbox('update', "<publish><id type=\"integer\">#{self.id}</id></publish>" )
             begin
-                MiddleMan.worker(:outbox_manager_worker).write_remote(self.id)
+                MiddleMan.worker(:outbox_manager_worker).async_write_remote(:arg => self.id)
             rescue Exception => error
                 self.errors.add_to_base("Publishing error: #{error}")
             end
@@ -598,7 +598,7 @@ class Configuration < ActiveRecord::Base
         if (!self.publish_scheduled?)
             self.schedule_publish(60) # schedule publish for 60 seconds from now
             begin
-                MiddleMan.worker(:publisher_worker).restart_tacacs_daemons(self.id)
+                MiddleMan.worker(:publisher_worker).async_restart_tacacs_daemons(:arg => self.id)
             rescue Exception => error
                 self.errors.add_to_base("Publishing error: #{error}")
             end

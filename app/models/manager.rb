@@ -163,7 +163,7 @@ class Manager < ActiveRecord::Base
                 pid_file = "#{RAILS_ROOT}/tmp/pids/backgroundrb_#{config[:backgroundrb][:port]}.pid"
                 pid = File.open(pid_file).read.to_i if ( File.exists?(pid_file) )
 
-                if (pid > 0)
+                if (pid && pid > 0)
                     begin
                         Process.kill(0, pid)
                         status = 'started'
@@ -176,7 +176,7 @@ class Manager < ActiveRecord::Base
                 end
 
             rescue Exception => error
-                msg = "Error opening #{conf_file}: #{error}"
+                msg = error
             end
         end
 
@@ -210,11 +210,7 @@ class Manager < ActiveRecord::Base
         end
 
         xml << "</system-export>"
-        str = String.new
-        doc = REXML::Document.new(xml)
-        formatter = REXML::Formatters::Pretty.new
-        formatter.write(doc, str)
-        return(str)
+        return(xml)
     end
 
     # add message to outbox of master
@@ -456,7 +452,7 @@ class Manager < ActiveRecord::Base
                     end
 
                     # fire off background job to process the inbox
-                    MiddleMan.worker(:inbox_manager_worker).process_inbox(self.id)
+                    MiddleMan.worker(:inbox_manager_worker).async_process_inbox(:arg => self.id)
                 end
             rescue BackgrounDRb::BdrbConnError => error
                 msg = "Error with BackgrounDRB: #{error}"
