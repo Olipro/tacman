@@ -643,6 +643,10 @@ class UsersController < ApplicationController
                 flash[:warning] = "This action is prohibited on slave systems."
                 format.html { redirect_to user_url(@user) }
                 format.xml  { render :xml => '<errors><error>This action is prohibited on slave systems.</error></errors>', :status => :not_acceptable }
+            elsif (@session_user.id == @user.id)
+                flash[:warning] = "You may not reset your own password."
+                format.html { redirect_to user_url(@user) }
+                format.xml  { render :xml => "<errors><error>#{flash[:warning]}</error></errors>", :status => :not_acceptable }
             elsif @user.set_password(params[:enable], params[:enable_confirmation], true, expire)
                 if ( params.has_key?(:notify) )
                     begin
@@ -678,6 +682,10 @@ class UsersController < ApplicationController
                 flash[:warning] = "This action is prohibited on slave systems."
                 format.html { redirect_to user_url(@user) }
                 format.xml  { render :xml => '<errors><error>This action is prohibited on slave systems.</error></errors>', :status => :not_acceptable }
+            elsif (@session_user.id == @user.id)
+                flash[:warning] = "You may not reset your own password."
+                format.html { redirect_to user_url(@user) }
+                format.xml  { render :xml => "<errors><error>#{flash[:warning]}</error></errors>", :status => :not_acceptable }
             elsif @user.set_password(params[:password],params[:password_confirmation], false, expire)
                 if ( params.has_key?(:notify) )
                     begin

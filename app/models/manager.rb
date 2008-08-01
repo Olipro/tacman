@@ -186,6 +186,7 @@ class Manager < ActiveRecord::Base
     # return string of xml elements. no root element provided
     def Manager.export(full=false)
         xml = "<system-export>"
+        xml << Department.find(:all).to_xml(:indent => 0, :skip_instruct => true)
         xml << User.find(:all).to_xml(:indent => 0, :skip_instruct => true)
         xml << PasswordHistory.find(:all).to_xml(:indent => 0, :skip_instruct => true)
         xml << Configuration.find(:all).to_xml(:indent => 0, :skip_instruct => true)

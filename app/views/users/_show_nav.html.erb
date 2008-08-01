@@ -11,8 +11,12 @@
 
 <%= link_to 'View Settings', user_url(@user) %><br />
 <% if (!@local_manager.slave?) %>
+
+  <% if (@session_user.id != @user.id) %>
     <%= link_to 'Reset Login Password', reset_password_user_url(@user) %><br />
     <%= link_to 'Reset Enable Password', reset_enable_user_url(@user) %><br />
+  <% end %>
+
     <%= link_to 'Publish', publish_user_url(@user), :method => :put %><br />
     <%= link_to 'Edit', edit_user_url(@user) %><br />
     <br />
