@@ -11,4 +11,5 @@ module ConfiguredUsersHelper
         str << "</ul>\n"
         return(str)
     end
+
 end

@@ -73,8 +73,10 @@
               <% end %>
             </td>
 
-            <td>
-              <% if (cu.overrides_user_group?) %><i style="color: #7B2024;">overrides in place</i> <% end %>
+            <td nowrap>
+              <% if (cu.user_specific_settings?) %>
+              <a href="#" class="tip" style="color: #7B2024" >settings<span><%= configured_user_settings_description(cu) %></span></a>
+              <% end %>
             </td>
         </tr>
         <% end %>

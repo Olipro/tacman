@@ -1,5 +1,6 @@
 # Methods added to this helper will be available to all templates in the application.
 module ApplicationHelper
+
     def password_lifespan_options(additional=nil)
         default1 = @local_manager.default_login_password_lifespan
         default2 = @local_manager.default_enable_password_lifespan
@@ -20,4 +21,5 @@ module ApplicationHelper
             return("#{days} days")
         end
     end
+
 end

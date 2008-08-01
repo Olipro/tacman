@@ -40,11 +40,6 @@ class ConfiguredUser < ActiveRecord::Base
         return(false)
     end
 
-    def overrides_user_group?
-        return(true) if (self.user_group_id && (self.author_avpair_id || self.command_authorization_profile_id || self.login_acl_id || self.enable_acl_id) )
-        return(false)
-    end
-
     def status
         return('active') if (self.is_active)
         return('suspended')
@@ -67,6 +62,11 @@ class ConfiguredUser < ActiveRecord::Base
 
     def user?
         return(true) if self.role == 'user'
+        return(false)
+    end
+
+    def user_specific_settings?
+        return(true) if (self.author_avpair_id || self.command_authorization_profile_id || self.login_acl_id || self.enable_acl_id )
         return(false)
     end
 

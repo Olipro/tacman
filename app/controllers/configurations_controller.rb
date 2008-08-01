@@ -82,9 +82,13 @@ class ConfigurationsController < ApplicationController
         respond_to do |format|
             @nav = "configurations/show_nav"
             if (@local_manager.slave?)
-                @configuration.errors.add_to_base("This action is prohibited on slave systems.")
+                flash[:warning] = "This action is prohibited on slave systems."
                 format.html { render add_remove_users_configuration_url(@configuration) }
-                format.xml  { render :xml => @configuration.errors, :status => :not_acceptable }
+                format.xml  { render :xml => "<errors><error>#{flash[:warning]}</error></errors>", :status => :not_acceptable }
+            elsif (@user.department_id != @configuration.department_id)
+                flash[:warning] = "User and configuration are not part of the same department."
+                format.html { render add_remove_users_configuration_url(@configuration) }
+                format.xml  { render :xml => "<errors><error>#{flash[:warning]}</error></errors>", :status => :not_acceptable }
             else
                 cu = @configuration.configured_users.build()
                 cu.user_id = @user.id
@@ -97,14 +101,16 @@ class ConfigurationsController < ApplicationController
     end
 
     def add_remove_users
+        @added = {}
         if (@configuration.department_id)
             @users = User.paginate(:page => params[:page], :per_page => @local_manager.pagination_per_page,
                                    :conditions => "department_id = #{@configuration.department_id}", :order => :username)
-            @added = {}
-            @configuration.configured_users.each {|cu| @added[cu.user_id] = cu.id }
         else
-            @users = []
+            @users = User.paginate(:page => params[:page], :per_page => @local_manager.pagination_per_page,
+                                   :conditions => "department_id is null", :order => :username)
         end
+        @added = {}
+        @configuration.configured_users.each {|cu| @added[cu.user_id] = cu.id }
         respond_to do |format|
             @nav = 'show_nav'
             format.html
