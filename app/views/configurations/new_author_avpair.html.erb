@@ -10,21 +10,35 @@
 <% end %>
 
 <br /><br />
+<h3><u>Instructions</u></h3>
 <p>
-<b><u>Examples</u></b><br />
-A complete author-avpair-list named av_list1:<br />
+author-avpair-lists are composed of multiple 'set' statements and a single 'match' statement.
+Client source IPs will be checked against the access-list within the 'match' statement,
+and if the client is permitted then the 'set' statements will be applied.
+If no 'match' statement is provided then all clients will match on the entry.
+Only the first matching entry will be applied.
+</p>
+<p>
+Avpairs will take the form of <b><i>attribute</i>=<i>value</i></b> or <b><i>attribute</i>*<i>value</i></b>.
+Avpairs with an <b><i>=</i></b> must be understood by the client (authorization fails if not), while avpairs with a <b><i>*</i></b> are not
+required to be understood.
+</p>
+<br />
+<h3><u>Examples</u></h3>
+<p>
+<b>A complete author-avpair-list named av_list1:</b><br />
 <pre>
 author-avpair-list av_list1 10
   match access-list acl1
   set service=shell
-  set noescape=true
+  set shell:Admin*Admin default-domain
 
 author-avpair-list av_list1 20
   set service=shell
   set priv_lvl=15
 </pre>
-
-An empty author-avpair-list named av_list2:<br />
+<br />
+<b>An empty author-avpair-list named av_list2:</b><br />
 <pre>
 command-authorization-profile av_list2
 </pre>

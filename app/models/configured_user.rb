@@ -41,7 +41,7 @@ class ConfiguredUser < ActiveRecord::Base
     end
 
     def overrides_user_group?
-        return(true) if (self.author_avpair_id || self.command_authorization_profile_id || self.login_acl_id || self.enable_acl_id)
+        return(true) if (self.user_group_id && (self.author_avpair_id || self.command_authorization_profile_id || self.login_acl_id || self.enable_acl_id) )
         return(false)
     end
 

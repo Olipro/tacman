@@ -411,7 +411,7 @@ class ConfigurationsController < ApplicationController
 
     def new_acl
          @acl = @configuration.acls.build
-        @data = "access-list ChangeMyName"
+        @data = "access-list "
 
         respond_to do |format|
             @nav = 'acl_nav'
@@ -421,7 +421,7 @@ class ConfigurationsController < ApplicationController
 
     def new_author_avpair
         @author_avpair = @configuration.author_avpairs.build
-        @data = "author-avpair-list ChangeMyName 10"
+        @data = "author-avpair-list "
 
         respond_to do |format|
             @nav = 'author_avpair_nav'
@@ -431,7 +431,7 @@ class ConfigurationsController < ApplicationController
 
     def new_command_authorization_profile
         @command_authorization_profile = @configuration.command_authorization_profiles.build
-        @data = "command-authorization-profile ChangeMyName"
+        @data = "command-authorization-profile "
 
         respond_to do |format|
             @nav = 'command_authorization_profile_nav'
@@ -450,7 +450,7 @@ class ConfigurationsController < ApplicationController
 
     def new_network_object_group
         @network_object_group = @configuration.network_object_groups.build
-        @data = "network-object-group ChangeMyName"
+        @data = "network-object-group "
 
         respond_to do |format|
             @nav = 'network_object_group_nav'
@@ -460,7 +460,7 @@ class ConfigurationsController < ApplicationController
 
     def new_shell_command_object_group
         @shell_command_object_group = @configuration.shell_command_object_groups.build
-        @data = "shell-command-object-group ChangeMyName"
+        @data = "shell-command-object-group "
 
         respond_to do |format|
             @nav = 'shell_command_object_group_nav'

@@ -10,9 +10,16 @@
 <% end %>
 
 <br /><br />
+<h3><u>Instructions</u></h3>
 <p>
-<b><u>Examples</u></b><br />
-A complete command-authorization-profile named profile1:<br />
+command-authorization-profiles define shell commands that may be executed by a user. They support
+full Ruby regular expressions. If an access-list is applied to an entry then
+that entry will only apply to clients whose IPs are permitted by the access-list.
+</p>
+<br />
+<h3><u>Examples</u></h3>
+<p>
+<b>A complete command-authorization-profile named profile1:</b><br />
 <pre>
 command-authorization-profile profile1
   command /show run/ access-list acl1
@@ -20,8 +27,8 @@ command-authorization-profile profile1
   shell-command-object-group scog1
   shell-command-object-group command_list1 access-list acl1
 </pre>
-
-An empty command-authorization-profile named profile2:<br />
+<br />
+<b>An empty command-authorization-profile named profile2:</b><br />
 <pre>
 command-authorization-profile profile2
 </pre>

@@ -162,7 +162,10 @@ class Configuration < ActiveRecord::Base
                         end
                         seq = elements[2] if (elements[2])
                     elsif (elements[0] == 'match')
-                        if (elements[1] == 'access-list')
+                        if (acl)
+                            author_avpair.errors.add_to_base("Line #{count}: there may only be a single 'match' statment.")
+                            raise
+                        elsif (elements[1] == 'access-list')
                             acl = Acl.find_by_name(elements[2], :conditions => "configuration_id = #{self.id}")
                             if (!acl)
                                 author_avpair.errors.add_to_base("Line #{count}: unknown access-list: #{elements[2]}")
@@ -173,6 +176,7 @@ class Configuration < ActiveRecord::Base
                             raise
                         end
                     elsif (elements[0] == 'set')
+                        elements = line.split(' ', 2)
                         if (elements[1] =~ /^service=/)
                             entry = author_avpair.author_avpair_entries.build(:service => elements[1].split('service=')[1] )
                             entry.sequence = seq if (seq)
