@@ -17,6 +17,8 @@
         <b>Revision:</b> <%=h message.revision %>
         &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
         <b>Creation Date/Time:</b> <i><%=h message.created_at.strftime("%Y-%m-%d %H:%M:%S %Z") %></i>
+        &nbsp&nbsp&nbsp&nbsp
+        <%= link_to 'Delete', system_message_url(message), :style => "color: #7B2024; font-weight: bold;", :method => :delete %>
       </td>
     </tr>
     <tr class="shaded">

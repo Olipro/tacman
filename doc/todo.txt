@@ -10,8 +10,11 @@
 features & bugs
 ---------------
 
-* fix approval process
-* look into write_to_outbox
+* is there a more efficient way to check outbox_locked? on add_to_outbox
+* need a way to clear system message if it is missing verb or content
+  this becomes a problem if system log is is invalid. keeps trying to send, and keeps making
+  more system logs.
+* backgroundrb seems to be constantly thrashing the db reading job queue status or something gay
 
 * need a way to periodically restart backgroundrb. maybe a cron job for user 'apache'
 
@@ -23,12 +26,13 @@ features & bugs
 
 * test account lockout
 
+* import old logs into new system
+
 * script to port users to new system
 User.find(:all).each {|u| puts "#{u.username}, #{u.hashed_password}, #{u.hashed_enable}, #{u.salt}, #{u.first_name} #{u.last_name}, #{u.email},, #{u.department}\n"}
 
 * script to import nogs, acls, etc...
 
-* import old logs into new system
 
 
 

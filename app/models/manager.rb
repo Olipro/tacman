@@ -184,6 +184,25 @@ class Manager < ActiveRecord::Base
         return({:status => status, :message => msg})
     end
 
+    # retrieve manager credentials from xml doc
+    # expects xml document as <manager><serial>xxxx</serial><password>xxxxx</password></manager>
+    # returns [serial,password] or nil
+    def Manager.credentials_from_xml(doc)
+        if (doc.root.name == 'manager')
+            serial_xml = REXML::XPath.first(doc.root, "serial")
+            serial = serial_xml.text if (serial_xml)
+            pwd_xml = REXML::XPath.first(doc.root, "password") if (serial)
+            pwd = pwd_xml.text if (pwd_xml)
+            return([serial,pwd]) if (pwd)
+        end
+        return(nil)
+     end
+
+    def Manager.destroy_non_local!
+        Manager.find(:all, :conditions => "is_local = false").each {|m| m.destroy}
+        return(nil)
+    end
+
     # return string of xml elements. no root element provided
     def Manager.export(full=false)
         xml = "<system-export>"
@@ -213,61 +232,6 @@ class Manager < ActiveRecord::Base
 
         xml << "</system-export>"
         return(xml)
-    end
-
-    # add message to outbox of master
-    # expects a valid verb, and an xml string
-    # return manager
-    def Manager.replicate_to_master(verb, message)
-        if (Manager.local.slave?)
-            master = Manager.find(:first, :conditions => "manager_type = 'master'")
-            master.add_to_outbox(verb, message) if (master)
-
-            begin
-                MiddleMan.worker(:outbox_manager_worker).async_write_remote(:arg => master.id)
-            rescue Exception => error
-                Manager.local.log(:level => 'error', :message => "Manager#replicate_to_master - Error with BackgrounDRB: #{error}")
-            end
-        end
-        return(master)
-    end
-
-    # add message to outbox of all slaves
-    # expects a valid verb, and an xml string
-    # return array of managers
-    def Manager.replicate_to_slaves(verb, message)
-        if (Manager.local.master?)
-            non_local = Manager.non_local
-            non_local.each do |rs|
-                rs.add_to_outbox(verb, message)
-            end
-
-            begin
-                MiddleMan.worker(:outbox_manager_worker).async_write_all_remote
-            rescue Exception => error
-                Manager.local.log(:level => 'error', :message => "Manager#replicate_to_slaves - Error with BackgrounDRB: #{error}")
-            end
-        end
-        return(non_local)
-    end
-
-    # retrieve manager credentials from xml doc
-    # expects xml document as <manager><serial>xxxx</serial><password>xxxxx</password></manager>
-    # returns [serial,password] or nil
-    def Manager.credentials_from_xml(doc)
-        if (doc.root.name == 'manager')
-            serial_xml = REXML::XPath.first(doc.root, "serial")
-            serial = serial_xml.text if (serial_xml)
-            pwd_xml = REXML::XPath.first(doc.root, "password") if (serial)
-            pwd = pwd_xml.text if (pwd_xml)
-            return([serial,pwd]) if (pwd)
-        end
-        return(nil)
-     end
-
-    def Manager.destroy_non_local!
-        Manager.find(:all, :conditions => "is_local = false").each {|m| m.destroy}
-        return(nil)
     end
 
     def Manager.local
@@ -307,6 +271,30 @@ class Manager < ActiveRecord::Base
             s.errors.add_to_base("Registration could not proceed. This is not a Master system.")
             return(s)
         end
+    end
+
+    # add message to outbox of master
+    # expects a valid verb, and an xml string
+    # return manager
+    def Manager.replicate_to_master(verb, message)
+        if (Manager.local.slave?)
+            master = Manager.find(:first, :conditions => "manager_type = 'master'")
+            master.add_to_outbox(verb, message) if (master)
+        end
+        return(master)
+    end
+
+    # add message to outbox of all slaves
+    # expects a valid verb, and an xml string
+    # return array of managers
+    def Manager.replicate_to_slaves(verb, message)
+        if (Manager.local.master?)
+            non_local = Manager.non_local
+            non_local.each do |rs|
+                rs.add_to_outbox(verb, message)
+            end
+        end
+        return(non_local)
     end
 
     # used by slave to register with master
@@ -492,6 +480,12 @@ class Manager < ActiveRecord::Base
         if (self.is_approved)
             msg = self.system_messages.build(:queue => 'outbox', :verb => verb, :content => content)
             if (msg.save)
+                if (self.is_enabled && !self.outbox_locked?)
+                    begin
+                        MiddleMan.worker(:outbox_manager_worker).async_write_remote(:arg => self.id)
+                    rescue
+                    end
+                end
                 return(true)
             else
                 msg.errors.each_full {|e| self.errors.add_to_base("Error adding to outbox: #{e}")}
@@ -508,7 +502,7 @@ class Manager < ActiveRecord::Base
         if (!self.is_approved)
             self.is_approved = true
             self.is_enabled = true
-            self.send_system_sync!
+            self.add_to_outbox('create', Manager.export)
             return(self.save)
         else
             return(false)
@@ -712,9 +706,10 @@ class Manager < ActiveRecord::Base
     # tell manager to perform complete re-sync of all system data
     def send_system_sync!
         if (!self.is_local && self.is_enabled && self.slave?)
-            SystemMessage.delete_all("manager_id = #{self.id} and queue = 'outbox'")
+            SystemMessage.destroy_all("manager_id = #{self.id} and queue = 'outbox'")
             self.outbox_revision = 0
-            self.write_to_outbox('create', Manager.export)
+            self.add_to_outbox('create', Manager.export)
+            self.save
         end
         return(true)
     end
@@ -801,6 +796,11 @@ class Manager < ActiveRecord::Base
         data.add_element(pw)
         messages = REXML::Element.new("system-messages")
         out_msgs.each do |m|
+            if (m.content.blank?)
+                Manager.local.log(:level => 'error', :message => "SystemMessage #{m.id} was missing content. Maybe content file was missing or empty?")
+                m.destroy
+                next
+            end
             cur_revision += 1
             m.revision = cur_revision
             messages.add_element(m.to_xml)
@@ -898,7 +898,7 @@ private
                                         :is_enabled, :is_local, :base_url, :manager_type, :name, :password, :serial,
                                         :disabled_message, :created_at, :updated_at]) )
         elsif (self.is_enabled && self.slave?)
-            Manager.replicate_to_master( 'update', self.to_xml(:skip_instruct => true, :only => [:name, :base_url]) )
+            self.add_to_outbox( 'update', self.to_xml(:skip_instruct => true, :only => [:name, :base_url]) )
         end
     end
 

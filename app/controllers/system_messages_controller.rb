@@ -7,7 +7,7 @@ class SystemMessagesController < ApplicationController
         @system_message = SystemMessage.find(params[:id])
         respond_to do |format|
                 @system_message.destroy
-                format.html { redirect_to(unprocessable_messages_manager_url(:id => @system_message.manager_id)) }
+                format.html { redirect_to( request.env["HTTP_REFERER"] ) }
                 format.xml  { head :ok }
         end
     end
