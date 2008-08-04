@@ -13,8 +13,6 @@ class CreateTacacsDaemons < ActiveRecord::Migration
       t.string :serial
       t.string :name
       t.string :ip
-      t.boolean :is_monitored, :default => false
-      t.boolean :is_down, :default => true
       t.integer :port, :default => 4949
       t.integer :max_clients, :default => 30
       t.integer :sock_timeout, :default => 100

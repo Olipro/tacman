@@ -17,7 +17,7 @@ class ManagersController < ApplicationController
                 format.xml  { render :xml => @manager.errors, :status => :not_acceptable }
             elsif (@manager.approve!)
                 begin
-                    MiddleMan.worker(:outbox_manager_worker).async_write_remote(:arg => @manager.id)
+                    MiddleMan.worker(:queue_worker).async_write_remote(:arg => @manager.id)
                 rescue Exception => error
                     @manager.errors.add_to_base("Error writing remote: #{error}")
                 end
@@ -37,7 +37,7 @@ class ManagersController < ApplicationController
         respond_to do |format|
             @nav = 'local_nav'
             cmd = params[:command]
-            cmd = nil if ( cmd != 'start' && cmd != 'stop' )
+            cmd = nil if ( cmd != 'start' && cmd != 'stop' && cmd != 'restart' )
             @status = Manager.backgroundrb_control(cmd)
             @manager = Manager.local
             format.html {render :action => :backgroundrb}

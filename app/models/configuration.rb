@@ -586,27 +586,21 @@ class Configuration < ActiveRecord::Base
     end
 
     def publish
-        managers = {}
-        self.tacacs_daemons.each {|td| managers[td.manager_id] = td.manager if (!td.local? && !managers.has_key?(td.manager_id) ) }
-        managers.each_value do |m|
-            m.add_to_outbox('update', "<publish><id type=\"integer\">#{self.id}</id></publish>" )
-            begin
-                MiddleMan.worker(:outbox_manager_worker).async_write_remote(:arg => self.id)
-            rescue Exception => error
-                self.errors.add_to_base("Publishing error: #{error}")
+        local_daemons_count = self.tacacs_daemons.count(:conditions => 'manager_id = null')
+        remote_daemons = self.tacacs_daemons.find(:all, :conditions => 'manager_id != null')
+
+        if (remote_daemons.length > 0)
+            managers = {}
+            remote_daemons.each {|td| managers[td.manager_id] = td.manager }
+            managers.each_value do |m|
+                m.add_to_outbox('update', "<publish><id type=\"integer\">#{self.id}</id></publish>" )
             end
         end
 
         # request delayed restart of tacacs daemons. this should prevent consecutive publish requests from
         # creating a dos situation on the daemons
-        if (!self.publish_scheduled?)
-            self.schedule_publish(60) # schedule publish for 60 seconds from now
-            begin
-                MiddleMan.worker(:publisher_worker).async_restart_tacacs_daemons(:arg => self.id)
-            rescue Exception => error
-                self.errors.add_to_base("Publishing error: #{error}")
-            end
-        end
+        self.schedule_publish(60) if (local_daemons_count > 0 && !self.publish_scheduled?)
+
         return(true)
     end
 
@@ -636,6 +630,11 @@ class Configuration < ActiveRecord::Base
 
     def schedule_publish(seconds)
         self.publish_lock.update_attribute(:expires_at, Time.now + seconds)
+        begin
+            MiddleMan.worker(:queue_worker).async_restart_tacacs_daemons(:arg => self.id)
+        rescue Exception => error
+            self.errors.add_to_base("Publishing error: #{error}")
+        end
     end
 
 private

@@ -131,7 +131,20 @@ class Manager < ActiveRecord::Base
         status = 'stopped'
         msg = ''
 
-        if (cmd == 'start')
+        if (cmd == 'restart')
+            child_pid = Process.fork do
+                Process.setsid
+
+                # have to do this to stop this proccess from inheriting the open
+                # TCPServer IO from mongrel
+                ObjectSpace.each_object(TCPSocket) {|sock| sock.reopen('/dev/null', 'r'); sock.close}
+
+                exec "#{RAILS_ROOT}/script/backgroundrb stop; #{RAILS_ROOT}/script/backgroundrb start -e #{RAILS_ENV}"
+            end
+            Process.wait(child_pid)
+            return(Manager.backgroundrb_control)
+
+        elsif (cmd == 'start')
             child_pid = Process.fork do
                 Process.setsid
 
@@ -452,18 +465,18 @@ class Manager < ActiveRecord::Base
                             end
                         end
                     end
-
-                    # fire off background job to process the inbox
-                    MiddleMan.worker(:inbox_manager_worker).async_process_inbox(:arg => self.id)
                 end
-            rescue BackgrounDRb::BdrbConnError => error
-                msg = "Error with BackgrounDRB: #{error}"
-                Manager.local.log(:level => 'error', :message => msg)
-                self.errors.add_to_base(msg)
-                return(false)
+
             rescue Exception => error
                 self.errors.add_to_base("Error processing system messages: #{error}")
                 return(false)
+            end
+
+            begin
+                # fire off background job to process the inbox
+                MiddleMan.worker(:queue_worker).async_process_inbox(:arg => self.id)
+            rescue
+                Manager.local.log(:level => 'error', :message => "Manager#add_to_inbox - Error with BackgrounDRB: #{error}")
             end
         else
             self.errors.add_to_base("No messages could be found.")
@@ -480,11 +493,10 @@ class Manager < ActiveRecord::Base
         if (self.is_approved)
             msg = self.system_messages.build(:queue => 'outbox', :verb => verb, :content => content)
             if (msg.save)
-                if (self.is_enabled && !self.outbox_locked?)
-                    begin
-                        MiddleMan.worker(:outbox_manager_worker).async_write_remote(:arg => self.id)
-                    rescue
-                    end
+                begin
+                    MiddleMan.worker(:queue_worker).async_write_remote(:arg => self.id) if (self.is_enabled && !self.outbox_locked?)
+                rescue Exception => error
+                    self.errors.add_to_base("BackgrounDRb error: #{error}")
                 end
                 return(true)
             else
@@ -797,8 +809,11 @@ class Manager < ActiveRecord::Base
         messages = REXML::Element.new("system-messages")
         out_msgs.each do |m|
             if (m.content.blank?)
-                Manager.local.log(:level => 'error', :message => "SystemMessage #{m.id} was missing content. Maybe content file was missing or empty?")
-                m.destroy
+                msg = "Error with outbox message #{m.id}. Content empty or content file missing."
+                Manager.local.log(:level => 'error', :message => msg)
+                m.error_log = msg
+                m.queue = 'unprocessable'
+                m.save
                 next
             end
             cur_revision += 1
@@ -816,21 +831,22 @@ class Manager < ActiveRecord::Base
                 return(true)
 
             elsif ( response.kind_of?(Net::HTTPForbidden) )
-                self.errors.add_to_base("Authentication failure.")
-                Manager.local.log(:manager_id => self.id, :message => "Authorization failure on Manager #{self.name}. Disabling messaging.")
+                Manager.local.log(:manager_id => self.id, :message => "Manager#write_remote_inbox! - authorization failure on Manager #{self.name}. Disabling messaging.")
                 self.disable!('authentication failure.')
             elsif (response.kind_of?(Net::HTTPNotAcceptable))
                 body = response.body
                 doc = REXML::Document.new(body)
                 if (doc.root.name == 'errors')
-                     doc.root.each_element {|e| self.errors.add_to_base(e.text) }
+                    error = ''
+                    doc.root.each_element {|e| error << e.text + "\n" }
+                    Manager.local.log(:level => 'warn', :message => "Manager#write_remote_inbox! - raised errors: #{error}")
                 end
             else
-                self.errors.add_to_base("Unexpected response: #{response.class}")
+                Manager.local.log(:level => 'warn', :message => "Manager#write_remote_inbox! - unexpected response: #{response.class}")
             end
 
         rescue Exception => error
-            self.errors.add_to_base("Web services call raised errors: #{error}")
+            Manager.local.log(:level => 'warn', :message => "Manager#write_remote_inbox! - raised errors: #{error}")
         end
 
         return(false)

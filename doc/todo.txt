@@ -10,11 +10,7 @@
 features & bugs
 ---------------
 
-* is there a more efficient way to check outbox_locked? on add_to_outbox
-* need a way to clear system message if it is missing verb or content
-  this becomes a problem if system log is is invalid. keeps trying to send, and keeps making
-  more system logs.
-* backgroundrb seems to be constantly thrashing the db reading job queue status or something gay
+* figure out how to call background methods without auto loading the worker. load_and_invoke?
 
 * need a way to periodically restart backgroundrb. maybe a cron job for user 'apache'
 

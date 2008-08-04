@@ -41,7 +41,7 @@ class SystemMessage < ActiveRecord::Base
         begin
             content_hash = Hash.from_xml(self.content)
         rescue Exception => error
-            self.error_log = "Error decoding message content XML: #{error}"
+            self.error_log = "Error decoding content XML from inbox message: #{error}"
             self.queue = 'unprocessable'
             self.save
             return(expected_revision)

@@ -14,42 +14,12 @@
 
 :schedules:
 
-  # daily archiver runs at midnight
-  :archiver_worker:
-    :daily_archive:
+  :hourly_worker:
+    :hourly_tasks:
+      :trigger_args: 0 30 * * * * *
+
+  :nightly_worker:
+    :nightly_tasks:
       :trigger_args: 0 0 0 * * * *
 
-  # check the inbox every hour
-  :inbox_manager_worker:
-    :process_all_inbox:
-      :trigger_args: 0 10 * * * * *
-
-  # check outbox every hour
-  :outbox_manager_worker:
-    :write_all_remote:
-      :trigger_args: 0 5 * * * * *
-
-  # tacacs daemons
-  :daemon_manager_worker:
-
-    # gather up aaa logs every 20 minutes
-    :gather_aaa_logs:
-      :trigger_args: 0 */20 * * * * *
-
-  # users
-  :user_manager_worker:
-
-    :cleanup_sessions:
-      :trigger_args: 0 0 * * * * *
-
-    :disable_inactive:
-      :trigger_args: 0 0 0 * * * *
-
-    # mail logs daily
-    :daily_logs:
-      :trigger_args: 59 59 23 * * * *
-
-    # mail configuration changelogs
-    :configuration_changelog:
-      :trigger_args: 59 59 23 * * * *
 
