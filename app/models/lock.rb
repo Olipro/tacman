@@ -8,7 +8,11 @@ class Lock < ActiveRecord::Base
 
 
     def active?
-        return(true) if (self.expires_at && Time.now < self.expires_at)
+        if (self.expires_at && Time.now < self.expires_at)
+            return(true)
+        elsif(self.expires_at)
+            self.update_attribute(:expires_at, nil)
+        end
         return(false)
     end
 

@@ -16,13 +16,8 @@ class ManagersController < ApplicationController
                 format.html { render :action => :show }
                 format.xml  { render :xml => @manager.errors, :status => :not_acceptable }
             elsif (@manager.approve!)
-                begin
-                    MiddleMan.worker(:queue_worker).async_write_remote(:arg => @manager.id)
-                rescue Exception => error
-                    @manager.errors.add_to_base("Error writing remote: #{error}")
-                end
                 flash[:notice] = "#{@manager.name} has been approved."
-                @local_manager.log(:username => @session_user.username, :manager_id=> @manager.id, :message => "Approved Manager '#{@manager.name}'")
+                @local_manager.log(:username => @session_user.username, :manager_id=> @manager.id, :message => "Approved Manager #{@manager.name}")
                 format.html { redirect_to manager_url(@manager) }
                 format.xml  { head :ok }
             else
@@ -71,7 +66,7 @@ class ManagersController < ApplicationController
         respond_to do |format|
             @nav = "remote_nav"
             if (@manager.destroy)
-                @local_manager.log(:username => @session_user.username, :message => "Deleted Manager '#{@manager.name}'")
+                @local_manager.log(:username => @session_user.username, :message => "Deleted Manager #{@manager.name}")
                 if (@manager.master?)
                     format.html { redirect_to( show_master_managers_url) }
                 else
@@ -80,6 +75,24 @@ class ManagersController < ApplicationController
                 format.xml  { head :ok }
             else
                 format.html { render :action => :local }
+                format.xml  { render :xml => @manager.errors, :status => :not_acceptable }
+            end
+        end
+    end
+
+    def disable
+        @manager = Manager.find(params[:id])
+
+        respond_to do |format|
+            @nav = "remote_nav"
+            msg = "#{@session_user.username} disabled messaging for Manager #{@manager.name}"
+            if (@manager.disable!(msg))
+                flash[:notice] = "#{@manager.name} has been disabled."
+                @local_manager.log(:username => @session_user.username, :manager_id=> @manager.id, :message => msg)
+                format.html { redirect_to manager_url(@manager) }
+                format.xml  { head :ok }
+            else
+                format.html { render :action => :show }
                 format.xml  { render :xml => @manager.errors, :status => :not_acceptable }
             end
         end
@@ -110,13 +123,10 @@ class ManagersController < ApplicationController
 
         respond_to do |format|
             @nav = "remote_nav"
-            if (!@local_manager.master?)
-                @manager.errors.add_to_base("This action is only allowed on master systems.")
-                format.html { render :action => :show }
-                format.xml  { render :xml => @manager.errors, :status => :not_acceptable }
-            elsif (@manager.enable!)
-                flash[:notice] = "#{@manager.name} has been enabled."
-                @local_manager.log(:username => @session_user.username, :manager_id=> @manager.id, :message => "Enabled Manager '#{@manager.name}'")
+            msg = "#{@session_user.username} enabled messaging for Manager #{@manager.name}"
+            if (@manager.enable!)
+                flash[:notice] = msg
+                @local_manager.log(:username => @session_user.username, :manager_id=> @manager.id, :message => msg)
                 format.html { redirect_to manager_url(@manager) }
                 format.xml  { head :ok }
             else
@@ -215,6 +225,21 @@ class ManagersController < ApplicationController
             @nav = "remote_nav"
             format.html
             format.xml {render :xml => @manager.outbox.to_xml}
+        end
+    end
+
+    def process_inbox
+        @manager = Manager.find(params[:id])
+        if (@manager.queue_worker_inbox!)
+            flash[:notice] = "This may take a few moments to process. Please wait."
+        else
+            flash[:warning] = "BackgrounDRb error. Request could not be completed."
+        end
+
+        respond_to do |format|
+            @nav = "remote_nav"
+            format.html { redirect_to inbox_manager_url(@manager) }
+            format.xml  { head :ok }
         end
     end
 
@@ -562,7 +587,7 @@ class ManagersController < ApplicationController
 
         respond_to do |format|
             if @manager.update_attributes(params[:manager])
-                @local_manager.log(:username => @session_user.username, :manager_id=> @manager.id, :message => "Updated Manager '#{@manager.name}'")
+                @local_manager.log(:username => @session_user.username, :manager_id=> @manager.id, :message => "Updated Manager #{@manager.name}")
                 if (@manager.is_local)
                     @nav = "local_nav"
                     format.html { redirect_to local_managers_url} 
@@ -580,6 +605,21 @@ class ManagersController < ApplicationController
                 format.html { render :action => "edit" }
                 format.xml  { render :xml => @manager.errors, :status => :unprocessable_entity }
             end
+        end
+    end
+
+    def write_outbox
+        @manager = Manager.find(params[:id])
+        if (@manager.queue_worker_outbox!)
+            flash[:notice] = "This may take a few moments to process. Please wait."
+        else
+            flash[:warning] = "BackgrounDRb error. Request could not be completed."
+        end
+
+        respond_to do |format|
+            @nav = "remote_nav"
+            format.html { redirect_to outbox_manager_url(@manager) }
+            format.xml  { head :ok }
         end
     end
 

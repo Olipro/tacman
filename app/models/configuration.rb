@@ -631,7 +631,11 @@ class Configuration < ActiveRecord::Base
     def schedule_publish(seconds)
         self.publish_lock.update_attribute(:expires_at, Time.now + seconds)
         begin
-            MiddleMan.worker(:queue_worker).async_restart_tacacs_daemons(:arg => self.id)
+            worker_key = "publish#{self.id}"
+            if (MiddleMan.worker(:queue_worker, worker_key).worker_info[:status] == :stopped)
+                MiddleMan.new_worker(:worker => :queue_worker, :worker_key => worker_key )
+                MiddleMan.worker(:queue_worker, worker_key).async_restart_tacacs_daemons(:arg => self.id)
+            end
         rescue Exception => error
             self.errors.add_to_base("Publishing error: #{error}")
         end

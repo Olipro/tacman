@@ -13,7 +13,11 @@
     <% end %>
 
     <% if (@manager.is_approved && !@manager.is_enabled) %>
-    <%= link_to 'Enable', enable_manager_url(@manager), :confirm => "Confirm Enable", :method => :put %><br />
+    <%= link_to 'Enable Messaging', enable_manager_url(@manager), :confirm => "Confirm Enable", :method => :put %><br />
+    <% end %>
+
+    <% if (@manager.is_approved && @manager.is_enabled) %>
+    <%= link_to 'Disable Messaging', disable_manager_url(@manager), :confirm => "Confirm Disable", :method => :put %><br />
     <% end %>
 
     <% if (@manager.master?) %>

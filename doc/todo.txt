@@ -10,17 +10,9 @@
 features & bugs
 ---------------
 
-* fix all calls to middleman to look like add_to_outbox
-
-* need a way for user to force outbox write to remote, and process inbox
-
 * need a way for user to request aaa log gather
 
 * need a way to periodically restart backgroundrb. maybe a cron job for user 'apache'
-
-* should re-publish after system sync
-
-* test changes to outbox_manager_worker and writing to outbox
 
 * verify all workers
 

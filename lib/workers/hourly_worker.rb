@@ -10,6 +10,7 @@ class HourlyWorker < BackgrounDRb::MetaWorker
         @local_manager = Manager.local
         cleanup_sessions
         gather_aaa_logs
+        write_all_remote
         process_all_inbox
     end
 

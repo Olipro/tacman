@@ -400,11 +400,6 @@ private
     def destroy_on_remote_managers!
         if (!self.local?)
             self.manager.add_to_outbox('destroy', self.to_xml(:skip_instruct => true, :only => :id) )
-            begin
-                MiddleMan.worker(:queue_worker).async_write_remote(:arg => self.manager_id)
-            rescue Exception => error
-                self.errors.add_to_base("Publishing error: #{error}")
-            end
         end
     end
 
@@ -412,11 +407,6 @@ private
         if (!self.local?)
             self.manager.add_to_outbox('create', self.to_xml(:skip_instruct => true,
                                        :only => [:id, :configuration_id, :name, :ip, :port, :max_clients, :sock_timeout]) )
-            begin
-                MiddleMan.worker(:queue_worker).async_write_remote(:arg => self.manager_id)
-            rescue Exception => error
-                self.errors.add_to_base("Publishing error: #{error}")
-            end
         end
     end
 
@@ -435,11 +425,6 @@ private
         if (!self.local?)
             self.manager.add_to_outbox('update', self.to_xml(:skip_instruct => true,
                                        :only => [:id, :configuration_id, :name, :ip, :port, :max_clients, :sock_timeout]) )
-            begin
-                MiddleMan.worker(:queue_worker).async_write_remote(:arg => self.manager_id)
-            rescue Exception => error
-                self.errors.add_to_base("Publishing error: #{error}")
-            end
         end
     end
 

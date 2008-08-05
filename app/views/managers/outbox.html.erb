@@ -1,6 +1,10 @@
 <b style="font-size: 16px;">Outbox - <%= @manager.name %></b><br />
 <b>Queue Length: <%= @msg_count %></b><br />
-<b>Revision: <%= @manager.outbox_revision %></b><br /><br />
+<b>Revision: <%= @manager.outbox_revision %></b><br />
+<% if (@msg_count > 0) %>
+<%= link_to "Write Outbox Now!", write_outbox_manager_url(@manager), :style => "color: #7B2024; font-weight: bold;", :confirm => "Write Outbox?", :method => :post %><br />
+<% end %>
+<br />
 
 <% if (@manager.outbox_locked?) %>
 <b style="color: #7B2024; font-weight: bold;">Locked until: <%= @manager.outbox_lock.expires_at %></b><br />

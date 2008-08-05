@@ -89,6 +89,7 @@ class SystemMessage < ActiveRecord::Base
                             end
                         end
                     end
+                    Configuration.find(:all).each {|c| c.publish}
 
                 else
                     hash_to_model(key,val)
