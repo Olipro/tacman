@@ -21,6 +21,17 @@ private
         CGI::Session::ActiveRecordStore::Session.delete_all("updated_at < '#{time}'")
     end
 
+    def do_write(m)
+        count = m.system_messages.count(:conditions => "queue = 'outbox'")
+        if (count > 0 && m.is_enabled && !m.outbox_locked?)
+            m.lock_outbox(1800) # 30 min lock
+            m.write_remote_inbox!
+            m.unlock_outbox()
+        end
+
+        return(true)
+    end
+
     def gather_aaa_logs
          TacacsDaemon.find(:all, :conditions => "manager_id is null").each do |td|
             td.gather_aaa_logs!
@@ -40,6 +51,14 @@ private
                 m.unlock_inbox()
             end
         end
+    end
+
+    def write_all_remote
+        Manager.non_local.each do |manager|
+            thread_pool.defer(:do_write, manager)
+        end
+
+        return(true)
     end
 
 end

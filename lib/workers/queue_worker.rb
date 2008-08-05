@@ -16,13 +16,13 @@ class QueueWorker < BackgrounDRb::MetaWorker
             m.unlock_inbox()
         end
 
-        return(true)
+        exit
     end
 
     def restart_tacacs_daemons(configuration_id)
         @configuration = Configuration.find(configuration_id)
         delay = @configuration.publish_lock.expires_at - Time.now
-        add_timer(delay) {restart_tacacs_daemons} if (delay > 0)
+        add_timer(delay) {restart_tacacs_daemons; exit;} if (delay > 0)
     end
 
     def write_all_remote
@@ -31,13 +31,11 @@ class QueueWorker < BackgrounDRb::MetaWorker
             thread_pool.defer(:do_write, manager)
         end
 
-        return(true)
     end
 
     def write_remote(manager_id)
         m = Manager.find(manager_id)
         do_write(m)
-        return(true)
     end
 
 private
@@ -46,7 +44,7 @@ private
         count = m.system_messages.count(:conditions => "queue = 'outbox'")
         if (count > 0 && m.is_enabled && !m.outbox_locked?)
             m.lock_outbox(1800) # 30 min lock
-            add_timer(30) {m.write_remote_inbox!} # wait a bit before actually writing as to catch as many messages as possible
+            add_timer(30) {m.write_remote_inbox!; exit;} # wait a bit before actually writing as to catch as many messages as possible
             m.unlock_outbox()
         end
 

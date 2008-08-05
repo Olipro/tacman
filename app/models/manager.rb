@@ -474,8 +474,9 @@ class Manager < ActiveRecord::Base
 
             begin
                 # fire off background job to process the inbox
+                MiddleMan.new_worker(:worker => :queue_worker)
                 MiddleMan.worker(:queue_worker).async_process_inbox(:arg => self.id)
-            rescue
+            rescue Exception => error
                 Manager.local.log(:level => 'error', :message => "Manager#add_to_inbox - Error with BackgrounDRB: #{error}")
             end
         else
@@ -494,9 +495,15 @@ class Manager < ActiveRecord::Base
             msg = self.system_messages.build(:queue => 'outbox', :verb => verb, :content => content)
             if (msg.save)
                 begin
-                    MiddleMan.worker(:queue_worker).async_write_remote(:arg => self.id) if (self.is_enabled && !self.outbox_locked?)
+                    #MiddleMan.new_worker(:worker => :queue_worker, :worker_key => Time.now.strftime("%Y%m%d%H%M%S") )
+                    #MiddleMan.worker(:queue_worker).async_write_remote(:arg => self.id) if (self.is_enabled && !self.outbox_locked?)
+
+                    worker_key = "outbox#{self.id}-" + Time.now.strftime("%Y%m%d%H%M%S")
+                    MiddleMan.new_worker(:worker => :queue_worker, :worker_key => worker_key )
+                    MiddleMan.worker(:queue_worker, worker_key).async_write_remote(:arg => self.id)
                 rescue Exception => error
-                    self.errors.add_to_base("BackgrounDRb error: #{error}")
+                    local_manager = Manager.local
+                    local_manager.log(:level => 'error', :message => "Manager#add_to_outbox - BackgrounDRb error: #{error}") if (!local_manager.slave?)
                 end
                 return(true)
             else
