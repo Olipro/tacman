@@ -273,7 +273,7 @@ class Manager < ActiveRecord::Base
                 local.password = s.password
                 local.is_approved = true
                 local.is_local = false
-                local.system_logs.create(:level => 'warn', :message => "Successful remote system registration for (#{s.serial}) from #{from}")
+                local.log(:level => 'warn', :message => "Successful remote system registration for (#{s.serial}) from #{from}")
                 return(local)
             else
                 return(s)
