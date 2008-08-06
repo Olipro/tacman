@@ -9,7 +9,6 @@ class HourlyWorker < BackgrounDRb::MetaWorker
     def hourly_tasks
         @local_manager = Manager.local
         cleanup_sessions
-        gather_aaa_logs
         write_all_remote
         process_all_inbox
     end
@@ -31,17 +30,6 @@ private
         end
 
         return(true)
-    end
-
-    def gather_aaa_logs
-         TacacsDaemon.find(:all, :conditions => "manager_id is null").each do |td|
-            td.gather_aaa_logs!
-            if (td.errors.length > 0)
-                errors = td.errors.full_messages.join(' ')
-                @local_manager.log(:level => 'warn', :tacacs_daemon_id => td.id,
-                                   :message => "DaemonManager#gather_aaa_logs - #{td.name}: #{errors}")
-            end
-         end
     end
 
     def process_all_inbox()

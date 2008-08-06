@@ -10,8 +10,6 @@
 features & bugs
 ---------------
 
-* need a way for user to request aaa log gather
-
 * need a way to periodically restart backgroundrb. maybe a cron job for user 'apache'
 
 * verify all workers

@@ -1,4 +1,4 @@
-class NightlyWorker < BackgrounDRb::MetaWorker
+class DailyWorker < BackgrounDRb::MetaWorker
     set_worker_name :nightly_worker
     reload_on_schedule true
 
@@ -6,11 +6,11 @@ class NightlyWorker < BackgrounDRb::MetaWorker
         # this method is called, when worker is loaded for the first time
     end
 
-    def nightly_tasks
+    def daily_tasks
         @local_manager = Manager.local
         @configurations = Configuration.find(:all)
         disable_inactive
-        log_archive
+        cleanup_logs
         mail_configuration_changelog
         mail_daily_logs
         mail_password_expiry
@@ -19,6 +19,25 @@ class NightlyWorker < BackgrounDRb::MetaWorker
 
 
 private
+
+    def cleanup_logs
+
+        # archive logs
+        if (!@local_manager.slave?)
+            last = SystemLogArchive.find(:first, :order => "archived_on desc")
+            (last.archived_on..Date.today-1).each {|x| SystemLogArchive.archive}
+        end
+
+        # cleanup db and old archive files
+        SystemLogArchive.cleanup_logs!
+        SystemLogArchive.cleanup_archives!
+
+        # cleanup db and old archive files
+        @configurations.each do |configuration|
+            configuration.cleanup_logs!
+            configuration.cleanup_archives!
+        end
+    end
 
     def disable_inactive
         return(false) if (@local_manager.slave? || @local_manager.disable_inactive_users_after == 0)
@@ -37,25 +56,6 @@ private
         end
 
         return(true)
-    end
-
-    def log_archive
-
-        # archive logs
-        if (!@local_manager.slave?)
-            last = SystemLogArchive.find(:first, :order => "archived_on desc")
-            (last.archived_on..Date.today-1).each {|x| SystemLogArchive.archive}
-        end
-
-        # cleanup db and old archive files
-        SystemLogArchive.cleanup_logs!
-        SystemLogArchive.cleanup_archives!
-
-        # cleanup db and old archive files
-        @configurations.each do |configuration|
-            configuration.cleanup_logs!
-            configuration.cleanup_archives!
-        end
     end
 
     def mail_configuration_changelog
