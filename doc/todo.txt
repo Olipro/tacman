@@ -10,9 +10,9 @@
 features & bugs
 ---------------
 
-* verify all workers
+* publishing broken. worker is not restarting td and is not exiting
 
-* test publishing
+* verify all workers
 
 * test account lockout
 

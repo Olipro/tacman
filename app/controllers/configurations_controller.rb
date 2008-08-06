@@ -485,9 +485,14 @@ class ConfigurationsController < ApplicationController
 
     def publish
         @configuration.publish
+        if (@configuration.errors.length == 0)
+            flash[:notice] = "Changes published, but may take a few minutes to propagate."
+        else
+            flash[:warning] = "Publishing error. Check system logs."
+        end
+
         respond_to do |format|
             @nav = 'show_nav'
-            flash[:notice] = "Changes published, but may take a few minutes to propagate."
             @local_manager.log(:username => @session_user.username, :configuration_id => @configuration.id, :message => "Published configuration #{@configuration.name}.")
             format.html { redirect_to( request.env["HTTP_REFERER"] ) }
             format.xml  { head :ok }

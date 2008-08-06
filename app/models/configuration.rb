@@ -636,7 +636,9 @@ class Configuration < ActiveRecord::Base
                 MiddleMan.worker(:queue_worker, worker_key).async_restart_tacacs_daemons(:arg => self.id)
             end
         rescue Exception => error
+            Manager.local.log(:level => 'error', :configuration_id => self.id, :message => "Publishing error: #{error}")
             self.errors.add_to_base("Publishing error: #{error}")
+            self.publish_lock.update_attribute(:expires_at, nil)
         end
     end
 
