@@ -831,7 +831,7 @@ class Manager < ActiveRecord::Base
         out_msgs.each do |m|
             if (m.content.blank?)
                 msg = "Error with outbox message #{m.id}. Content empty or content file missing."
-                Manager.local.log(:level => 'error', :message => msg)
+                Manager.local.log(:level => 'error', :manager_id => self.id, :message => msg)
                 m.error_log = msg
                 m.queue = 'unprocessable'
                 m.save

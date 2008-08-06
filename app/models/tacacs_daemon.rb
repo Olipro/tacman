@@ -15,8 +15,9 @@ class TacacsDaemon < ActiveRecord::Base
 
 
     after_create :setup
-    after_create :create_locks
     after_create :create_on_remote_managers!
+    after_create :save
+    after_create :create_locks
     after_destroy :destroy_on_remote_managers!
     after_destroy :cleanup
     after_update :update_on_remote_managers!
@@ -392,7 +393,6 @@ private
         self.configuration_file = File.expand_path("#{RAILS_ROOT}/tmp/configurations/") + "/#{self.serial}"
         self.aaa_log_file = File.expand_path("#{RAILS_ROOT}/tmp/aaa_logs/") + "/#{self.serial}"
         self.aaa_scratch_file = File.expand_path("#{RAILS_ROOT}/tmp/aaa_logs_scratch/") + "/#{self.serial}"
-        self.save
     end
 
     def update_on_remote_managers!

@@ -96,7 +96,7 @@ class SystemMessage < ActiveRecord::Base
                 end
 
             rescue Exception => error
-                Manager.local.log(:level => 'error', :message => "Unprocessable SystemMessage encountered.")
+                Manager.local.log(:level => 'error', :manager_id => self.manager_id, :message => "Unprocessable SystemMessage encountered.")
                 self.error_log = "Processing error:\n" + error + "\n" + error.backtrace.join("\n")
                 self.queue = 'unprocessable'
                 self.save
