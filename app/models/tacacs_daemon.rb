@@ -70,11 +70,6 @@ class TacacsDaemon < ActiveRecord::Base
         return(true)
     end
 
-    def down!
-        self.is_down = true
-        self.save
-    end
-
     def error_log
         if (local?)
             log = ''
@@ -165,20 +160,6 @@ class TacacsDaemon < ActiveRecord::Base
 
     def lock_aaa_file(seconds)
         self.aaa_lock.update_attribute(:expires_at, Time.now + seconds)
-    end
-
-    def monitor_on!
-        if (!self.is_monitored)
-            self.is_monitored = true
-            self.save
-        end
-    end
-
-    def monitor_off!
-        if (self.is_monitored)
-            self.is_monitored = false
-            self.save
-        end
     end
 
     def pid
@@ -283,7 +264,6 @@ class TacacsDaemon < ActiveRecord::Base
         sleep(1)
         if (self.running?)
             started = true
-            self.monitor_on!
         else
             self.errors.add_to_base("TACACS+ server failed to start. See error log.")
         end
@@ -323,18 +303,12 @@ class TacacsDaemon < ActiveRecord::Base
                 Process.kill('INT', self.pid)
                 sleep(1)
                 stopped = true
-                self.monitor_off!
             rescue Errno::ESRCH => error
                 self.errors.add_to_base("Could not stop daemon. #{error}")
             end
         end
 
         return(stopped)
-    end
-
-    def up!
-        self.is_down = false
-        self.save
     end
 
     def unlock_aaa_file()

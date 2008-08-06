@@ -35,10 +35,10 @@ module ConfigurationsHelper
 
     def configured_user_settings_description(cu)
         str = ""
-        str << "Authorization AVPair: &nbsp&nbsp<b>#{cu.author_avpair.name}</b><br />" if (cu.author_avpair_id)
-        str << "Command Authorization Profile: &nbsp&nbsp<b>#{cu.command_authorization_profile.name}</b><br />" if (cu.command_authorization_profile_id)
-        str << "Login ACL: &nbsp&nbsp<b>#{cu.login_acl.name}</b><br />" if (cu.login_acl_id)
-        str << "Enable ACL: &nbsp&nbsp<b>#{cu.enable_acl.name}</b>" if (cu.enable_acl_id)
+        str << "<b>Authorization AVPair:</b> &nbsp&nbsp#{cu.author_avpair.name}<br />" if (cu.author_avpair_id)
+        str << "<b>Command Authorization Profile:</b> &nbsp&nbsp#{cu.command_authorization_profile.name}<br />" if (cu.command_authorization_profile_id)
+        str << "<b>Login ACL:</b> &nbsp&nbsp#{cu.login_acl.name}<br />" if (cu.login_acl_id)
+        str << "<b>Enable ACL:</b> &nbsp&nbsp#{cu.enable_acl.name}" if (cu.enable_acl_id)
         return(str)
     end
 end

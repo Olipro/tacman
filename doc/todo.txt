@@ -10,8 +10,6 @@
 features & bugs
 ---------------
 
-* need a way to periodically restart backgroundrb. maybe a cron job for user 'apache'
-
 * verify all workers
 
 * test publishing

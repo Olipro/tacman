@@ -192,6 +192,11 @@ production:
 
     <p>
       <b>Set up cron to restart BackgrounDRb nightly.</b><br><br>
+      <code>crontab -u apache -e</code><br />
+      <textarea cols="120" rows="7" readonly>
+# m h  dom mon dow   command
+  20 0  *   *   *     /var/tacman/script/backgroundrb stop; /var/tacman/script/backgroundrb start -e production
+      </textarea>
 
     </p>
     <br>
