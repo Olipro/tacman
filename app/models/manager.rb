@@ -267,13 +267,13 @@ class Manager < ActiveRecord::Base
             s.password = (1..32).collect { (i = Kernel.rand(62); i += ((i < 10) ? 48 : ((i < 36) ? 55 : 61 ))).chr }.join
 
             if (s.save)
+                local.log(:level => 'warn', :message => "Successful remote system registration for (#{s.serial}) from #{from}")
                 # modify self to send to slave
                 local.id = nil
                 local.serial = s.serial
                 local.password = s.password
                 local.is_approved = true
                 local.is_local = false
-                local.log(:level => 'warn', :message => "Successful remote system registration for (#{s.serial}) from #{from}")
                 return(local)
             else
                 return(s)
