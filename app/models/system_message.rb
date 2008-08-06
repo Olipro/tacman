@@ -62,7 +62,7 @@ class SystemMessage < ActiveRecord::Base
                     Manager.transaction do
                         AaaLog.delete_all
                         AaaLogArchive.destroy_all
-                        Lock.delete_all("manager_id = null")
+                        Lock.delete_all("manager_id = ''")
                         ConfiguredUser.delete_all
                         PasswordHistory.delete_all
                         UserLastLogin.delete_all

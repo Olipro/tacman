@@ -586,8 +586,8 @@ class Configuration < ActiveRecord::Base
     end
 
     def publish
-        local_daemons_count = self.tacacs_daemons.count(:conditions => 'manager_id = null')
-        remote_daemons = self.tacacs_daemons.find(:all, :conditions => 'manager_id != null')
+        local_daemons_count = self.tacacs_daemons.count(:conditions => "manager_id = ''")
+        remote_daemons = self.tacacs_daemons.find(:all, :conditions => "manager_id != ''")
 
         if (remote_daemons.length > 0)
             managers = {}

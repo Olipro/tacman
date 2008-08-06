@@ -10,7 +10,7 @@ class SystemLogArchive < ActiveRecord::Base
         ret_status = true
 
         # update entries which will be archived today
-        SystemLogArchive.update_all("archived_on = '#{Date.today.to_s}'", "archived_on = null")
+        SystemLogArchive.update_all("archived_on = '#{Date.today.to_s}'", "archived_on = ''")
 
         managers = {}
         Manager.find(:all).each {|m| managers[m.id] = m.name}
