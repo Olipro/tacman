@@ -10,13 +10,19 @@
 features & bugs
 ---------------
 
-* publishing broken. worker is not restarting td and is not exiting
+* system log archive page is broken
+
+* test aaa log archive
+
+* test publishing to slave
 
 * verify all workers
 
 * test account lockout
 
 * import old logs into new system
+
+* need to be able to edit manager passwords
 
 * script to port users to new system
 User.find(:all).each {|u| puts "#{u.username}, #{u.hashed_password}, #{u.hashed_enable}, #{u.salt}, #{u.first_name} #{u.last_name}, #{u.email},, #{u.department}\n"}

@@ -18,6 +18,8 @@ class ConfigurationsController < ApplicationController
     before_filter :force_pw_change
 
     def aaa_log_archives
+        @files = AaaLogArchive.paginate(:page => params[:page], :per_page => @local_manager.pagination_per_page,
+                                        :order => :archived_on, :conditions => "configuration_id = #{@configuration.id}")
         respond_to do |format|
             @nav = 'show_nav'
             format.html
@@ -485,13 +487,8 @@ class ConfigurationsController < ApplicationController
 
     def publish
         @configuration.publish
-        if (@configuration.errors.length == 0)
-            flash[:notice] = "Changes published, but may take a few minutes to propagate."
-        else
-            flash[:warning] = "Publishing error. Check system logs."
-        end
-
         respond_to do |format|
+            flash[:notice] = "Publish requested, but will take a few minutes to complete."
             @nav = 'show_nav'
             @local_manager.log(:username => @session_user.username, :configuration_id => @configuration.id, :message => "Published configuration #{@configuration.name}.")
             format.html { redirect_to( request.env["HTTP_REFERER"] ) }

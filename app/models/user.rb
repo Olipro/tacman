@@ -172,7 +172,7 @@ class User < ActiveRecord::Base
     end
 
     def configuration_hash
-        config = {:disabled => false }
+        config = {}
         config[:disabled] = true if (self.disabled?)
         config[:enable_password] = self.enable_password.password_hash
         config[:enable_password_expires_on] = self.enable_password.expires_on.to_s if (self.enable_password_lifespan != 0)

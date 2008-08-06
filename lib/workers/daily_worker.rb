@@ -22,17 +22,14 @@ private
 
     def cleanup_logs
 
-        # archive logs
-        if (!@local_manager.slave?)
-            last = SystemLogArchive.find(:first, :order => "archived_on desc")
-            (last.archived_on..Date.today-1).each {|x| SystemLogArchive.archive}
-        end
+        # archive system logs
+        SystemLogArchive.archive if (!@local_manager.slave?)
 
         # cleanup db and old archive files
         SystemLogArchive.cleanup_logs!
         SystemLogArchive.cleanup_archives!
 
-        # cleanup db and old archive files
+        # cleanup db and old aaa archive files
         @configurations.each do |configuration|
             configuration.cleanup_logs!
             configuration.cleanup_archives!

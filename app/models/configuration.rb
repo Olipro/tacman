@@ -633,7 +633,7 @@ class Configuration < ActiveRecord::Base
             worker_key = "publish#{self.id}"
             if (MiddleMan.worker(:queue_worker, worker_key).worker_info[:status] == :stopped)
                 MiddleMan.new_worker(:worker => :queue_worker, :worker_key => worker_key )
-                MiddleMan.worker(:queue_worker, worker_key).async_restart_tacacs_daemons(:arg => self.id)
+                MiddleMan.worker(:queue_worker, worker_key).async_publish_configuration(:arg => self.id)
             end
         rescue Exception => error
             Manager.local.log(:level => 'error', :configuration_id => self.id, :message => "Publishing error: #{error}")

@@ -304,7 +304,7 @@ class UsersController < ApplicationController
         @user.publish!
         respond_to do |format|
             @nav = 'show_nav'
-            flash[:notice] = "Changes published but may take a few minutes to take effect."
+            flash[:notice] = "Publish requested, but will take a few minutes to complete."
             @local_manager.log(:username => @session_user.username, :user_id => @user.id, :message => "Published user #{@user.username}.")
             format.html { redirect_to( request.env["HTTP_REFERER"] ) }
             format.xml  { head :ok }
@@ -513,6 +513,7 @@ class UsersController < ApplicationController
             else
                 @user.toggle_enable_expiry!
                 @local_manager.log(:username => @session_user.username, :user_id=> @user.id, :message => "Toggled enable expiry (current=#{@user.enable_password_expired?}) for user #{@user.username}.")
+                flash[:notice] = "You must publish this user before changes will take effect on TACACS+ daemons."
                 format.html { redirect_to user_url(@user) }
                 format.xml  { head :ok }
             end
@@ -534,6 +535,7 @@ class UsersController < ApplicationController
             else
                 @user.toggle_password_expiry!
                 @local_manager.log(:username => @session_user.username, :user_id=> @user.id, :message => "Toggled password expiry (current=#{@user.login_password_expired?}) for user #{@user.username}.")
+                flash[:notice] = "You must publish this user before changes will take effect on TACACS+ daemons."
                 format.html { redirect_to user_url(@user) }
                 format.xml  { head :ok }
             end
@@ -657,7 +659,7 @@ class UsersController < ApplicationController
                 end
 
                 @local_manager.log(:username => @session_user.username, :user_id=> @user.id, :message => "Reset enable password for user #{@user.username}.")
-                flash[:notice] = "Change won't be effective on TACACS+ daemons until it is published."
+                flash[:notice] = "You must publish this user before changes will take effect on TACACS+ daemons."
                 format.html { redirect_to user_url(@user) }
                 format.xml  { head :ok }
             else
@@ -696,7 +698,7 @@ class UsersController < ApplicationController
                 end
 
                 @local_manager.log(:username => @session_user.username, :user_id=> @user.id, :message => "Reset password for user #{@user.username}.")
-                flash[:notice] = "Change won't be effective on TACACS+ daemons until it is published."
+                flash[:notice] = "You must publish this user before changes will take effect on TACACS+ daemons."
                 format.html { redirect_to user_url(@user) }
                 format.xml  { head :ok }
             else

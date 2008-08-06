@@ -22,20 +22,20 @@ class QueueWorker < BackgrounDRb::MetaWorker
         exit
     end
 
-    def restart_tacacs_daemons(configuration_id)
+    def publish_configuration(configuration_id)
         begin
             configuration = Configuration.find(configuration_id)
             delay = configuration.publish_lock.expires_at - Time.now
             if (delay > 0)
                 add_timer(delay) do
                     begin
-                        configuration.tacacs_daemons.find(:all, :conditions => "manager_id is null").each {|td| td.restart}
+                        reload_tacacs_daemon(configuration)
                     rescue
                     end
                     exit
                 end
             else
-                configuration.tacacs_daemons.find(:all, :conditions => "manager_id is null").each {|td| td.restart}
+                reload_tacacs_daemon(configuration)
                 exit
             end
         rescue
@@ -64,8 +64,11 @@ class QueueWorker < BackgrounDRb::MetaWorker
 
 private
 
-    def restart_tacacs_daemons
-        @configuration.tacacs_daemons.find(:all, :conditions => 'manager_id = null').each {|td| td.restart}
+    def reload_tacacs_daemon(configuration)
+        configuration.tacacs_daemons.find(:all, :conditions => 'manager_id is null').each do |td|
+            td.write_config_file
+            td.reload_server
+        end
     end
 
 end

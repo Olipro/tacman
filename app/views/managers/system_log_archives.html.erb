@@ -1,12 +1,26 @@
 <b style="font-size: 16px;">Archived Logs</b><br /><br />
 
 
-<b>Due to the way logs are archived the entries may be out of order. All fields are tab delimited.</b><br /><br />
+<b>Due to the way logs are archived the entries may be out of order. All fields are tab delimited.</b><br />
 
-<% form_for(:manager, :url => download_archived_log_managers_url(), :html => { :method => :post }) do |f| %>
-<b>Filename:</b>&nbsp<%= select_tag("system_log_archive_id", options_for_select(SystemLogArchive.find(:all, :order => :archived_on).collect {|x| [File.basename(x.archive_file), x.id  ] }) ) %>
-<%= submit_tag "Download" %>
-<% end %>
+  <table class="index_list">
+    <tr><td style="border-bottom: 1px solid #000000;"><%= will_paginate @files %></td></tr>
+    <tr><td>&nbsp</td></tr>
 
+    <% shaded = true %>
+    <% for file in @files %>
+        <% if (shaded) %>
+            <tr class="shaded">
+            <% shaded = false %>
+        <% else %>
+            <tr class="light_shaded">
+            <% shaded = true %>
+        <% end %>
+      <td><%= link_to File.basename(file.archive_file), :action => :download_archived_log, :system_log_archive_id => file.id, :method => :post %></td>
+    </tr>
+    <% end %>
+    <tr><td>&nbsp</td></tr>
+    <tr><td style="border-top: 1px solid #000000;"><%= will_paginate @files %></td></tr>
+  </table>
 
 <br />

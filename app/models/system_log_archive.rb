@@ -9,14 +9,11 @@ class SystemLogArchive < ActiveRecord::Base
     def SystemLogArchive.archive
         ret_status = true
 
-        # update entries which will be archived today
-        SystemLogArchive.update_all("archived_on = '#{Date.today.to_s}'", "archived_on is null")
-
         managers = {}
         Manager.find(:all).each {|m| managers[m.id] = m.name}
 
         logs = {}
-        SystemLog.find(:all, :conditions => "archived_on = '#{Date.today.to_s}'", :order => :created_at).each do |l|
+        SystemLog.find(:all, :conditions => "archived_on is null", :order => :created_at).each do |l|
             day = l.created_at.strftime("%Y-%m-%d")
             log_str = "#{l.created_at}\t#{l.level}\t#{managers[l.owning_manager_id]}\t#{l.username}\t#{l.message}\n"
             if ( logs.has_key?(day) )
@@ -37,6 +34,8 @@ class SystemLogArchive < ActiveRecord::Base
                 f = File.open(filename, 'a')
                 f.print(log)
                 f.close
+                SystemLog.update_all("archived_on = '#{Date.today.to_s}'",
+                                     "archived_on is null and created_at >= '#{day} 00:00:00' and created_at <= '#{day} 23:59:59'")
             rescue Exception => error
                 Manager.local.log(:message => "SystemLogArchive - Error writing to archive file: #{error}")
                 ret_status = false
