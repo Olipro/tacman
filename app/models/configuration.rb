@@ -30,8 +30,6 @@ class Configuration < ActiveRecord::Base
 
 
     after_create :setup
-    after_create :create_on_remote_managers!
-    after_create :save
     after_create :create_locks
     after_destroy :destroy_on_remote_managers!
     after_destroy :cleanup
@@ -667,6 +665,8 @@ private
     def setup
         self.serial = Time.now.strftime("%Y%m%d-%H%M%S-") << self.id.to_s
         self.aaa_log_dir = File.expand_path("#{RAILS_ROOT}/log/aaa_logs/") + "/#{self.serial}/"
+        self.save
+        create_on_remote_managers!
 
         begin
             FileUtils.mkdir(self.aaa_log_dir)
