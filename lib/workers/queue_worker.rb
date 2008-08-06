@@ -12,7 +12,7 @@ class QueueWorker < BackgrounDRb::MetaWorker
             m = Manager.find(manager_id)
             count = m.system_messages.count(:conditions => "queue = 'inbox'")
             if (count > 0 && !m.inbox_locked?)
-                m.lock_inbox(1800) # 30 min lock
+                m.lock_inbox(900) # 15 min lock
                 m.process_inbox!
                 m.unlock_inbox()
             end
@@ -44,7 +44,7 @@ class QueueWorker < BackgrounDRb::MetaWorker
         m = Manager.find(manager_id)
         count = m.system_messages.count(:conditions => "queue = 'outbox'")
         if (count > 0 && m.is_enabled && !m.outbox_locked?)
-            m.lock_outbox(1800) # 30 min lock
+            m.lock_outbox(900) # 15 min lock
             add_timer(30) do
                 begin
                     m.write_remote_inbox!
