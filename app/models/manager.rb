@@ -924,7 +924,7 @@ private
     end
 
     def set_serial
-        self.serial = Time.now.strftime("%Y%m%d-%H%M%S-") << self.id.to_s
+        self.serial = Time.now.strftime("%Y%m%d-%H%M%S-") << self.id.to_s if (self.serial.blank?)
         self.save
     end
 
