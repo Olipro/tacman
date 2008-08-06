@@ -542,7 +542,7 @@ class Manager < ActiveRecord::Base
         elsif (!self.is_enabled)
             self.is_enabled = true
             self.disabled_message = nil
-            self.add_to_outbox('create', Manager.export)
+            self.add_to_outbox('create', Manager.export) if (!self.master?)
             return(self.save)
         else
             self.errors.add_to_base("Manager is already enabled.")
