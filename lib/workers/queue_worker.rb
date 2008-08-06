@@ -29,7 +29,7 @@ class QueueWorker < BackgrounDRb::MetaWorker
             if (delay > 0)
                 add_timer(delay) do
                     begin
-                        restart_tacacs_daemons
+                        @configuration.tacacs_daemons.find(:all, :conditions => "manager_id is null").each {|td| td.restart}
                     rescue
                     end
                     exit
