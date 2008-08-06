@@ -665,8 +665,8 @@ private
     def setup
         self.serial = Time.now.strftime("%Y%m%d-%H%M%S-") << self.id.to_s
         self.aaa_log_dir = File.expand_path("#{RAILS_ROOT}/log/aaa_logs/") + "/#{self.serial}/"
-        self.save
         create_on_remote_managers!
+        self.save
 
         begin
             FileUtils.mkdir(self.aaa_log_dir)
