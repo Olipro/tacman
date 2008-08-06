@@ -34,6 +34,8 @@ class QueueWorker < BackgrounDRb::MetaWorker
                     end
                     exit
                 end
+            else
+                @configuration.tacacs_daemons.find(:all, :conditions => "manager_id is null").each {|td| td.restart}
             end
         rescue
             exit
