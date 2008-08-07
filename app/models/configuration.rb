@@ -113,11 +113,17 @@ class Configuration < ActiveRecord::Base
     end
 
     def archive_aaa_logs(date, logs)
-        file = self.aaa_log_dir + date + ".txt"
         arch = AaaLogArchive.find_by_archived_on(date)
         if (!arch)
-            arch = self.aaa_log_archives.create(:archive_file => file, :archived_on => date)
+            arch = self.aaa_log_archives.create(:archive_file => self.aaa_log_dir + date + ".txt", :archived_on => date)
+        elsif (arch.zipped?)
+            if (!arch.unzip!)
+                local_manager.log(:message => "SystemLogArchive - Error unzipping #{arch.archive_file}: #{arch.errors.full_messages.join(' ')}")
+                return(false)
+            end
         end
+
+        file = arch.archive_file
 
         begin
             f = File.open(arch.archive_file, 'a')

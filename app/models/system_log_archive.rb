@@ -7,6 +7,7 @@ class SystemLogArchive < ActiveRecord::Base
 
     # return true on success, return false if any errors
     def SystemLogArchive.archive
+        local_manager = Manager.local
         ret_status = true
 
         managers = {}
@@ -24,11 +25,17 @@ class SystemLogArchive < ActiveRecord::Base
         end
 
         logs.each_pair do |day, log|
-            filename = File.expand_path("#{RAILS_ROOT}/log/system_logs/#{day}.txt")
-            arch = SystemLogArchive.find_by_archive_file(filename)
+            arch = SystemLogArchive.find_by_archived_on(day)
             if (!arch)
-                SystemLogArchive.create(:archive_file => filename, :archived_on => day)
+                SystemLogArchive.create(:archive_file => File.expand_path("#{RAILS_ROOT}/log/system_logs/#{day}.txt"), :archived_on => day)
+            elsif (arch.zipped?)
+                if (!arch.unzip!)
+                    local_manager.log(:message => "SystemLogArchive - Error unzipping #{arch.archive_file}: #{arch.errors.full_messages.join(' ')}")
+                    next
+                end
             end
+
+            filename = arch.archive_file
 
             begin
                 f = File.open(filename, 'a')
@@ -37,7 +44,7 @@ class SystemLogArchive < ActiveRecord::Base
                 SystemLog.update_all("archived_on = '#{Date.today.to_s}'",
                                      "archived_on is null and created_at >= '#{day} 00:00:00' and created_at <= '#{day} 23:59:59'")
             rescue Exception => error
-                Manager.local.log(:message => "SystemLogArchive - Error writing to archive file: #{error}")
+                local_manager.log(:message => "SystemLogArchive - Error writing to archive file: #{error}")
                 ret_status = false
             end
         end
@@ -63,16 +70,61 @@ class SystemLogArchive < ActiveRecord::Base
     end
 
     def SystemLogArchive.zip_old_archives!
-        local_manager = Manager.local
         date = Date.today -3
+        local_manager = Manager.local
         SystemLogArchive.find(:all, :conditions => "archived_on <= '#{date}'").each do |arch|
-            begin
-                exec "gzip #{arch.archive_file}"
-                arch.update_attribute(:archive_file, arch.archive_file + ".gz")
-            rescue Exception => error
-                local_manager.log(:level => 'error', :message => "Could not zip file #{arch.archive_file}: #{error}")
+            if (!arch.zip!)
+                local_manager.log(:level => 'error', :message => "#{arch.errors.full_messages.join("\n")}")
             end
         end
+    end
+
+
+    def zip!
+        if (self.zipped?)
+            self.errors.add_to_base("Cannot compress already compressed file: #{self.archive_file}")
+            return(false)
+        end
+
+        begin
+            msg = `gzip #{self.archive_file}`
+            exit_status = $?
+            if (exit_status == 1)
+                raise msg
+            else
+                self.update_attribute(:archive_file, self.archive_file + ".gz")
+            end
+        rescue Exception => error
+            self.errors.add_to_base("Could not zip file #{self.archive_file}: #{error}")
+            return(false)
+        end
+        return(true)
+    end
+
+    def zipped?
+        return(true) if (self.archive_file =~ /.*gz$/)
+        return(false)
+    end
+
+    def unzip!
+        if (!self.zipped?)
+            self.errors.add_to_base("Cannot uncompress non gzipped file: #{self.archive_file}")
+            return(false)
+        end
+
+        begin
+            msg = `gunzip #{self.archive_file}`
+            exit_status = $?
+            if (exit_status == 1)
+                raise msg
+            else
+                self.update_attribute(:archive_file, self.archive_file.sub(/.*\.gz/, '') )
+            end
+        rescue Exception => error
+            self.errors.add_to_base("Could not zip file #{self.archive_file}: #{error}")
+            return(false)
+        end
+        return(true)
     end
 
 
