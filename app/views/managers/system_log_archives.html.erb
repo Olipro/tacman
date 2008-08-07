@@ -16,7 +16,7 @@
             <tr class="light_shaded">
             <% shaded = true %>
         <% end %>
-      <td><%= link_to File.basename(file.archive_file), :action => :download_archived_log, :system_log_archive_id => file.id, :method => :post %></td>
+      <td><%= link_to File.basename(file.archive_file), {:action => :download_archived_log, :system_log_archive_id => file.id}, :method => :post %></td>
     </tr>
     <% end %>
     <tr><td>&nbsp</td></tr>

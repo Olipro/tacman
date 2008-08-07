@@ -10,10 +10,6 @@
 features & bugs
 ---------------
 
-* system log archive page is broken
-
-* test aaa log archive
-
 * test publishing to slave
 
 * verify all workers
@@ -21,6 +17,7 @@ features & bugs
 * test account lockout
 
 * import old logs into new system
+* test aaa log archive
 
 * need to be able to edit manager passwords
 
