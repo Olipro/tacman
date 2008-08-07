@@ -38,7 +38,13 @@
               <td><%= user.username %></td>
             <% end %>
 
-            <td><%= configured_user_role_highlight(cu) %></td>
+            <td>
+            <% if (cu.active?) %>
+              <%= configured_user_role_highlight(cu) %>
+            <% else %>
+              <%= cu.role %>
+            <% end %>
+            </td>
             <td>
               <%= link_to(cu.user_group.name, user_groups_configuration_url(@configuration) ) if (cu.user_group) %>
             </td>
@@ -68,12 +74,16 @@
             </td>
 
             <td nowrap>
-              <% if (cu.user_specific_settings?) %>
+              <% if (cu.user_specific_settings? && cu.active?) %>
               <a href="#" class="tip" style="color: #7B2024" >settings<span><%= configured_user_settings_description(cu) %></span></a>
+              <% elsif (cu.user_specific_settings?) %>
+              <a href="#" class="tip">settings<span><%= configured_user_settings_description(cu) %></span></a>
               <% end %>
             </td>
 
-            <% if (!cu.notes.blank?) %>
+            <% if (!cu.notes.blank? && cu.active?) %>
+              <td nowrap><a href="#" class="tip" style="color: #7B2024">notes<span><pre><%= cu.notes %></pre></span></a></td>
+            <% elsif (!cu.notes.blank?) %>
               <td nowrap><a href="#" class="tip">notes<span><pre><%= cu.notes %></pre></span></a></td>
             <% else %>
               <td>&nbsp</td>

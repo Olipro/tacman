@@ -35,7 +35,13 @@
           <%= link_to image_tag('view_button.png', :border => 'none'), user_url(user) %>
         </td>
         <td><%= user.username %></td>
-        <td><%= user_role_highlight(user) %></td>
+        <td>
+        <% if (!user.disabled?) %>
+          <%= user_role_highlight(user) %>
+        <% else %>
+          <%= user.role %>
+        <% end %>
+        </td>
         <td><%=h user.real_name %></td>
         <td><%=h user.department.name if (user.department) %></td>
 

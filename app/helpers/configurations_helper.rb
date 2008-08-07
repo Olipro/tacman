@@ -27,7 +27,7 @@ module ConfigurationsHelper
 
     def configured_user_role_highlight(cu)
         if (cu.admin?)
-            return("<i style=\"color: #7B2024\">#{cu.role}</i>")
+            return("<i style=\"color: #7B2024;\">#{cu.role}</i>")
         else
             return("<i>#{cu.role}</i>")
         end
