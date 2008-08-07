@@ -375,7 +375,11 @@ class Manager < ActiveRecord::Base
         tacacs_daemons = []
         threads = []
         td_by_m.each_pair do |manager, tacacs_daemons_list|
-            next if (tacacs_daemons_list.length == 0)
+            if (tacacs_daemons_list.length == 0)
+                managers.push(m)
+                next
+            end
+
             threads << Thread.new(manager, tacacs_daemons_list) do |m, td_list|
                 statuses = []
                 if (!m.is_local)

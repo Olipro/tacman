@@ -99,7 +99,7 @@ class TacacsDaemon < ActiveRecord::Base
 
     def gather_aaa_logs!
         return(false) if (self.aaa_file_locked?)
-        self.lock_aaa_file(600) # 10 min lock
+        self.lock_aaa_file(900) # 15 min lock
 
         # move aaa_log to aaa_scratch
         begin
