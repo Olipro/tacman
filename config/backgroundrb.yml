@@ -10,17 +10,17 @@
 
 :production:
   :backgroundrb:
-    :debug_log: false # disable log workers and other logging 
+    :debug_log: false # disable log workers and other logging
 
 :schedules:
 
   :hourly_worker:
     :hourly_tasks:
-      :trigger_args: 0 5 * * * * *
+      :trigger_args: 0 10 * * * * *
 
   :daily_worker:
     :daily_tasks:
-      :trigger_args: 0 0 0 * * * *
+      :trigger_args: 0 5 0 * * * *
 
   :aaa_log_worker:
     :gather_aaa_logs:

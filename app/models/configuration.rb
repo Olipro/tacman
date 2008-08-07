@@ -442,9 +442,14 @@ class Configuration < ActiveRecord::Base
             next if (line.blank? || line =~/^#/)
             line.chomp!
             fields = {}
-            line.split("\t").each do |field|
-                attr,val = field.split('=', 2)
-                fields[attr.to_sym] = val
+            begin
+                line.split("\t").each do |field|
+                    attr,val = field.split('=', 2)
+                    fields[attr.to_sym] = val
+                end
+            rescue Exception => error
+                self.errors.add_to_base("Error parsing aaa_log /#{line}/: #{error}")
+                next
             end
 
             # attempt dns lookup of client ip
@@ -480,18 +485,23 @@ class Configuration < ActiveRecord::Base
             end
 
             # add to archive list
-            day = Date.parse(fields[:timestamp]).strftime("%Y-%m-%d")
-            if ( !to_archive.has_key?(day) )
-                to_archive[day] = line + "\n"
+            if ( fields.has_key?(:timestamp) && !fields[:timestamp].blank? )
+                day = Date.parse(fields[:timestamp]).strftime("%Y-%m-%d")
+                if ( !to_archive.has_key?(day) )
+                    to_archive[day] = line + "\n"
+                else
+                    to_archive[day] = to_archive[day] << line << "\n"
+                end
             else
-                 to_archive[day] = to_archive[day] << line << "\n"
+                self.errors.add_to_base("Timestamp missing from aaa_log /#{line}/")
+                next
             end
 
             # create aaa_log
             begin
                 self.aaa_logs.create!(fields)
             rescue Exception => err
-                self.errors.add_to_base("Error adding aaa_log '#{line}': #{err}")
+                self.errors.add_to_base("Error adding aaa_log /#{line}/: #{err}")
             end
 
         end

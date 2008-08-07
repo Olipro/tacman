@@ -30,9 +30,10 @@
           <% shaded = true %>
       <% end %>
         <% for field in log_entry.short_log_fields %>
-        <td><%=h field %></td>
+          <td><%=h field %></td>
         <% end %>
-    </tr>
+      </tr>
+    <% end %>
 
     <tr>
         <td colspan="<%= AaaLog.log_fields_header.length %>">
