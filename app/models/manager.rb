@@ -376,7 +376,7 @@ class Manager < ActiveRecord::Base
         threads = []
         td_by_m.each_pair do |manager, tacacs_daemons_list|
             if (tacacs_daemons_list.length == 0)
-                managers.push(m)
+                managers.push(manager)
                 next
             end
 
