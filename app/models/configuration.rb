@@ -113,7 +113,7 @@ class Configuration < ActiveRecord::Base
     end
 
     def archive_aaa_logs(date, logs)
-        file = self.aaa_log_dir + date
+        file = self.aaa_log_dir + date + ".txt"
         arch = AaaLogArchive.find_by_archived_on(date)
         if (!arch)
             arch = self.aaa_log_archives.create(:archive_file => file, :archived_on => date)

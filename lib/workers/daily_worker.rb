@@ -28,6 +28,8 @@ private
         # cleanup db and old archive files
         SystemLogArchive.cleanup_logs!
         SystemLogArchive.cleanup_archives!
+        SystemLogArchive.zip_old_archives!
+        AaaLogArchive.zip_old_archives!
 
         # cleanup db and old aaa archive files
         @configurations.each do |configuration|

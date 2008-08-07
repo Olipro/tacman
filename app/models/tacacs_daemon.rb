@@ -123,8 +123,6 @@ class TacacsDaemon < ActiveRecord::Base
         log = ''
         begin
             file = File.open(self.aaa_scratch_file)
-            log = file.read
-            file.close
         rescue Exception => error
             self.errors.add_to_base("Error reading aaa_scratch_file: #{error}")
             FileUtils.mv(self.aaa_scratch_file, self.aaa_log_file, :force => true)
@@ -132,18 +130,35 @@ class TacacsDaemon < ActiveRecord::Base
             return(false)
         end
 
-        # if slave put scratch_log_file into message for master, else import into db
-        if (Manager.local.slave? && log.length > 0)
-            master = Manager.find(:first, :conditions => "manager_type = 'master'")
-            master.add_to_outbox('create', "<aaa-logs>\n  <id type=\"integer\">#{self.configuration_id}</id>\n  <log type=\"string\">\n#{log}</log>\n</aaa-logs>\n" )
-
-        elsif (log.length > 0)
-            configuration = self.configuration
-            configuration.import_aaa_logs(log)
-
-            if (configuration.errors.length > 0)
-                configuration.errors.each_full {|e| self.errors.add_to_base("Error writing logs to configuration: #{e}") }
+        # import logs directly for master systems, place into system_message for slaves
+        master = Manager.find(:first, :conditions => "manager_type = 'master'") if (Manager.local.slave?)
+        configuration = self.configuration
+        eof = false
+        while(1)
+            logs = ''
+            begin
+                500.times {logs << file.readline}
+            rescue EOFError
+                eof = true
+            rescue Exception => error
+                self.errors.add_to_base("Error processing aaa_scratch_file. Cannot continue. Error: #{error}")
+                self.unlock_aaa_file()
+                return(false)
             end
+
+            if (logs.length > 0 )
+                if (master)
+                    master.add_to_outbox('create', "<aaa-logs>\n  <id type=\"integer\">#{self.configuration_id}</id>\n  <log type=\"string\">\n#{log}</log>\n</aaa-logs>\n" )
+
+                else
+                    configuration.import_aaa_logs(log)
+
+                    if (configuration.errors.length > 0)
+                        configuration.errors.each_full {|e| self.errors.add_to_base("Error writing logs to configuration: #{e}") }
+                    end
+                end
+            end
+            break if (eof)
         end
 
         self.unlock_aaa_file()

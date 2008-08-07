@@ -10,6 +10,20 @@ class AaaLogArchive < ActiveRecord::Base
     after_destroy :cleanup
 
 
+    def AaaLogArchive.zip_old_archives!
+        local_manager = Manager.local
+        date = Date.today -3
+        AaaLogArchive.find(:all, :conditions => "archived_on <= '#{date}'").each do |arch|
+            begin
+                exec "gzip #{arch.archive_file}"
+                arch.update_attribute(:archive_file, arch.archive_file + ".gz")
+            rescue Exception => error
+                local_manager.log(:level => 'error', :message => "Could not zip file #{arch.archive_file}: #{error}")
+            end
+        end
+    end
+
+
 private
 
     def cleanup
@@ -21,7 +35,6 @@ private
     end
 
     def setup
-        self.archive_file = self.archive_file + ".txt"
         self.archived_on = Date.today if (!self.archived_on)
     end
 

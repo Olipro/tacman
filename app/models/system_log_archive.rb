@@ -62,6 +62,19 @@ class SystemLogArchive < ActiveRecord::Base
         SystemLog.destroy_all("archived_on <= '#{date}'")
     end
 
+    def SystemLogArchive.zip_old_archives!
+        local_manager = Manager.local
+        date = Date.today -3
+        SystemLogArchive.find(:all, :conditions => "archived_on <= '#{date}'").each do |arch|
+            begin
+                exec "gzip #{arch.archive_file}"
+                arch.update_attribute(:archive_file, arch.archive_file + ".gz")
+            rescue Exception => error
+                local_manager.log(:level => 'error', :message => "Could not zip file #{arch.archive_file}: #{error}")
+            end
+        end
+    end
+
 
 private
 
