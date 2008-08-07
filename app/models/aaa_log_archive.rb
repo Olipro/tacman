@@ -59,7 +59,7 @@ class AaaLogArchive < ActiveRecord::Base
             if (exit_status == 1)
                 raise msg
             else
-                self.update_attribute(:archive_file, self.archive_file.sub(/.*\.gz/, '') )
+                self.update_attribute(:archive_file, self.archive_file.sub(/.gz/, '') )
             end
         rescue Exception => error
             self.errors.add_to_base("Could not zip file #{self.archive_file}: #{error}")
