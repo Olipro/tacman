@@ -106,7 +106,7 @@ class TacacsDaemon < ActiveRecord::Base
             FileUtils.mv(self.aaa_log_file, self.aaa_scratch_file) if ( File.exists?(self.aaa_log_file) )
         rescue Exception => error
             self.errors.add_to_base("Error rotating aaa_log_file: #{error}")
-            self.update_attribute(:aaa_logs_locked_until, nil)
+            self.unlock_aaa_file()
             return(false)
         end
 
@@ -119,34 +119,27 @@ class TacacsDaemon < ActiveRecord::Base
             end
         end
 
-        # if slave put scratch_log_file into message for master, else import into db
-        if (Manager.local.slave?)
-            # read aaa_scratch
-            log = ''
-            begin
-                if ( File.exists?(self.aaa_scratch_file) )
-                    file = File.open(self.aaa_scratch_file)
-                    log = file.read
-                    file.close
-                end
-            rescue Exception => error
-                self.errors.add_to_base("Error reading aaa_scratch_file: #{error}")
-                FileUtils.mv(self.aaa_scratch_file, self.aaa_log_file, :force => true)
-                self.update_attribute(:aaa_logs_locked_until, nil)
-                return(false)
-            end
+        # read aaa_scratch
+        log = ''
+        begin
+            file = File.open(self.aaa_scratch_file)
+            log = file.read
+            file.close
+        rescue Exception => error
+            self.errors.add_to_base("Error reading aaa_scratch_file: #{error}")
+            FileUtils.mv(self.aaa_scratch_file, self.aaa_log_file, :force => true)
+            self.unlock_aaa_file()
+            return(false)
+        end
 
-            if (log.length > 0)
-                master = Manager.find(:first, :conditions => "manager_type = 'master'")
-                master.add_to_outbox('create', "<aaa-logs>\n  <id type=\"integer\">#{self.configuration_id}</id>\n  <log type=\"string\">\n#{log}</log>\n</aaa-logs>\n" )
-            end
-        else
+        # if slave put scratch_log_file into message for master, else import into db
+        if (Manager.local.slave? && log.length > 0)
+            master = Manager.find(:first, :conditions => "manager_type = 'master'")
+            master.add_to_outbox('create', "<aaa-logs>\n  <id type=\"integer\">#{self.configuration_id}</id>\n  <log type=\"string\">\n#{log}</log>\n</aaa-logs>\n" )
+
+        elsif (log.length > 0)
             configuration = self.configuration
-            if ( !configuration.import_aaa_logs(self.aaa_scratch_file) )
-                FileUtils.mv(self.aaa_scratch_file, self.aaa_log_file, :force => true)
-                self.update_attribute(:aaa_logs_locked_until, nil)
-                return(false)
-            end
+            configuration.import_aaa_logs(log)
 
             if (configuration.errors.length > 0)
                 configuration.errors.each_full {|e| self.errors.add_to_base("Error writing logs to configuration: #{e}") }

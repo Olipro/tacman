@@ -432,23 +432,13 @@ class Configuration < ActiveRecord::Base
         return(@config)
     end
 
-    def import_aaa_logs(log_file)
+    def import_aaa_logs(log)
         client_dns = {}
         users = {}
         to_archive = {}
 
-        file = nil
-        begin
-            if ( File.exists?(log_file) )
-                file = File.open(log_file)
-            end
-        rescue Exception => error
-            self.errors.add_to_base("Error reading #{log_file}: #{error}")
-            return(false)
-        end
-
         # split each log into appropriate fields. attempt dns lookup for client
-        file.each_line do |line|
+        log.each_line do |line|
             next if (line.blank? || line =~/^#/)
             line.chomp!
             fields = {}
@@ -515,7 +505,6 @@ class Configuration < ActiveRecord::Base
             end
 
         end
-        file.close
 
         # update user last_login
         users.each_pair do |user,time|
