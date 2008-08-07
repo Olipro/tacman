@@ -432,13 +432,23 @@ class Configuration < ActiveRecord::Base
         return(@config)
     end
 
-    def import_aaa_logs(log)
+    def import_aaa_logs(log_file)
         client_dns = {}
         users = {}
         to_archive = {}
 
+        file = nil
+        begin
+            if ( File.exists?(log_file) )
+                file = File.open(log_file)
+            end
+        rescue Exception => error
+            self.errors.add_to_base("Error reading #{log_file}: #{error}")
+            return(false)
+        end
+
         # split each log into appropriate fields. attempt dns lookup for client
-        log.each_line do |line|
+        file.each_line do |line|
             next if (line.blank? || line =~/^#/)
             line.chomp!
             fields = {}
@@ -505,6 +515,7 @@ class Configuration < ActiveRecord::Base
             end
 
         end
+        file.close
 
         # update user last_login
         users.each_pair do |user,time|
@@ -515,13 +526,7 @@ class Configuration < ActiveRecord::Base
         # archive logs
         to_archive.each_pair {|day,logs| self.archive_aaa_logs(day, logs )}
 
-        # log errors
-        if (self.errors.length > 0)
-            manager = Manager.local
-            self.errors.full_messages.each {|x| manager.log(:level => 'warn', :configuration_id => self.id, :message => x) }
-        end
-
-        return(nil)
+        return(true)
     end
 
     def network_object_group_from_string(data)

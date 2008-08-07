@@ -98,8 +98,8 @@ class TacacsDaemon < ActiveRecord::Base
     end
 
     def gather_aaa_logs!
-        return(false) if (self.aaa_file_locked?)
-        self.lock_aaa_file(900) # 15 min lock
+        return(false) if (self.aaa_file_locked? || !self.configuration_id)
+        self.lock_aaa_file(1800) # 30 min lock
 
         # move aaa_log to aaa_scratch
         begin
@@ -119,32 +119,37 @@ class TacacsDaemon < ActiveRecord::Base
             end
         end
 
-        # read aaa_scratch
-        log = ''
-        begin
-            if ( File.exists?(self.aaa_scratch_file) )
-                file = File.open(self.aaa_scratch_file)
-                log = file.read
-                file.close
+        # if slave put scratch_log_file into message for master, else import into db
+        if (Manager.local.slave?)
+            # read aaa_scratch
+            log = ''
+            begin
+                if ( File.exists?(self.aaa_scratch_file) )
+                    file = File.open(self.aaa_scratch_file)
+                    log = file.read
+                    file.close
+                end
+            rescue Exception => error
+                self.errors.add_to_base("Error reading aaa_scratch_file: #{error}")
+                FileUtils.mv(self.aaa_scratch_file, self.aaa_log_file, :force => true)
+                self.update_attribute(:aaa_logs_locked_until, nil)
+                return(false)
             end
-        rescue Exception => error
-            self.errors.add_to_base("Error reading aaa_scratch_file: #{error}")
-            FileUtils.mv(self.aaa_scratch_file, self.aaa_log_file, :force => true)
-            self.update_attribute(:aaa_logs_locked_until, nil)
-            return(false)
-        end
 
-        if (log.length > 0 && self.configuration_id)
-            # if slave put scratch_log_file into message for master, else import into db
-            if (Manager.local.slave?)
+            if (log.length > 0)
                 master = Manager.find(:first, :conditions => "manager_type = 'master'")
                 master.add_to_outbox('create', "<aaa-logs>\n  <id type=\"integer\">#{self.configuration_id}</id>\n  <log type=\"string\">\n#{log}</log>\n</aaa-logs>\n" )
-            else
-                configuration = self.configuration
-                configuration.import_aaa_logs(log)
-                if (configuration.errors.length > 0)
-                    configuration.errors.each_full {|e| self.errors.add_to_base("Error writing logs to configuration: #{e}") }
-                end
+            end
+        else
+            configuration = self.configuration
+            if ( !configuration.import_aaa_logs(self.aaa_scratch_file) )
+                FileUtils.mv(self.aaa_scratch_file, self.aaa_log_file, :force => true)
+                self.update_attribute(:aaa_logs_locked_until, nil)
+                return(false)
+            end
+
+            if (configuration.errors.length > 0)
+                configuration.errors.each_full {|e| self.errors.add_to_base("Error writing logs to configuration: #{e}") }
             end
         end
 
