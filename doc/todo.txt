@@ -10,7 +10,7 @@
 features & bugs
 ---------------
 
-* must have compression support for archived logs
+* importing large log aaa files is broken
 
 * need a way to display 'unpublished changes' on a config
 
