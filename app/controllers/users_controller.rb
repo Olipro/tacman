@@ -304,7 +304,7 @@ class UsersController < ApplicationController
         @user.publish!
         respond_to do |format|
             @nav = 'show_nav'
-            flash[:notice] = "Publish requested, but will take a few minutes to complete."
+            flash[:notice] = "Published changes will take a few moments to propagate."
             @local_manager.log(:username => @session_user.username, :user_id => @user.id, :message => "Published user #{@user.username}.")
             format.html { redirect_to( request.env["HTTP_REFERER"] ) }
             format.xml  { head :ok }

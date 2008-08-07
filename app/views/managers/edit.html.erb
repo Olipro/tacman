@@ -55,7 +55,6 @@
 <table>
     <tr><td><b>Mailer</b></td></tr>
     <tr><td>Enable Mailer: <%= f.check_box(:enable_mailer) %></td></tr>
-    <% if (@manager.enable_mailer) %>
     <tr><td>Mail From: <%= f.text_field :mail_from %></td></tr>
     <tr><td>&nbsp</td></tr>
     <tr><td><u>Account Disabled Message</u></td></tr>
@@ -68,7 +67,6 @@
     <tr><td><%= f.text_area :mail_password_reset, :size => "80x15" %></td></tr>
     <tr><td><u>Pending Password Expiry Message</u></td></tr>
     <tr><td><%= f.text_area :mail_pending_password_expiry, :size => "80x15" %></td></tr>
-    <% end %>
 </table>
 
     <br /><br />

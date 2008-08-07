@@ -10,8 +10,6 @@
 features & bugs
 ---------------
 
-* test publishing to slave
-
 * verify all workers
 
 * test account lockout

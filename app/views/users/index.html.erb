@@ -6,8 +6,8 @@
     <tr>
         <th>&nbsp</th>
         <th>Username</th>
-        <th>Role</th>
         <th>Real Name</th>
+        <th>Role</th>
         <th>Department</th>
         <th>Last Login</th>
         <th>&nbsp</th>
@@ -35,14 +35,14 @@
           <%= link_to image_tag('view_button.png', :border => 'none'), user_url(user) %>
         </td>
         <td><%= user.username %></td>
-        <td>
-        <% if (!user.disabled?) %>
-          <%= user_role_highlight(user) %>
-        <% else %>
-          <%= user.role %>
-        <% end %>
-        </td>
         <td><%=h user.real_name %></td>
+        <td>
+          <% if (!user.disabled?) %>
+            <%= user_role_highlight(user) %>
+          <% else %>
+            <%= user.role %>
+          <% end %>
+        </td>
         <td><%=h user.department.name if (user.department) %></td>
 
         <% if (!user.last_login.blank?) %>

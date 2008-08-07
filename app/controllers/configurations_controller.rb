@@ -488,7 +488,7 @@ class ConfigurationsController < ApplicationController
     def publish
         @configuration.publish
         respond_to do |format|
-            flash[:notice] = "Publish requested, but will take a few minutes to complete."
+            flash[:notice] = "Published changes will take a few moments to propagate."
             @nav = 'show_nav'
             @local_manager.log(:username => @session_user.username, :configuration_id => @configuration.id, :message => "Published configuration #{@configuration.name}.")
             format.html { redirect_to( request.env["HTTP_REFERER"] ) }
