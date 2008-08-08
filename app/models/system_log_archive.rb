@@ -74,7 +74,7 @@ class SystemLogArchive < ActiveRecord::Base
         local_manager = Manager.local
         SystemLogArchive.find(:all, :conditions => "archived_on <= '#{date}'").each do |arch|
             if (!arch.zip!)
-                local_manager.log(:level => 'error', :message => "#{arch.errors.full_messages.join("\n")}")
+                local_manager.log(:level => 'error', :message => "#{arch.errors.full_messages.join(" ")}")
             end
         end
     end

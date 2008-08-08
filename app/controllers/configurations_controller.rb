@@ -409,6 +409,8 @@ class ConfigurationsController < ApplicationController
     def new
         @configuration = Configuration.new()
         @configuration.key = (1..12).collect { (i = Kernel.rand(62); i += ((i < 10) ? 48 : ((i < 36) ? 55 : 61 ))).chr }.join
+        @configuration.retain_aaa_logs_for = @local_manager.maximum_aaa_log_retainment
+        @configuration.archive_aaa_logs_for = @local_manager.maximum_aaa_archive_retainment
 
         respond_to do |format|
             @nav = 'index_nav'
