@@ -137,7 +137,7 @@ class TacacsDaemon < ActiveRecord::Base
         while(1)
             logs = ''
             begin
-                500.times {logs << file.readline}
+                10000.times {logs << file.readline}
             rescue EOFError
                 eof = true
             rescue Exception => error
