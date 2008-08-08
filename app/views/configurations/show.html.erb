@@ -2,12 +2,11 @@
 
     <b style="font-size: 16px;"><%= pluralize(@configuration.configured_users.count, "User" ) %></b><br />
     <table class="index_list">
-        <tr><td colspan="9" style="border-bottom: 1px solid #000000;"><%= will_paginate @users %></td></tr>
+        <tr><td colspan="8" style="border-bottom: 1px solid #000000;"><%= will_paginate @users %></td></tr>
         <tr><td>&nbsp</td></tr>
         <tr>
             <th>&nbsp</th>
             <th>Username</th>
-            <th>Real Name</th>
             <th>Role</th>
             <th>User Group</th>
             <th>&nbsp</th>
@@ -34,7 +33,6 @@
             </td>
 
             <td><%= user.username %></td>
-            <td><%= user.real_name %></td>
 
             <td>
             <% if (cu.active?) %>
@@ -89,7 +87,7 @@
         </tr>
         <% end %>
         <tr><td>&nbsp</td></tr>
-        <tr><td colspan="9" style="border-top: 1px solid #000000;"><%= will_paginate @users %></td></tr>
+        <tr><td colspan="8" style="border-top: 1px solid #000000;"><%= will_paginate @users %></td></tr>
     </table>
 
 
