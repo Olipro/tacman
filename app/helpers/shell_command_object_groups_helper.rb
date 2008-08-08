@@ -9,7 +9,7 @@ module ShellCommandObjectGroupsHelper
             str << "<li> &nbsp&nbsp "
             str << link_to(image_tag('delete_button.png', :border => 'none'), shell_command_object_group_entry_url(e), :method => :delete) if (show_details)
             str << " seq #{e.sequence}"if (show_details)
-            str << " /#{e.command}/ </li>\n"
+            str << " #{e.command} </li>\n"
         end
         str << "</ul>\n"
         return(str)
