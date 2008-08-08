@@ -20,7 +20,7 @@
 
   :daily_worker:
     :daily_tasks:
-      :trigger_args: 0 5 0 * * * *
+      :trigger_args: 0 5 3 * * * *
 
   :aaa_log_worker:
     :gather_aaa_logs:

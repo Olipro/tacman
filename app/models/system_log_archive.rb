@@ -70,7 +70,7 @@ class SystemLogArchive < ActiveRecord::Base
     end
 
     def SystemLogArchive.zip_old_archives!
-        date = Date.today -3
+        date = Date.today - 1
         local_manager = Manager.local
         SystemLogArchive.find(:all, :conditions => "archived_on <= '#{date}'").each do |arch|
             if (!arch.zip!)

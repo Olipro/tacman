@@ -1,5 +1,6 @@
 <%= error_messages_for :manager %>
 
+<h2>Slave system</h2>
 <table>
     <% if (!@manager.is_approved) %>
     <tr><td colspan="2" style="text-align:center;"><b style="color:#7B2024;"><i>Awaiting Approval</i></b></td></tr>
@@ -9,5 +10,6 @@
     <tr><td><b>Serial:</b></td> <td><%=h @manager.serial %></td></tr>
     <tr><td><b>Name:</b></td> <td><%=h @manager.name %></td></tr>
     <tr><td><b>URL:</b></td> <td><%=h @manager.base_url %></td></tr>
+    <tr><td><b>Password:</b></td> <td>********</td></tr>
     <tr><td>&nbsp</td></tr>
 </table>

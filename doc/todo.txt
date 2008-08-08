@@ -10,10 +10,6 @@
 features & bugs
 ---------------
 
-* importing large log aaa files is broken
-
-* need a way to display 'unpublished changes' on a config
-
 * import old logs into new system
 * test aaa log archive
 

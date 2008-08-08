@@ -11,7 +11,7 @@ class AaaLogArchive < ActiveRecord::Base
 
 
     def AaaLogArchive.zip_old_archives!
-        date = Date.today -3
+        date = Date.today - 1
         local_manager = Manager.local
         AaaLogArchive.find(:all, :conditions => "archived_on <= '#{date}'").each do |arch|
             if (!arch.zip!)
