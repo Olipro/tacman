@@ -148,14 +148,11 @@ class TacacsDaemon < ActiveRecord::Base
 
             if (logs.length > 0 )
                 if (master)
-                    master.add_to_outbox('create', "<aaa-logs>\n  <id type=\"integer\">#{self.configuration_id}</id>\n  <log type=\"string\">\n#{log}</log>\n</aaa-logs>\n" )
+                    master.add_to_outbox('create', "<aaa-logs>\n  <id type=\"integer\">#{configuration.id}</id>\n  <log type=\"string\">\n#{logs}</log>\n</aaa-logs>\n" )
 
                 else
-                    configuration.import_aaa_logs(log)
-
-                    if (configuration.errors.length > 0)
-                        configuration.errors.each_full {|e| self.errors.add_to_base("Error writing logs to configuration: #{e}") }
-                    end
+                    configuration.import_aaa_logs(logs)
+                    self.errors.add_to_base("Error writing logs to configuration: " + configuration.errors.full_messages.join(" ") if (configuration.errors.length > 0)
                 end
             end
             break if (eof)
