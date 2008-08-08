@@ -1,10 +1,18 @@
 <%= error_messages_for :configured_user %>
 
 <hr>
-<b style="font-size: 16px;">Account Settings for <%= @configured_user.user.username %></b><br /><br />
+<b style="font-size: 16px;">Account Settings</b><br /><br />
 
 <% form_for(:configured_user, :url => configured_user_url(@configured_user), :html => { :method => :put }) do |f| %>
 <table>
+  <tr>
+    <td><b>Username:</b></td> 
+    <td><%= @configured_user.user.username %></td>
+  </tr>
+    <tr>
+    <td><b>Real Name:</b></td> 
+    <td><%= @configured_user.user.real_name %></td>
+  </tr>
   <tr>
     <td><b>User Group:</b></td> 
     <td><%= f.select :user_group_id, @configuration.user_groups.collect {|x| [ x.name, x.id ] }, { :include_blank => true }  %></td>
