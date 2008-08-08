@@ -492,7 +492,13 @@ class Configuration < ActiveRecord::Base
 
             # add to archive list
             if ( fields.has_key?(:timestamp) && !fields[:timestamp].blank? )
-                day = Date.parse(fields[:timestamp]).strftime("%Y-%m-%d")
+                begin
+                    day = Date.parse(fields[:timestamp]).strftime("%Y-%m-%d")
+                rescue Exception => error
+                    self.errors.add_to_base("Timestamp error /#{line}/: #{error}")
+                    next
+                end
+
                 if ( !to_archive.has_key?(day) )
                     to_archive[day] = line + "\n"
                 else
