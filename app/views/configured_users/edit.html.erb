@@ -1,7 +1,7 @@
 <%= error_messages_for :configured_user %>
 
 <hr>
-<b style="font-size: 16px;">Account Settings</b><br /><br />
+<b style="font-size: 16px;">Account Settings for <%= @configured_user.user.username %></b><br /><br />
 
 <% form_for(:configured_user, :url => configured_user_url(@configured_user), :html => { :method => :put }) do |f| %>
 <table>
