@@ -17,7 +17,7 @@ features & bugs
 * test account lockout
 
 * script to port users to new system
-User.find(:all).each {|u| puts "#{u.username}, #{u.hashed_password}, #{u.hashed_enable}, #{u.salt}, #{u.first_name} #{u.last_name}, #{u.email}, #{u.department}\n"}
+User.find(:all, :order => :username).each {|u| puts "#{u.username}, #{u.hashed_password}, #{u.hashed_enable}, #{u.salt}, #{u.first_name} #{u.last_name}, #{u.email}, #{u.department}\n"}
 
 * script to import nogs, acls, etc...
 
