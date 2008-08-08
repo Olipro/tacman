@@ -152,7 +152,7 @@ class TacacsDaemon < ActiveRecord::Base
 
                 else
                     configuration.import_aaa_logs(logs)
-                    self.errors.add_to_base("Error writing logs to configuration: " + configuration.errors.full_messages.join(" ") if (configuration.errors.length > 0)
+                    self.errors.add_to_base("Error writing logs to configuration: " + configuration.errors.full_messages.join(" ") ) if (configuration.errors.length > 0)
                 end
             end
             break if (eof)
