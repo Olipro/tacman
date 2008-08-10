@@ -461,7 +461,7 @@ class Configuration < ActiveRecord::Base
             # attempt dns lookup of client ip
             if ( fields.has_key?(:client) && !fields[:client].blank? )
                 ip = fields[:client]
-                name = 'DNS record not found.'
+                name = ''
                 if ( client_dns.has_key?(ip) )
                     name = client_dns[ip]
                 else
@@ -474,26 +474,12 @@ class Configuration < ActiveRecord::Base
                 fields[:client_name] = name
             end
 
-            # get user login times
-            if ( fields.has_key?(:user) && !fields[:user].blank? )
-                user = fields[:user]
-                msg_type = fields[:msg_type] if ( fields.has_key?(:msg_type) )
-                status = fields[:status] if ( fields.has_key?(:status) )
-
-                if (!msg_type.blank? && !status.blank?)
-                    time = Time.parse(fields[:timestamp]) if ( fields.has_key?(:timestamp) )
-                    if ( users.has_key?(user) )
-                        users[user] = time if (users[user] < time)
-                    else
-                        users[user] = time
-                    end
-                end
-            end
-
             # add to archive list
+            time = nil
             if ( fields.has_key?(:timestamp) && !fields[:timestamp].blank? )
                 begin
-                    day = Date.parse(fields[:timestamp]).strftime("%Y-%m-%d")
+                    time = Date.parse(fields[:timestamp])
+                    day = time.strftime("%Y-%m-%d")
                 rescue Exception => error
                     self.errors.add_to_base("Timestamp error /#{line}/: #{error}")
                     next
@@ -507,6 +493,21 @@ class Configuration < ActiveRecord::Base
             else
                 self.errors.add_to_base("Timestamp missing from aaa_log /#{line}/")
                 next
+            end
+
+            # get user login times
+            if ( fields.has_key?(:user) && !fields[:user].blank? )
+                user = fields[:user]
+                msg_type = fields[:msg_type] if ( fields.has_key?(:msg_type) )
+                status = fields[:status] if ( fields.has_key?(:status) )
+
+                if (msg_type == 'Authentication' && status == 'Pass')
+                    if ( users.has_key?(user) )
+                        users[user] = time if (users[user] < time)
+                    else
+                        users[user] = time
+                    end
+                end
             end
 
             # create aaa_log
