@@ -73,6 +73,14 @@ class UsersController < ApplicationController
                     flash[:warning] = "System is undergoing maintenance. Please try again later."
                     format.html {redirect_to(login_users_url)  }
                     format.xml {render :xml => "<errors><error>#{flash[:warning]}</error></errors>", :status => :forbidden}
+                elsif(user.disabled)
+                    flash[:warning] = "Your account is currently disabled."
+                    format.html {redirect_to(login_users_url)  }
+                    format.xml {render :xml => "<errors><error>#{flash[:warning]}</error></errors>", :status => :forbidden}
+                elsif(!user.allow_web_login)
+                    flash[:warning] = "Your web interface login is currently disabled."
+                    format.html {redirect_to(login_users_url)  }
+                    format.xml {render :xml => "<errors><error>#{flash[:warning]}</error></errors>", :status => :forbidden}
                 else
                     session[:user_id] = @session_user.id
                     uri = session[:original_uri]
