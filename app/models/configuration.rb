@@ -441,6 +441,7 @@ class Configuration < ActiveRecord::Base
     def import_aaa_logs(log)
         client_dns = {}
         users = {}
+        login_times = {}
         to_archive = {}
 
         # split each log into appropriate fields. attempt dns lookup for client
@@ -497,15 +498,18 @@ class Configuration < ActiveRecord::Base
 
             # get user login times
             if ( fields.has_key?(:user) && !fields[:user].blank? )
-                user = fields[:user]
+                username = fields[:user]
                 msg_type = fields[:msg_type] if ( fields.has_key?(:msg_type) )
                 status = fields[:status] if ( fields.has_key?(:status) )
 
-                if (msg_type == 'Authentication' && status == 'Pass')
-                    if ( users.has_key?(user) )
-                        users[user] = time if (users[user] < time)
+                users[username] = User.find_by_username(username)
+                user = users[username]
+
+                if (user && msg_type == 'Authentication' && status == 'Pass')
+                    if ( login_times.has_key?(username) )
+                        login_times[username] = time if (login_times[username] < time)
                     else
-                        users[user] = time
+                        login_times[username] = time
                     end
                 end
             end
@@ -520,9 +524,8 @@ class Configuration < ActiveRecord::Base
         end
 
         # update user last_login
-        users.each_pair do |user,time|
-            user = User.find_by_username(user)
-            user.last_login = time if (user)
+        login_times.each_pair do |username,time|
+            users[username].last_login = time
         end
 
         # archive logs
