@@ -259,19 +259,7 @@ class TacacsDaemon < ActiveRecord::Base
             return(false)
         else
             self.write_config_file
-            child_pid = Process.fork do
-                Process.setsid
-
-                # have to do this to stop this proccess from inheriting the open
-                # TCPServer IO from mongrel
-                ObjectSpace.each_object(TCPSocket) {|sock| sock.reopen('/dev/null', 'r'); sock.close}
-
-                begin
-                    `ruby #{RAILS_ROOT}/lib/tacacs_plus_server.rb --pid_file #{self.pid_file} --error_log #{self.error_log_file} --log_file #{self.aaa_log_file} --conf_file #{self.configuration_file} --start`
-                rescue Exception => error
-                end
-            end
-            Process.wait(child_pid)
+            `ruby #{RAILS_ROOT}/lib/tacacs_plus_server.rb --pid_file #{self.pid_file} --error_log #{self.error_log_file} --log_file #{self.aaa_log_file} --conf_file #{self.configuration_file} --start`
         end
 
         sleep(1)
