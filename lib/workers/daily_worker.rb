@@ -72,7 +72,7 @@ private
             mail_to = []
             @configurations.each do |configuration|
                 configuration.configured_users.find(:all, :conditions => "role = 'admin'").each {|x| mail_to.push(x.user.email) if (!x.user.email.blank?)}
-                logs = configuration.system_logs.find(:all, :conditions => "created_at >= #{start_time} and created_at <= #{end_time}", :order => :created_at)
+                logs = configuration.system_logs.find(:all, :conditions => "created_at >= '#{start_time}' and created_at <= '#{end_time}'", :order => :created_at)
 
                 if (logs.length > 0)
                     begin
@@ -97,7 +97,7 @@ private
             end_time = yesterday + " 23:59:59"
             mail_to = []
             User.find(:all, :conditions => "role = 'admin' and email != null").each {|x| mail_to.push(x.email)}
-            logs = SystemLog.find(:all, :conditions => "level != 'info' and created_at >= #{start_time} and created_at <= #{end_time}", :order => :created_at)
+            logs = SystemLog.find(:all, :conditions => "level != 'info' and created_at >= '#{start_time}' and created_at <= '#{end_time}'", :order => :created_at)
             if (logs.length > 0)
                 begin
                     TacmanMailer.deliver_logs(@local_manager, mail_to, logs)
