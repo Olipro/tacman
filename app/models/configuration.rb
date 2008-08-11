@@ -512,7 +512,7 @@ class Configuration < ActiveRecord::Base
 
             # create aaa_log
             begin
-                self.aaa_logs.create!(fields)
+                self.aaa_logs.create!(fields) if (!user || !user.disable_aaa_log_import)
             rescue Exception => err
                 self.errors.add_to_base("Error adding aaa_log /#{line}/: #{err}")
             end

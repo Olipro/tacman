@@ -26,6 +26,14 @@ module UsersHelper
         end
     end
 
+    def user_aaa_log_import_checkbox(user)
+        if (user.disable_aaa_log_import)
+            link_to(image_tag('checked.png', :border => 'none'), toggle_disable_aaa_log_import_user_url(user), :method => :put )
+        else
+            link_to(image_tag('unchecked.png', :border => 'none'), toggle_disable_aaa_log_import_user_url(user), :method => :put )
+        end
+    end
+
     def password_expiry_checkboxes(user)
         if (!user.login_password || user.login_password_lifespan == 0)
             return( password_status(user) )

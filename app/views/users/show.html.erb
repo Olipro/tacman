@@ -16,6 +16,7 @@
   <tr><td>&nbsp</td></tr>
   <tr><td><%= user_active_checkbox(@user) %><b>Account Enabled</b></td></tr>
   <tr><td><%= user_web_login_checkbox(@user) %><b>Web Login Allowed</b></td></tr>
+  <tr><td><%= user_aaa_log_import_checkbox(@user) %><b>Disable AAA Log Import</b></td></tr>
   <tr><td>&nbsp</td></tr>
   <tr><td><b><u>Login Password</u></b></td></tr>
   <tr><td><b>Lifespan:</b></td> <td><%= password_lifespan_xlate(@user.login_password_lifespan) %></td></tr>

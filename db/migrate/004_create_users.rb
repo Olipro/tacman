@@ -27,6 +27,7 @@ class CreateUsers < ActiveRecord::Migration
     create_table :users do |t|
       t.integer :department_id
       t.boolean :allow_web_login, :default => true
+      t.boolean :disable_aaa_log_import, :default => false
       t.boolean :disabled, :default => false
       t.string :email
       t.integer :enable_password_lifespan

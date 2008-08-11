@@ -48,6 +48,12 @@ security feature on user accounts is the ability to disable web interface logins
 for non-human accounts which should not normally accessed through the web interface.
 </p>
 
+<p>
+For certain types of accounts, such as script accounts that do nothing but perform device configuration backups, you may want to disable
+AAA log import into the database. This is useful if the account generates a lot of uninteresting logs. Although disabling
+AAA log import will prevent the logs from being imported into the database, they will still be archived by the system.
+</p>
+
 <br />
 
 <h4><u>Departments</u></h4>

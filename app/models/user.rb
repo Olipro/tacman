@@ -275,6 +275,15 @@ class User < ActiveRecord::Base
         self.save
     end
 
+    def toggle_disable_aaa_log_import!
+        if (self.disable_aaa_log_import == true )
+            self.disable_aaa_log_import = false
+        else
+            self.disable_aaa_log_import = true
+        end
+        self.save
+    end
+
     def toggle_disabled!
         if (self.disabled == true )
             self.disabled = false

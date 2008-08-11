@@ -112,13 +112,11 @@ def start_daemon(conf_file, dump_file, error_log, log_file, pid_file)
         trap("INT") do
             server.stop
             cleanup_on_stop(pid_file,conf_file)
-            STDERR.puts("#{Time.now.strftime("%Y-%m-%d %H:%M:%S %Z")} - Server Halted")
         end
 
         trap("TERM") do
             server.stop
             cleanup_on_stop(pid_file,conf_file)
-            STDERR.puts("#{Time.now.strftime("%Y-%m-%d %H:%M:%S %Z")} - Server Halted")
         end
 
         trap("HUP") do

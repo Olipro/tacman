@@ -482,6 +482,28 @@ class UsersController < ApplicationController
         end
     end
 
+    def toggle_disable_aaa_log_import
+        @user = User.find(params[:id])
+
+        respond_to do |format|
+            @nav = 'show_nav'
+            if (@local_manager.slave?)
+                flash[:warning] = "This action is prohibited on slave systems."
+                format.html { redirect_to user_url(@user) }
+                format.xml  { render :xml => '<errors><error>This action is prohibited on slave systems.</error></errors>', :status => :not_acceptable }
+            elsif (@user.admin? && @session_user.user_admin?)
+                flash[:warning] = "You do not have permission to modify administrator accounts."
+                format.html { redirect_to user_url(@user) }
+                format.xml  { render :xml => @user.errors, :status => :not_acceptable }
+            else
+                @user.toggle_disable_aaa_log_import!
+                @local_manager.log(:username => @session_user.username, :user_id=> @user.id, :message => "Set disable_aaa_log_import = #{@user.account_status} for user #{@user.username}.")
+                format.html { redirect_to user_url(@user) }
+                format.xml  { head :ok }
+            end
+        end
+    end
+
     # PUT /users/1
     # PUT /users/1.xml
     def toggle_disabled
