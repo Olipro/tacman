@@ -1,5 +1,5 @@
 class DailyWorker < BackgrounDRb::MetaWorker
-    set_worker_name :nightly_worker
+    set_worker_name :daily_worker
     reload_on_schedule true
 
     def create(args = nil)
