@@ -7,13 +7,6 @@ class TacmanMailer < ActionMailer::Base
         from(local_manager.mail_from)
     end
 
-    def alert(local_manager, mail_to, subj, message)
-        bcc(mail_to)
-        subject(subj)
-        body(:message => message)
-        from(local_manager.mail_from)
-    end
-
     def logs(local_manager, mail_to, logs, subject="TacacsManager logs")
         bcc(mail_to)
         subject(subject)

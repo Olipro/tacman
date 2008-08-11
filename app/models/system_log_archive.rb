@@ -27,7 +27,7 @@ class SystemLogArchive < ActiveRecord::Base
         logs.each_pair do |day, log|
             arch = SystemLogArchive.find_by_archived_on(day)
             if (!arch)
-                SystemLogArchive.create(:archive_file => File.expand_path("#{RAILS_ROOT}/log/system_logs/#{day}.txt"), :archived_on => day)
+                arch = SystemLogArchive.create(:archive_file => File.expand_path("#{RAILS_ROOT}/log/system_logs/#{day}.txt"), :archived_on => day)
             elsif (arch.zipped?)
                 if (!arch.unzip!)
                     local_manager.log(:message => "SystemLogArchive - Error unzipping #{arch.archive_file}: #{arch.errors.full_messages.join(' ')}")

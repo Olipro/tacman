@@ -199,7 +199,7 @@ class User < ActiveRecord::Base
     end
 
     def inactive(days=0)
-        return(true)  if (days > 0 && !self.within_grace_period? && (self.last_login <=> Date.today - days) != 1 )
+        return(true)  if (days > 0 && !self.within_grace_period? && !self.logged_in_within(days) )
         return(false)
     end
 
@@ -217,6 +217,12 @@ class User < ActiveRecord::Base
         else
             self.create_user_last_login(:last_login_at => time)
         end
+    end
+
+    def logged_in_within(days)
+        ll = self.user_last_login
+        return(true) if (ll && (ll.last_login_at <=> Date.today - days) == 1)
+        return(false)
     end
 
     # return current password from password history
