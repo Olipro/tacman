@@ -42,13 +42,13 @@ private
         return(false) if (@local_manager.slave? || @local_manager.disable_inactive_users_after == 0)
 
         User.find(:all).each do |user|
-            if (user.role != 'admin' && !user.disabled && user.inactive?)
+            if (!user.admin? && !user.disabled && user.inactive(@local_manager.disable_inactive_users_after) )
                 user.toggle_disabled!
-                @local_manager.log(:user_id=> user.id, :message => "Auto-disabled user '#{user.username}' due to account inactivity for #{@local_manager.disable_inactive_users_after} days.")
+                @local_manager.log(:user_id=> user.id, :message => "Auto-disabled user #{user.username} due to account inactivity for #{@local_manager.disable_inactive_users_after} days.")
                 begin
                     TacmanMailer.deliver_account_disabled(@local_manager, user.email) if (!user.email.blank?)
                 rescue Exception => error
-                    @local_manager.log(:level => 'error', :message => "Failed to deliver daily logs - #{error}")
+                    @local_manager.log(:level => 'error', :message => "Failed to notify user of account auto-disable - #{error}")
                     return(false)
                 end
             end

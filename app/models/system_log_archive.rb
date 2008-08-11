@@ -66,13 +66,14 @@ class SystemLogArchive < ActiveRecord::Base
         return(false) if (days == 0)
 
         date = (Date.today - days).to_s
-        SystemLog.destroy_all("archived_on <= '#{date}'")
+        SystemLogArchive.destroy_all("archived_on <= '#{date}'")
     end
 
     def SystemLogArchive.zip_old_archives!
         date = Date.today - 1
         local_manager = Manager.local
         SystemLogArchive.find(:all, :conditions => "archived_on <= '#{date}'").each do |arch|
+            next if (arch.zipped?)
             if (!arch.zip!)
                 local_manager.log(:level => 'error', :message => "#{arch.errors.full_messages.join(" ")}")
             end

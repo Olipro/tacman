@@ -198,11 +198,8 @@ class User < ActiveRecord::Base
         self.password_histories.find(:first, :conditions => "is_enable = true", :order => "id desc")
     end
 
-    def inactive?
-        if (!self.within_grace_period?)
-            days = Manager.local.disable_inactive_users_after
-            return(true) if (days > 0 && self.last_login.days_ago > days )
-        end
+    def inactive(days=0)
+        return(true)  if (days > 0 && !self.within_grace_period? && (self.last_login <=> Date.today - days) != 1 )
         return(false)
     end
 
@@ -349,7 +346,7 @@ class User < ActiveRecord::Base
     end
 
     def within_grace_period?
-        return(true) if (Date.today - self.created_at.to_date > 3)
+        return(true) if ( (self.created_at.to_date <=> Date.today - 3) == 1 )
         return(false)
     end
 

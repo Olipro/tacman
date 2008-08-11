@@ -296,7 +296,7 @@ class Configuration < ActiveRecord::Base
         return(false) if (self.archive_aaa_logs_for == 0)
 
         date = (Date.today - self.archive_aaa_logs_for).to_s
-        AaaLog.destroy_all("configuration_id = #{self.id} AND archived_on <= '#{date}'")
+        AaaLogArchive.destroy_all("configuration_id = #{self.id} AND archived_on <= '#{date}'")
     end
 
     def configuration_hash

@@ -14,6 +14,7 @@ class AaaLogArchive < ActiveRecord::Base
         date = Date.today - 1
         local_manager = Manager.local
         AaaLogArchive.find(:all, :conditions => "archived_on <= '#{date}'").each do |arch|
+            next if (arch.zipped?)
             if (!arch.zip!)
                 local_manager.log(:level => 'error', :message => "#{arch.errors.full_messages.join(" ")}")
             end
