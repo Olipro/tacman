@@ -266,8 +266,10 @@ class TacacsDaemon < ActiveRecord::Base
                 # TCPServer IO from mongrel
                 ObjectSpace.each_object(TCPSocket) {|sock| sock.reopen('/dev/null', 'r'); sock.close}
 
-                exec "ruby #{RAILS_ROOT}/lib/tacacs_plus_server.rb --pid_file #{self.pid_file} --error_log #{self.error_log_file} " +
-                    "--log_file #{self.aaa_log_file} --conf_file #{self.configuration_file} --start"
+                begin
+                    `ruby #{RAILS_ROOT}/lib/tacacs_plus_server.rb --pid_file #{self.pid_file} --error_log #{self.error_log_file} --log_file #{self.aaa_log_file} --conf_file #{self.configuration_file} --start`
+                rescue Exception => error
+                end
             end
             Process.wait(child_pid)
         end

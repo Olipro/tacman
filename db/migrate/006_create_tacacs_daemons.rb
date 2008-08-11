@@ -22,6 +22,7 @@ class CreateTacacsDaemons < ActiveRecord::Migration
   end
 
   def self.down
+    TacacsDaemon.find(:all, :conditions => "manager_id is null").each {|x| x.stop if (x.running?)}
     begin
         FileUtils.rm( Dir.glob("#{RAILS_ROOT}/log/tacacs_daemon_error_logs/*") )
         FileUtils.rm( Dir.glob("#{RAILS_ROOT}/tmp/configurations/*") )
