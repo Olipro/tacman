@@ -614,6 +614,7 @@ class UsersController < ApplicationController
                 format.html { redirect_to home_users_url }
                 format.xml  { render :xml => '<errors><error>This action is prohibited on slave systems.</error></errors>', :status => :not_acceptable }
             elsif @user.change_password(params[:new_password], params[:password_confirmation], params[:current_password], true)
+                flash[:notice] = "Change may take a few minutes to propagate."
                 format.html do
                     if (uri)
                         redirect_to(uri)
@@ -644,6 +645,7 @@ class UsersController < ApplicationController
                 format.html { redirect_to home_users_url }
                 format.xml  { render :xml => '<errors><error>This action is prohibited on slave systems.</error></errors>', :status => :not_acceptable }
             elsif @user.change_password(params[:new_password], params[:password_confirmation], params[:current_password])
+                flash[:notice] = "Change may take a few minutes to propagate."
                 format.html do
                     if (uri)
                         redirect_to(uri)
@@ -651,7 +653,7 @@ class UsersController < ApplicationController
                         redirect_to(home_users_url)
                     end
                 end
-                @local_manager.log(:username => @session_user.username, :user_id=> @session_user.id, :message => "User changed their password")
+                @local_manager.log(:username => @session_user.username, :user_id=> @session_user.id, :message => "User changed their login password")
                 format.xml  { head :ok }
             else
                 format.html { render :action => "change_password" }

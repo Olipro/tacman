@@ -12,6 +12,7 @@ features & bugs
 
 * import old logs into new system
 * test aaa log archive
+* test that old archive files get erased
 
 * verify all workers
 * test account lockout
