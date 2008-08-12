@@ -134,7 +134,7 @@ private
             mail_to.push(user.email)
         end
         begin
-            TacmanMailer.deliver_pending_password_expiry(@local_manager, mail_to, 7) if ( && mail_to.length > 0)
+            TacmanMailer.deliver_pending_password_expiry(@local_manager, mail_to, 7) if (mail_to.length > 0)
         rescue Exception => error
             @local_manager.log(:level => 'error', :message => "Failed to deliver password expiry notifications - #{error}")
         end
@@ -144,7 +144,7 @@ private
             mail_to.push(user.email)
         end
         begin
-            TacmanMailer.deliver_pending_password_expiry(@local_manager, mail_to, 3) if ( && mail_to.length > 0)
+            TacmanMailer.deliver_pending_password_expiry(@local_manager, mail_to, 3) if (mail_to.length > 0)
         rescue Exception => error
             @local_manager.log(:level => 'error', :message => "Failed to deliver password expiry notifications - #{error}")
         end
@@ -154,7 +154,7 @@ private
             mail_to.push(user.email)
         end
         begin
-            TacmanMailer.deliver_password_expired(@local_manager, mail_to) if ( && mail_to.length > 0)
+            TacmanMailer.deliver_password_expired(@local_manager, mail_to) if (mail_to.length > 0)
         rescue Exception => error
             @local_manager.log(:level => 'error', :message => "Failed to deliver password expiry notifications - #{error}")
         end
