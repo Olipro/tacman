@@ -69,12 +69,12 @@ private
             yesterday = (Date.today - 1).strftime("%Y-%m-%d")
             start_time = yesterday + " 00:00:00"
             end_time = yesterday + " 23:59:59"
-            mail_to = []
             @configurations.each do |configuration|
+                mail_to = []
                 configuration.configured_users.find(:all, :conditions => "role = 'admin'").each {|x| mail_to.push(x.user.email) if (!x.user.email.blank?)}
                 logs = configuration.system_logs.find(:all, :conditions => "created_at >= '#{start_time}' and created_at <= '#{end_time}'", :order => :created_at)
 
-                if (logs.length > 0)
+                if (logs.length > 0 && mail_to.length > 0)
                     begin
                         TacmanMailer.deliver_logs(@local_manager, mail_to, logs, "TacacsManager changelog - #{configuration.name}")
                     rescue Exception => error
@@ -96,9 +96,9 @@ private
             start_time = yesterday + " 00:00:00"
             end_time = yesterday + " 23:59:59"
             mail_to = []
-            User.find(:all, :conditions => "role = 'admin' and email != null").each {|x| mail_to.push(x.email)}
+            User.find(:all, :conditions => "role = 'admin' and email is not null").each {|x| mail_to.push(x.email)}
             logs = SystemLog.find(:all, :conditions => "level != 'info' and created_at >= '#{start_time}' and created_at <= '#{end_time}'", :order => :created_at)
-            if (logs.length > 0)
+            if (logs.length > 0 && mail_to.length > 0)
                 begin
                     TacmanMailer.deliver_logs(@local_manager, mail_to, logs)
                 rescue Exception => error
@@ -120,17 +120,13 @@ private
         pending7 = []
         pending3 = []
         expired = []
-        User.find(:all).each do |user|
+        User.find(:all, :conditions => "disabled = false").each do |user|
             next if (user.email.blank?)
             login = user.login_password
             enable = user.enable_password
-            if (login.expires_on == day7 || enable.expires_on == day7)
-                pending7.push(user)
-            elsif (login.expires_on == day3 || enable.expires_on == day3)
-                 pending3.push(user)
-            elsif (login.expires_on == today || enable.expires_on == today)
-                expired.push(user)
-            end
+            pending7.push(user) if (login.expires_on == day7 || enable.expires_on == day7)
+            pending3.push(user) if (login.expires_on == day3 || enable.expires_on == day3)
+            expired.push(user) if (login.expires_on == today || enable.expires_on == today)
         end
 
         mail_to = []
@@ -138,7 +134,7 @@ private
             mail_to.push(user.email)
         end
         begin
-            TacmanMailer.deliver_pending_password_expiry(@local_manager, mail_to, 7)
+            TacmanMailer.deliver_pending_password_expiry(@local_manager, mail_to, 7) if ( && mail_to.length > 0)
         rescue Exception => error
             @local_manager.log(:level => 'error', :message => "Failed to deliver password expiry notifications - #{error}")
         end
@@ -148,7 +144,7 @@ private
             mail_to.push(user.email)
         end
         begin
-            TacmanMailer.deliver_pending_password_expiry(@local_manager, mail_to, 3)
+            TacmanMailer.deliver_pending_password_expiry(@local_manager, mail_to, 3) if ( && mail_to.length > 0)
         rescue Exception => error
             @local_manager.log(:level => 'error', :message => "Failed to deliver password expiry notifications - #{error}")
         end
@@ -158,7 +154,7 @@ private
             mail_to.push(user.email)
         end
         begin
-            TacmanMailer.deliver_password_expired(@local_manager, mail_to)
+            TacmanMailer.deliver_password_expired(@local_manager, mail_to) if ( && mail_to.length > 0)
         rescue Exception => error
             @local_manager.log(:level => 'error', :message => "Failed to deliver password expiry notifications - #{error}")
         end
