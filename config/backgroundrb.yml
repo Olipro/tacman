@@ -16,12 +16,12 @@
 
   :hourly_worker:
     :hourly_tasks:
-      :trigger_args: 0 10 * * * * *
+      :trigger_args: 0 2 * * * * *
 
   :daily_worker:
     :daily_tasks:
-      :trigger_args: 0 5 3 * * * *
+      :trigger_args: 0 1 3 * * * *
 
   :aaa_log_worker:
     :gather_aaa_logs:
-      :trigger_args: 0 */15 * * * * *
+      :trigger_args: 0 */5 * * * * *

@@ -99,24 +99,28 @@ class TacacsDaemon < ActiveRecord::Base
 
     def gather_aaa_logs!
         return(false) if (self.aaa_file_locked? || !self.configuration_id)
-        self.lock_aaa_file(1800) # 30 min lock
+        self.lock_aaa_file(3600) # 60 min lock
 
-        # move aaa_log to aaa_scratch
+        # return if aaa_log_file contains no data
         begin
-            FileUtils.mv(self.aaa_log_file, self.aaa_scratch_file) if ( File.exists?(self.aaa_log_file) )
+            if ( File.zero?(self.aaa_log_file) )
+                self.unlock_aaa_file()
+                return(false)
+            end
         rescue Exception => error
-            self.errors.add_to_base("Error rotating aaa_log_file: #{error}")
+            self.errors.add_to_base("Error checking aaa_log_file size: #{error}")
             self.unlock_aaa_file()
             return(false)
         end
 
-        # reload daemon if running
-        if (self.running?)
-            begin
-                Process.kill('HUP', self.pid)
-            rescue Errno::ESRCH => error
-                self.errors.add_to_base("Reload failed. #{error}")
-            end
+        # move aaa_log to aaa_scratch
+        begin
+            FileUtils.mv(self.aaa_log_file, self.aaa_scratch_file)
+            FileUtils.touch(self.aaa_log_file)
+        rescue Exception => error
+            self.errors.add_to_base("Error rotating aaa_log_file: #{error}")
+            self.unlock_aaa_file()
+            return(false)
         end
 
         # read aaa_scratch
@@ -128,6 +132,15 @@ class TacacsDaemon < ActiveRecord::Base
             FileUtils.mv(self.aaa_scratch_file, self.aaa_log_file, :force => true)
             self.unlock_aaa_file()
             return(false)
+        end
+
+        # reload daemon if running
+        if (self.running?)
+            begin
+                Process.kill('HUP', self.pid)
+            rescue Errno::ESRCH => error
+                self.errors.add_to_base("Reload failed. #{error}")
+            end
         end
 
         # import logs directly for master systems, place into system_message for slaves
