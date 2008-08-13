@@ -60,6 +60,7 @@ class SystemMessage < ActiveRecord::Base
                                'user_groups', 'configured_users', 'command_authorization_whitelist_entries']
 
                     Manager.transaction do
+                        TacacsDaemon.destroy_all
                         AaaLog.delete_all
                         AaaLogArchive.destroy_all
                         Lock.delete_all("manager_id is null")

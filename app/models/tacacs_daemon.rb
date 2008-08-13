@@ -363,6 +363,9 @@ class TacacsDaemon < ActiveRecord::Base
         return(config.to_yaml)
     end
 
+    def export_xml
+        self.to_xml(:skip_instruct => true, :only => [:id, :configuration_id, :name, :ip, :port, :max_clients, :sock_timeout])
+    end
 
 private
 
@@ -393,8 +396,7 @@ private
 
     def create_on_remote_managers!
         if (!self.local?)
-            self.manager.add_to_outbox('create', self.to_xml(:skip_instruct => true,
-                                       :only => [:id, :configuration_id, :name, :ip, :port, :max_clients, :sock_timeout]) )
+            self.manager.add_to_outbox('create', self.export_xml )
         end
     end
 

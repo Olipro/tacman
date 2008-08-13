@@ -511,6 +511,7 @@ class Manager < ActiveRecord::Base
             self.is_approved = true
             self.is_enabled = true
             self.add_to_outbox('create', Manager.export)
+            self.tacacs_daemons.each {|td| self.add_to_outbox('create', td.export_xml)}
             return(self.save)
         else
             return(false)
@@ -747,6 +748,7 @@ class Manager < ActiveRecord::Base
             SystemMessage.destroy_all("manager_id = #{self.id} and queue = 'outbox'")
             self.outbox_revision = 0
             self.add_to_outbox('create', Manager.export)
+            self.tacacs_daemons.each {|td| self.add_to_outbox('create', td.export_xml)}
             self.save
         end
         return(true)
