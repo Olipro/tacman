@@ -52,7 +52,7 @@ private
 
         if (@local_manager.enable_mailer)
             begin
-                TacmanMailer.deliver_account_disabled(@local_manager, mail_to)
+                TacmanMailer.deliver_account_disabled(@local_manager, mail_to) if (mail_to.length > 0)
             rescue Exception => error
                 @local_manager.log(:level => 'error', :message => "Failed to deliver account auto-disable message - #{error}")
                 return(false)
