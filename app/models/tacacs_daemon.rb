@@ -103,7 +103,7 @@ class TacacsDaemon < ActiveRecord::Base
 
         # return if aaa_log_file contains no data
         begin
-            if ( File.zero?(self.aaa_log_file) )
+            if ( !File.exists?(self.aaa_log_file) || File.zero?(self.aaa_log_file) )
                 self.unlock_aaa_file()
                 return(false)
             end
