@@ -414,8 +414,7 @@ private
 
     def update_on_remote_managers!
         if (!self.local?)
-            self.manager.add_to_outbox('update', self.to_xml(:skip_instruct => true,
-                                       :only => [:id, :configuration_id, :name, :ip, :port, :max_clients, :sock_timeout]) )
+            self.manager.add_to_outbox('update', self.export_xml )
         end
     end
 
