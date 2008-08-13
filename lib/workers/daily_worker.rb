@@ -15,6 +15,7 @@ class DailyWorker < BackgrounDRb::MetaWorker
         mail_daily_logs
         mail_password_expiry
         restart_tacacs_daemons
+        cleanup_unprocessable_queue
     end
 
 
@@ -36,6 +37,13 @@ private
             configuration.cleanup_logs!
             configuration.cleanup_archives!
         end
+    end
+
+    def cleanup_unprocessable_queue
+        # delete unprocessable messages older than 28 days
+        date = (Date.today - 28).to_s
+        datetime = date + ' 23:59:59'
+        SystemMessage.delete_all("queue = 'unprocessable' and created_at <= '#{datetime}'")
     end
 
     def disable_inactive

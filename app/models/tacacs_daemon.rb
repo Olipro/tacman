@@ -372,6 +372,7 @@ private
     def cleanup
         if (self.local?)
             self.stop if (self.running?)
+            self.gather_aaa_logs!
             begin
                 File.delete(self.configuration_file) if ( File.exists?(self.configuration_file) )
                 File.delete(self.error_log_file) if ( File.exists?(self.error_log_file) )

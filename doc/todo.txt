@@ -10,7 +10,7 @@
 features & bugs
 ---------------
 
-* failed to add td to remote manager
+* uncomment cronjob on sat2 box
 
 
 
