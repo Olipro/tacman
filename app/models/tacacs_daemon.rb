@@ -411,6 +411,7 @@ private
         self.aaa_scratch_file = File.expand_path("#{RAILS_ROOT}/tmp/aaa_logs_scratch/") + "/#{self.serial}"
         create_on_remote_managers!
         self.save
+        self.start if (self.local?)
     end
 
     def update_on_remote_managers!
