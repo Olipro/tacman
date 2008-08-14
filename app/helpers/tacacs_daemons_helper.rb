@@ -1,14 +1,15 @@
 module TacacsDaemonsHelper
 
     def migration_checkboxes(td)
-            str = "<ul>"
+            str = '<ul style="list-style:none;">'
         Manager.find(:all, :order => :name).each do |m|
-            if (td.manager_id && td.manager_id != m.id)
+            str << "<li>"
+            if ( (td.manager_id && td.manager_id != m.id) || (!td.manager_id && !m.is_local) )
                 str << link_to(image_tag("unchecked.png", :border => 'none'), {:action => 'do_migrate', :id => td.id, :manager_id => m.id}, :confirm => "Migrate?", :method => :post)
             else
                 str << image_tag("checked.png", :border => 'none')
             end
-            str << m.name
+            str << m.name + "</li>"
         end
         str << "</ol>"
     end

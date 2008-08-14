@@ -90,7 +90,7 @@ class TacacsDaemonsController < ApplicationController
 
     def do_migrate
         @tacacs_daemon = TacacsDaemon.find(params[:id])
-        manager = Manger.find(params[:manager_id])
+        manager = Manager.find(params[:manager_id])
         respond_to do |format|
             @nav = 'show_nav'
             if (@local_manager.slave?)

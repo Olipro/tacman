@@ -1,0 +1,26 @@
+<b style="font-size: 16px;">Bulk Create TACACS+ daemons</b><br /><br />
+
+<% if (@import_errors) %>
+<div class="errorExplanation" id="errorExplanation">
+  <h2>Import Error</h2><br />
+  <% @import_errors.each_pair do |name,errors| %>
+    <% errors.each do |error| %>
+        <%= "TacacsDaemon #{name}: #{error}" %>
+    <% end %>
+  <% end %>
+</div>
+<% end %>
+
+
+<p>
+Only one entry per line. Fields should be comma delimited.<br /><br />
+Fields: <b><i>name, manager, configuration, ip, port</i></b><br />
+</p>
+
+<% form_for(:tacacs_daemon, :url => import_tacacs_daemons_url) do |f| %>
+    <%= text_area_tag :data, @data, :size => '100x15', :wrap => 'off' %>
+    <br /><br />
+    <%= submit_tag "Create" %>
+<% end %>
+
+<br />

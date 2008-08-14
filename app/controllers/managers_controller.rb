@@ -502,7 +502,7 @@ class ManagersController < ApplicationController
             if @manager.send_system_sync!
                 @nav = "remote_nav"
                 flash[:notice] = "System synchronization requested."
-                @local_manager.log(:level => 'warn', :username => @session_user.username, :manager_id=> @manager.id, :message => "Requested system synchronization.")
+                @local_manager.log(:level => 'warn', :username => @session_user.username, :manager_id=> @manager.id, :message => "Requested system synchronization for #{@manager.name}.")
                 format.html { redirect_to outbox_manager_url(@manager)}
                 format.xml  { head :ok }
             else

@@ -12,6 +12,7 @@ class TacacsDaemon < ActiveRecord::Base
     validates_presence_of :name
     validates_uniqueness_of :name
     validates_inclusion_of :port, :in => (1..65535)
+    validates_uniqueness_of :port, :scope => [:manager_id, :ip], :message => "IP/port combination must be unique."
 
 
     before_validation_on_create :name_lookup
@@ -20,6 +21,7 @@ class TacacsDaemon < ActiveRecord::Base
     after_destroy :destroy_on_remote_managers!
     after_destroy :cleanup
     after_update :update_on_remote_managers!
+
 
 
     # expects comma delimited string with fields:
@@ -222,18 +224,29 @@ class TacacsDaemon < ActiveRecord::Base
     end
 
     def migrate(manager)
+        orig_manager = self.manager_id
         begin
             TacacsDaemon.transaction do
                 if (self.local?)
-                    cleanup!
+                    cleanup
                 else
                     destroy_on_remote_managers!
                 end
-                self.manager_id = manager.id
-                create_on_remote_managers! if (!manager.local?)
-                self.save
+                manager.add_to_outbox('create', self.export_xml ) if (!manager.is_local)
+
+                if (!manager.is_local)
+                    self.manager_id = manager.id
+                    m_id = manager.id
+                else
+                    self.manager_id = nil
+                    m_id = 'null'
+                end
+
+                raise("validation failure") if (!self.valid?)
+                TacacsDaemon.update_all("manager_id = #{m_id}", "id = #{self.id}")
             end
         rescue Exception => error
+            self.manager_id = orig_manager
             self.errors.add_to_base("Migration failed: #{error}")
             return(false)
         end
