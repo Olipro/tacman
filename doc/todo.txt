@@ -25,11 +25,6 @@ tests & doc
 
 
 
-{'Backbone Engineering' => 'En1gx4uY', 'Managed NetSec' => 'Ri7@4Zx8','Enterprise NetSec' => 'LeuS3Rs1', 'Platform NetSec' => 'h1n3EryS', 'RTS' => 'h8db53rr'}.each_pair do |name,key|
-    dept = Department.create(:name => name)
-    Configuration.create(:name => name, :department_id => dept.id, :key => key)
-end
-
 User.find(:all, :conditions => "disabled = false", :order => :username).each {|u| puts "#{u.username}, #{u.hashed_password}, #{u.hashed_enable}, #{u.salt}, #{u.first_name} #{u.last_name}, #{u.email}, #{u.department}\n"}
 
 NetworkObjectGroup.find(:all, :order => :configuration_id).each do |nog|
