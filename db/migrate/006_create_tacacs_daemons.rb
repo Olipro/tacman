@@ -4,6 +4,7 @@ class CreateTacacsDaemons < ActiveRecord::Migration
       t.integer :manager_id
       t.integer :configuration_id
 
+      t.boolean :desire_start, :default => false
       t.string :aaa_log_file
       t.string :aaa_scratch_file
       t.string :configuration_file

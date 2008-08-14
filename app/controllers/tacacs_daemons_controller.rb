@@ -10,6 +10,13 @@ class TacacsDaemonsController < ApplicationController
         end
     end
 
+    def bulk_create
+        respond_to do |format|
+            @nav = 'index_nav'
+            format.html
+        end
+    end
+
     def changelog
         @tacacs_daemon = TacacsDaemon.find(params[:id])
         @log_count = SystemLog.count_by_sql("SELECT COUNT(*) FROM system_logs WHERE tacacs_daemon_id=#{@tacacs_daemon.id}")
@@ -81,6 +88,27 @@ class TacacsDaemonsController < ApplicationController
         end
     end
 
+    def do_migrate
+        @tacacs_daemon = TacacsDaemon.find(params[:id])
+        manager = Manger.find(params[:manager_id])
+        respond_to do |format|
+            @nav = 'show_nav'
+            if (@local_manager.slave?)
+                @tacacs_daemon.errors.add_to_base("This action is prohibited on slave systems.")
+                format.html { render :action => "migrate" }
+                format.xml  { render :xml => @tacacs_daemon.errors, :status => :not_acceptable }
+            elsif (@tacacs_daemon.migrate(manager) )
+                @local_manager.log(:username => @session_user.username, :tacacs_daemon_id => @tacacs_daemon.id,
+                                   :message => "Migrated #{@tacacs_daemon.name} to #{manager.name}.")
+
+                format.html { redirect_to tacacs_daemon_url(@tacacs_daemon) }
+                format.xml  { head :ok }
+            else
+                format.html { render :action => "migrate" }
+                format.xml  { render :xml => @tacacs_daemon.errors, :status => :unprocessable_entity }
+            end
+        end
+    end
 
     def edit
         @tacacs_daemon = TacacsDaemon.find(params[:id])
@@ -94,6 +122,29 @@ class TacacsDaemonsController < ApplicationController
         end
     end
 
+    def import
+        @data = params[:data]
+        respond_to do |format|
+            if (@local_manager.slave?)
+                flash[:warning] = "This action is prohibited on slave systems."
+                format.html { redirect_to bulk_create_tacacs_daemons_url }
+                format.xml  { render :xml => '<errors><error>This action is prohibited on slave systems.</error></errors>', :status => :not_acceptable }
+            else
+                @nav = 'index_nav'
+                errors = TacacsDaemon.import(@data)
+                if (errors.length == 0)
+                    @local_manager.log(:username=> @session_user.username, :message => "Bulk created new TACACS+ daemons.")
+                    format.html {redirect_to tacacs_daemons_url}
+                    format.xml{head :ok}
+                else
+                    @import_errors = errors
+                    format.html {render :action => :bulk_create}
+                    format.xml{render :xml => @import_errors.to_xml}
+                end
+            end
+        end
+    end
+
     def index
         @tacacs_daemons = TacacsDaemon.find(:all, :order => :name)
         @managers = Manager.find(:all, :order => :name)
@@ -104,6 +155,10 @@ class TacacsDaemonsController < ApplicationController
         end
     end
 
+    def migrate
+        @tacacs_daemon = TacacsDaemon.find(params[:id])
+        @nav = 'show_nav'
+    end
 
     def new
         @tacacs_daemon = TacacsDaemon.new()

@@ -10,6 +10,8 @@
 features & bugs
 ---------------
 
+* test migrations
+* test desire_start
 * uncomment cronjob on sat2 box
 
 

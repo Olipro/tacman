@@ -296,6 +296,7 @@ ActiveRecord::Schema.define(:version => 6) do
   create_table "tacacs_daemons", :force => true do |t|
     t.integer  "manager_id",         :limit => 11
     t.integer  "configuration_id",   :limit => 11
+    t.boolean  "desire_start",                     :default => false
     t.string   "aaa_log_file"
     t.string   "aaa_scratch_file"
     t.string   "configuration_file"

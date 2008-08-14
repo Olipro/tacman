@@ -250,7 +250,7 @@ class UsersController < ApplicationController
         respond_to do |format|
             if (@local_manager.slave?)
                 flash[:warning] = "This action is prohibited on slave systems."
-                format.html { redirect_to user_url(@user) }
+                format.html { redirect_to bulk_create_users_url }
                 format.xml  { render :xml => '<errors><error>This action is prohibited on slave systems.</error></errors>', :status => :not_acceptable }
             else
                 @nav = 'index_nav'

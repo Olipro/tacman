@@ -1,5 +1,18 @@
 module TacacsDaemonsHelper
 
+    def migration_checkboxes(td)
+            str = "<ul>"
+        Manager.find(:all, :order => :name).each do |m|
+            if (td.manager_id && td.manager_id != m.id)
+                str << link_to(image_tag("unchecked.png", :border => 'none'), {:action => 'do_migrate', :id => td.id, :manager_id => m.id}, :confirm => "Migrate?", :method => :post)
+            else
+                str << image_tag("checked.png", :border => 'none')
+            end
+            str << m.name
+        end
+        str << "</ol>"
+    end
+
     def status(tacacs_daemon)
         if (tacacs_daemon.running?)
             return('running')

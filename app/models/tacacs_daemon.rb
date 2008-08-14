@@ -14,11 +14,55 @@ class TacacsDaemon < ActiveRecord::Base
     validates_inclusion_of :port, :in => (1..65535)
 
 
+    before_validation_on_create :name_lookup
     after_create :setup
     after_create :create_locks
     after_destroy :destroy_on_remote_managers!
     after_destroy :cleanup
     after_update :update_on_remote_managers!
+
+
+    # expects comma delimited string with fields:
+    #name,manager,configuration,ip,port
+    # return hash of errors by name
+    def TacacsDaemon.import(data)
+        errors = {}
+        name = nil
+        managers = {}
+        configurations = {}
+        Manager.find(:all).each {|x| managers[x.name] = x.id}
+        Configuration.find(:all).each {|x| configurations[x.name] = x.id}
+        begin
+            TacacsDaemon.transaction do
+                data.each_line do |line|
+                    name,manager,configuration,ip,port = line.split(",")
+                    td = TacacsDaemon.new
+                    td.name = name.strip if (name)
+                    td.ip = ip.strip if (ip)
+                    td.port = port.to_i if (port)
+
+                    if (manager)
+                        manager.strip!
+                        td.manager_id = managers[manager] if ( managers.has_key?(manager) )
+                    end
+
+                    if (configuration)
+                        configuration.strip!
+                        td.configuration_id = configurations[configuration] if ( configurations.has_key?(configuration) )
+                    end
+
+                    if (!td.save)
+                        errors[name] = td.errors.full_messages
+                        raise
+                    end
+                end
+            end
+        rescue
+        end
+
+        return(errors)
+    end
+
 
 
     def aaa_file_locked?
@@ -174,6 +218,26 @@ class TacacsDaemon < ActiveRecord::Base
         end
 
         self.unlock_aaa_file()
+        return(true)
+    end
+
+    def migrate(manager)
+        begin
+            TacacsDaemon.transaction do
+                if (self.local?)
+                    cleanup!
+                else
+                    destroy_on_remote_managers!
+                end
+                self.manager_id = manager.id
+                create_on_remote_managers! if (!manager.local?)
+                self.save
+            end
+        rescue Exception => error
+            self.errors.add_to_base("Migration failed: #{error}")
+            return(false)
+        end
+
         return(true)
     end
 
@@ -401,6 +465,15 @@ private
         end
     end
 
+    def name_lookup
+        if (self.name.blank?)
+            begin
+                self.name = Resolv.getname(self.ip)
+            rescue Exception
+                self.name = self.ip
+            end
+        end
+    end
 
     def setup
         self.serial = Time.now.strftime("%Y%m%d-%H%M%S-") << self.id.to_s
@@ -411,7 +484,7 @@ private
         self.aaa_scratch_file = File.expand_path("#{RAILS_ROOT}/tmp/aaa_logs_scratch/") + "/#{self.serial}"
         create_on_remote_managers!
         self.save
-        self.start if (self.local?)
+        self.start if (self.local? && self.desire_start)
     end
 
     def update_on_remote_managers!

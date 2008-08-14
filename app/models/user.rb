@@ -41,7 +41,7 @@ class User < ActiveRecord::Base
     end
 
 
-    # expects \t delimited string with fields:
+    # expects comma delimited string with fields:
     #username, real_name, email, department, salt, login_password, enable_password
     # return hash of errors by username
     def User.import(data)
@@ -79,8 +79,7 @@ class User < ActiveRecord::Base
                     end
                 end
             end
-        rescue Exception => error
-            errors[username] = "Account creation failed with errors - #{error}"
+        rescue
         end
 
         return(errors)
