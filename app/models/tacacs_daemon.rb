@@ -37,6 +37,7 @@ class TacacsDaemon < ActiveRecord::Base
         begin
             TacacsDaemon.transaction do
                 data.each_line do |line|
+                    next if (line.blank?)
                     name,manager,configuration,ip,port = line.split(",")
                     td = TacacsDaemon.new
                     td.name = name.strip if (name)

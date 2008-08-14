@@ -52,6 +52,7 @@ class User < ActiveRecord::Base
         begin
             User.transaction do
                 data.each_line do |line|
+                    next if (line.blank?)
                     username,login_password,enable_password,salt,real_name,email,department = line.split(",")
                     user = User.new
                     user.username = username.strip if (username)

@@ -14,23 +14,34 @@ features & bugs
 * uncomment cronjob on sat2 box
 
 
+tests & doc
+-----------
 
-* script to port users, etc...
+* hash out xml views
+
+* tests for slave system restrictions
+
+* test write_remote_inbox with and without backgroundrb started
+
+
+
+
+
 User.find(:all, :conditions => "disabled = false", :order => :username).each {|u| puts "#{u.username}, #{u.hashed_password}, #{u.hashed_enable}, #{u.salt}, #{u.first_name} #{u.last_name}, #{u.email}, #{u.department}\n"}
 
-NetworkObjectGroup.find(:all).each do |nog|
+NetworkObjectGroup.find(:all, :order => :configuration_id).each do |nog|
     str = "# #{nog.configuration.name}\nnetwork-object-group #{nog.name.gsub(' ', '_').gsub('-', '_')}\n"
     nog.network_object_group_entries.each {|e| str << "  #{e.network}\n"}
     puts str + "\n"
 end
 
-ShellCommandObjectGroup.find(:all).each do |scog|
+ShellCommandObjectGroup.find(:all, :order => :configuration_id).each do |scog|
     str = "# #{scog.configuration.name}\nshell-command-object-group #{scog.name.gsub(' ', '_').gsub('-', '_')}\n"
     scog.shell_command_object_group_entries.each {|e| str << "  #{e.command}\n"}
     puts str + "\n"
 end
 
-Acl.find(:all).each do |acl|
+Acl.find(:all, :order => :configuration_id).each do |acl|
     str = "# #{acl.configuration.name}\naccess-list #{acl.name.gsub(' ', '_').gsub('-', '_')}\n"
     acl.acl_entries.each do |e|
         if (e.ip?)
@@ -42,18 +53,19 @@ Acl.find(:all).each do |acl|
     puts str + "\n"
 end
 
-AuthorAvpair.find(:all).each do |av|
+AuthorAvpair.find(:all, :order => :configuration_id).each do |av|
     str = "# #{av.configuration.name}\n"
     av.author_avpair_entries.each do |e|
         str << "author-avpair-list #{av.name.gsub(' ', '_').gsub('-', '_')}\n"
-        str << "  match #{e.acl.name.gsub(' ', '_').gsub('-', '_')}\n"
+        str << "  match access-list #{e.acl.name.gsub(' ', '_').gsub('-', '_')}\n"
+        str << "  set service=shell\n"
         e.avpairs.each {|x| str << "  set #{x.avpair}\n" }
         str << "\n"
     end
     puts str + "\n"
 end
 
-CommandAuthorizationProfile.find(:all).each do |cap|
+CommandAuthorizationProfile.find(:all, :order => :configuration_id).each do |cap|
     str = "# #{cap.configuration.name}\ncommand-authorization-profile #{cap.name.gsub(' ', '_').gsub('-', '_')}\n"
     cap.command_authorization_profile_entries.each do |e|
         if (e.command?)
@@ -65,14 +77,25 @@ CommandAuthorizationProfile.find(:all).each do |cap|
     puts str + "\n"
 end
 
-ConfiguredUser.find(:all).each do |cu|
-    str = "username=#{cu.user.username}\tconfiguration=#{cu.configuration.name}\trole=#{cu.user_role}\t"
-    str << "user_group=#{cu.user_group.name}\t" if (cu.user_group_id)
-    str << "av=#{cu.author_avpair.name}\t" if (cu.author_avpair_id)
-    str << "cap=#{cu.command_authorization_profile.name}\t" if (cu.command_authorization_profile_id)
-    str << "lacl=#{cu.login_acl.name}\t" if (cu.login_acl_id)
-    str << "eacl=#{cu.enable_acl.name}\t" if (cu.enable_acl_id)
-    puts str + "\n"
+UserGroup.find(:all, :order => :configuration_id).each do |x|
+    ar = ["name=#{x.name}", "configuration=#{x.configuration.name}"]
+    ar.push("av=#{x.author_avpair.name.gsub(' ', '_').gsub('-', '_')}") if (x.author_avpair_id)
+    ar.push("cap=#{x.command_authorization_profile.name.gsub(' ', '_').gsub('-', '_')}") if (x.command_authorization_profile_id)
+    ar.push("lacl=#{x.login_acl.name.gsub(' ', '_').gsub('-', '_')}") if (x.login_acl_id)
+    ar.push("eacl=#{x.enable_acl.name.gsub(' ', '_').gsub('-', '_')}") if (x.enable_acl_id)
+    puts ar.join(",") + "\n"
+end
+
+
+ConfiguredUser.find(:all, :order => :configuration_id).each do |cu|
+    next if cu.user.disabled
+    ar = ["username=#{cu.user.username}", "configuration=#{cu.configuration.name}", "role=#{cu.user_role}"]
+    ar.push("user_group=#{cu.user_group.name.gsub(' ', '_').gsub('-', '_')}") if (cu.user_group_id)
+    ar.push("av=#{cu.author_avpair.name.gsub(' ', '_').gsub('-', '_')}") if (cu.author_avpair_id)
+    ar.push("cap=#{cu.command_authorization_profile.name.gsub(' ', '_').gsub('-', '_')}") if (cu.command_authorization_profile_id)
+    ar.push("lacl=#{cu.login_acl.name.gsub(' ', '_').gsub('-', '_')}") if (cu.login_acl_id)
+    ar.push("eacl=#{cu.enable_acl.name.gsub(' ', '_').gsub('-', '_')}") if (cu.enable_acl_id)
+    puts ar.join(",") + "\n"
 end
 
 
@@ -83,12 +106,80 @@ User.find(:all).each {|u| users[u.username] = u}
 configurations = {}
 Configuration.find(:all).each {|x| configurations[x.name] = x}
 
-File.open(ARGV[0]).each_line do |line|
+File.open('/tmp/ug.txt').each_line do |line|
+    configuration = nil
+    field = nil
+    val = nil
+    begin
+    line.split(",").each do |part|
+        field,val = part.split('=')
+        next if (!field || !val)
+        field.strip!
+        val.strip!
+        configuration = configurations[val] if (field == 'configuration')
+        attrs[:name] = val) if (field == 'name')
+
+
+        if (field == 'av')
+            x = configuration.author_avpairs.find_by_name(val)
+            if (!x)
+                puts "no find #{val}. skipping #{attrs[:name]} #{configuration.name}"
+                next
+            end
+            attrs[:author_avpair_id] = x).id
+        end
+
+        if (field == 'cap')
+            x = configuration.command_authorization_profiles.find_by_name(val)
+            if (!x)
+                puts "no find #{val}. skipping #{attrs[:name]} #{configuration.name}"
+                next
+            end
+            attrs[:command_authorization_profile_id] = x.id
+        end
+
+        if (field == 'lacl')
+            x = configuration.acls.find_by_name(val)
+            if (!x)
+                puts "no find #{val}. skipping #{attrs[:name]} #{configuration.name}"
+                next
+            end
+            attrs[:login_acl_id] = x.id
+        end
+
+        if (field == 'eacl')
+            x = configuration.acls.find_by_name(val)
+            if (!x)
+                puts "no find #{val}. skipping #{attrs[:name]} #{configuration.name}"
+                next
+            end
+            attrs[:enable_acl_id] = x.id
+        end
+    end
+
+    configuration.user_groups.create(attrs)
+rescue Exception => error
+    puts error
+    puts line
+    puts "'#{field}'"
+    puts "'#{val}'"
+    break
+end
+end
+
+
+File.open('/tmp/cu.txt').each_line do |line|
     user = nil
     configuration = nil
     attrs = {:is_active => true}
-    line.split("\t").each do |part|
+    field = nil
+    val = nil
+begin
+    line.split(",").each do |part|
         field,val = part.split('=')
+        next if (!field || !val)
+        field.strip!
+        val.strip!
         user = users[val] if (field == 'username')
         configuration = configurations[val] if (field == 'configuration')
 
@@ -103,40 +194,62 @@ File.open(ARGV[0]).each_line do |line|
         end
 
         if (field == 'user_group')
-            attrs[:user_group_id] = configuration.user_groups.find(:first, :conditions => "name = '#{val}'").id
+            x = configuration.user_groups.find_by_name(val)
+            if (!x)
+                puts "no find #{val}. skipping #{user.username} #{configuration.name}"
+                next
+            end
+            attrs[:user_group_id] = x.id
         end
 
         if (field == 'av')
-            attrs[:author_avpair_id] = configuration.author_avpairs.find(:first, :conditions => "name = '#{val}'").id
+            x = configuration.author_avpairs.find_by_name(val)
+            if (!x)
+                puts "no find #{val}. skipping #{user.username} #{configuration.name}"
+                next
+            end
+            attrs[:author_avpair_id] = x).id
         end
 
         if (field == 'cap')
-            attrs[:command_authorization_profile_id] = configuration.command_authorization_profiles.find(:first, :conditions => "name = '#{val}'").id
+            x = configuration.command_authorization_profiles.find_by_name(val)
+            if (!x)
+                puts "no find #{val}. skipping #{user.username} #{configuration.name}"
+                next
+            end
+            attrs[:command_authorization_profile_id] = x.id
         end
 
         if (field == 'lacl')
-            attrs[:login_acl_id] = configuration.acls.find(:first, :conditions => "name = '#{val}'").id
+            x = configuration.acls.find_by_name(val)
+            if (!x)
+                puts "no find #{val}. skipping #{user.username} #{configuration.name}"
+                next
+            end
+            attrs[:login_acl_id] = x.id
         end
 
         if (field == 'eacl')
-            attrs[:enable_acl_id] = configuration.acls.find(:first, :conditions => "name = '#{val}'").id
+            x = configuration.acls.find_by_name(val)
+            if (!x)
+                puts "no find #{val}. skipping #{user.username} #{configuration.name}"
+                next
+            end
+            attrs[:enable_acl_id] = x.id
         end
     end
 
-    cu = ConfiguredUser.build(attrs)
+    cu = ConfiguredUser.new(attrs)
     cu.user_id = user.id
     cu.configuration_id = configuration.id
     cu.save
+rescue Exception => error
+    puts error
+    puts line
+    puts "'#{field}'"
+    puts "'#{val}'"
+    break
+end
 end
 
 
-tests & doc
------------
-
-* hash out xml views
-
-* tests for slave system restrictions
-
-* test write_remote_inbox with and without backgroundrb started
-
-* make sure un-approved or suspended users arent written to td config file

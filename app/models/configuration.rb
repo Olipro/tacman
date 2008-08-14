@@ -4,13 +4,13 @@ class Configuration < ActiveRecord::Base
     belongs_to :department
     has_many :aaa_log_archives, :dependent => :destroy, :order => :archived_on
     has_many :aaa_logs, :dependent => :destroy, :order => :timestamp
-    has_many :acls, :dependent => :destroy
-    has_many :author_avpairs, :dependent => :destroy
-    has_many :command_authorization_profiles, :dependent => :destroy
+    has_many :acls, :dependent => :destroy, :order => :name
+    has_many :author_avpairs, :dependent => :destroy, :order => :name
+    has_many :command_authorization_profiles, :dependent => :destroy, :order => :name
     has_many :command_authorization_whitelist_entries, :dependent => :destroy, :order => :sequence
-    has_many :network_object_groups, :dependent => :destroy
-    has_many :shell_command_object_groups, :dependent => :destroy
-    has_many :user_groups, :dependent => :destroy
+    has_many :network_object_groups, :dependent => :destroy, :order => :name
+    has_many :shell_command_object_groups, :dependent => :destroy, :order => :name
+    has_many :user_groups, :dependent => :destroy, :order => :name
     has_many :configured_users, :dependent => :destroy
     has_many :tacacs_daemons, :dependent => :nullify, :order => :name
     has_many :users, :through => :configured_users, :order => :username
