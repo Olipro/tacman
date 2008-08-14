@@ -16,8 +16,8 @@ class CreateConfigurations < ActiveRecord::Migration
       t.boolean :log_accounting, :default => true
       t.boolean :log_authentication, :default => true
       t.boolean :log_authorization, :default => true
-      t.integer :retain_aaa_logs_for, :default => 0
-      t.integer :archive_aaa_logs_for, :default => 0
+      t.integer :retain_aaa_logs_for
+      t.integer :archive_aaa_logs_for
 
       t.timestamps
     end

@@ -29,6 +29,7 @@ class Configuration < ActiveRecord::Base
     validates_length_of :password_prompt, :maximum => 255, :allow_nil => true
 
 
+    before_validation :default_settings
     after_create :setup
     after_create :create_locks
     after_destroy :destroy_on_remote_managers!
@@ -678,6 +679,12 @@ private
 
     def create_on_remote_managers!
         Manager.replicate_to_slaves('create', self.to_xml(:skip_instruct => true) )
+    end
+
+    def default_settings
+        local_manager = Manager.local
+        self.retain_aaa_logs_for = local_manager.maximum_aaa_log_retainment if (!self.retain_aaa_logs_for && local_manager.maximum_aaa_log_retainment > 0)
+        self.archive_aaa_logs_for = local_manager.maximum_aaa_archive_retainment if (!self.archive_aaa_logs_for && local_manager.maximum_aaa_archive_retainment > 0)
     end
 
     def destroy_on_remote_managers!
