@@ -19,6 +19,7 @@ private
                 @local_manager.log(:level => 'error', :tacacs_daemon_id => td.id,
                                    :message => "DaemonManager#check_status - failed to auto-start downed TacacsDaemon #{td.name}.")
                 TacacsDaemon.update_all("desire_start = false", "id = #{td.id}")
+                td.errors.clear
             end
         end
     end
