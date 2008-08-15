@@ -18,7 +18,7 @@ private
             if (td.desire_start && !td.running? && !td.start)
                 @local_manager.log(:level => 'error', :tacacs_daemon_id => td.id,
                                    :message => "DaemonManager#check_status - #{td.name} failed to start: #{errors}")
-                td.update_attribute(:desire_start, false)
+                TacacsDaemon.update_all("desire_start = false", "id = #{td.id}")
             end
         end
     end

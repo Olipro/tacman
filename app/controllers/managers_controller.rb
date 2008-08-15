@@ -529,7 +529,7 @@ class ManagersController < ApplicationController
                                 TacacsDaemon.update_all("desire_start = true", "id = #{td.id}") if (!td.desire_start)
                             elsif (command == 'stop')
                                 td.stop
-                                TacacsDaemon.update_all("desire_start = false", "id = #{td.id}") if (!td.desire_start)
+                                TacacsDaemon.update_all("desire_start = false", "id = #{td.id}") if (td.desire_start)
                             elsif (command == 'restart')
                                 td.restart
                                 TacacsDaemon.update_all("desire_start = true", "id = #{td.id}") if (!td.desire_start)
