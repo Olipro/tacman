@@ -1,0 +1,18 @@
+<b style="font-size: 16px;">TACACS+ Daemon Log Files</b><br /><br /><br />
+
+<% if (@tacacs_daemons.length > 0) %>
+  <% for td in @tacacs_daemons %>
+    <li>
+      <%= td.name %> &nbsp&nbsp
+      <%= link_to 'changelog', :action => :tacacs_daemon_changelog, :id => @configuration.id, :tacacs_daemon_id => td.id %> &nbsp&nbsp
+      <%= link_to 'AAA log', :action => :aaa_log_file, :id => @configuration.id, :tacacs_daemon_id => td.id %>
+    </li>
+  <% end %>
+  </ol>
+
+<% else %>
+  <b>No TACACS+ Daemons have been created.</b>
+<% end %>
+
+<br />
+
