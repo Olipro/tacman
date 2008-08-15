@@ -421,9 +421,9 @@ class Manager < ActiveRecord::Base
 
                 else
                     if (cmd == 'start')
-                        td_list.each {|td| td.start; TacacsDaemon.update_all("desired_start = true", "id = #{td.id}"); tacacs_daemons.push(td) }
+                        td_list.each {|td| td.start; TacacsDaemon.update_all("desire_start = true", "id = #{td.id}"); tacacs_daemons.push(td) }
                     elsif (cmd == 'stop')
-                        td_list.each {|td| td.stop; TacacsDaemon.update_all("desired_start = false", "id = #{td.id}");  tacacs_daemons.push(td) }
+                        td_list.each {|td| td.stop; TacacsDaemon.update_all("desire_start = false", "id = #{td.id}");  tacacs_daemons.push(td) }
                     elsif (cmd == 'reload')
                         td_list.each {|td| td.reload; tacacs_daemons.push(td) }
                     elsif (cmd == 'restart')

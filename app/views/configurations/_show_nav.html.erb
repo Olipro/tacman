@@ -9,16 +9,16 @@
 <% end %>
 
 <%= link_to 'View Settings', settings_configuration_url(@configuration) %><br />
-<% if (!@local_manager.slave? && (@session_user.admin? || @configuration_roles[@configuration.id] == 'admin') ) %>
+<% if (@session_user.admin? || @configuration_roles[@configuration.id] == 'admin' ) %>
 <%= link_to 'Edit Settings', edit_configuration_url(@configuration) %><br />
 <% end %>
 
 <%= link_to 'View User Settings', configuration_url(@configuration) %><br />
-<% if (!@local_manager.slave? && (@session_user.admin? || @configuration_roles[@configuration.id] == 'admin') ) %>
+<% if (@session_user.admin? || @configuration_roles[@configuration.id] == 'admin' ) %>
 <%= link_to 'Add/Remove Users', add_remove_users_configuration_url(@configuration) %><br />
 <% end %>
 
-<% if (!@local_manager.slave? && @session_user.admin?) %>
+<% if (@session_user.admin?) %>
 <br />
 <%= link_to 'Delete', configuration_url(@configuration), :confirm => "Confirm delete.", :method => :delete %><br />
 <% end %>

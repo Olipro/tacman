@@ -2,10 +2,8 @@
   <%= link_to 'Create New', new_tacacs_daemon_url %><br />
   <hr><br />
   <%= link_to 'View', tacacs_daemon_url(@tacacs_daemon) %><br />
-  <% if (!@local_manager.slave?) %>
-    <%= link_to 'Edit', edit_tacacs_daemon_url(@tacacs_daemon) %><br />
-    <%= link_to 'Migrate', migrate_tacacs_daemon_url(@tacacs_daemon) %><br />
-  <% end %>
+  <%= link_to 'Edit', edit_tacacs_daemon_url(@tacacs_daemon) %><br />
+  <%= link_to 'Migrate', migrate_tacacs_daemon_url(@tacacs_daemon) %><br />
   <%= link_to 'Changelog', changelog_tacacs_daemon_url(@tacacs_daemon) %><br />
   <%= link_to 'AAA Log File', aaa_log_tacacs_daemon_url(@tacacs_daemon) %><br />
   <%= link_to 'Error Log File', error_log_tacacs_daemon_url(@tacacs_daemon) %><br />
