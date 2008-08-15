@@ -526,12 +526,16 @@ class ManagersController < ApplicationController
                         tds.each do |td|
                             if (command == 'start')
                                 td.start
+                                TacacsDaemon.update_all("desire_start = true", "id = #{td.id}") if (!td.desire_start)
                             elsif (command == 'stop')
                                 td.stop
+                                TacacsDaemon.update_all("desire_start = false", "id = #{td.id}") if (!td.desire_start)
                             elsif (command == 'restart')
                                 td.restart
+                                TacacsDaemon.update_all("desire_start = true", "id = #{td.id}") if (!td.desire_start)
                             elsif (command == 'reload')
                                 td.reload
+                                TacacsDaemon.update_all("desire_start = true", "id = #{td.id}") if (!td.desire_start)
                             end
 
                             if (td.errors.length == 0)
