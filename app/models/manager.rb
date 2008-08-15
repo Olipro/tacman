@@ -421,13 +421,13 @@ class Manager < ActiveRecord::Base
 
                 else
                     if (cmd == 'start')
-                        td_list.each {|td| td.start; TacacsDaemon.update_all("desire_start = true", "id = #{td.id}") if (!tacacs_daemon.desire_start); tacacs_daemons.push(td) }
+                        td_list.each {|td| td.start; TacacsDaemon.update_all("desire_start = true", "id = #{td.id}") if (!td.desire_start); tacacs_daemons.push(td) }
                     elsif (cmd == 'stop')
-                        td_list.each {|td| td.stop; TacacsDaemon.update_all("desire_start = false", "id = #{td.id}") if (tacacs_daemon.desire_start);  tacacs_daemons.push(td) }
+                        td_list.each {|td| td.stop; TacacsDaemon.update_all("desire_start = false", "id = #{td.id}") if (td.desire_start);  tacacs_daemons.push(td) }
                     elsif (cmd == 'reload')
-                        td_list.each {|td| td.reload; TacacsDaemon.update_all("desire_start = true", "id = #{td.id}") if (!tacacs_daemon.desire_start);  tacacs_daemons.push(td) }
+                        td_list.each {|td| td.reload; TacacsDaemon.update_all("desire_start = true", "id = #{td.id}") if (!td.desire_start);  tacacs_daemons.push(td) }
                     elsif (cmd == 'restart')
-                        td_list.each {|td| td.restart;TacacsDaemon.update_all("desire_start = true", "id = #{td.id}") if (!tacacs_daemon.desire_start);  tacacs_daemons.push(td) }
+                        td_list.each {|td| td.restart;TacacsDaemon.update_all("desire_start = true", "id = #{td.id}") if (!td.desire_start);  tacacs_daemons.push(td) }
                     else
                         tacacs_daemons = td_list.dup
                     end
