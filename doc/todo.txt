@@ -11,7 +11,6 @@ features & bugs
 ---------------
 
 * test desire_start
-* uncomment cronjob on sat2 box
 
 
 tests & doc
@@ -105,6 +104,7 @@ configurations = {}
 Configuration.find(:all).each {|x| configurations[x.name] = x}
 
 File.open('/tmp/ug.txt').each_line do |line|
+    attrs = {}
     configuration = nil
     field = nil
     val = nil
@@ -115,7 +115,7 @@ File.open('/tmp/ug.txt').each_line do |line|
         field.strip!
         val.strip!
         configuration = configurations[val] if (field == 'configuration')
-        attrs[:name] = val) if (field == 'name')
+        attrs[:name] = val if (field == 'name')
 
 
         if (field == 'av')
@@ -124,7 +124,7 @@ File.open('/tmp/ug.txt').each_line do |line|
                 puts "no find #{val}. skipping #{attrs[:name]} #{configuration.name}"
                 next
             end
-            attrs[:author_avpair_id] = x).id
+            attrs[:author_avpair_id] = x.id
         end
 
         if (field == 'cap')
@@ -206,7 +206,7 @@ begin
                 puts "no find #{val}. skipping #{user.username} #{configuration.name}"
                 next
             end
-            attrs[:author_avpair_id] = x).id
+            attrs[:author_avpair_id] = x.id
         end
 
         if (field == 'cap')
