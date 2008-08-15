@@ -10,7 +10,6 @@
 features & bugs
 ---------------
 
-* test desire_start
 
 
 tests & doc
@@ -19,9 +18,6 @@ tests & doc
 * hash out xml views
 
 * tests for slave system restrictions
-
-* test write_remote_inbox with and without backgroundrb started
-
 
 
 User.find(:all, :conditions => "disabled = false", :order => :username).each {|u| puts "#{u.username}, #{u.hashed_password}, #{u.hashed_enable}, #{u.salt}, #{u.first_name} #{u.last_name}, #{u.email}, #{u.department}\n"}

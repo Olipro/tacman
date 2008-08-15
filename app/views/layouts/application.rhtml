@@ -36,6 +36,12 @@
         <b style="font-size: 24px; position: absolute; left: 30px; top: 10px; color: #ffffff;">TacacsPlus Manager</b>
 
         <% if @session_user %>
+            <% if @local_manager.slave? %>
+            <div style="position: absolute; left: 310px; top: 10px;">
+              <b style="font-size: 18px; color: #ffffff;"><u>slave</u></b>
+            </div>
+            <% end %>
+
             <% if @local_manager.in_maintenance_mode %>
             <div style="position: absolute; bottom: 5px; left: 400px;">
               <b style="font-size: 24px; color: #ffff00;">MAINTENANCE MODE</b>

@@ -123,7 +123,6 @@ production:
        <li>
          Set up permissions for tacman user<br>
          <code>chown -R apache:apache /var/tacman</code><br>
-         <i><b>*Note - make sure you rerun this command after downloading updates</b></i>
        </li> <br>
       </ol>
     
@@ -183,7 +182,7 @@ production:
 # rotate web logs when they reach 500k
 /home/tacman/tacman/log/*.log {
     size 500k
-    create 0664 tacman tacman
+    create 0664 apache apache
     rotate 3
 }
 </textarea>
@@ -246,7 +245,7 @@ COMMIT
 :POSTROUTING ACCEPT [0:0]
 :OUTPUT ACCEPT [0:0]
 
-# you need to configure the following for each ip which will listen on tcp 49
+# you need to configure the following for each ip (assumes daemons bind to 4949)
 -A PREROUTING -p tcp -m tcp --dport 49  -d 127.0.0.1 -j DNAT --to-destination 127.0.0.1:4949
 
 COMMIT
@@ -278,6 +277,26 @@ COMMIT
 
       To log into the system, visit <i>https://yourserver.here</i> and log in with 'admin', 'password'.
     </p>
+
+    <br>
+    <p>
+      <b>Periodic updates from subversion</b>
+      </p><ol>
+      <li>
+         Pull update, update db tables, set permissions, restart apache<br>
+         <code>cd /var/tacman</code> <br>
+         <code>svn update</code> <br>
+         <code>rake db:migrate RAILS_ENV=production</code> <br>
+         <code>chown -R apache:apache /var/tacman</code><br>
+         <code>/etc/init.d/httpd restart</code><br>
+       </li> <br>
+       <li>
+         Restart BackgrounDRb through the web interface<br>
+       </li> <br>
+      </ol>
+
+    <br>
+
 
 
       </div>
