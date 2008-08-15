@@ -2,7 +2,7 @@ class ConfigurationsController < ApplicationController
     viewer_access = [:aaa_log_archives, :aaa_log_file, :aaa_logs, :acls, :author_avpairs, :changelog, :command_authorization_profiles,
                      :command_authorization_whitelist, :download_archived_log, :log_search_form, :network_object_groups,
                      :search_aaa_logs, :settings, :shell_command_object_groups, :show, :tacacs_daemons, :tacacs_daemon_changelog,
-                     :tacacs_daemon_control, :user_groups]
+                     :tacacs_daemon_logs, :tacacs_daemon_control, :user_groups]
     admin_access = [:add_remove_users, :add_user, :create_acl, :create_author_avpair, :create_command_authorization_profile,
                     :create_command_authorization_whitelist_entry,:create_network_object_group, 
                     :create_shell_command_object_group, :create_user_group, :edit, :new_acl, :new_author_avpair,
@@ -613,6 +613,7 @@ class ConfigurationsController < ApplicationController
         end
     end
 
+
     def tacacs_daemon_changelog
         @tacacs_daemon = TacacsDaemon.find(params[:id])
         @configuration = @tacacs_daemon.configuration
@@ -666,6 +667,15 @@ class ConfigurationsController < ApplicationController
                 format.html {redirect_to tacacs_daemons_configuration_url(@configuration)}
                 format.xml  { head :ok }
             end
+        end
+    end
+
+    def tacacs_daemon_logs
+        @tacacs_daemons = @configuration.tacacs_daemons
+        respond_to do |format|
+            @nav = 'tacacs_daemon_nav'
+            format.html
+            format.xml  { render :xml => @tacacs_daemons.to_xml }
         end
     end
 

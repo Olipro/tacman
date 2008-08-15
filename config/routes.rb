@@ -56,7 +56,7 @@ ActionController::Routing::Routes.draw do |map|
                             :command_authorization_whitelist => :get, :new_command_authorization_whitelist_entry => :get, :create_command_authorization_whitelist_entry => :post,
                             :network_object_groups => :get, :new_network_object_group => :get, :create_network_object_group => :post,
                             :shell_command_object_groups => :get, :new_shell_command_object_group => :get, :create_shell_command_object_group => :post,
-                            :tacacs_daemons => :get, :tacacs_daemon_changelog => :get, :tacacs_daemon_control => :put,
+                            :tacacs_daemons => :get, :tacacs_daemon_changelog => :get, :tacacs_daemon_control => :put, :tacacs_daemon_logs => :get,
                             :user_groups => :get, :new_user_group => :get, :create_user_group => :post,
                             :add_remove_users => :get, :settings => :get,
                             :resequence_whitelist => :put, :search_aaa_logs => :get, :log_search_form => :get,

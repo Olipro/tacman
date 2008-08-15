@@ -10,13 +10,13 @@
 features & bugs
 ---------------
 
+* hash out xml views
 
 
 tests & doc
 -----------
 
-* hash out xml views
-
+* double check viewer permissions
 * tests for slave system restrictions
 
 
