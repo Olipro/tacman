@@ -817,7 +817,6 @@ class Manager < ActiveRecord::Base
     # write messages into inbox of manager
     def write_remote_inbox!
         if (!self.is_enabled)
-            self.errors.add_to_base("Messaging is not enabled.")
             return(false)
         end
 

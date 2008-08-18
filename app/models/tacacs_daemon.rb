@@ -208,7 +208,15 @@ class TacacsDaemon < ActiveRecord::Base
 
             if (logs.length > 0 )
                 if (master)
-                    master.add_to_outbox('create', "<aaa-logs>\n  <id type=\"integer\">#{configuration.id}</id>\n  <log type=\"string\">\n#{logs}</log>\n</aaa-logs>\n" )
+                    aaa_logs = REXML::Element.new("aaa-logs")
+                    id = REXML::Element.new("id")
+                    id.add_attribute('type', 'integer')
+                    log = REXML::Element.new("log")
+                    log.add_attribute('type', 'string')
+                    log.text = logs
+                    aaa_log.add_element(id)
+                    aaa_log.add_element(log)
+                    master.add_to_outbox('create', aaa_logs.to_s)
 
                 else
                     configuration.import_aaa_logs(logs)

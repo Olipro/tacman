@@ -51,8 +51,9 @@ class QueueWorker < BackgrounDRb::MetaWorker
             add_timer(30) do
                 begin
                     m.unlock_outbox() if (m.write_remote_inbox!)
-                rescue
+                rescue Exception => error
                     m.unlock_outbox()
+                    m.log(:level => 'error', :message => "QueueWorker#write_remote - raised errors: #{error}")
                 end
                 exit
             end
