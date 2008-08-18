@@ -70,6 +70,10 @@ CommandAuthorizationProfile.find(:all, :order => :configuration_id).each do |cap
     puts str + "\n"
 end
 
+
+
+
+
 UserGroup.find(:all, :order => :configuration_id).each do |x|
     ar = ["name=#{x.name}", "configuration=#{x.configuration.name}"]
     ar.push("av=#{x.author_avpair.name.gsub(' ', '_').gsub('-', '_')}") if (x.author_avpair_id)

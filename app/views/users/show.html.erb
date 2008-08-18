@@ -20,14 +20,14 @@
   <tr><td>&nbsp</td></tr>
   <tr><td><b><u>Login Password</u></b></td></tr>
   <tr><td><b>Lifespan:</b></td> <td><%= password_lifespan_xlate(@user.login_password_lifespan) %></td></tr>
-  <tr><td><b>Status:</b></td> <td><%= password_expiry_checkboxes(@user) %></td></tr>
+  <tr><td><b>Expires:</b></td> <td><%= password_expiry_checkboxes(@user) %></td></tr>
   <% if @user.password_history_length %>
   <tr><td><b>History:</b></td> <td><%= pluralize(@user.password_history_length, "entry" ) %></td></tr>
   <% end %>
   <tr><td>&nbsp</td></tr>
   <tr><td><b><u>Enable Password</u></b></td></tr>
   <tr><td><b>Lifespan:</b></td> <td><%= password_lifespan_xlate(@user.enable_password_lifespan) %></td></tr>
-  <tr><td><b>Status:</b></td> <td><%= enable_expiry_checkboxes(@user) %></td></tr>
+  <tr><td><b>Expires:</b></td> <td><%= enable_expiry_checkboxes(@user) %></td></tr>
   <% if @user.password_history_length %>
   <tr><td><b>History:</b></td> <td><%= pluralize(@user.password_history_length, "entry" ) %></td></tr>
   <% end %>

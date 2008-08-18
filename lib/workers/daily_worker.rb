@@ -171,7 +171,7 @@ private
     end
 
     def tacacs_daemon_maintenance
-        TacacsDaemon.find(:all, :conditions => 'manager_id = null').each do|td|
+        TacacsDaemon.find(:all, :conditions => 'manager_id = null').each do |td|
             # rotate error log file
             if (File.size(td.error_log_file) < 500000)
                 bak = td.error_log_file + '.bak'

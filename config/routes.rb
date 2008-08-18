@@ -73,6 +73,7 @@ ActionController::Routing::Routes.draw do |map|
                             :set_role_admin => :put, :set_role_user => :put, :set_role_user_admin => :put,
                             :toggle_allow_web_login => :put, :toggle_allow_web_services => :put, :toggle_disabled => :put,
                             :toggle_enable_expiry => :put, :toggle_password_expiry => :put,
+                            :extend_enable_expiry => :put, :extend_password_expiry => :put,
                             :toggle_disable_aaa_log_import => :put, :toggle_disable_aaa_log_import => :put,
                             :update_reset_password => :put, :update_reset_enable => :put,
                             :changelog => :get, :publish => :put}

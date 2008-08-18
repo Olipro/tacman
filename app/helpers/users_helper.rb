@@ -14,16 +14,18 @@ module UsersHelper
     end
 
     def enable_expiry_checkboxes(user)
-        if (!user.enable_password || user.login_password_lifespan == 0)
+        if (!user.enable_password || user.enable_password_lifespan == 0)
             return( enable_status(user) )
-        elsif (user.enable_password.expired? && user.login_password_lifespan != 0)
-            str = image_tag('checked.png', :border => 'none') + "expired &nbsp&nbsp&nbsp"
-            str << link_to(image_tag('unchecked.png', :border => 'none'), toggle_enable_expiry_user_url(user), :method => :put ) + "expires on #{@user.enable_password.expires_on + @user.login_password_lifespan}"
-            return(str)
-        elsif (user.login_password_lifespan != 0)
-            str = link_to(image_tag('unchecked.png', :border => 'none'), toggle_enable_expiry_user_url(user), :method => :put ) + "expired &nbsp&nbsp&nbsp"
-            str << image_tag('checked.png', :border => 'none') + "expires on #{user.enable_password.expires_on}"
+        elsif (user.enable_password.expired?)
+            str = image_tag('checked.png', :border => 'none') + "now &nbsp&nbsp&nbsp"
+            str << link_to(image_tag('unchecked.png', :border => 'none'), toggle_enable_expiry_user_url(user), :method => :put ) + "#{@user.enable_password.expires_on + @user.enable_password_lifespan}"
+        else
+            extended = Date.today + user.enable_password_lifespan
+            str = link_to(image_tag('unchecked.png', :border => 'none'), toggle_enable_expiry_user_url(user), :method => :put ) + "now &nbsp&nbsp&nbsp"
+            str << image_tag('checked.png', :border => 'none') + "#{user.enable_password.expires_on} &nbsp&nbsp&nbsp"
+            str << link_to(image_tag('unchecked.png', :border => 'none'), extend_enable_expiry_user_url(user), :method => :put ) + "#{extended}" if (user.enable_password.expires_on < extended)
         end
+        return(str)
     end
 
     def user_aaa_log_import_checkbox(user)
@@ -36,15 +38,17 @@ module UsersHelper
 
     def password_expiry_checkboxes(user)
         if (!user.login_password || user.login_password_lifespan == 0)
-            return( password_status(user) )
-        elsif (user.login_password.expired? && user.login_password_lifespan != 0)
-            str = image_tag('checked.png', :border => 'none') + "expired &nbsp&nbsp&nbsp"
-            str << link_to(image_tag('unchecked.png', :border => 'none'), toggle_password_expiry_user_url(user), :method => :put ) + "expires on #{@user.login_password.expires_on + @user.login_password_lifespan}"
-            return(str)
-        elsif (user.login_password_lifespan != 0)
-            str = link_to(image_tag('unchecked.png', :border => 'none'), toggle_password_expiry_user_url(user), :method => :put ) + "expired &nbsp&nbsp&nbsp"
-            str << image_tag('checked.png', :border => 'none') + "expires on #{user.login_password.expires_on}"
+            return( login_status(user) )
+        elsif (user.login_password.expired?)
+            str = image_tag('checked.png', :border => 'none') + "now &nbsp&nbsp&nbsp"
+            str << link_to(image_tag('unchecked.png', :border => 'none'), toggle_password_expiry_user_url(user), :method => :put ) + "#{@user.login_password.expires_on + @user.login_password_lifespan}"
+        else
+            extended = Date.today + user.login_password_lifespan
+            str = link_to(image_tag('unchecked.png', :border => 'none'), toggle_password_expiry_user_url(user), :method => :put ) + "now &nbsp&nbsp&nbsp"
+            str << image_tag('checked.png', :border => 'none') + "#{user.login_password.expires_on} &nbsp&nbsp&nbsp"
+            str << link_to(image_tag('unchecked.png', :border => 'none'), extend_password_expiry_user_url(user), :method => :put ) + "#{extended}" if (user.login_password.expires_on < extended)
         end
+        return(str)
     end
 
     def password_status(user)

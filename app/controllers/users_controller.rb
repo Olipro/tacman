@@ -224,6 +224,46 @@ class UsersController < ApplicationController
         @nav = 'show_nav'
     end
 
+    def extend_enable_expiry
+        @user = User.find(params[:id])
+
+        respond_to do |format|
+            @nav = 'show_nav'
+            if (@local_manager.slave?)
+                flash[:warning] = "This action is prohibited on slave systems."
+                format.html { redirect_to user_url(@user) }
+                format.xml  { render :xml => '<errors><error>This action is prohibited on slave systems.</error></errors>', :status => :not_acceptable }
+            else
+                @user.toggle_enable_expiry!
+                @user.toggle_enable_expiry!
+                @local_manager.log(:username => @session_user.username, :user_id=> @user.id, :message => "Extended enable password expiry to #{@user.enable_password_expired?} for user #{@user.username}.")
+                flash[:notice] = "You must publish this user before changes will take effect on TACACS+ daemons."
+                format.html { redirect_to user_url(@user) }
+                format.xml  { head :ok }
+            end
+        end
+    end
+
+    def extend_password_expiry
+        @user = User.find(params[:id])
+
+        respond_to do |format|
+            @nav = 'show_nav'
+            if (@local_manager.slave?)
+                flash[:warning] = "This action is prohibited on slave systems."
+                format.html { redirect_to user_url(@user) }
+                format.xml  { render :xml => '<errors><error>This action is prohibited on slave systems.</error></errors>', :status => :not_acceptable }
+            else
+                @user.toggle_password_expiry!
+                @user.toggle_password_expiry!
+                @local_manager.log(:username => @session_user.username, :user_id=> @user.id, :message => "Extended login password expiry to #{@user.login_password_expired?} for user #{@user.username}.")
+                flash[:notice] = "You must publish this user before changes will take effect on TACACS+ daemons."
+                format.html { redirect_to user_url(@user) }
+                format.xml  { head :ok }
+            end
+        end
+    end
+
     def help
         @user = @session_user
         respond_to do |format|
