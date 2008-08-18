@@ -180,7 +180,7 @@ production:
       edit /etc/logrotate.conf and add the following entries:<br>
 <textarea cols="100" rows="7" readonly>
 # rotate web logs when they reach 500k
-/home/tacman/tacman/log/*.log {
+/var/tacman/log/*.log {
     size 500k
     create 0664 apache apache
     rotate 3

@@ -14,7 +14,7 @@ class DailyWorker < BackgrounDRb::MetaWorker
         mail_configuration_changelog
         mail_daily_logs
         mail_password_expiry
-        restart_tacacs_daemons
+        tacacs_daemon_maintenance
         cleanup_unprocessable_queue
     end
 
@@ -170,8 +170,21 @@ private
         return(true)
     end
 
-    def restart_tacacs_daemons
-        TacacsDaemon.find(:all, :conditions => 'manager_id = null').each {|td| td.restart}
+    def tacacs_daemon_maintenance
+        TacacsDaemon.find(:all, :conditions => 'manager_id = null').each do|td|
+            # rotate error log file
+            if (File.size(td.error_log_file) < 500000)
+                bak = td.error_log_file + '.bak'
+                begin
+                    File.delete(bak) if ( File.exists?(bak) )
+                    FileUtils.mv(td.error_log_file, bak)
+                    FileUtils.touch(td.error_log_file)
+                rescue Exception => err
+                    @local_manager.log(:level => 'error', :message => "Error rotating error_log_file for #{td.name}:#{error}")
+                end
+            end
+            td.restart
+        end
     end
 
 end
