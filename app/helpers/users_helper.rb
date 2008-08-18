@@ -38,7 +38,7 @@ module UsersHelper
 
     def password_expiry_checkboxes(user)
         if (!user.login_password || user.login_password_lifespan == 0)
-            return( login_status(user) )
+            return( password_status(user) )
         elsif (user.login_password.expired?)
             str = image_tag('checked.png', :border => 'none') + "now &nbsp&nbsp&nbsp"
             str << link_to(image_tag('unchecked.png', :border => 'none'), toggle_password_expiry_user_url(user), :method => :put ) + "#{@user.login_password.expires_on + @user.login_password_lifespan}"
