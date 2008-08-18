@@ -48,15 +48,12 @@
             <td>
             <% if (@configuration_roles[@configuration.id] == 'admin' || @session_user.admin?) %>
               <% if (cu.active?) %>
-                <%= image_tag('checked.png', :border => 'none') %> active
-                &nbsp&nbsp
-                <%= link_to(image_tag('unchecked.png', :border => 'none'), suspend_configured_user_url(cu),:method => :put, :confirm => "Suspend #{user.username}?") %> suspended
+                <%= link_to(image_tag('checked.png', :border => 'none'), suspend_configured_user_url(cu),:method => :put, :confirm => "Disable #{user.username}?") %>
               <% else %>
-                <%= link_to(image_tag('unchecked.png', :border => 'none'), activate_configured_user_url(cu),:method => :put) %> active
-                &nbsp&nbsp
-                <%= image_tag('checked.png', :border => 'none') %> suspended
+                <%= link_to(image_tag('unchecked.png', :border => 'none'), activate_configured_user_url(cu),:method => :put) %>
               <% end %>
             <% end %>
+            account enabled
             </td>
 
             <td>

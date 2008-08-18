@@ -5,11 +5,12 @@
     <tr><td>&nbsp</td></tr>
     <tr>
         <th>&nbsp</th>
+        <th>Role</th>
         <th>Username</th>
         <th>Real Name</th>
-        <th>Role</th>
         <th>Department</th>
-        <th>Last Login</th>
+        <th>&nbsp</th>
+        <th>&nbsp</th>
         <th>&nbsp</th>
         <th>&nbsp</th>
     </tr>
@@ -34,8 +35,6 @@
           &nbsp
           <%= link_to image_tag('view_button.png', :border => 'none'), user_url(user) %>
         </td>
-        <td><%= user.username %></td>
-        <td><%=h user.real_name %></td>
         <td>
           <% if (!user.disabled?) %>
             <%= user_role_highlight(user) %>
@@ -43,24 +42,27 @@
             <%= user.role %>
           <% end %>
         </td>
+        <td><%= user.username %></td>
+        <td><%=h user.real_name %></td>
         <td><%=h user.department.name if (user.department) %></td>
+        <td><%= user_active_checkbox(user) %>account enabled</td>
 
-        <% if (!user.last_login.blank?) %>
-          <td><%= user.last_login %></td>
+        <% if (user.notes.blank?) %>
+          <td>&nbsp</td>
         <% else %>
-            <td><i>never</i></td>
+          <td nowrap><a href="#" class="tip"><b><u>notes</u></b><span><pre><%= user.notes %></pre></span></a></td>
         <% end %>
 
         <% if (user.allow_web_login) %>
           <td>&nbsp</td>
         <% else %>
-            <td><i>NoWebLogin</i></td>
+            <td><i style="font-size: 10px;">Web Login Disabled</i></td>
         <% end %>
 
-        <% if (!user.notes.blank?) %>
-          <td nowrap><a href="#" class="tip"><b><u>notes</u></b><span><pre><%= user.notes %></pre></span></a></td>
+        <% if (!user.last_login.blank?) %>
+            <td>&nbsp</td>
         <% else %>
-          <td>&nbsp</td>
+            <td><i style="font-size: 10px;">Never Logged In</i></td>
         <% end %>
 
         </tr>

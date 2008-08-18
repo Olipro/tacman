@@ -16,7 +16,6 @@ class ConfiguredUsersController < ApplicationController
             else
                 @configured_user.activate!
                 @local_manager.log(:username => @session_user.username, :configured_user_id => @configured_user.id, :configuration_id => @configuration.id, :message => "Activated user #{@user.username} within configuration #{@configuration.name}.")
-                flash[:notice] = "User has been activated."
                 format.html { redirect_to configuration_url(@configuration)}
                 format.xml  { head :ok }
             end
@@ -65,7 +64,6 @@ class ConfiguredUsersController < ApplicationController
             else
                 @configured_user.suspend!
                 @local_manager.log(:username => @session_user.username, :configured_user_id => @configured_user.id, :configuration_id => @configuration.id, :message => "Suspended user #{@user.username} within configuration #{@configuration.name}.")
-                flash[:notice] = "User has been suspended."
                 format.html { redirect_to configuration_url(@configuration)}
                 format.xml  { head :ok }
             end
