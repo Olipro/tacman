@@ -208,15 +208,15 @@ class TacacsDaemon < ActiveRecord::Base
 
             if (logs.length > 0 )
                 if (master)
-                    aaa_logs = REXML::Element.new("aaa-logs")
+                    aaa_xml = REXML::Element.new("aaa-logs")
                     id = REXML::Element.new("id")
                     id.add_attribute('type', 'integer')
                     log = REXML::Element.new("log")
                     log.add_attribute('type', 'string')
                     log.text = logs
-                    aaa_log.add_element(id)
-                    aaa_log.add_element(log)
-                    master.add_to_outbox('create', aaa_logs.to_s)
+                    aaa_xml.add_element(id)
+                    aaa_xml.add_element(log)
+                    master.add_to_outbox('create', aaa_xml.to_s)
 
                 else
                     configuration.import_aaa_logs(logs)
