@@ -211,6 +211,7 @@ class TacacsDaemon < ActiveRecord::Base
                     aaa_xml = REXML::Element.new("aaa-logs")
                     id = REXML::Element.new("id")
                     id.add_attribute('type', 'integer')
+                    id.text = configuration.id
                     log = REXML::Element.new("log")
                     log.add_attribute('type', 'string')
                     log.text = logs
