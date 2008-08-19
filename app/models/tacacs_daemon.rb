@@ -18,6 +18,7 @@ class TacacsDaemon < ActiveRecord::Base
     before_validation_on_create :name_lookup
     after_create :setup
     after_create :create_locks
+    before_destroy :prepare_for_destroy
     after_destroy :destroy_on_remote_managers!
     after_destroy :cleanup
     after_update :update_on_remote_managers!
@@ -458,8 +459,6 @@ private
 
     def cleanup
         if (self.local?)
-            self.stop if (self.running?)
-            self.gather_aaa_logs!
             begin
                 File.delete(self.configuration_file) if ( File.exists?(self.configuration_file) )
                 File.delete(self.error_log_file) if ( File.exists?(self.error_log_file) )
@@ -495,6 +494,13 @@ private
             rescue Exception
                 self.name = self.ip
             end
+        end
+    end
+
+    def prepare_for_destroy
+        if (self.local?)
+            self.stop if (self.running?)
+            self.gather_aaa_logs!
         end
     end
 
