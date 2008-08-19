@@ -271,7 +271,7 @@ class TacacsDaemon < ActiveRecord::Base
     end
 
     def lock_aaa_file(seconds)
-        self.aaa_lock.update_attribute(:expires_at, Time.now + seconds)
+        Lock.update_all("expires_at = '#{Time.now + seconds}'", "tacacs_daemon_id = #{self.id} and lock_type = 'aaa'")
     end
 
     def pid
@@ -414,7 +414,7 @@ class TacacsDaemon < ActiveRecord::Base
     end
 
     def unlock_aaa_file()
-        self.aaa_lock.update_attribute(:expires_at, nil)
+        Lock.update_all("expires_at = null", "tacacs_daemon_id = #{self.id} and lock_type = 'aaa'")
     end
 
     def write_config_file
