@@ -146,92 +146,11 @@ class TacacsDaemon < ActiveRecord::Base
     end
 
     def gather_aaa_logs!
-        return(false) if (self.aaa_file_locked? || !self.configuration_id)
+        return(false) if (self.aaa_file_locked?)
         self.lock_aaa_file(3600) # 60 min lock
-
-        # return if aaa_log_file contains no data
-        begin
-            if ( !File.exists?(self.aaa_log_file) || File.zero?(self.aaa_log_file) )
-                self.unlock_aaa_file()
-                return(false)
-            end
-        rescue Exception => error
-            self.errors.add_to_base("Error checking aaa_log_file size: #{error}")
-            self.unlock_aaa_file()
-            return(false)
-        end
-
-        # move aaa_log to aaa_scratch
-        begin
-            FileUtils.mv(self.aaa_log_file, self.aaa_scratch_file)
-            FileUtils.touch(self.aaa_log_file)
-        rescue Exception => error
-            self.errors.add_to_base("Error rotating aaa_log_file: #{error}")
-            self.unlock_aaa_file()
-            return(false)
-        end
-
-        # read aaa_scratch
-        log = ''
-        begin
-            file = File.open(self.aaa_scratch_file)
-        rescue Exception => error
-            self.errors.add_to_base("Error reading aaa_scratch_file: #{error}")
-            FileUtils.mv(self.aaa_scratch_file, self.aaa_log_file, :force => true)
-            self.unlock_aaa_file()
-            return(false)
-        end
-
-        # reload daemon if running
-        if (self.running?)
-            begin
-                Process.kill('HUP', self.pid)
-            rescue Errno::ESRCH => error
-                self.errors.add_to_base("Reload failed. #{error}")
-            end
-        end
-
-        # import logs directly for master systems, place into system_message for slaves
-        master = Manager.find(:first, :conditions => "manager_type = 'master'") if (Manager.local.slave?)
-        configuration = self.configuration
-        eof = false
-        while(1)
-            logs = ''
-            begin
-                10000.times {logs << file.readline}
-            rescue EOFError
-                eof = true
-            rescue Exception => error
-                self.errors.add_to_base("Error processing aaa_scratch_file. Cannot continue. Error: #{error}")
-                self.unlock_aaa_file()
-                return(false)
-            end
-
-            if (logs.length > 0 )
-                if (master)
-                    aaa_xml = REXML::Element.new("aaa-logs")
-                    id = REXML::Element.new("id")
-                    id.add_attribute('type', 'integer')
-                    id.text = configuration.id
-                    log = REXML::Element.new("log")
-                    log.add_attribute('type', 'string')
-                    log.text = logs
-                    aaa_xml.add_element(id)
-                    aaa_xml.add_element(log)
-                    master.add_to_outbox('create', aaa_xml.to_s)
-
-                else
-                    configuration.import_aaa_logs(logs)
-                    if (configuration.errors.length > 0)
-                        configuration.errors.each_full {|e| self.errors.add_to_base("AAA log import error: #{e}")}
-                    end
-                end
-            end
-            break if (eof)
-        end
-
+        stat = import_logs_from_file
         self.unlock_aaa_file()
-        return(true)
+        return(stat)
     end
 
     def migrate(manager)
@@ -271,7 +190,7 @@ class TacacsDaemon < ActiveRecord::Base
     end
 
     def lock_aaa_file(seconds)
-        Lock.update_all("expires_at = '#{Time.now + seconds}'", "tacacs_daemon_id = #{self.id} and lock_type = 'aaa'")
+        self.aaa_lock.update_attribute(:expires_at, Time.now + seconds)
     end
 
     def pid
@@ -414,7 +333,7 @@ class TacacsDaemon < ActiveRecord::Base
     end
 
     def unlock_aaa_file()
-        Lock.update_all("expires_at = null", "tacacs_daemon_id = #{self.id} and lock_type = 'aaa'")
+        self.aaa_lock.update_attribute(:expires_at, nil)
     end
 
     def write_config_file
@@ -487,6 +406,88 @@ private
         end
     end
 
+    def import_logs_from_file
+        return(false) if (!self.configuration_id)
+
+        # return if aaa_log_file contains no data
+        begin
+            if ( !File.exists?(self.aaa_log_file) || File.zero?(self.aaa_log_file) )
+                return(false)
+            end
+        rescue Exception => error
+            self.errors.add_to_base("Error checking aaa_log_file size: #{error}")
+            return(false)
+        end
+
+        # move aaa_log to aaa_scratch
+        begin
+            FileUtils.mv(self.aaa_log_file, self.aaa_scratch_file)
+            FileUtils.touch(self.aaa_log_file)
+        rescue Exception => error
+            self.errors.add_to_base("Error rotating aaa_log_file: #{error}")
+            return(false)
+        end
+
+        # read aaa_scratch
+        log = ''
+        begin
+            file = File.open(self.aaa_scratch_file)
+        rescue Exception => error
+            self.errors.add_to_base("Error reading aaa_scratch_file: #{error}")
+            FileUtils.mv(self.aaa_scratch_file, self.aaa_log_file, :force => true)
+            return(false)
+        end
+
+        # reload daemon if running
+        if (self.running?)
+            begin
+                Process.kill('HUP', self.pid)
+            rescue Errno::ESRCH => error
+                self.errors.add_to_base("Reload failed. #{error}")
+            end
+        end
+
+        # import logs directly for master systems, place into system_message for slaves
+        master = Manager.find(:first, :conditions => "manager_type = 'master'") if (Manager.local.slave?)
+        configuration = self.configuration
+        eof = false
+        while(1)
+            logs = ''
+            begin
+                10000.times {logs << file.readline}
+            rescue EOFError
+                eof = true
+            rescue Exception => error
+                self.errors.add_to_base("Error processing aaa_scratch_file. Cannot continue. Error: #{error}")
+                return(false)
+            end
+
+            if (logs.length > 0 )
+                if (master)
+                    aaa_xml = REXML::Element.new("aaa-logs")
+                    id = REXML::Element.new("id")
+                    id.add_attribute('type', 'integer')
+                    id.text = configuration.id
+                    log = REXML::Element.new("log")
+                    log.add_attribute('type', 'string')
+                    log.text = logs
+                    aaa_xml.add_element(id)
+                    aaa_xml.add_element(log)
+                    master.add_to_outbox('create', aaa_xml.to_s)
+
+                else
+                    configuration.import_aaa_logs(logs)
+                    if (configuration.errors.length > 0)
+                        configuration.errors.each_full {|e| self.errors.add_to_base("AAA log import error: #{e}")}
+                    end
+                end
+            end
+            break if (eof)
+        end
+
+        return(true)
+    end
+
     def name_lookup
         if (self.name.blank?)
             begin
@@ -500,7 +501,7 @@ private
     def prepare_for_destroy
         if (self.local?)
             self.stop if (self.running?)
-            self.gather_aaa_logs!
+            import_logs_from_file
         end
     end
 
