@@ -506,7 +506,7 @@ private
     end
 
     def setup
-        self.serial = Time.now.strftime("%Y%m%d-%H%M%S-") << self.id.to_s
+        self.serial = Time.now.strftime("%Y%m%d-%H%M%S-") << self.id.to_s if (!self.serial)
         self.error_log_file = File.expand_path("#{RAILS_ROOT}/log/tacacs_daemon_error_logs/") + "/#{self.serial}"
         self.pid_file = File.expand_path("#{RAILS_ROOT}/tmp/pids/tacacs_daemon_pid_files/") + "/#{self.serial}"
         self.configuration_file = File.expand_path("#{RAILS_ROOT}/tmp/configurations/") + "/#{self.serial}"
