@@ -14,14 +14,6 @@ module TacacsDaemonsHelper
         str << "</ol>"
     end
 
-    def status(tacacs_daemon)
-        if (tacacs_daemon.running?)
-            return('running')
-        else
-            return('stopped')
-        end
-    end
-
     def status_icon(tacacs_daemon)
         if (tacacs_daemon.status == 'running')
             image_tag("status_running.png", :border => 0)

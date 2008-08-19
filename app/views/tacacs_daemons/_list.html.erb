@@ -44,7 +44,7 @@
                 <% end %>
 
                 <td>&nbsp&nbsp</td>
-                <td><%= "#{tacacs_daemon.ip}:#{tacacs_daemon.port}" %></td>
+                <td><%= tacacs_daemon.ip %></td>
                 <td>&nbsp&nbsp</td>
                 <td style="font-size: 10px; color: #7B2024; font-weight: bold;"><%= tacacs_daemon.errors.full_messages.join("<br />") %></td>
               </tr>
