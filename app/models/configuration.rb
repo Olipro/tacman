@@ -503,8 +503,11 @@ class Configuration < ActiveRecord::Base
                 msg_type = fields[:msg_type] if ( fields.has_key?(:msg_type) )
                 status = fields[:status] if ( fields.has_key?(:status) )
 
-                users[username] = User.find_by_username(username)
-                user = users[username]
+                begin
+                    users[username] = User.find_by_username(username)
+                    user = users[username]
+                rescue
+                end
 
                 if (user && msg_type == 'Authentication' && status == 'Pass')
                     if ( login_times.has_key?(username) )
