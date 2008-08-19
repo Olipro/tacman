@@ -502,6 +502,7 @@ private
         if (self.local?)
             self.stop if (self.running?)
             import_logs_from_file
+            return(true)
         end
     end
 
