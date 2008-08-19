@@ -372,7 +372,7 @@ class TacacsDaemon < ActiveRecord::Base
 
     def export_xml
         self.to_xml(:skip_instruct => true, :only => [:id, :serial, :configuration_id, :name, :ip, :port,
-                                                      :max_clients, :sock_timeout, :desire_start])
+                                                      :max_clients, :sock_timeout])
     end
 
 private

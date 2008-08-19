@@ -171,6 +171,7 @@ private
                 tacacs_daemon = TacacsDaemon.new(fields)
                 tacacs_daemon.serial = fields['serial']
                 tacacs_daemon.id = fields['id']
+                tacacs_daemon.desire_start = true
                 raise( tacacs_daemon.errors.full_messages.join("\n") ) if ( !tacacs_daemon.save )
             else
                 tacacs_daemon = TacacsDaemon.find(fields['id'])
