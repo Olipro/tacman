@@ -25,8 +25,7 @@ private
         count = m.system_messages.count(:conditions => "queue = 'outbox'")
         if (count > 0 && m.is_enabled && !m.outbox_locked?)
             m.lock_outbox(1800) # 30 min lock
-            m.write_remote_inbox!
-            m.unlock_outbox()
+            m.unlock_outbox() if (m.write_remote_inbox!)
         end
 
         return(true)
