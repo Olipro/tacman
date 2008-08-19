@@ -480,7 +480,7 @@ class Configuration < ActiveRecord::Base
             time = nil
             if ( fields.has_key?(:timestamp) && !fields[:timestamp].blank? )
                 begin
-                    time = Date.parse(fields[:timestamp])
+                    time = Time.parse(fields[:timestamp])
                     day = time.strftime("%Y-%m-%d")
                 rescue Exception => error
                     self.errors.add_to_base("Timestamp error /#{line}/: #{error}")
