@@ -49,7 +49,8 @@ ActionController::Routing::Routes.draw do |map|
                 :collection => {:start_stop_selected => :put, :bulk_create => :get, :import => :post}
 
   map.resources :configurations,
-                :member => {:aaa_log_archives => :get, :aaa_log_file => :get, :aaa_logs => :get, :add => :post, :download_archived_log => :post,
+                :member => {:aaa_log_archives => :get, :aaa_log_file => :get, :aaa_logs => :get, :aaa_log_details => :get,
+                            :add => :post, :download_archived_log => :post,
                             :acls => :get, :new_acl => :get, :create_acl => :post,
                             :author_avpairs => :get, :new_author_avpair => :get, :create_author_avpair => :post,
                             :command_authorization_profiles => :get, :new_command_authorization_profile => :get, :create_command_authorization_profile => :post,

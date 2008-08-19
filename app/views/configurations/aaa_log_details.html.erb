@@ -1,0 +1,11 @@
+<b style="font-size: 16px;">AAA Log Details</b><br /><br />
+
+<% data = @log.log_fields %>
+<table>
+<% for field in AaaLog.log_fields_header %>
+  <tr> <td><b><%= field %></b></td> <td><%= data.shift %></td> </tr>
+<% end %>
+</table>
+<br /><br />
+<%= link_to 'Back', :back %>
+<br />

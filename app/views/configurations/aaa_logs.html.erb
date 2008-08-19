@@ -5,7 +5,7 @@
     <b>Current Time: </b><%= Time.now.strftime("%Y-%m-%d %H:%M:%S %Z") %></b>
     <table id="logs">
     <tr>
-      <td colspan="<%= AaaLog.short_log_fields_header.length %>">
+      <td colspan="<%= AaaLog.short_log_fields_header.length + 1 %>">
         <% if @search_opts %>
             <%= will_paginate @logs, :params => @search_opts %>
         <% else %>
@@ -15,6 +15,7 @@
     </tr>
 
     <tr>
+        <td>&nbsp</td>
         <% for field in AaaLog.short_log_fields_header %>
         <th><%= field %></th>
         <% end %>
@@ -29,6 +30,7 @@
           <tr class="light_shaded">
           <% shaded = true %>
       <% end %>
+          <td><%= link_to image_tag('view_button.png', :border => 'none'), aaa_log_details_configuration_url(@configuration, :aaa_log_id => log_entry.id) %></td>
         <% for field in log_entry.short_log_fields %>
           <td><%=h field %></td>
         <% end %>
@@ -36,7 +38,7 @@
     <% end %>
 
     <tr>
-        <td colspan="<%= AaaLog.log_fields_header.length %>">
+        <td colspan="<%= AaaLog.log_fields_header.length + 1 %>">
         <% if @search_opts %>
             <%= will_paginate @logs, :params => @search_opts %>
         <% else %>

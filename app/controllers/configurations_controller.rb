@@ -1,5 +1,5 @@
 class ConfigurationsController < ApplicationController
-    viewer_access = [:aaa_log_archives, :aaa_log_file, :aaa_logs, :acls, :author_avpairs, :changelog, :command_authorization_profiles,
+    viewer_access = [:aaa_log_archives, :aaa_log_file, :aaa_logs, :aaa_log_detail, :acls, :author_avpairs, :changelog, :command_authorization_profiles,
                      :command_authorization_whitelist, :download_archived_log, :log_search_form, :network_object_groups,
                      :search_aaa_logs, :settings, :shell_command_object_groups, :show, :tacacs_daemons, :tacacs_daemon_changelog,
                      :tacacs_daemon_logs, :tacacs_daemon_control, :user_groups]
@@ -62,6 +62,14 @@ class ConfigurationsController < ApplicationController
         end
         @logs = AaaLog.paginate(:page => page, :per_page => @local_manager.pagination_per_page,
                                 :conditions => "configuration_id = #{@configuration.id}", :order => :timestamp)
+        respond_to do |format|
+            @nav = 'show_nav'
+            format.html
+        end
+    end
+
+    def aaa_log_details
+        @log = AaaLog.find(params[:aaa_log_id])
         respond_to do |format|
             @nav = 'show_nav'
             format.html
