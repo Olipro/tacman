@@ -383,13 +383,17 @@ class ManagersController < ApplicationController
         respond_to do |format|
             if (@manager.is_local)
                 @nav = 'local_nav'
+                @managers = {@manager.id => @manager}
+                Manager.non_local.each {|m| @managers[m.id] = m}
             else
                 @nav = "remote_nav"
             end
 
             if (criteria.length != 0)
-                criteria.push("owning_manager_id = ?")
-                criteria_vals.push(@manager.id)
+                if (!@manager.is_local)
+                    criteria.push("owning_manager_id = ?")
+                    criteria_vals.push(@manager.id)
+                end
                 conditions = criteria.join(" and ")
                 @log_count = SystemLog.count_by_sql( ["SELECT COUNT(*) FROM system_logs WHERE #{conditions}"].concat(criteria_vals) )
 
