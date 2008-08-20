@@ -482,16 +482,18 @@ class Configuration < ActiveRecord::Base
                 begin
                     time = Time.parse(fields[:timestamp])
                     day = time.strftime("%Y-%m-%d")
+
+                    if ( !to_archive.has_key?(day) )
+                        to_archive[day] = line + "\n"
+                    else
+                        to_archive[day] = to_archive[day] << line << "\n"
+                    end
+
                 rescue Exception => error
                     self.errors.add_to_base("Timestamp error /#{line}/: #{error}")
                     next
                 end
 
-                if ( !to_archive.has_key?(day) )
-                    to_archive[day] = line + "\n"
-                else
-                    to_archive[day] = to_archive[day] << line << "\n"
-                end
             else
                 self.errors.add_to_base("Timestamp missing from aaa_log /#{line}/")
                 next
