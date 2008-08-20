@@ -20,7 +20,14 @@
     <td><b>Port:</b></td> 
     <td><%= f.text_field :port %></td>
   </tr>
-  
+  <tr>
+    <td><b>Maximum Concurrent Clients:</b></td> 
+    <td><%= f.text_field :max_clients %></td>
+  </tr>
+  <tr>
+    <td><b>Socket Timeout:</b></td> 
+    <td><%= f.text_field :sock_timeout %></td>
+  </tr>
   <tr><td>&nbsp</td></tr>
   <tr>
     <td><%= submit_tag "Update" %></td>
