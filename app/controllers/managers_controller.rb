@@ -172,7 +172,7 @@ class ManagersController < ApplicationController
 
     def local_logs
         @manager = @local_manager
-        @log_count = @manager.logs.count
+        @log_count = SystemLog.count
         if ( params.has_key?(:page) )
             page = params[:page]
         elsif (@log_count > 0)
@@ -180,7 +180,10 @@ class ManagersController < ApplicationController
             page = page + 1 if (@log_count % @local_manager.pagination_per_page > 0)
         end
         @logs = SystemLog.paginate(:page => page, :per_page => @local_manager.pagination_per_page,
-                                   :conditions => "owning_manager_id = #{@manager.id}", :order => :created_at)
+                                   :order => :created_at)
+        @managers = {@manager.id => @manager}
+        Manager.non_local.each {|m| @managers[m.id] = m}
+
         respond_to do |format|
             @nav = 'local_nav'
             format.html {render :template => 'managers/system_logs'}
