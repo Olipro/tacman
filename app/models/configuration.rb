@@ -114,7 +114,7 @@ class Configuration < ActiveRecord::Base
     end
 
     def archive_aaa_logs(date, logs)
-        arch = AaaLogArchive.find_by_archived_on(date)
+        arch = AaaLogArchive.find_by_archived_on(date, :conditions => "configuration_id = #{self.id}")
         if (!arch)
             arch = self.aaa_log_archives.create(:archive_file => self.aaa_log_dir + date + ".txt", :archived_on => date)
         elsif (arch.zipped?)
