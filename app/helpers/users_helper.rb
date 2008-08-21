@@ -17,13 +17,13 @@ module UsersHelper
         if (!user.enable_password || user.enable_password_lifespan == 0)
             return( enable_status(user) )
         elsif (user.enable_password.expired?)
-            str = image_tag('checked.png', :border => 'none') + "now &nbsp&nbsp&nbsp"
-            str << link_to(image_tag('unchecked.png', :border => 'none'), toggle_enable_expiry_user_url(user), :method => :put ) + "#{@user.enable_password.expires_on + @user.enable_password_lifespan}"
+            str = image_tag('radio_on.png', :border => 'none') + " now &nbsp&nbsp&nbsp"
+            str << link_to(image_tag('radio_off.png', :border => 'none'), toggle_enable_expiry_user_url(user), :method => :put ) + " #{@user.enable_password.expires_on + @user.enable_password_lifespan}"
         else
             extended = Date.today + user.enable_password_lifespan
-            str = link_to(image_tag('unchecked.png', :border => 'none'), toggle_enable_expiry_user_url(user), :method => :put ) + "now &nbsp&nbsp&nbsp"
-            str << image_tag('checked.png', :border => 'none') + "#{user.enable_password.expires_on} &nbsp&nbsp&nbsp"
-            str << link_to(image_tag('unchecked.png', :border => 'none'), extend_enable_expiry_user_url(user), :method => :put ) + "#{extended}" if (user.enable_password.expires_on < extended)
+            str = link_to(image_tag('radio_off.png', :border => 'none'), toggle_enable_expiry_user_url(user), :method => :put ) + " now &nbsp&nbsp&nbsp"
+            str << image_tag('radio_on.png', :border => 'none') + " #{user.enable_password.expires_on} &nbsp&nbsp&nbsp"
+            str << link_to(image_tag('radio_off.png', :border => 'none'), extend_enable_expiry_user_url(user), :method => :put ) + " #{extended}" if (user.enable_password.expires_on < extended)
         end
         return(str)
     end
@@ -40,13 +40,13 @@ module UsersHelper
         if (!user.login_password || user.login_password_lifespan == 0)
             return( password_status(user) )
         elsif (user.login_password.expired?)
-            str = image_tag('checked.png', :border => 'none') + "now &nbsp&nbsp&nbsp"
-            str << link_to(image_tag('unchecked.png', :border => 'none'), toggle_password_expiry_user_url(user), :method => :put ) + "#{@user.login_password.expires_on + @user.login_password_lifespan}"
+            str = image_tag('radio_on.png', :border => 'none') + " now &nbsp&nbsp&nbsp"
+            str << link_to(image_tag('radio_off.png', :border => 'none'), toggle_password_expiry_user_url(user), :method => :put ) + " #{@user.login_password.expires_on + @user.login_password_lifespan}"
         else
             extended = Date.today + user.login_password_lifespan
-            str = link_to(image_tag('unchecked.png', :border => 'none'), toggle_password_expiry_user_url(user), :method => :put ) + "now &nbsp&nbsp&nbsp"
-            str << image_tag('checked.png', :border => 'none') + "#{user.login_password.expires_on} &nbsp&nbsp&nbsp"
-            str << link_to(image_tag('unchecked.png', :border => 'none'), extend_password_expiry_user_url(user), :method => :put ) + "#{extended}" if (user.login_password.expires_on < extended)
+            str = link_to(image_tag('radio_off.png', :border => 'none'), toggle_password_expiry_user_url(user), :method => :put ) + " now &nbsp&nbsp&nbsp"
+            str << image_tag('radio_on.png', :border => 'none') + " #{user.login_password.expires_on} &nbsp&nbsp&nbsp"
+            str << link_to(image_tag('radio_off.png', :border => 'none'), extend_password_expiry_user_url(user), :method => :put ) + " #{extended}" if (user.login_password.expires_on < extended)
         end
         return(str)
     end
@@ -75,28 +75,28 @@ module UsersHelper
     def user_role_checkboxes(user)
         str = ""
         if (user.admin?)
-            str << link_to(image_tag('checked.png', :border => 'none'), set_role_admin_user_url(user), :confirm => "Confirm", :method => :put)
+            str << link_to(image_tag('radio_on.png', :border => 'none'), set_role_admin_user_url(user), :confirm => "Confirm", :method => :put)
         else
-            str << link_to(image_tag('unchecked.png', :border => 'none'), set_role_admin_user_url(user), :confirm => "Confirm", :method => :put)
+            str << link_to(image_tag('radio_off.png', :border => 'none'), set_role_admin_user_url(user), :confirm => "Confirm", :method => :put)
         end
 
-        str << 'admin &nbsp &nbsp'
+        str << ' admin &nbsp &nbsp'
 
         if (user.user_admin?)
-            str << link_to(image_tag('checked.png', :border => 'none'), set_role_user_admin_user_url(user), :confirm => "Confirm", :method => :put)
+            str << link_to(image_tag('radio_on.png', :border => 'none'), set_role_user_admin_user_url(user), :confirm => "Confirm", :method => :put)
         else
-            str << link_to(image_tag('unchecked.png', :border => 'none'), set_role_user_admin_user_url(user), :confirm => "Confirm", :method => :put)
+            str << link_to(image_tag('radio_off.png', :border => 'none'), set_role_user_admin_user_url(user), :confirm => "Confirm", :method => :put)
         end
 
-        str << 'user_admin &nbsp &nbsp'
+        str << ' user_admin &nbsp &nbsp'
 
         if (user.user?)
-            str << link_to(image_tag('checked.png', :border => 'none'), set_role_user_user_url(user), :confirm => "Confirm", :method => :put)
+            str << link_to(image_tag('radio_on.png', :border => 'none'), set_role_user_user_url(user), :confirm => "Confirm", :method => :put)
         else
-            str << link_to(image_tag('unchecked.png', :border => 'none'), set_role_user_user_url(user), :confirm => "Confirm", :method => :put)
+            str << link_to(image_tag('radio_off.png', :border => 'none'), set_role_user_user_url(user), :confirm => "Confirm", :method => :put)
         end
 
-        str << 'user'
+        str << ' user'
 
         return(str)
     end
