@@ -8,9 +8,11 @@ class TacmanMailer < ActionMailer::Base
     end
 
     def logs(local_manager, mail_to, logs, subject="TacacsManager logs")
+        managers = {local_manager.id => local_manager}
+        Manager.non_local.each {|m| managers[m.id] = m}
         bcc(mail_to)
         subject(subject)
-        body(:logs => logs)
+        body(:logs => logs, :managers => managers)
         from(local_manager.mail_from)
     end
 

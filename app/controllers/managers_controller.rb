@@ -478,7 +478,7 @@ class ManagersController < ApplicationController
     def system_log_archives
         @manager = @local_manager
         @files = SystemLogArchive.paginate(:page => params[:page], :per_page => @local_manager.pagination_per_page,
-                                           :order => :archived_on)
+                                           :order => 'archived_on desc')
         respond_to do |format|
             @nav = 'local_nav'
             format.html

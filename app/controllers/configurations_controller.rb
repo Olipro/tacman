@@ -19,7 +19,7 @@ class ConfigurationsController < ApplicationController
 
     def aaa_log_archives
         @files = AaaLogArchive.paginate(:page => params[:page], :per_page => @local_manager.pagination_per_page,
-                                        :order => :archived_on, :conditions => "configuration_id = #{@configuration.id}")
+                                        :order => 'archived_on desc', :conditions => "configuration_id = #{@configuration.id}")
         respond_to do |format|
             @nav = 'show_nav'
             format.html
