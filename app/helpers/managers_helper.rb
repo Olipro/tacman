@@ -1,5 +1,15 @@
 module ManagersHelper
 
+    def maintenance_checkboxes
+        if (!@local_manager.in_maintenance_mode)
+            str = link_to(image_tag("unchecked.png", :border => 'none'), toggle_maintenance_mode_managers_url, :method => :post, :confirm => "Enable maintenance mode?") + " on &nbsp&nbsp"
+            str << image_tag("checked.png", :border => 'none') + " off"
+        else
+            str = image_tag("checked.png", :border => 'none') + " on&nbsp&nbsp"
+            str << link_to(image_tag("unchecked.png", :border => 'none'), toggle_maintenance_mode_managers_url, :method => :post, :confirm => "Disable maintenance mode?") + " off"
+        end
+    end
+
     def role_checkboxes
         if (@manager.stand_alone?)
             str = link_to(image_tag("unchecked.png", :border => 'none'), {:action => 'master'}, :confirm => "Confirm Manager Type Change", :method => :post)

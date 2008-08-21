@@ -15,12 +15,6 @@
 <%= link_to 'Edit', edit_manager_url(@manager) %><br />
 <hr /><br />
 
-<% if (!@local_manager.in_maintenance_mode) %>
-<%= link_to 'Maintenance Mode on', toggle_maintenance_mode_managers_url, :method => :post, :confirm => "Enable maintenance mode?" %><br />
-<% else %>
-<%= link_to 'Maintenance Mode off', toggle_maintenance_mode_managers_url, :method => :post, :confirm => "Disable maintenance mode?" %><br />
-<% end %>
-
 <% if (!@manager.slave?) %>
 <%= link_to 'System Export', system_export_managers_url %><br />
 <% end %>
