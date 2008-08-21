@@ -5,9 +5,9 @@ module TacacsDaemonsHelper
         Manager.find(:all, :order => :name).each do |m|
             str << "<li>"
             if ( (td.manager_id && td.manager_id != m.id) || (!td.manager_id && !m.is_local) )
-                str << link_to(image_tag("unchecked.png", :border => 'none'), {:action => 'do_migrate', :id => td.id, :manager_id => m.id}, :confirm => "Migrate?", :method => :post)
+                str << link_to(image_tag("radio_off.png", :border => 'none'), {:action => 'do_migrate', :id => td.id, :manager_id => m.id}, :confirm => "Migrate?", :method => :post)
             else
-                str << image_tag("checked.png", :border => 'none')
+                str << image_tag("radio_on.png", :border => 'none')
             end
             str << m.name + "</li>"
         end
