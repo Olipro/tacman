@@ -29,7 +29,6 @@ body, p, ol, ul, td {
 
 div#header {
 color: #ffffff;
-background-color: #21517b;
 border: 0px;
 border-bottom: 3px solid #000000;
 height: 40px;
@@ -38,6 +37,9 @@ position: fixed;
 width: 100%;
 z-index: 3;
 }
+
+div.normal_header {background-color: #21517b;}
+div.slave_header {background-color: #757575;}
 
 div#header a, div#header a:visited{
 color: #ffffff;
