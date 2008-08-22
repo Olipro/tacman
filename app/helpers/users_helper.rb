@@ -64,11 +64,14 @@ module UsersHelper
         end
     end
 
-    def user_active_checkbox(user)
-        if (user.disabled?)
-            link_to(image_tag('unchecked.png', :border => 'none'), toggle_disabled_user_url(user), :method => :put )
+    def user_active_toggle(user)
+        str = ""
+        if (!user.disabled?)
+            str << image_tag('radio_on.png', :border => 'none') << " enable &nbsp&nbsp"
+            str << link_to(image_tag('radio_off.png', :border => 'none'), toggle_disabled_user_url(user), :method => :put ) << " disable"
         else
-            link_to(image_tag('checked.png', :border => 'none'), toggle_disabled_user_url(user), :method => :put )
+            str << link_to(image_tag('radio_off.png', :border => 'none'), toggle_disabled_user_url(user), :method => :put ) << " enable &nbsp&nbsp"
+            str << image_tag('radio_on.png', :border => 'none') << " disable"
         end
     end
 

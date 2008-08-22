@@ -606,7 +606,7 @@ class ConfigurationsController < ApplicationController
     end
 
     def show
-        sql = "select users.id,users.username,users.real_name,users.department_id from users,configured_users " +
+        sql = "select users.id,users.username,users.real_name,users.department_id,users.disabled from users,configured_users " +
               "where configured_users.configuration_id = #{@configuration.id} and configured_users.user_id = users.id " +
               "order by users.username"
         @users = User.paginate_by_sql(sql, :page => params[:page], :per_page => @local_manager.pagination_per_page)

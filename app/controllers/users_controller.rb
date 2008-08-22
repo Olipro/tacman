@@ -553,16 +553,16 @@ class UsersController < ApplicationController
             @nav = 'show_nav'
             if (@local_manager.slave?)
                 flash[:warning] = "This action is prohibited on slave systems."
-                format.html { redirect_to user_url(@user) }
+                format.html { redirect_to(request.env["HTTP_REFERER"]) }
                 format.xml  { render :xml => '<errors><error>This action is prohibited on slave systems.</error></errors>', :status => :not_acceptable }
             elsif (@user.admin? && @session_user.user_admin?)
                 flash[:warning] = "You do not have permission to modify administrator accounts."
-                format.html { redirect_to user_url(@user) }
+                format.html { redirect_to(request.env["HTTP_REFERER"]) }
                 format.xml  { render :xml => @user.errors, :status => :not_acceptable }
             else
                 @user.toggle_disabled!
                 @local_manager.log(:username => @session_user.username, :user_id=> @user.id, :message => "Set account status = #{@user.account_status} for user #{@user.username}.")
-                format.html { redirect_to user_url(@user) }
+                format.html { redirect_to(request.env["HTTP_REFERER"]) }
                 format.xml  { head :ok }
             end
         end

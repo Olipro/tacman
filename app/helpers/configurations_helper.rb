@@ -41,4 +41,17 @@ module ConfigurationsHelper
         str << "<b>Enable ACL:</b> &nbsp&nbsp #{cu.enable_acl.name}" if (cu.enable_acl_id)
         return(str)
     end
+
+    def cu_active_toggle(cu,user)
+        str = ""
+        if (cu.active?)
+            str << image_tag('radio_on.png', :border => 'none') << " active &nbsp&nbsp"
+            str << link_to(image_tag('radio_off.png', :border => 'none'), suspend_configured_user_url(cu),:method => :put, :confirm => "Disable #{user.username}?" )
+            str << " inactive"
+        else
+            str << link_to(image_tag('radio_off.png', :border => 'none'), activate_configured_user_url(cu),:method => :put )
+            str << " active &nbsp&nbsp"
+            str << image_tag('radio_on.png', :border => 'none') << " inactive"
+        end
+    end
 end

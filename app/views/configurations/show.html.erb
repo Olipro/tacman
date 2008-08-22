@@ -15,7 +15,7 @@
         <% shaded = true %>
         <% for user in @users %>
           <% cu = user.configured_users.find(:first, :conditions => "configuration_id = #{@configuration.id}") %>
-          <% if (cu.suspended?) %>
+          <% if (cu.suspended? || user.disabled?) %>
                 <tr class="disabled">
                 <% shaded = true %>
           <% elsif (shaded) %>
@@ -47,13 +47,8 @@
 
             <td>
             <% if (@configuration_roles[@configuration.id] == 'admin' || @session_user.admin?) %>
-              <% if (cu.active?) %>
-                <%= link_to(image_tag('checked.png', :border => 'none'), suspend_configured_user_url(cu),:method => :put, :confirm => "Disable #{user.username}?") %>
-              <% else %>
-                <%= link_to(image_tag('unchecked.png', :border => 'none'), activate_configured_user_url(cu),:method => :put) %>
-              <% end %>
+              <%= cu_active_toggle(cu,user) %>
             <% end %>
-            account enabled
             </td>
 
             <td>
@@ -63,6 +58,12 @@
                 <% else %>
                     <i>no department</i>
                 <% end %>
+              <% end %>
+            </td>
+
+            <td>
+              <% if (user.disabled?) %>
+              <i style="color: #7B2024; font-size: 10px;" >ACCOUNT DISABLED</i>
               <% end %>
             </td>
 
