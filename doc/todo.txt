@@ -10,6 +10,7 @@
 features & bugs
 ---------------
 
+* make sure no slq injection on search forms
 * view list of users/configs from department
 * view list of users from user_group
 * make logs list config name as part of message
