@@ -45,9 +45,13 @@
               <%= link_to(cu.user_group.name, user_groups_configuration_url(@configuration) ) if (cu.user_group) %>
             </td>
 
-            <td>
+            <td class="toggles">
             <% if (@configuration_roles[@configuration.id] == 'admin' || @session_user.admin?) %>
               <%= cu_active_toggle(cu,user) %>
+            <% elsif (cu.active?) %>
+                active
+            <% else %>
+                inactive
             <% end %>
             </td>
 

@@ -45,7 +45,7 @@
         <td><%= user.username %></td>
         <td><%=h user.real_name %></td>
         <td><%=h user.department.name if (user.department) %></td>
-        <td><%= user_active_toggle(user) %></td>
+        <td class="toggles"><%= user_active_toggle(user) %></td>
 
         <% if (user.notes.blank?) %>
           <td>&nbsp</td>
