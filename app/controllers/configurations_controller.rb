@@ -559,6 +559,12 @@ class ConfigurationsController < ApplicationController
             @search_opts['search_criteria[user]'] = params[:search_criteria][:user]
         end
 
+        if (!params[:search_criteria][:message].blank?)
+            criteria.push("message regexp ?")
+            criteria_vals.push(params[:search_criteria][:message])
+            @search_opts['search_criteria[message]'] = params[:search_criteria][:message]
+        end
+
         respond_to do |format|
             @nav = 'show_nav'
             if (criteria.length != 0)

@@ -10,6 +10,10 @@
 features & bugs
 ---------------
 
+* view list of users/configs from department
+* view list of users from user_group
+* make logs list config name as part of message
+
 * hash out xml views
 
 
