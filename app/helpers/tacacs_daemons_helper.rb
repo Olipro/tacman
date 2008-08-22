@@ -9,7 +9,7 @@ module TacacsDaemonsHelper
             else
                 str << image_tag("radio_on.png", :border => 'none')
             end
-            str << m.name + "</li>"
+            str << " #{m.name} </li>"
         end
         str << "</ol>"
     end
