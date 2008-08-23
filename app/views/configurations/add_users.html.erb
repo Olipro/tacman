@@ -1,0 +1,22 @@
+
+<b style="font-size: 24px;">Add Users - <%= @configuration.name %></b><br /><br /><br />
+
+<table  class="index_list">
+<tr><td colspan="3" style="border-bottom: 1px solid #000000;"><%= will_paginate @users %></td></tr>
+<tr> <th>&nbsp</th> <th>Username</th> <th>Real Name</th> </tr>
+<% shaded = true %>
+<% for user in @users %>
+  <% next if (@added.has_key?(user.id) ) %>
+    <td>
+      <%= link_to '<b>+</b>',
+          {:action => :add_user, :id => @configuration.id, :user_id => user.id}, :method => :post %>
+    </td>
+    <td><%= user.username %></td>
+    <td><%= user.real_name %></td>
+  </tr>
+<% end %>
+<tr><td colspan="3" style="border-top: 1px solid #000000;"><%= will_paginate @users %></td></tr>
+</table>
+
+<br /><br /><br />
+

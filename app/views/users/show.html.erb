@@ -13,7 +13,6 @@
   <% else %>
   <tr><td><b>Role:</b></td><td><%=h @user.role %></td></tr>
   <% end %>
-  <tr><td><b>Account Status:</b></td> <td><%= user_active_toggle(@user) %></td></tr>
   <tr><td>&nbsp</td></tr>
   <tr><td><%= user_web_login_checkbox(@user) %><b>web login allowed</b></td></tr>
   <tr><td><%= user_aaa_log_import_checkbox(@user) %><b>disable AAA log import</b></td></tr>

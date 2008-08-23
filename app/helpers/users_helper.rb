@@ -68,9 +68,9 @@ module UsersHelper
         str = ""
         if (!user.disabled?)
             str << image_tag('radio_on.png', :border => 'none') << " enable &nbsp&nbsp"
-            str << link_to(image_tag('radio_off.png', :border => 'none'), toggle_disabled_user_url(user), :method => :put ) << " disable"
+            str << link_to_remote(image_tag('radio_off.png', :border => 'none'), :url => toggle_disabled_user_url(user), :method => :put ) << " disable"
         else
-            str << link_to(image_tag('radio_off.png', :border => 'none'), toggle_disabled_user_url(user), :method => :put ) << " enable &nbsp&nbsp"
+            str << link_to_remote(image_tag('radio_off.png', :border => 'none'), :url => toggle_disabled_user_url(user), :method => :put ) << " enable &nbsp&nbsp"
             str << image_tag('radio_on.png', :border => 'none') << " disable"
         end
     end

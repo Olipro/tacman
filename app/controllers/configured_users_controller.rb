@@ -10,13 +10,28 @@ class ConfiguredUsersController < ApplicationController
         respond_to do |format|
             @nav = "configurations/show_nav"
             if (@local_manager.slave?)
-                @configured_user.errors.add_to_base("This action is prohibited on slave systems.")
-                format.html { render configuration_url(@configured_user.configuration)  }
+                format.html do
+                    render :update do |page|
+                        page.replace_html('flash_box' , '<p class="flash_warning">This action is prohibited on slave systems.</p>')
+                        page.show('flash_box')
+                        page << "new Effect.Fade('flash_box', { delay: 4.0 });"
+                    end
+                end
                 format.xml  { render :xml => @configured_user.errors, :status => :not_acceptable }
             else
                 @configured_user.activate!
                 @local_manager.log(:username => @session_user.username, :configured_user_id => @configured_user.id, :configuration_id => @configuration.id, :message => "Activated user #{@user.username} within configuration #{@configuration.name}.")
-                format.html { redirect_to configuration_url(@configuration)}
+                format.html do
+                    render :update do |page|
+                        if @user.disabled?
+                            page.replace("user#{@user.id}" , :partial => 'configurations/user_index',
+                                        :locals => { :user => @user, :cu => @configured_user, :user_class => 'disabled' })
+                        else
+                            page.replace("user#{@user.id}" , :partial => 'configurations/user_index',
+                                        :locals => { :user => @user, :cu => @configured_user, :user_class => 'light_shaded' })
+                        end
+                    end
+                end
                 format.xml  { head :ok }
             end
         end
@@ -30,13 +45,22 @@ class ConfiguredUsersController < ApplicationController
         respond_to do |format|
             @nav = "configurations/show_nav"
             if (@local_manager.slave?)
-                flash[:warning] = "This action is prohibited on slave systems."
-                format.html { redirect_to( request.env["HTTP_REFERER"] ) }
+                format.html do
+                    render :update do |page|
+                        page.replace_html('flash_box' , '<p class="flash_warning">This action is prohibited on slave systems.</p>')
+                        page.show('flash_box')
+                        page << "new Effect.Fade('flash_box', { delay: 4.0 });"
+                    end
+                end
                 format.xml  { render :xml => @@configured_user.errors, :status => :not_acceptable }
             else
                 @configured_user.destroy
                 @local_manager.log(:username => @session_user.username, :user_id => @user.id, :configured_user_id => @configured_user.id, :configuration_id => @configuration.id, :message => "Removed user #{@user.username} from configuration #{@configuration.name}.")
-                format.html { redirect_to( request.env["HTTP_REFERER"] ) }
+                format.html do
+                    render :update do |page|
+                      page.remove("user#{@user.id}")
+                    end
+                end
                 format.xml  { head :ok }
             end
         end
@@ -58,13 +82,23 @@ class ConfiguredUsersController < ApplicationController
         respond_to do |format|
             @nav = "configurations/show_nav"
             if (@local_manager.slave?)
-                @configured_user.errors.add_to_base("This action is prohibited on slave systems.")
-                format.html { render configuration_url(@configured_user.configuration) }
+                format.html do
+                    render :update do |page|
+                        page.replace_html('flash_box' , '<p class="flash_warning">This action is prohibited on slave systems.</p>')
+                        page.show('flash_box')
+                        page << "new Effect.Fade('flash_box', { delay: 4.0 });"
+                    end
+                end
                 format.xml  { render :xml => @@configured_user.errors, :status => :not_acceptable }
             else
                 @configured_user.suspend!
                 @local_manager.log(:username => @session_user.username, :configured_user_id => @configured_user.id, :configuration_id => @configuration.id, :message => "Suspended user #{@user.username} within configuration #{@configuration.name}.")
-                format.html { redirect_to configuration_url(@configuration)}
+                format.html do
+                    render :update do |page|
+                        page.replace("user#{@user.id}" , :partial => 'configurations/user_index',
+                                     :locals => { :user => @user, :cu => @configured_user, :user_class => 'disabled' })
+                    end
+                end
                 format.xml  { head :ok }
             end
         end

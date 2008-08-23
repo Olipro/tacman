@@ -180,7 +180,7 @@ private
 
         elsif (type == 'department')
             if (self.verb == 'update')
-                department = Deparment.find(fields['id'])
+                department = Department.find(fields['id'])
                 raise( department.errors.full_messages.join("\n") ) if ( !department.update_attributes(fields) )
             elsif (self.verb == 'create')
                 department = Department.new(fields)

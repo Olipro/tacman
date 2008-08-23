@@ -576,17 +576,37 @@ class UsersController < ApplicationController
         respond_to do |format|
             @nav = 'show_nav'
             if (@local_manager.slave?)
-                flash[:warning] = "This action is prohibited on slave systems."
-                format.html { redirect_to(request.env["HTTP_REFERER"]) }
+                format.html do
+                    render :update do |page|
+                        page.replace_html('flash_box' , '<p class="flash_warning">This action is prohibited on slave systems.</p>')
+                        page.show('flash_box')
+                        page << "new Effect.Fade('flash_box', { delay: 4.0 });"
+                    end
+                end
                 format.xml  { render :xml => '<errors><error>This action is prohibited on slave systems.</error></errors>', :status => :not_acceptable }
             elsif (@user.admin? && @session_user.user_admin?)
-                flash[:warning] = "You do not have permission to modify administrator accounts."
-                format.html { redirect_to(request.env["HTTP_REFERER"]) }
+                format.html do
+                    render :update do |page|
+                        page.replace_html('flash_box' , '<p class="flash_warning">You do not have permission to modify administrator accounts.</p>')
+                        page.show('flash_box')
+                        page << "new Effect.Fade('flash_box', { delay: 4.0 });"
+                    end
+                end
                 format.xml  { render :xml => @user.errors, :status => :not_acceptable }
             else
                 @user.toggle_disabled!
                 @local_manager.log(:username => @session_user.username, :user_id=> @user.id, :message => "Set account status = #{@user.account_status} for user #{@user.username}.")
-                format.html { redirect_to(request.env["HTTP_REFERER"]) }
+                format.html do
+                    render :update do |page|
+                        if @user.disabled?
+                            page.replace("user#{@user.id}" , :partial => 'user_index',
+                                        :locals => { :user => @user, :user_class => 'disabled' })
+                        else
+                            page.replace("user#{@user.id}" , :partial => 'user_index',
+                                        :locals => { :user => @user, :user_class => 'light_shaded' })
+                        end
+                    end
+                end
                 format.xml  { head :ok }
             end
         end

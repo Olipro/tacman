@@ -3,7 +3,7 @@ class ConfigurationsController < ApplicationController
                      :command_authorization_whitelist, :download_archived_log, :log_search_form, :network_object_groups,
                      :search_aaa_logs, :settings, :shell_command_object_groups, :show, :tacacs_daemons, :tacacs_daemon_changelog,
                      :tacacs_daemon_logs, :tacacs_daemon_control, :user_groups]
-    admin_access = [:add_remove_users, :add_user, :create_acl, :create_author_avpair, :create_command_authorization_profile,
+    admin_access = [:add_user, :add_users, :create_acl, :create_author_avpair, :create_command_authorization_profile,
                     :create_command_authorization_whitelist_entry,:create_network_object_group, 
                     :create_shell_command_object_group, :create_user_group, :edit, :new_acl, :new_author_avpair,
                     :new_command_authorization_profile, :new_command_authorization_whitelist_entry,
@@ -110,7 +110,7 @@ class ConfigurationsController < ApplicationController
         end
     end
 
-    def add_remove_users
+    def add_users
         @added = {}
         if (@configuration.department_id)
             @users = User.paginate(:page => params[:page], :per_page => @local_manager.pagination_per_page,
@@ -610,6 +610,8 @@ class ConfigurationsController < ApplicationController
               "where configured_users.configuration_id = #{@configuration.id} and configured_users.user_id = users.id " +
               "order by users.username"
         @users = User.paginate_by_sql(sql, :page => params[:page], :per_page => @local_manager.pagination_per_page)
+        @configured_users = {}
+        @configuration.configured_users.each {|cu| @configured_users[cu.user_id] = cu}
         respond_to do |format|
             @nav = 'show_nav'
             format.html # show.html.erb
