@@ -10,7 +10,7 @@
 features & bugs
 ---------------
 
-* make logs list config name as part of message
+* make logs list config name as part of message on X_entries
 * timeouts for remote web service calls
 * times in logs are being displayed wrong
 

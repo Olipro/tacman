@@ -179,7 +179,7 @@ class ConfigurationsController < ApplicationController
             else
                 @acl = @configuration.acl_from_string(@data)
                 if (@acl.errors.length == 0)
-                    @local_manager.log(:username => @session_user.username, :configuration_id => @configuration.id, :acl_id => @acl.id, :message => "Created ACL #{@acl.name}.")
+                    @local_manager.log(:username => @session_user.username, :configuration_id => @configuration.id, :acl_id => @acl.id, :message => "Created ACL #{@acl.name} within configuration #{@configuration.name}.")
                     format.html { redirect_to acl_url(@acl) }
                     format.xml  { render :xml => @acl, :status => :created, :location => @acl }
                 else
@@ -204,7 +204,7 @@ class ConfigurationsController < ApplicationController
             else
                 @author_avpair = @configuration.author_avpair_from_string(@data)
                 if (@author_avpair.errors.length == 0)
-                    @local_manager.log(:username => @session_user.username, :configuration_id => @configuration.id, :author_avpair_id => @author_avpair.id, :message => "Created Author AVPair #{@author_avpair.name}.")
+                    @local_manager.log(:username => @session_user.username, :configuration_id => @configuration.id, :author_avpair_id => @author_avpair.id, :message => "Created Author AVPair #{@author_avpair.name} within configuration #{@configuration.name}.")
                     format.html { redirect_to author_avpair_url(@author_avpair) }
                     format.xml  { render :xml => @author_avpair, :status => :created, :location => @author_avpair }
                 else
@@ -228,7 +228,7 @@ class ConfigurationsController < ApplicationController
             else
                 @command_authorization_profile = @configuration.command_authorization_profile_from_string(@data)
                 if (@command_authorization_profile.errors.length == 0)
-                    @local_manager.log(:username => @session_user.username, :configuration_id => @configuration.id, :command_authorization_profile_id => @command_authorization_profile.id, :message => "Created Command Authorization Profile #{@command_authorization_profile.name}.")
+                    @local_manager.log(:username => @session_user.username, :configuration_id => @configuration.id, :command_authorization_profile_id => @command_authorization_profile.id, :message => "Created Command Authorization Profile #{@command_authorization_profile.name} within configuration #{@configuration.name}.")
                     format.html { redirect_to command_authorization_profile_url(@command_authorization_profile) }
                     format.xml  { render :xml => @command_authorization_profile, :status => :created, :location => @command_authorization_profile }
                 else
@@ -298,7 +298,7 @@ class ConfigurationsController < ApplicationController
             else
                 @network_object_group = @configuration.network_object_group_from_string(@data)
                 if (@network_object_group.errors.length == 0)
-                    @local_manager.log(:username => @session_user.username, :configuration_id => @configuration.id, :network_object_group_id => @network_object_group.id, :message => "Created Network Object Group #{@network_object_group.name}.")
+                    @local_manager.log(:username => @session_user.username, :configuration_id => @configuration.id, :network_object_group_id => @network_object_group.id, :message => "Created Network Object Group #{@network_object_group.name} within configuration #{@configuration.name}.")
                     format.html { redirect_to network_object_group_url(@network_object_group) }
                     format.xml  { render :xml => @network_object_group, :status => :created, :location => @network_object_group }
                 else
@@ -322,7 +322,7 @@ class ConfigurationsController < ApplicationController
             else
                 @shell_command_object_group = @configuration.shell_command_object_group_from_string(@data)
                 if (@shell_command_object_group.errors.length == 0)
-                    @local_manager.log(:username => @session_user.username, :configuration_id => @configuration.id, :shell_command_object_group_id => @shell_command_object_group.id, :message => "Created Shell Command Object Group #{@shell_command_object_group.name}.")
+                    @local_manager.log(:username => @session_user.username, :configuration_id => @configuration.id, :shell_command_object_group_id => @shell_command_object_group.id, :message => "Created Shell Command Object Group #{@shell_command_object_group.name} within configuration #{@configuration.name}.")
                     format.html { redirect_to shell_command_object_group_url(@shell_command_object_group) }
                     format.xml  { render :xml => @shell_command_object_group, :status => :created, :location => @shell_command_object_group }
                 else
@@ -343,7 +343,7 @@ class ConfigurationsController < ApplicationController
                 format.html { render :action => "new_user_group" }
                 format.xml  { render :xml => @user_group.errors, :status => :not_acceptable }
             elsif @user_group.save
-                @local_manager.log(:username => @session_user.username, :configuration_id => @configuration.id, :user_group_id => @user_group.id, :message => "Created User Group #{@user_group.name}.")
+                @local_manager.log(:username => @session_user.username, :configuration_id => @configuration.id, :user_group_id => @user_group.id, :message => "Created User Group #{@user_group.name} within configuration #{@configuration.name}.")
                 format.html { redirect_to user_groups_configuration_url(@configuration) }
                 format.xml  { render :xml => @user_group, :status => :created, :location => @user_group }
             else

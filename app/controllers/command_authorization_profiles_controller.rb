@@ -20,6 +20,7 @@ class  CommandAuthorizationProfilesController < ApplicationController
     end
 
     def create_entry
+        @configuration = @command_authorization_profile.configuration
         @command_authorization_profile_entry = @command_authorization_profile.command_authorization_profile_entries.build(params[:command_authorization_profile_entry])
 
         respond_to do |format|
@@ -29,7 +30,7 @@ class  CommandAuthorizationProfilesController < ApplicationController
                 format.html { render :action => "show" }
                 format.xml  { render :xml => @command_authorization_profile_entry.errors, :status => :not_acceptable }
             elsif @command_authorization_profile_entry.save
-                @local_manager.log(:username => @session_user.username, :configuration_id => @command_authorization_profile.configuration_id, :command_authorization_profile_id => @command_authorization_profile.id, :message => "Created entry #{@command_authorization_profile_entry.description} of Command Authorization Profile #{@command_authorization_profile.name}.")
+                @local_manager.log(:username => @session_user.username, :configuration_id => @command_authorization_profile.configuration_id, :command_authorization_profile_id => @command_authorization_profile.id, :message => "Created entry #{@command_authorization_profile_entry.description} of Command Authorization Profile #{@command_authorization_profile.name} within configuration #{@configuration.name}.")
                 format.html { redirect_to command_authorization_profile_url(@command_authorization_profile) }
                 format.xml  { render :xml => @command_authorization_profile_entry.to_xml }
             else
@@ -50,7 +51,7 @@ class  CommandAuthorizationProfilesController < ApplicationController
                 format.html { render :action => "show" }
                 format.xml  { render :xml => @command_authorization_profile.errors, :status => :not_acceptable }
             elsif (@command_authorization_profile.destroy)
-                @local_manager.log(:username => @session_user.username, :configuration_id => @configuration.id, :message => "Deleted Command Authorization Profile #{@command_authorization_profile.name}.")
+                @local_manager.log(:username => @session_user.username, :configuration_id => @configuration.id, :message => "Deleted Command Authorization Profile #{@command_authorization_profile.name} from configuration #{@configuration.name}.")
                 format.html { redirect_to command_authorization_profiles_configuration_url(@configuration) }
                 format.xml  { head :ok }
             else
@@ -68,6 +69,7 @@ class  CommandAuthorizationProfilesController < ApplicationController
     end
 
     def resequence
+        @configuration = @command_authorization_profile.configuration
 
         respond_to do |format|
             @nav = 'show_nav'
@@ -76,7 +78,7 @@ class  CommandAuthorizationProfilesController < ApplicationController
                 format.html { render :action => "show" }
                 format.xml  { render :xml => @command_authorization_profile.errors, :status => :not_acceptable }
             elsif (@command_authorization_profile.resequence!)
-                @local_manager.log(:username => @session_user.username, :configuration_id => @command_authorization_profile.configuration_id, :command_authorization_profile_id => @command_authorization_profile.id, :message => "Resequenced Command Authorization Profile #{@command_authorization_profile.name}.")
+                @local_manager.log(:username => @session_user.username, :configuration_id => @command_authorization_profile.configuration_id, :command_authorization_profile_id => @command_authorization_profile.id, :message => "Resequenced Command Authorization Profile #{@command_authorization_profile.name} within configuration #{@configuration.name}.")
                 format.html { redirect_to command_authorization_profile_url(@command_authorization_profile) }
                 format.xml  { head :ok }
             else
@@ -97,6 +99,7 @@ class  CommandAuthorizationProfilesController < ApplicationController
 
 
     def update
+        @configuration = @command_authorization_profile.configuration
         respond_to do |format|
             @nav = 'show_nav'
             if (@local_manager.slave?)
@@ -104,7 +107,7 @@ class  CommandAuthorizationProfilesController < ApplicationController
                 format.html { render :action => "edit" }
                 format.xml  { render :xml => @command_authorization_profile.errors, :status => :not_acceptable }
             elsif @command_authorization_profile.update_attributes(params[:command_authorization_profile])
-                @local_manager.log(:username => @session_user.username, :configuration_id => @command_authorization_profile.configuration_id, :command_authorization_profile_id => @command_authorization_profile.id, :message => "Renamed Command Authorization Profile #{@command_authorization_profile.name}.")
+                @local_manager.log(:username => @session_user.username, :configuration_id => @command_authorization_profile.configuration_id, :command_authorization_profile_id => @command_authorization_profile.id, :message => "Renamed Command Authorization Profile #{@command_authorization_profile.name} within configuration #{@configuration.name}.")
                 format.html { redirect_to command_authorization_profile_url(@command_authorization_profile) }
                 format.xml  { head :ok }
             else
