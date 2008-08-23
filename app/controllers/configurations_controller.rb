@@ -3,12 +3,12 @@ class ConfigurationsController < ApplicationController
                      :command_authorization_whitelist, :download_archived_log, :log_search_form, :network_object_groups,
                      :search_aaa_logs, :settings, :shell_command_object_groups, :show, :tacacs_daemons, :tacacs_daemon_changelog,
                      :tacacs_daemon_logs, :tacacs_daemon_control, :user_groups]
-    admin_access = [:add_user, :add_users, :create_acl, :create_author_avpair, :create_command_authorization_profile,
+    admin_access = [:add_users, :create_acl, :create_author_avpair, :create_command_authorization_profile,
                     :create_command_authorization_whitelist_entry,:create_network_object_group, 
                     :create_shell_command_object_group, :create_user_group, :edit, :new_acl, :new_author_avpair,
                     :new_command_authorization_profile, :new_command_authorization_whitelist_entry,
-                    :new_network_object_group, :new_shell_command_object_group, :new_user_group, :publish,
-                    :resequence_whitelist, :update]
+                    :new_configured_user, :new_network_object_group, :new_shell_command_object_group, 
+                    :new_user_group, :publish, :resequence_whitelist, :update]
     su_exclude = admin_access.dup.concat(viewer_access)
 
     before_filter :define_session_user
@@ -82,31 +82,6 @@ class ConfigurationsController < ApplicationController
             @nav = 'acl_nav'
             format.html
             format.xml  { render :xml => @acls.to_xml }
-        end
-    end
-
-    def add_user
-        @configuration = Configuration.find(params[:id])
-        @user = User.find(params[:user_id])
-
-        respond_to do |format|
-            @nav = "configurations/show_nav"
-            if (@local_manager.slave?)
-                flash[:warning] = "This action is prohibited on slave systems."
-                format.html { render add_remove_users_configuration_url(@configuration) }
-                format.xml  { render :xml => "<errors><error>#{flash[:warning]}</error></errors>", :status => :not_acceptable }
-            elsif (@user.department_id != @configuration.department_id)
-                flash[:warning] = "User and configuration are not part of the same department."
-                format.html { render add_remove_users_configuration_url(@configuration) }
-                format.xml  { render :xml => "<errors><error>#{flash[:warning]}</error></errors>", :status => :not_acceptable }
-            else
-                cu = @configuration.configured_users.build()
-                cu.user_id = @user.id
-                cu.save
-                @local_manager.log(:username => @session_user.username, :user_id => @user.id, :configured_user_id => cu.id, :configuration_id => @configuration.id, :message => "Added user #{@user.username} to configuration #{@configuration.name}.")
-                format.html { redirect_to add_remove_users_configuration_url(@configuration)}
-                format.xml  { head :ok }
-            end
         end
     end
 
@@ -281,6 +256,31 @@ class ConfigurationsController < ApplicationController
                 @configuration.reload
                 format.html { render :action => :command_authorization_whitelist, :id => @configuration }
                 format.xml  { render :xml => @command_authorization_whitelist_entry.errors, :status => :unprocessable_entity }
+            end
+        end
+    end
+
+    def create_configured_user
+        @configured_user = @configuration.configured_users.build(params[:configured_user])
+        @user = User.find(params[:configured_user][:user_id])
+
+        respond_to do |format|
+            @nav = "configurations/show_nav"
+            if (@local_manager.slave?)
+                flash[:warning] = "This action is prohibited on slave systems."
+                format.html { render new_configured_user_configuration_url(@configuration) }
+                format.xml  { render :xml => "<errors><error>#{flash[:warning]}</error></errors>", :status => :not_acceptable }
+            elsif (@user.department_id != @configuration.department_id)
+                flash[:warning] = "User and configuration are not part of the same department."
+                format.html { render new_configured_user_configuration_url(@configuration) }
+                format.xml  { render :xml => "<errors><error>#{flash[:warning]}</error></errors>", :status => :not_acceptable }
+            else
+                @configured_user.user_id = @user.id
+                @configured_user.is_active = true
+                @configured_user.save
+                @local_manager.log(:username => @session_user.username, :user_id => @user.id, :configured_user_id => cu.id, :configuration_id => @configuration.id, :message => "Added user #{@user.username} to configuration #{@configuration.name}.")
+                format.html {redirect_to add_users_configuration_url(@configuration)}
+                format.xml  { head :ok }
             end
         end
     end
@@ -463,6 +463,17 @@ class ConfigurationsController < ApplicationController
         respond_to do |format|
             @nav = 'command_authorization_whitelist_nav'
             format.html
+        end
+    end
+
+    def new_configured_user
+        @configured_user = @configuration.configured_users.build
+        @configured_user.user_id = params[:user_id]
+
+        respond_to do |format|
+            @nav = "configurations/show_nav"
+            format.html
+            format.xml  { head :ok }
         end
     end
 

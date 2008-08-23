@@ -37,7 +37,6 @@ class ConfiguredUsersController < ApplicationController
         end
     end
 
-
     def destroy
         @user = @configured_user.user
         @configuration = @configured_user.configuration
@@ -73,7 +72,6 @@ class ConfiguredUsersController < ApplicationController
             format.html {@nav = "configurations/show_nav"}
         end
     end
-
 
     def suspend
         @user = @configured_user.user

@@ -1,0 +1,63 @@
+          <tr id="user<%= user.id %>" class="<%= user_class %>">
+            <td nowrap>
+              <%= link_to_remote( image_tag('delete_button.png', :border => 'none'), :url => configured_user_url(cu), :confirm => "Remove #{user.username} from configuration?", :method => :delete) %>
+              &nbsp
+              <%= link_to( image_tag('edit_button.png', :border => 'none'), edit_configured_user_url(cu)) %>
+            </td>
+
+            <td><%= user.username %></td>
+
+            <td>
+            <% if (cu.active?) %>
+              <%= configured_user_role_highlight(cu) %>
+            <% else %>
+              <%= cu.role %>
+            <% end %>
+            </td>
+
+            <td>
+              <%= link_to(cu.user_group.name, members_user_group_url(cu.user_group_id) ) if (cu.user_group_id) %>
+            </td>
+
+            <td class="toggles" style="padding-left: 5px;">
+            <% if (@configuration_roles[@configuration.id] == 'admin' || @session_user.admin?) %>
+              <%= cu_active_toggle(cu,user) %>
+            <% elsif (cu.active?) %>
+                active
+            <% else %>
+                inactive
+            <% end %>
+            </td>
+
+            <td>
+              <% if (user.department_id != @configuration.department_id) %>
+                <% if (user.department_id) %>
+                    <%= user.department.name %>
+                <% else %>
+                    <i>no department</i>
+                <% end %>
+              <% end %>
+            </td>
+
+            <td>
+              <% if (user.disabled?) %>
+              <i style="color: #7B2024; font-size: 10px;" >ACCOUNT DISABLED</i>
+              <% end %>
+            </td>
+
+            <td nowrap>
+              <% if (cu.user_specific_settings? && cu.active?) %>
+              <a href="#" class="tip" style="color: #7B2024" >settings<span><%= configured_user_settings_description(cu) %></span></a>
+              <% elsif (cu.user_specific_settings?) %>
+              <a href="#" class="tip">settings<span><%= configured_user_settings_description(cu) %></span></a>
+              <% end %>
+            </td>
+
+            <% if (!cu.notes.blank? && cu.active?) %>
+              <td nowrap><a href="#" class="tip" style="color: #7B2024">notes<span><pre><%= cu.notes %></pre></span></a></td>
+            <% elsif (!cu.notes.blank?) %>
+              <td nowrap><a href="#" class="tip">notes<span><pre><%= cu.notes %></pre></span></a></td>
+            <% else %>
+              <td>&nbsp</td>
+            <% end %>
+        </tr>

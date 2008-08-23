@@ -1,0 +1,39 @@
+        <tr id="user<%= user.id %>" class="<%= user_class %>">
+        <td nowrap>
+          <%= link_to_remote( image_tag('delete_button.png', :border => 'none'), :url => user_url(user), :confirm => "Delete user #{user.username}?", :method => :delete) %>
+          &nbsp
+          <%= link_to( image_tag('edit_button.png', :border => 'none'), edit_user_url(user)) %>
+          &nbsp
+          <%= link_to image_tag('view_button.png', :border => 'none'), user_url(user) %>
+        </td>
+        <td>
+          <% if (!user.disabled?) %>
+            <%= user_role_highlight(user) %>
+          <% else %>
+            <%= user.role %>
+          <% end %>
+        </td>
+        <td><%= user.username %></td>
+        <td><%=h user.real_name %></td>
+        <td><%=h user.department.name if (user.department) %></td>
+        <td class="toggles" style="padding-left: 5px;"><%= user_active_toggle(user) %></td>
+
+        <% if (user.notes.blank?) %>
+          <td>&nbsp</td>
+        <% else %>
+          <td nowrap><a href="#" class="tip"><b><u>notes</u></b><span><pre><%= user.notes %></pre></span></a></td>
+        <% end %>
+
+        <% if (user.allow_web_login) %>
+          <td>&nbsp</td>
+        <% else %>
+            <td><i style="font-size: 10px;">Web Login Disabled</i></td>
+        <% end %>
+
+        <% if (!user.last_login.blank?) %>
+            <td>&nbsp</td>
+        <% else %>
+            <td><i style="font-size: 10px;">Never Logged In</i></td>
+        <% end %>
+
+        </tr>
