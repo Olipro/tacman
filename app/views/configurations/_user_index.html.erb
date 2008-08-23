@@ -21,7 +21,7 @@
 
             <td class="toggles" style="padding-left: 5px;">
             <% if (@configuration_roles[@configuration.id] == 'admin' || @session_user.admin?) %>
-              <%= cu_active_toggle(cu,user) %>
+              <%= cu_active_toggle(cu,user,blue) %>
             <% elsif (cu.active?) %>
                 active
             <% else %>

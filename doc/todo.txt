@@ -10,9 +10,6 @@
 features & bugs
 ---------------
 
-* redo configuration add_users - make add a link to #new so that settings can be made upon create
-* get rid of configuraton #add_user
-* is there a way to fix row highlights for ajax enable/disable?
 * make logs list config name as part of message
 * timeouts for remote web service calls
 * times in logs are being displayed wrong

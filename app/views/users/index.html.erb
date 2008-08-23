@@ -15,21 +15,27 @@
         <th>&nbsp</th>
     </tr>
 
-    <% shaded = true %>
+    <% blue = 1 %>
     <% for user in @users
-           if (user.disabled?)
-                user_class="disabled"
-                shaded = true
-           elsif (shaded)
-                user_class="shaded"
-                shaded = false
+           if (!user.disabled?)
+                if (blue == 1)
+                    user_class="shaded"
+                else
+                    user_class="light_shaded"
+                end
            else
-                user_class="light_shaded"
-                shaded = true
-        end
+                user_class="disabled"
+           end
     %>
-    <%= render :partial => 'user_index', :locals => { :user => user, :user_class => user_class } %>
-    <% end %>
+    <%= render :partial => 'user_index', :locals => { :user => user, :user_class => user_class, :blue => blue } %>
+    <% 
+          if (blue == 1)
+               blue = 0
+           else
+               blue = 1
+           end
+    end
+    %>
     <tr><td>&nbsp</td></tr>
     <tr><td colspan="9" style="border-top: 1px solid #000000;"><%= will_paginate @users %></td></tr>
   </table>

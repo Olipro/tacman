@@ -9,7 +9,7 @@
   <% next if (@added.has_key?(user.id) ) %>
     <td>
       <%= link_to 'add',
-          {:action => :new, :user_id => user.id}, :method => :get %>
+          {:action => :new_configured_user, :user_id => user.id}, :method => :get %>
     </td>
     <td><%= user.username %></td>
     <td><%= user.real_name %></td>

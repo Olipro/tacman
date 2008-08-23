@@ -3,7 +3,8 @@
 <hr>
 <b style="font-size: 16px;">Account Settings</b><br /><br />
 
-<% form_for(:configured_user, :url => configured_user_url(@configured_user), :html => { :method => :put }) do |f| %>
+<% form_for(:configured_user, :url => create_configured_user_configuration_url(@configuration), :html => { :method => :post }) do |f| %>
+<%= f.hidden_field :user_id %>
 <table>
   <tr>
     <td><b>Username:</b></td> 
@@ -45,7 +46,7 @@
 </table>
 <br /><br />
 
-<%= submit_tag "Update" %>
-<input type=button value="Cancel" onclick="window.location.href='<%= configuration_url(@configuration) %>'" />
+<%= submit_tag "Add" %>
+<input type=button value="Cancel" onclick="window.location.href='<%= add_users_configuration_url(@configuration) %>'" />
 <% end %>
 

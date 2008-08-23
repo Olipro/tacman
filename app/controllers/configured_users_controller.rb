@@ -6,6 +6,7 @@ class ConfiguredUsersController < ApplicationController
     def activate
         @user = @configured_user.user
         @configuration = @configured_user.configuration
+        blue = params[:blue].to_i
 
         respond_to do |format|
             @nav = "configurations/show_nav"
@@ -25,10 +26,13 @@ class ConfiguredUsersController < ApplicationController
                     render :update do |page|
                         if @user.disabled?
                             page.replace("user#{@user.id}" , :partial => 'configurations/user_index',
-                                        :locals => { :user => @user, :cu => @configured_user, :user_class => 'disabled' })
+                                        :locals => { :user => @user, :cu => @configured_user, :blue => blue, :user_class => 'disabled' })
+                        elsif (blue == 1)
+                            page.replace("user#{@user.id}" , :partial => 'configurations/user_index',
+                                        :locals => { :user => @user, :cu => @configured_user, :blue => blue, :user_class => 'shaded' })
                         else
                             page.replace("user#{@user.id}" , :partial => 'configurations/user_index',
-                                        :locals => { :user => @user, :cu => @configured_user, :user_class => 'light_shaded' })
+                                        :locals => { :user => @user, :cu => @configured_user, :blue => blue, :user_class => 'light_shaded' })
                         end
                     end
                 end
@@ -76,6 +80,7 @@ class ConfiguredUsersController < ApplicationController
     def suspend
         @user = @configured_user.user
         @configuration = @configured_user.configuration
+        blue = params[:blue].to_i
 
         respond_to do |format|
             @nav = "configurations/show_nav"
@@ -94,7 +99,7 @@ class ConfiguredUsersController < ApplicationController
                 format.html do
                     render :update do |page|
                         page.replace("user#{@user.id}" , :partial => 'configurations/user_index',
-                                     :locals => { :user => @user, :cu => @configured_user, :user_class => 'disabled' })
+                                     :locals => { :user => @user, :cu => @configured_user, :blue => blue, :user_class => 'disabled' })
                     end
                 end
                 format.xml  { head :ok }

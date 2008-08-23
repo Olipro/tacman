@@ -572,6 +572,7 @@ class UsersController < ApplicationController
     # PUT /users/1.xml
     def toggle_disabled
         @user = User.find(params[:id])
+        blue = params[:blue].to_i
 
         respond_to do |format|
             @nav = 'show_nav'
@@ -600,10 +601,13 @@ class UsersController < ApplicationController
                     render :update do |page|
                         if @user.disabled?
                             page.replace("user#{@user.id}" , :partial => 'user_index',
-                                        :locals => { :user => @user, :user_class => 'disabled' })
+                                        :locals => { :user => @user, :blue => blue, :user_class => 'disabled' })
+                        elsif (blue == 1)
+                            page.replace("user#{@user.id}" , :partial => 'user_index',
+                                        :locals => { :user => @user, :blue => blue, :user_class => 'shaded' })
                         else
                             page.replace("user#{@user.id}" , :partial => 'user_index',
-                                        :locals => { :user => @user, :user_class => 'light_shaded' })
+                                        :locals => { :user => @user, :blue => blue, :user_class => 'light_shaded' })
                         end
                     end
                 end

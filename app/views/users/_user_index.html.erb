@@ -16,7 +16,7 @@
         <td><%= user.username %></td>
         <td><%=h user.real_name %></td>
         <td><%=h user.department.name if (user.department) %></td>
-        <td class="toggles" style="padding-left: 5px;"><%= user_active_toggle(user) %></td>
+        <td class="toggles" style="padding-left: 5px;"><%= user_active_toggle(user,blue) %></td>
 
         <% if (user.notes.blank?) %>
           <td>&nbsp</td>

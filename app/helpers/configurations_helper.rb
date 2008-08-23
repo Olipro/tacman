@@ -42,14 +42,14 @@ module ConfigurationsHelper
         return(str)
     end
 
-    def cu_active_toggle(cu,user)
+    def cu_active_toggle(cu,user,blue)
         str = ""
         if (cu.active?)
             str << image_tag('radio_on.png', :border => 'none') << " active &nbsp&nbsp"
-            str << link_to_remote(image_tag('radio_off.png', :border => 'none'), :url => suspend_configured_user_url(cu),:method => :put )
+            str << link_to_remote(image_tag('radio_off.png', :border => 'none'), :url => {:controller => :configured_users, :action => :suspend, :id => cu.id, :blue => blue},:method => :put )
             str << " inactive"
         else
-            str << link_to_remote(image_tag('radio_off.png', :border => 'none'), :url => activate_configured_user_url(cu),:method => :put )
+            str << link_to_remote(image_tag('radio_off.png', :border => 'none'), :url => {:controller => :configured_users, :action => :activate, :id => cu.id, :blue => blue},:method => :put )
             str << " active &nbsp&nbsp"
             str << image_tag('radio_on.png', :border => 'none') << " inactive"
         end
