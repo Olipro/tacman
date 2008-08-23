@@ -4,23 +4,6 @@ class DepartmentsController < ApplicationController
     before_filter :authorize_user_admin
 
 
-    def changelog
-        @department = Department.find(params[:id])
-        @log_count = SystemLog.count_by_sql("SELECT COUNT(*) FROM system_logs WHERE department_id=#{@department.id}")
-        if ( params.has_key?(:page) )
-            page = params[:page]
-        elsif (@log_count > 0)
-            page = @log_count / @local_manager.pagination_per_page
-            page = page + 1 if (@log_count % @local_manager.pagination_per_page > 0)
-        end
-        @logs = SystemLog.paginate(:page => page, :per_page => @local_manager.pagination_per_page,
-                                   :conditions => "department_id=#{@department.id}", :order => :created_at)
-        respond_to do |format|
-            @nav = 'index_nav'
-            format.html {render :template => 'managers/system_logs'}
-        end
-    end
-
     def create
         @department = Department.new(params[:department])
 
@@ -81,6 +64,23 @@ class DepartmentsController < ApplicationController
             @nav = 'index_nav'
             format.html # new.html.erb
             format.xml  { render :xml => @department }
+        end
+    end
+
+    def show
+        @department = Department.find(params[:id])
+        @log_count = SystemLog.count_by_sql("SELECT COUNT(*) FROM system_logs WHERE department_id=#{@department.id}")
+        if ( params.has_key?(:page) )
+            page = params[:page]
+        elsif (@log_count > 0)
+            page = @log_count / @local_manager.pagination_per_page
+            page = page + 1 if (@log_count % @local_manager.pagination_per_page > 0)
+        end
+        @logs = SystemLog.paginate(:page => page, :per_page => @local_manager.pagination_per_page,
+                                   :conditions => "department_id=#{@department.id}", :order => :created_at)
+        respond_to do |format|
+            @nav = 'index_nav'
+            format.html
         end
     end
 

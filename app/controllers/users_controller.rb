@@ -194,24 +194,48 @@ class UsersController < ApplicationController
         respond_to do |format|
             @nav = 'show_nav'
             if (@local_manager.slave?)
-                flash[:warning] = "This action is prohibited on slave systems."
-                format.html { redirect_to user_url(@user) }
+                format.html do
+                    render :update do |page|
+                        page.replace_html('flash_box' , '<p class="flash_warning">This action is prohibited on slave systems.</p>')
+                        page.show('flash_box')
+                        page << "new Effect.Fade('flash_box', { delay: 4.0 });"
+                    end
+                end
                 format.xml  { render :xml => '<errors><error>This action is prohibited on slave systems.</error></errors>', :status => :not_acceptable }
             elsif (@user.id == @session_user.id)
-                flash[:warning] = "You may not delete your own account."
-                format.html { redirect_to user_url(@user) }
+                format.html do
+                    render :update do |page|
+                        page.replace_html('flash_box' , '<p class="flash_warning">You may not delete your own account.</p>')
+                        page.show('flash_box')
+                        page << "new Effect.Fade('flash_box', { delay: 4.0 });"
+                    end
+                end
                 format.xml  { render :xml => @user.errors, :status => :not_acceptable }
             elsif (@user.admin? && @session_user.user_admin?)
-                flash[:warning] = "You do not have permission to delete administrator accounts."
-                format.html { redirect_to user_url(@user) }
+                format.html do
+                    render :update do |page|
+                        page.replace_html('flash_box' , '<p class="flash_warning">You do not have permission to delete administrator accounts.</p>')
+                        page.show('flash_box')
+                        page << "new Effect.Fade('flash_box', { delay: 4.0 });"
+                    end
+                end
                 format.xml  { render :xml => @user.errors, :status => :not_acceptable }
             elsif (@user.destroy)
                 @local_manager.log(:username => @session_user.username, :message => "Deleted user #{@user.username}.")
-                format.html { redirect_to(users_url) }
+                format.html do
+                    render :update do |page|
+                      page.remove("user#{@user.id}")
+                    end
+                end
                 format.xml  { head :ok }
             else
-                flash[:warning] = "error"
-                format.html { redirect_to user_url(@user) }
+                format.html do
+                    render :update do |page|
+                        page.replace_html('flash_box' , '<p class="flash_warning">error! what\'d you do?</p>')
+                        page.show('flash_box')
+                        page << "new Effect.Fade('flash_box', { delay: 4.0 });"
+                    end
+                end
                 format.xml  { render :xml => @user.errors, :status => :not_acceptable }
             end
         end

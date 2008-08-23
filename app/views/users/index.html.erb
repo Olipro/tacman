@@ -16,56 +16,19 @@
     </tr>
 
     <% shaded = true %>
-    <% for user in @users %>
-        <% if (user.disabled?) %>
-            <tr class="disabled">
-            <% shaded = true %>
-        <% elsif (shaded) %>
-            <tr class="shaded">
-            <% shaded = false %>
-        <% else %>
-            <tr class="light_shaded">
-            <% shaded = true %>
-        <% end %>
-
-        <td>
-          <%= link_to( image_tag('delete_button.png', :border => 'none'), user_url(user), :confirm => "Delete user #{user.username}?", :method => :delete) %>
-          &nbsp
-          <%= link_to( image_tag('edit_button.png', :border => 'none'), edit_user_url(user)) %>
-          &nbsp
-          <%= link_to image_tag('view_button.png', :border => 'none'), user_url(user) %>
-        </td>
-        <td>
-          <% if (!user.disabled?) %>
-            <%= user_role_highlight(user) %>
-          <% else %>
-            <%= user.role %>
-          <% end %>
-        </td>
-        <td><%= user.username %></td>
-        <td><%=h user.real_name %></td>
-        <td><%=h user.department.name if (user.department) %></td>
-        <td class="toggles"><%= user_active_toggle(user) %></td>
-
-        <% if (user.notes.blank?) %>
-          <td>&nbsp</td>
-        <% else %>
-          <td nowrap><a href="#" class="tip"><b><u>notes</u></b><span><pre><%= user.notes %></pre></span></a></td>
-        <% end %>
-
-        <% if (user.allow_web_login) %>
-          <td>&nbsp</td>
-        <% else %>
-            <td><i style="font-size: 10px;">Web Login Disabled</i></td>
-        <% end %>
-
-        <% if (!user.last_login.blank?) %>
-            <td>&nbsp</td>
-        <% else %>
-            <td><i style="font-size: 10px;">Never Logged In</i></td>
-        <% end %>
-
-        </tr>
+    <% for user in @users
+           if (user.disabled?)
+                user_class="disabled"
+                shaded = true
+           elsif (shaded)
+                user_class="shaded"
+                shaded = false
+           else
+                user_class="light_shaded"
+                shaded = true
+        end
+    %>
+    <%= render :partial => 'user_index', :locals => { :user => user, :user_class => user_class } %>
     <% end %>
     <tr><td>&nbsp</td></tr>
     <tr><td colspan="9" style="border-top: 1px solid #000000;"><%= will_paginate @users %></td></tr>

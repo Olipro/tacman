@@ -1,7 +1,5 @@
 ActionController::Routing::Routes.draw do |map|
-  map.resources :departments,
-                :member => {:changelog => :get}
-
+  map.resources :departments
 
   map.resources :avpairs
 
@@ -22,7 +20,7 @@ ActionController::Routing::Routes.draw do |map|
                             :changelog => :get}
 
   map.resources :user_groups,
-                :member => {:changelog => :get}
+                :member => {:changelog => :get, :members => :get}
 
   map.resources :shell_command_object_groups,
                 :member => {:create_entry => :post, :resequence => :put,

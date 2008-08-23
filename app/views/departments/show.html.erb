@@ -1,0 +1,60 @@
+<b style="font-size: 16px;">Department - <%= @department.name %></b><br /><br />
+
+
+<b style="font-size: 14px;">Members</b>
+<ul>
+<% for user in @department.users %>
+  <li><%= user.username %> &nbsp&nbsp <i><%= user.real_name %></i></li>
+<% end %>
+</ul>
+<br /><br />
+
+<b style="font-size: 14px;">Configurations</b>
+<ul>
+<% for configuration in @department.configurations %>
+  <li><%= configuration.name %></li>
+<% end %>
+</ul>
+<br /><br />
+
+
+<% if (@log_count != 0) %>
+    <b>Changelog</b>
+    <table id="logs">
+    <tr>
+        <td colspan="<%= SystemLog.log_fields_header.length + 1 %>">
+        <%= will_paginate @logs %>
+        </td>
+    </tr>
+    <tr>
+    <% for field in SystemLog.log_fields_header %>
+    <th><%= field %></th>
+    <% end %>
+    <% if @managers %><th>Manager</th><% end %>
+    </tr>
+
+    <% shaded = true %>
+    <% for log_entry in @logs %>
+      <% if (shaded) %>
+          <tr class="shaded">
+          <% shaded = false %>
+      <% else %>
+          <tr class="light_shaded">
+          <% shaded = true %>
+      <% end %>
+        <% for field in log_entry.log_fields %>
+        <td><%=h field %></td>
+        <% end %>
+        <% if @managers %><td><%=h @managers[log_entry.owning_manager_id].name %></td><% end %>
+    </tr>
+    <% end %>
+    <tr>
+        <td colspan="<%= SystemLog.log_fields_header.length + 1 %>">
+        <%= will_paginate @logs %>
+        </td>
+    </tr>
+    </table>
+
+    <br /> <br />
+
+<% end %>

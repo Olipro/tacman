@@ -8,16 +8,16 @@
 <% form_for(:manager, :url => search_logs_manager_url(@manager), :html => { :method => :get }) do |f| %>
   <table>
     <tr>
-        <td><b>Start Time:</b></td> <td><%= text_field_tag "search_criteria[start_time]", nil, :size => 19  %></td>
-        <td><b>End Time:</b></td> <td><%= text_field_tag "search_criteria[end_time]",nil, :size => 19  %></td>
+        <td><b>Start Time:</b></td> <td><%=h text_field_tag "search_criteria[start_time]", nil, :size => 19  %></td>
+        <td><b>End Time:</b></td> <td><%=h text_field_tag "search_criteria[end_time]",nil, :size => 19  %></td>
     </tr>
 
     <tr>
-        <td><b>Username:</b></td> <td colspan="3"><%= text_field_tag "search_criteria[username]", nil, :size => 30  %></td>
+        <td><b>Username:</b></td> <td colspan="3"><%=h text_field_tag "search_criteria[username]", nil, :size => 30  %></td>
     </tr>
 
     <tr>
-        <td><b>Message:</b></td> <td><%= text_field_tag "search_criteria[message]", nil, :size => 30%></td>
+        <td><b>Message:</b></td> <td><%=h text_field_tag "search_criteria[message]", nil, :size => 30%></td>
     </tr>
 
     <tr>

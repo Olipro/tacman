@@ -1,0 +1,10 @@
+<b style="font-size: 16px;">Members of User Group <i><%= @user_group.name %></i></b><br /><br />
+
+<ul>
+<% for user in @members %>
+  <li><%= user.username %> &nbsp&nbsp <i><%= user.real_name %></i></li>
+<% end %>
+</ul>
+<br /><br />
+
+

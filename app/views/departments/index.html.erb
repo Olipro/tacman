@@ -4,14 +4,13 @@
 <ul style="list-style-type:none">
 <% for department in @departments %>
     <li>
-    <% if (department.users.count > 0 || department.configurations.count > 0) %>
+    <% if (department.users.count < 1 || department.configurations.count < 1) %>
     <%= link_to( image_tag('delete_button.png', :border => 'none'), department_url(department), :confirm => "Delete department #{department.name}?", :method => :delete) %>
     &nbsp
     <% end %>
     <%= link_to( image_tag('edit_button.png', :border => 'none'), edit_department_url(department)) %>
     &nbsp&nbsp
-    <%= department.name %>
-    <i>(<%= link_to 'changes', changelog_department_url(department) %>)</i>
+    <%= link_to department.name, department_url(department) %>
     </li>
   </tr>
 <% end %>

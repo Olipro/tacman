@@ -22,7 +22,7 @@
 
   </head>
 
-  <body onload="new Effect.Fade('flash_box', { delay: 4.0 });">
+  <body <% if ( flash.has_key?(:notice) || flash.has_key?(:warning) ) %>onload="new Effect.Fade('flash_box', { delay: 4.0 });" <% end %> >
 
       <% if (@nav) %>
       <div id="sub_nav">
@@ -78,7 +78,7 @@
         <% end %>
       </div>
 
-      <% if (flash.has_key?(:notice) || flash.has_key?(:warning) ) %>
+
       <div id="flash_box">
         <% if ( flash.has_key?(:notice) ) %>
             <p class="flash_notice">
@@ -91,7 +91,7 @@
             </p>
         <% end %>
       </div>
-      <% end %>
+
 
 
       <div id="content">

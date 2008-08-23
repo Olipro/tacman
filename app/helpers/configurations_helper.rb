@@ -46,7 +46,7 @@ module ConfigurationsHelper
         str = ""
         if (cu.active?)
             str << image_tag('radio_on.png', :border => 'none') << " active &nbsp&nbsp"
-            str << link_to(image_tag('radio_off.png', :border => 'none'), suspend_configured_user_url(cu),:method => :put, :confirm => "Disable #{user.username}?" )
+            str << link_to(image_tag('radio_off.png', :border => 'none'), suspend_configured_user_url(cu),:method => :put )
             str << " inactive"
         else
             str << link_to(image_tag('radio_off.png', :border => 'none'), activate_configured_user_url(cu),:method => :put )

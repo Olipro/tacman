@@ -9,6 +9,8 @@
           &nbsp &nbsp &nbsp
           <% end %>
           <%= link_to "edit", edit_user_group_url(user_group)  %>
+          &nbsp &nbsp &nbsp
+          <%= link_to "members", members_user_group_url(user_group)  %>
         <% end %>
         <%= user_group_description(user_group) %>
     <% end %>

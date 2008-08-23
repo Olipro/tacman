@@ -26,7 +26,7 @@
                 <% shaded = true %>
           <% end %>
 
-            <td>
+            <td nowrap>
               <%= link_to( image_tag('delete_button.png', :border => 'none'), configured_user_url(cu), :confirm => "Remove #{user.username} from configuration?", :method => :delete) %>
               &nbsp
               <%= link_to( image_tag('edit_button.png', :border => 'none'), edit_configured_user_url(cu)) %>
@@ -42,10 +42,10 @@
             <% end %>
             </td>
             <td>
-              <%= link_to(cu.user_group.name, user_groups_configuration_url(@configuration) ) if (cu.user_group) %>
+              <%= link_to(cu.user_group.name, members_user_group_url(cu.user_group_id) ) if (cu.user_group_id) %>
             </td>
 
-            <td class="toggles">
+            <td class="toggles" style="padding-left: 5px;">
             <% if (@configuration_roles[@configuration.id] == 'admin' || @session_user.admin?) %>
               <%= cu_active_toggle(cu,user) %>
             <% elsif (cu.active?) %>

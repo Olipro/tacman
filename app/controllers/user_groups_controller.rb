@@ -48,6 +48,20 @@ class UserGroupsController < ApplicationController
         end
     end
 
+    def members
+        sql = "SELECT username, real_name " +
+              "FROM users,configured_users,user_groups " +
+              "WHERE users.id = configured_users.user_id " +
+              "AND configured_users.user_group_id = user_groups.id " +
+              "AND user_groups.id = #{@user_group.id} " +
+              "ORDER BY users.username"
+        @configuration = @user_group.configuration
+        @members = User.find_by_sql(sql)
+        respond_to do |format|
+            @nav = 'configurations/user_group_nav'
+            format.html
+        end
+    end
 
     def update
         @configuration = @user_group.configuration
