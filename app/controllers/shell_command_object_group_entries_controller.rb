@@ -10,7 +10,7 @@ class ShellCommandObjectGroupEntriesController < ApplicationController
             if (@local_manager.slave?)
                 @hell_command_object_group_entry.errors.add_to_base("This action is prohibited on slave systems.")
                 format.html { render shell_command_object_groups_configuration_url(@shell_command_object_group) }
-                format.xml  { render :xml => @hell_command_object_group_entry.errors, :status => :not_acceptable }
+                format.xml  { render :xml => @shell_command_object_group_entry.errors, :status => :not_acceptable }
             elsif (@shell_command_object_group_entry.destroy)
                 @local_manager.log(:username => @session_user.username, :configuration_id => @shell_command_object_group.configuration_id, :shell_command_object_group_id => @shell_command_object_group.id, :message => "Deleted entry #{@shell_command_object_group_entry.command} of Shell Command Object Group #{@shell_command_object_group.name}.")
                 format.html { redirect_to shell_command_object_group_url(@shell_command_object_group) }
