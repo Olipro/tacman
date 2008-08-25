@@ -833,7 +833,7 @@ class Manager < ActiveRecord::Base
         num_requests += 1 if (out_msgs.length % 20 > 0) # need a request for the remainder
         success = false
         num_requests.times do
-            if (num_messages < 20 )
+            if (out_msgs.length < 20 )
                 success = post_message_to_remote_inbox(http, uri, out_msgs)
             else
                 success = post_message_to_remote_inbox( http, uri, out_msgs.slice!(0..19) )
