@@ -548,8 +548,11 @@ class Manager < ActiveRecord::Base
         elsif (!self.is_enabled)
             self.is_enabled = true
             self.disabled_message = nil
-            self.add_to_outbox('create', Manager.export) if (!self.master?)
-            return(self.save)
+            if (self.slave?)
+                return(send_system_sync!)
+            else
+                return(self.save)
+            end
         else
             self.errors.add_to_base("Manager is already enabled.")
             return(false)
@@ -753,7 +756,7 @@ class Manager < ActiveRecord::Base
             self.outbox_revision = 0
             self.add_to_outbox('create', Manager.export)
             self.tacacs_daemons.each {|td| self.add_to_outbox('create', td.export_xml)}
-            self.save
+            return(self.save)
         end
         return(true)
     end
@@ -825,20 +828,27 @@ class Manager < ActiveRecord::Base
         end
 
         # if no messages, then exit
-        out_msgs = self.outbox
-        return(true) if (out_msgs.length == 0)
+        msg_count = SystemMessage.count(:conditions => "manager_id = #{self.id} and queue = 'outbox'")
+        return(true) if (msg_count == 0)
 
-        http, uri = prepare_http_request("/write_to_inbox")
-        num_requests = out_msgs.length / 20 # send 20 messages at a time
-        num_requests += 1 if (out_msgs.length % 20 > 0) # need a request for the remainder
+        out_msgs = self.outbox
         success = false
-        num_requests.times do
-            if (out_msgs.length < 20 )
-                success = post_message_to_remote_inbox(http, uri, out_msgs)
-            else
-                success = post_message_to_remote_inbox( http, uri, out_msgs.slice!(0..19) )
+        while(1)
+            total_len = 0
+            count = 0
+            out_msgs.each do |msg|
+                total_len += File.size(msg.content_file)
+                count += 1
+                break if (total_len > 1000000)
             end
-            break if (!success)
+
+            if (count > 1)
+                success = post_message_to_remote_inbox( out_msgs.slice!(0..count-1) )
+            else
+                success = post_message_to_remote_inbox( out_msgs.slice!(0) )
+            end
+
+            break if (!success || out_msgs.length == 0)
         end
 
         return(success)
@@ -881,7 +891,8 @@ private
         end
     end
 
-    def post_message_to_remote_inbox(http, uri, out_msgs)
+    def post_message_to_remote_inbox(out_msgs)
+        http, uri = prepare_http_request("/write_to_inbox")
         cur_revision = self.outbox_revision
         data = REXML::Element.new("manager")
         ser = REXML::Element.new("serial")
