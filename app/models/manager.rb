@@ -845,7 +845,7 @@ class Manager < ActiveRecord::Base
             if (count > 1)
                 success = post_message_to_remote_inbox( out_msgs.slice!(0..count-1) )
             else
-                success = post_message_to_remote_inbox( out_msgs.slice!(0) )
+                success = post_message_to_remote_inbox( [out_msgs.slice!(0)] )
             end
 
             break if (!success || out_msgs.length == 0)
