@@ -10,6 +10,7 @@
 features & bugs
 ---------------
 
+* way to clear unprocessable queue
 * make logs list config name as part of message on X_entries
 * timeouts for remote web service calls
 * times in logs are being displayed wrong

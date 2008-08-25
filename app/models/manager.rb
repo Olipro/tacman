@@ -630,8 +630,12 @@ class Manager < ActiveRecord::Base
     def prepare_http_request(path)
         uri = URI.parse(self.base_url + path)
         http = Net::HTTP.new(uri.host, uri.port)
-        http.open_timeout = 20
-        http.use_ssl = true if (uri.scheme == 'https')
+        http.open_timeout = 30 # if cant open connection in 30 seconds, then error
+        http.read_timeout = 300 # if can't complete connection in 5 min, then error
+        if (uri.scheme == 'https')
+            http.use_ssl = true
+            http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+        end
         return([http, uri])
     end
 
@@ -821,62 +825,23 @@ class Manager < ActiveRecord::Base
         end
 
         # if no messages, then exit
-        cur_revision = self.outbox_revision
         out_msgs = self.outbox
         return(true) if (out_msgs.length == 0)
 
         http, uri = prepare_http_request("/write_to_inbox")
-        data = REXML::Element.new("manager")
-        ser = REXML::Element.new("serial")
-        ser.text = self.serial
-        data.add_element(ser)
-        pw = REXML::Element.new("password")
-        pw.text = self.password
-        data.add_element(pw)
-        messages = REXML::Element.new("system-messages")
-        out_msgs.each do |m|
-            if (m.content.blank?)
-                msg = "Error with outbox message #{m.id} for #{self.manager.name}. Content empty or content file missing."
-                Manager.local.log(:level => 'error', :manager_id => self.id, :message => msg)
-                m.error_log = msg
-                m.queue = 'unprocessable'
-                m.save
-                next
-            end
-            cur_revision += 1
-            m.revision = cur_revision
-            messages.add_element(m.to_xml)
-        end
-        data.add_element(messages)
-
-        begin
-            response = http.post(uri.path, data.to_s, {'Accept' => 'text/xml', 'Content-type' => 'text/xml'})
-
-            if ( response.kind_of?(Net::HTTPOK) )
-                out_msgs.each {|m| m.destroy}
-                self.outbox_revision = cur_revision
-                return(true)
-
-            elsif ( response.kind_of?(Net::HTTPForbidden) )
-                Manager.local.log(:manager_id => self.id, :message => "Manager#write_remote_inbox! - authorization failure on Manager #{self.name}. Disabling messaging.")
-                self.disable!('authentication failure.')
-            elsif (response.kind_of?(Net::HTTPNotAcceptable))
-                body = response.body
-                doc = REXML::Document.new(body)
-                if (doc.root.name == 'errors')
-                    error = ''
-                    doc.root.each_element {|e| error << e.text + "\n" }
-                    Manager.local.log(:level => 'warn', :message => "Manager#write_remote_inbox! - raised errors: #{error}")
-                end
+        num_requests = out_msgs.length / 20 # send 20 messages at a time
+        num_requests += 1 if (out_msgs.length % 20 > 0) # need a request for the remainder
+        success = false
+        num_requests.times do
+            if (num_messages < 20 )
+                success = post_message_to_remote_inbox(http, uri, out_msgs)
             else
-                Manager.local.log(:level => 'warn', :message => "Manager#write_remote_inbox! - unexpected response: #{response.class}")
+                success = post_message_to_remote_inbox( http, uri, out_msgs.slice!(0..19) )
             end
-
-        rescue Exception => error
-            Manager.local.log(:level => 'warn', :message => "Manager#write_remote_inbox! - raised errors: #{error}")
+            break if (!success)
         end
 
-        return(false)
+        return(success)
     end
 
 
@@ -914,6 +879,61 @@ private
         rescue Exception => error
             self.errors.add_to_base("Error setting up default mailer messages: #{error}")
         end
+    end
+
+    def post_message_to_remote_inbox(http, uri, out_msgs)
+        cur_revision = self.outbox_revision
+        data = REXML::Element.new("manager")
+        ser = REXML::Element.new("serial")
+        ser.text = self.serial
+        data.add_element(ser)
+        pw = REXML::Element.new("password")
+        pw.text = self.password
+        data.add_element(pw)
+        messages = REXML::Element.new("system-messages")
+        out_msgs.each do |m|
+            if (m.content.blank?)
+                msg = "Error with outbox message #{m.id} for #{self.manager.name}. Content empty or content file missing."
+                Manager.local.log(:level => 'error', :manager_id => self.id, :message => msg)
+                m.error_log = msg
+                m.queue = 'unprocessable'
+                m.save
+                next
+            end
+            cur_revision += 1
+            m.revision = cur_revision
+            messages.add_element(m.to_xml)
+        end
+        data.add_element(messages)
+
+        begin
+            response = http.post(uri.path, data.to_s, {'Accept' => 'text/xml', 'Content-type' => 'text/xml'})
+
+            if ( response.kind_of?(Net::HTTPOK) )
+                out_msgs.each {|m| m.destroy}
+                self.outbox_revision = cur_revision
+                return(true)
+
+            elsif ( response.kind_of?(Net::HTTPForbidden) )
+                Manager.local.log(:manager_id => self.id, :message => "Error with Manager#write_remote_inbox! on #{self.name}: Authorization failure. Disabling messaging.")
+                self.disable!('authentication failure.')
+            elsif (response.kind_of?(Net::HTTPNotAcceptable))
+                body = response.body
+                doc = REXML::Document.new(body)
+                if (doc.root.name == 'errors')
+                    error = ''
+                    doc.root.each_element {|e| error << e.text + "\n" }
+                    Manager.local.log(:level => 'warn', :message => "Error with Manager#write_remote_inbox! on #{self.name}: HTTPNotAcceptable. #{error}")
+                end
+            else
+                Manager.local.log(:level => 'warn', :message => "Error with Manager#write_remote_inbox! on #{self.name}: Unexpected response. #{response.class}")
+            end
+
+        rescue Exception => error
+            Manager.local.log(:level => 'warn', :message => "Error with Manager#write_remote_inbox! on #{self.name}: Execution error. #{error}")
+        end
+
+        return(false)
     end
 
     def prevent_local_manager_delete

@@ -92,7 +92,8 @@ ActionController::Routing::Routes.draw do |map|
                 :member => {:approve => :put, :disable => :put, :enable => :put, :inbox => :get, :outbox => :get, :system_sync => :post,
                             :system_logs => :get, :unprocessable_messages => :get,
                             :changelog => :get, :search_logs => :get, :log_search_form => :get,
-                            :write_outbox => :post, :process_inbox => :post}
+                            :write_outbox => :post, :process_inbox => :post,
+                            :clear_unprocessable => :post}
 
 
   # The priority is based upon order of creation: first created -> highest priority.

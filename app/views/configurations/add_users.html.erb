@@ -3,20 +3,24 @@
 
 <table  class="index_list">
 <tr><td colspan="3" style="border-bottom: 1px solid #000000;"><%= will_paginate @users %></td></tr>
-<tr> <th>&nbsp</th> <th>Username</th> <th>Real Name</th> </tr>
+<tr><th>Username</th> <th>Real Name</th> </tr>
 <% shaded = true %>
 <% for user in @users %>
   <% next if (@added.has_key?(user.id) ) %>
     <td>
-      <%= link_to 'add',
+      <%= link_to user.username,
           {:action => :new_configured_user, :user_id => user.id}, :method => :get %>
     </td>
-    <td><%= user.username %></td>
     <td><%= user.real_name %></td>
   </tr>
 <% end %>
 <tr><td colspan="3" style="border-top: 1px solid #000000;"><%= will_paginate @users %></td></tr>
 </table>
+<br />
+
+<b>
+** Only users within your department will be listed here.<br />
+</b>
 
 <br /><br /><br />
 

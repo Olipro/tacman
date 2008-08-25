@@ -61,6 +61,16 @@ class ManagersController < ApplicationController
         end
     end
 
+    def clear_unprocessable
+        @manager = Manager.find(params[:id])
+        SystemMessage.destroy_all("manager_id = #{@manager.id} and queue='unprocessable'")
+        respond_to do |format|
+            @nav = "remote_nav"
+            format.html { redirect_to unprocessable_messages_manager_url(@manager) }
+            format.xml { head :ok }
+        end
+    end
+
     def destroy
         @manager = Manager.find(params[:id])
         respond_to do |format|

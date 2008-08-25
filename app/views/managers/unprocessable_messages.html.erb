@@ -1,5 +1,9 @@
 <b style="font-size: 16px;">Unprocessable - <%= @manager.name %></b><br />
 <b>Queue Length: <%= @msg_count %></b><br />
+<% if (@msg_count > 0) %>
+<%= link_to "Clear Queue!", clear_unprocessable_manager_url(@manager), :style => "color: #7B2024; font-weight: bold;", :confirm => "Confirm", :method => :post %><br />
+<% end %>
+<br />
 
 
 <%= will_paginate @messages %>
