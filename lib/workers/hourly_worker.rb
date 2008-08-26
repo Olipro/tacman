@@ -8,7 +8,7 @@ class HourlyWorker < BackgrounDRb::MetaWorker
 
     def hourly_tasks
         @local_manager = Manager.local
-        cleanup_sessions
+        #cleanup_sessions
         write_all_remote
         process_all_inbox
     end

@@ -457,6 +457,14 @@ production:
           </textarea>
        </li> <br>
        <li>
+        Edit secret key within environment.rb.<br>
+        <code>
+          cp config/environment.rb.tmpl config/environment.rb<br><br>
+         </code>
+        Edit the line that starts with "<i>:secret      =></i>".
+        You need to change the key to something unique.<br>
+       </li> <br>
+       <li>
          Install the database tables<br>
         <code>rake db:migrate RAILS_ENV=production</code> <br>
         <code>rake backgroundrb:setup RAILS_ENV=production</code> <br>

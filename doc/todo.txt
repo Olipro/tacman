@@ -10,10 +10,7 @@
 features & bugs
 ---------------
 
-* way to clear unprocessable queue
-* make logs list config name as part of message on X_entries
-* timeouts for remote web service calls
-* times in logs are being displayed wrong
+* make logs list config name as part of message on X_entries. look at scog_entry controller
 
 * hash out xml views
 
@@ -23,6 +20,19 @@ tests & doc
 
 * double check viewer permissions
 * tests for slave system restrictions
+
+
+
+scripts/commands
+-----------
+
+sudo su -
+cd /var/tacman
+svn update
+chown -R apache:apache /var/tacman
+/etc/init.d/httpd restart
+
+
 
 
 User.find(:all, :conditions => "disabled = false", :order => :username).each {|u| puts "#{u.username}, #{u.hashed_password}, #{u.hashed_enable}, #{u.salt}, #{u.first_name} #{u.last_name}, #{u.email}, #{u.department}\n"}

@@ -7,7 +7,11 @@ module ShellCommandObjectGroupsHelper
         str << "<li>shell-command-object-group <i>#{shell_command_object_group.name}</i></li>\n"
         entries.each do |e|
             str << "<li> &nbsp&nbsp "
-            str << link_to(image_tag('delete_button.png', :border => 'none'), shell_command_object_group_entry_url(e), :method => :delete) if (show_details)
+            if (show_details)
+            str << link_to(image_tag('delete_button.png', :border => 'none'), shell_command_object_group_entry_url(e), :method => :delete)
+            str << "&nbsp&nbsp"
+            str << link_to(image_tag('edit_button.png', :border => 'none'), edit_shell_command_object_group_entry_url(e))
+            end
             str << " seq #{e.sequence}"if (show_details)
             str << " #{e.command} </li>\n"
         end
