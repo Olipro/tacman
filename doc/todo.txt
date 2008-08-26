@@ -29,6 +29,7 @@ scripts/commands
 sudo su -
 cd /var/tacman
 svn update
+cp config/environment.rb.tmpl config/environment.rb
 chown -R apache:apache /var/tacman
 /etc/init.d/httpd restart
 

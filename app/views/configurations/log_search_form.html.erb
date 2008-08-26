@@ -8,24 +8,24 @@
 <% form_for(:configuration, :url => search_aaa_logs_configuration_url(@configuration), :html => { :method => :get }) do |f| %>
   <table>
     <tr>
-        <td><b>Start Time:</b></td> <td><%=h text_field_tag "search_criteria[start_time]", nil, :size => 19  %></td>
-        <td><b>End Time:</b></td> <td><%=h text_field_tag "search_criteria[end_time]",nil, :size => 19  %></td>
+        <td><b>Start Time:</b></td> <td><%= text_field_tag "search_criteria[start_time]", nil, :size => 19  %></td>
+        <td><b>End Time:</b></td> <td><%= text_field_tag "search_criteria[end_time]",nil, :size => 19  %></td>
     </tr>
 
     <tr>
-        <td><b>Username:</b></td> <td colspan="3"><%=h text_field_tag "search_criteria[user]", nil, :size => 30  %></td>
+        <td><b>Username:</b></td> <td colspan="3"><%= text_field_tag "search_criteria[user]", nil, :size => 30  %></td>
     </tr>
 
     <tr>
-        <td><b>Client IP:</b></td> <td><%=h text_field_tag "search_criteria[client]",nil, :size => 19 %></td>
+        <td><b>Client IP:</b></td> <td><%= text_field_tag "search_criteria[client]",nil, :size => 19 %></td>
     </tr>
 
     <tr>
-        <td><b>Client Hostname:</b></td> <td><%=h text_field_tag "search_criteria[client_name]", nil, :size => 19 %></td>
+        <td><b>Client Hostname:</b></td> <td><%= text_field_tag "search_criteria[client_name]", nil, :size => 19 %></td>
     </tr>
 
     <tr>
-        <td><b>Message:</b></td> <td colspan="3"><%=h text_field_tag "search_criteria[message]", nil, :size => 50  %></td>
+        <td><b>Message:</b></td> <td colspan="3"><%= text_field_tag "search_criteria[message]", nil, :size => 50  %></td>
     </tr>
 
     <tr>
