@@ -34,6 +34,13 @@ chown -R apache:apache /var/tacman
 /etc/init.d/httpd restart
 
 
+sudo su -
+cd /var/tacman
+svn update
+chown -R apache:apache /var/tacman
+/etc/init.d/httpd restart
+
+
 
 
 User.find(:all, :conditions => "disabled = false", :order => :username).each {|u| puts "#{u.username}, #{u.hashed_password}, #{u.hashed_enable}, #{u.salt}, #{u.first_name} #{u.last_name}, #{u.email}, #{u.department}\n"}

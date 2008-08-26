@@ -237,7 +237,11 @@ class TacacsDaemon < ActiveRecord::Base
         end
 
         started = false
-        started = self.start if (self.running? && self.stop)
+        if (self.running? && self.stop)
+            sleep(1)
+            started = self.start
+        end
+
         return(started)
     end
 
