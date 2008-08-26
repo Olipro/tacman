@@ -10,7 +10,6 @@
 features & bugs
 ---------------
 
-* restart_logger not working because your server passes in a Logger instead of a filename
 * test new daemon with reload_logger function
 
 * make logs list config name as part of message on X_entries. look at scog_entry controller

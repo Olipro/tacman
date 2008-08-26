@@ -4,14 +4,6 @@ require 'tacacs_plus'
 gem 'tacacs_plus', '= 1.0.0'
 
 
-# subclass logger so that i can control the output format
-class Logger
-  def format_message(severity, timestamp, progname, msg)
-    levels = {'DEBUG' => 0, 'INFO' => 1, 'WARN' => 2, 'ERROR' => 3, 'FATAL' => 4, 'UNKNOWN' => 5}
-    "timestamp=#{timestamp.strftime("%Y-%m-%d %H:%M:%S %Z")}\tlevel=#{levels[severity]}\t#{msg}\n"
-  end
-end
-
 def cleanup_on_stop(pid_file,conf_file)
     begin
         File.delete(pid_file)
@@ -54,9 +46,6 @@ def process_config(conf_file, dump_file, log_file)
 
     # set up log file
     config[:tacacs_daemon][:logger] = File.expand_path(log_file) if (log_file)
-
-    # use the subclassed logger
-    config[:tacacs_daemon][:logger] = Logger.new(config[:tacacs_daemon][:logger])
 
     return(config)
 end
@@ -219,6 +208,7 @@ if (ARGV.length == 0)
     puts "--log_file - the AAA log file"
     puts "--pid_file - the server pid file"
     puts "--reload - reload the configuration\n"
+    puts "--reload-logger - reload the logger\n"
     puts "--restart - restart the server with a new pid\n"
     puts "--start - start the server\n"
     puts "--stop - stop the server\n"
@@ -234,6 +224,7 @@ opts = GetoptLong.new([ '--conf_file', GetoptLong::REQUIRED_ARGUMENT ],
                       [ '--log_file', GetoptLong::REQUIRED_ARGUMENT ],
                       [ '--pid_file', GetoptLong::REQUIRED_ARGUMENT ],
                       [ '--reload', GetoptLong::NO_ARGUMENT ],
+                      [ '--reload-logger', GetoptLong::NO_ARGUMENT ],
                       [ '--restart', GetoptLong::NO_ARGUMENT ],
                       [ '--start', GetoptLong::NO_ARGUMENT ],
                       [ '--stop', GetoptLong::NO_ARGUMENT ],
@@ -260,6 +251,8 @@ begin
                 pid_file = File.expand_path(arg)
             when '--reload'
                 run_directive = :reload
+            when '--reload-logger'
+                run_directive = :reload_logger
             when '--restart'
                 run_directive = :restart
             when '--start'
@@ -279,6 +272,21 @@ end
 if (run_directive == :reload)
     redirect_io(error_log)
     reload_daemon(pid_file)
+
+elsif (run_directive == :reload_logger)
+    redirect_io(error_log)
+    if (!File.exists?(pid_file))
+        STDERR.puts("#{Time.now.strftime("%Y-%m-%d %H:%M:%S %Z")} - PID file #{pid_file} does not exist. Cannot write configuration.")
+    else
+        begin
+            file = File.open(pid_file)
+            pid = file.readline.to_i
+            file.close
+            Process.kill('USR2', pid)
+        rescue Errno::ESRCH => error
+            STDERR.puts("#{Time.now.strftime("%Y-%m-%d %H:%M:%S %Z")} - Could not reload logger. #{error}")
+        end
+    end
 
 elsif (run_directive == :restart)
     # exit if config_file is nil
@@ -314,7 +322,7 @@ elsif (run_directive == :write)
             file = File.open(pid_file)
             pid = file.readline.to_i
             file.close
-            Process.kill('USR2', pid)
+            Process.kill('USR1', pid)
         rescue Errno::ESRCH => error
             STDERR.puts("#{Time.now.strftime("%Y-%m-%d %H:%M:%S %Z")} - Could not write configuration. #{error}")
         end
