@@ -350,6 +350,24 @@ a part of the configuration for which the daemon subscribes (and that your accou
 To bring the system back, simply do the opposite.
 </p>
 
+<br />
+<p>
+<b>Problem:</b> I locked myself out of the system. How do I get back in?
+
+<br /><br />
+
+<b>Solution:</b> You've encountered an ID10T error. Here are the steps for recovery:
+<ol>
+  <li>ssh to the system and cd to /var/tacman</li>
+  <li>run the command '<code>script/console production</code>' and execute the below commands</li>
+  <li><code>>> User.import('Recover, password, password')</code></li>
+  <li><code>>> u = User.find_by_username('Recover')</code></li>
+  <li><code>>> u.admin!</code></li>
+  <li><code>>> u.toggle_password_expiry!</code></li>
+</ol>
+Login as user 'Recover' with password 'password'.
+</p>
+
 
 <br /><br />
 
@@ -460,9 +478,16 @@ production:
         Edit secret key within environment.rb.<br>
         <code>
           cp config/environment.rb.tmpl config/environment.rb<br><br>
-         </code>
+        </code>
         Edit the line that starts with "<i>:secret      =></i>".
         You need to change the key to something unique.<br>
+       </li> <br>
+       <li>
+        Copy backgroundrb.yml.tmpl.<br>
+        <code>
+          cp config/backgroundrb.yml.tmpl config/backgroundrb.yml<br><br>
+        </code>
+        This is the cron setup file for BackgrounDRB. You may modify your copy if you wish to adjust the schedule.<br>
        </li> <br>
        <li>
          Install the database tables<br>

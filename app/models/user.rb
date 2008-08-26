@@ -42,7 +42,7 @@ class User < ActiveRecord::Base
 
 
     # expects comma delimited string with fields:
-    #username, real_name, email, department, salt, login_password, enable_password
+    #username, login_password, enable_password, salt, real_name, email, department
     # return hash of errors by username
     def User.import(data)
         errors = {}

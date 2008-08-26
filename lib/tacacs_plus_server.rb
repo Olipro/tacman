@@ -131,6 +131,7 @@ def start_daemon(conf_file, dump_file, error_log, log_file, pid_file)
         end
 
         trap("USR1") do
+            # write config
             begin
                 config = server.configuration
                 f = File.open(conf_file, 'w')
@@ -141,6 +142,14 @@ def start_daemon(conf_file, dump_file, error_log, log_file, pid_file)
             end
         end
 
+        trap("USR2") do
+            # re-initialize logger
+            begin
+                server.restart_logger
+            rescue Exception => error
+                STDERR.puts("#{Time.now.strftime("%Y-%m-%d %H:%M:%S %Z")} - Failed to reload TACACS+ server logger. #{error}\n\n #{error.backtrace.join("\n")}")
+            end
+        end
 
         begin
             server.start

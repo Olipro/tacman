@@ -245,6 +245,24 @@ class TacacsDaemon < ActiveRecord::Base
         return(started)
     end
 
+    def restart_logger
+        if (!local?)
+            self.errors.add_to_base("Action prohibited on a non-local TACACS+ Daemon.")
+            return(false)
+        end
+
+        reloaded = false
+        if (self.running?)
+            begin
+                Process.kill('USR2', self.pid)
+                reloaded = true
+            rescue Errno::ESRCH => error
+                self.errors.add_to_base("Logger reload failed. #{error}")
+            end
+        end
+        return(reloaded)
+    end
+
     def running?
         if (!local?)
             self.errors.add_to_base("Action prohibited on a non-local TACACS+ Daemon.")
@@ -443,13 +461,9 @@ private
             return(false)
         end
 
-        # reload daemon if running
+        # reload logger if running
         if (self.running?)
-            begin
-                Process.kill('HUP', self.pid)
-            rescue Errno::ESRCH => error
-                self.errors.add_to_base("Reload failed. #{error}")
-            end
+            self.restart_logger
         end
 
         # import logs directly for master systems, place into system_message for slaves

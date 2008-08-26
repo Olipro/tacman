@@ -10,6 +10,9 @@
 features & bugs
 ---------------
 
+* restart_logger not working because your server passes in a Logger instead of a filename
+* test new daemon with reload_logger function
+
 * make logs list config name as part of message on X_entries. look at scog_entry controller
 
 * hash out xml views
@@ -26,10 +29,12 @@ tests & doc
 scripts/commands
 -----------
 
+# requires new tacplus module
 sudo su -
 cd /var/tacman
 svn update
 cp config/environment.rb.tmpl config/environment.rb
+cp config/backgroundrb.yml.tmpl config/backgroundrb.yml
 chown -R apache:apache /var/tacman
 /etc/init.d/httpd restart
 
