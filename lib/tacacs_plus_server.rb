@@ -114,7 +114,7 @@ def start_daemon(conf_file, dump_file, error_log, log_file, pid_file)
                 config = process_config(conf_file, dump_file, log_file)
                 server.restart_with(config)
             rescue Exception => error
-                STDERR.puts("#{Time.now.strftime("%Y-%m-%d %H:%M:%S %Z")} - Failed to reload TACACS+ server. #{error}\n\n #{error.backtrace.join("\n")}")
+                STDERR.puts("#{Time.now.strftime("%Y-%m-%d %H:%M:%S %Z")} - Failed to reload TACACS+ server. #{error}")
                 exit(2)
             end
         end
@@ -127,7 +127,7 @@ def start_daemon(conf_file, dump_file, error_log, log_file, pid_file)
                 f.puts(config.to_yaml)
                 f.close
             rescue Exception => error
-                STDERR.puts("#{Time.now.strftime("%Y-%m-%d %H:%M:%S %Z")} - Failed to write TACACS+ server configuration. #{error}\n\n #{error.backtrace.join("\n")}")
+                STDERR.puts("#{Time.now.strftime("%Y-%m-%d %H:%M:%S %Z")} - Failed to write TACACS+ server configuration. #{error}")
             end
         end
 
@@ -136,7 +136,7 @@ def start_daemon(conf_file, dump_file, error_log, log_file, pid_file)
             begin
                 server.restart_logger
             rescue Exception => error
-                STDERR.puts("#{Time.now.strftime("%Y-%m-%d %H:%M:%S %Z")} - Failed to reload TACACS+ server logger. #{error}\n\n #{error.backtrace.join("\n")}")
+                STDERR.puts("#{Time.now.strftime("%Y-%m-%d %H:%M:%S %Z")} - Failed to reload TACACS+ server logger. #{error}")
             end
         end
 
