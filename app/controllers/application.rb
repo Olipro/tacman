@@ -43,7 +43,7 @@ private
 
     def define_session_user()
         get_remote_addr()
-        @session_user = User.find_by_id(session[:user_id])
+        @session_user = User.find_by_id(session[:user_id], :conditions => "disabled = false and allow_web_login = true")
         @local_manager = Manager.local
         if (@session_user)
             @configuration_roles = {}
