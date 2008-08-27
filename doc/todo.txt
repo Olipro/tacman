@@ -25,16 +25,6 @@ scripts/commands
 -----------
 
 sudo su -
-gem install --local --no-rdoc --no-ri /tmp/tacacs_plus-1.0.0.gem
-cd /var/tacman
-svn update
-cp -f config/environment.rb.tmpl config/environment.rb
-cp -f config/backgroundrb.yml.tmpl config/backgroundrb.yml
-chown -R apache:apache /var/tacman
-/etc/init.d/httpd restart
-
-
-sudo su -
 cd /var/tacman
 svn update
 chown -R apache:apache /var/tacman

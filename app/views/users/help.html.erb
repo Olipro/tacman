@@ -285,6 +285,20 @@ then there will be an added 30 second delay while the messaging system writes th
 <h3><a name="troubleshooting" style="color: #000000;">Troubleshooting</a></h3>
 
 <p>
+<b>Problem:</b> My TACACS+ daemons fail to start.
+
+<br /><br />
+
+<b>Solution:</b> This could be the result of several things. However, here are a few things to check:
+<ol>
+  <li>Make sure that user apache owns all files within /var/tacman</li>
+  <li>Make sure that your daemons are binding to IPs which actually exist on your server</li>
+  <li>Make sure nothing else is bound to the IP/port for which the daemon is suppost to bind</li>
+</ol>
+</p>
+
+<br />
+<p>
 <b>Problem:</b> Changes on the master system don't seem to propagate to the slaves.
 
 <br /><br />
