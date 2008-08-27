@@ -12,7 +12,7 @@ class ShellCommandObjectGroupEntriesController < ApplicationController
                 format.html { render shell_command_object_group_url(@shell_command_object_group) }
                 format.xml  { render :xml => @shell_command_object_group_entry.errors, :status => :not_acceptable }
             elsif (@shell_command_object_group_entry.destroy)
-                @local_manager.log(:username => @session_user.username, :configuration_id => @shell_command_object_group.configuration_id, :shell_command_object_group_id => @shell_command_object_group.id, :message => "Deleted entry #{@shell_command_object_group_entry.command} of Shell Command Object Group #{@shell_command_object_group.name}.")
+                @local_manager.log(:username => @session_user.username, :configuration_id => @shell_command_object_group.configuration_id, :shell_command_object_group_id => @shell_command_object_group.id, :message => "Deleted entry #{@shell_command_object_group_entry.sequence} /#{@shell_command_object_group_entry.command}/ of Shell Command Object Group #{@shell_command_object_group.name} within configuration #{@configuration.name}.")
                 format.html { redirect_to shell_command_object_group_url(@shell_command_object_group) }
                 format.xml  { head :ok }
             else

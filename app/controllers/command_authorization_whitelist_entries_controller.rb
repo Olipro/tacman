@@ -10,7 +10,7 @@ class CommandAuthorizationWhitelistEntriesController < ApplicationController
                 format.html { render command_authorization_whitelist_configuration_url(@command_authorization_whitelist_entry.configuration) }
                 format.xml  { render :xml => @command_authorization_whitelist_entry.errors, :status => :not_acceptable }
             elsif (@command_authorization_whitelist_entry.destroy)
-                @local_manager.log(:username => @session_user.username, :configuration_id => @configuration.id, :message => "Deleted entry #{@command_authorization_whitelist_entry.description} from Configuration #{@configuration.name}.")
+                @local_manager.log(:username => @session_user.username, :configuration_id => @configuration.id, :message => "Deleted entry #{@command_authorization_whitelist_entry.sequence} (#{@command_authorization_whitelist_entry.description}) from Configuration #{@configuration.name}.")
                 format.html { redirect_to command_authorization_whitelist_configuration_url(@command_authorization_whitelist_entry.configuration) }
                 format.xml  { head :ok }
             else

@@ -21,8 +21,6 @@ class AclsController < ApplicationController
 
     def create_entry
         @acl_entry = @acl.acl_entries.build(params[:acl_entry])
-        @configuration = @acl.configuration
-
         respond_to do |format|
             @nav = 'show_nav'
             if (@local_manager.slave?)
@@ -30,7 +28,7 @@ class AclsController < ApplicationController
                 format.html { render :action => "show" }
                 format.xml  { render :xml => @acl_entry.errors, :status => :not_acceptable }
             elsif @acl_entry.save
-                @local_manager.log(:username => @session_user.username, :configuration_id => @acl.configuration_id, :acl_id => @acl.id, :message => "Added entry '#{@acl_entry.description}' to ACL #{@acl.name} within configuration #{@configuration.name}.")
+                @local_manager.log(:username => @session_user.username, :configuration_id => @acl.configuration_id, :acl_id => @acl.id, :message => "Added entry #{@acl_entry.sequence} (#{@acl_entry.description}) to ACL #{@acl.name} within configuration #{@configuration.name}.")
                 format.html { redirect_to acl_url(@acl) }
                 format.xml  { render :xml => @acl_entry.to_xml }
             else
@@ -42,8 +40,6 @@ class AclsController < ApplicationController
     end
 
     def destroy
-        @configuration = @acl.configuration
-
         respond_to do |format|
             @nav = 'show_nav'
             if (@local_manager.slave?)
@@ -69,8 +65,6 @@ class AclsController < ApplicationController
     end
 
     def resequence
-        @configuration = @acl.configuration
-
         respond_to do |format|
             @nav = 'show_nav'
             if (@local_manager.slave?)
@@ -98,8 +92,6 @@ class AclsController < ApplicationController
 
 
     def update
-        @configuration = @acl.configuration
-
         respond_to do |format|
             @nav = 'show_nav'
             if (@local_manager.slave?)
@@ -121,6 +113,7 @@ private
 
     def authorize
         @acl = Acl.find(params[:id])
+        @configuration = @acl.configuration
         if (!@session_user.admin?)
             if ( !@configuration_roles.has_key?(@acl.configuration_id) || @configuration_roles[@acl.configuration_id] != 'admin' ) # deny if not owned by my config
                 flash[:warning] = "Authorization failed. This attempt has been logged."

@@ -249,7 +249,7 @@ class ConfigurationsController < ApplicationController
                 format.html { render :action => :command_authorization_whitelist, :id => @configuration }
                 format.xml  { render :xml => @command_authorization_whitelist_entry.errors, :status => :not_acceptable }
             elsif @command_authorization_whitelist_entry.save
-                @local_manager.log(:username => @session_user.username, :configuration_id => @configuration.id, :message => "Added whitelist entry #{@command_authorization_whitelist_entry.description}.")
+                @local_manager.log(:username => @session_user.username, :configuration_id => @configuration.id, :message => "Added whitelist entry #{@command_authorization_whitelist_entry.sequence} (#{@command_authorization_whitelist_entry.description}).")
                 format.html { redirect_to command_authorization_whitelist_configuration_url(@configuration) }
                 format.xml  { render :xml => @command_authorization_whitelist_entry, :status => :created, :location => @command_authorization_whitelist_entry }
             else

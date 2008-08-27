@@ -44,10 +44,11 @@ class CommandAuthorizationWhitelistEntry < ActiveRecord::Base
 
     def description
         if (self.shell_command_object_group_id)
-            str = "shell command object group '#{self.shell_command_object_group.name}' "
+            str = "shell-command-object-group #{self.shell_command_object_group.name}"
         else
-            str = "command '#{self.command}'"
+            str = "command /#{self.command}/"
         end
+        str << " access-list #{self.acl.name}" if (self.acl_id)
         return(str)
     end
 

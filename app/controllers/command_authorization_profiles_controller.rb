@@ -20,7 +20,6 @@ class  CommandAuthorizationProfilesController < ApplicationController
     end
 
     def create_entry
-        @configuration = @command_authorization_profile.configuration
         @command_authorization_profile_entry = @command_authorization_profile.command_authorization_profile_entries.build(params[:command_authorization_profile_entry])
 
         respond_to do |format|
@@ -30,7 +29,7 @@ class  CommandAuthorizationProfilesController < ApplicationController
                 format.html { render :action => "show" }
                 format.xml  { render :xml => @command_authorization_profile_entry.errors, :status => :not_acceptable }
             elsif @command_authorization_profile_entry.save
-                @local_manager.log(:username => @session_user.username, :configuration_id => @command_authorization_profile.configuration_id, :command_authorization_profile_id => @command_authorization_profile.id, :message => "Created entry #{@command_authorization_profile_entry.description} of Command Authorization Profile #{@command_authorization_profile.name} within configuration #{@configuration.name}.")
+                @local_manager.log(:username => @session_user.username, :configuration_id => @command_authorization_profile.configuration_id, :command_authorization_profile_id => @command_authorization_profile.id, :message => "Created entry #{@command_authorization_profile_entry.sequence} (#{@command_authorization_profile_entry.description}) of Command Authorization Profile #{@command_authorization_profile.name} within configuration #{@configuration.name}.")
                 format.html { redirect_to command_authorization_profile_url(@command_authorization_profile) }
                 format.xml  { render :xml => @command_authorization_profile_entry.to_xml }
             else
@@ -42,8 +41,6 @@ class  CommandAuthorizationProfilesController < ApplicationController
     end
 
     def destroy
-        @configuration = @command_authorization_profile.configuration
-
         respond_to do |format|
             @nav = 'show_nav'
             if (@local_manager.slave?)
@@ -69,8 +66,6 @@ class  CommandAuthorizationProfilesController < ApplicationController
     end
 
     def resequence
-        @configuration = @command_authorization_profile.configuration
-
         respond_to do |format|
             @nav = 'show_nav'
             if (@local_manager.slave?)
@@ -99,7 +94,6 @@ class  CommandAuthorizationProfilesController < ApplicationController
 
 
     def update
-        @configuration = @command_authorization_profile.configuration
         respond_to do |format|
             @nav = 'show_nav'
             if (@local_manager.slave?)
@@ -121,6 +115,7 @@ private
 
     def authorize
         @command_authorization_profile = CommandAuthorizationProfile.find(params[:id])
+        @configuration = @command_authorization_profile.configuration
         if (!@session_user.admin?)
             if ( !@configuration_roles.has_key?(@command_authorization_profile.configuration_id) || @configuration_roles[@command_authorization_profile.configuration_id] != 'admin' ) # deny if not owned by my config
                 flash[:warning] = "Authorization failed. This attempt has been logged."

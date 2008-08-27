@@ -12,7 +12,7 @@ class NetworkObjectGroupEntriesController < ApplicationController
                 format.html { render network_object_group_url(@network_object_group) }
                 format.xml  { render :xml => @network_object_group_entry.errors, :status => :not_acceptable }
             elsif (@network_object_group_entry.destroy)
-                @local_manager.log(:username => @session_user.username, :configuration_id => @network_object_group.configuration_id, :network_object_group_id => @network_object_group.id, :message => "Deleted entry #{@network_object_group_entry.cidr} of Network Object Group #{@network_object_group.name}.")
+                @local_manager.log(:username => @session_user.username, :configuration_id => @network_object_group.configuration_id, :network_object_group_id => @network_object_group.id, :message => "Deleted entry #{@network_object_group_entry.sequence} (#{@network_object_group_entry.cidr}) of Network Object Group #{@network_object_group.name} within configuration #{@configuration.name}.")
                 format.html { redirect_to network_object_group_url(@network_object_group) }
                 format.xml  { head :ok }
             else
@@ -27,6 +27,7 @@ private
     def authorize
         @network_object_group_entry = NetworkObjectGroupEntry.find(params[:id])
         @network_object_group = @network_object_group_entry.network_object_group
+        @configuration = @network_object_group.configuration
         if (!@session_user.admin?)
             if ( !@configuration_roles.has_key?(@network_object_group.configuration_id) || @configuration_roles[@network_object_group.configuration_id] != 'admin' ) # deny if not owned by my config
                 flash[:warning] = "Authorization failed. This attempt has been logged."

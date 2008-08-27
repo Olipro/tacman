@@ -11,7 +11,7 @@ class AclEntriesController < ApplicationController
                 format.html { render acl_url(@acl) }
                 format.xml  { render :xml => @acl_entry.errors, :status => :not_acceptable }
             elsif (@acl_entry.destroy)
-                @local_manager.log(:username => @session_user.username, :configuration_id => @acl.configuration_id, :acl_id => @acl.id, :message => "Deleted entry '#{@acl_entry.description}' of ACL #{@acl.name}.")
+                @local_manager.log(:username => @session_user.username, :configuration_id => @acl.configuration_id, :acl_id => @acl.id, :message => "Deleted entry #{@acl_entry.sequence} (#{@acl_entry.description}) of ACL #{@acl.name} within configuration #{@configuration.name}.")
                 format.html { redirect_to acl_url(@acl) }
                 format.xml  { head :ok }
             else
@@ -26,6 +26,7 @@ private
     def authorize
         @acl_entry = AclEntry.find(params[:id])
         @acl = @acl_entry.acl
+        @configuration = @acl.configuration
         if (!@session_user.admin?)
             if ( !@configuration_roles.has_key?(@acl.configuration_id) || @configuration_roles[@acl.configuration_id] != 'admin' ) # deny if not owned by my config
                 flash[:warning] = "Authorization failed. This attempt has been logged."

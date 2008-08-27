@@ -11,7 +11,7 @@ class CommandAuthorizationProfileEntriesController < ApplicationController
                 format.html { render command_authorization_profile_url(@command_authorization_profile)  }
                 format.xml  { render :xml => @command_authorization_profile_entry.errors, :status => :not_acceptable }
             elsif (@command_authorization_profile_entry.destroy)
-                @local_manager.log(:username => @session_user.username, :configuration_id => @command_authorization_profile.configuration_id, :command_authorization_profile_id => @command_authorization_profile.id, :message => "Deleted entry #{@command_authorization_profile_entry.description} of Command Authorization Profile #{@command_authorization_profile.name}.")
+                @local_manager.log(:username => @session_user.username, :configuration_id => @command_authorization_profile.configuration_id, :command_authorization_profile_id => @command_authorization_profile.id, :message => "Deleted entry #{@command_authorization_profile_entry.sequence} (#{@command_authorization_profile_entry.description}) of Command Authorization Profile #{@command_authorization_profile.name} within configuration #{@configuration.name}.")
                 format.html { redirect_to command_authorization_profile_url(@command_authorization_profile) }
                 format.xml  { head :ok }
             else
@@ -26,6 +26,7 @@ private
     def authorize
         @command_authorization_profile_entry = CommandAuthorizationProfileEntry.find(params[:id])
         @command_authorization_profile = @command_authorization_profile_entry.command_authorization_profile
+        @configuration = @command_authorization_profile.configuration
         if (!@session_user.admin?)
             if ( !@configuration_roles.has_key?(@command_authorization_profile.configuration_id) || @configuration_roles[@command_authorization_profile.configuration_id] != 'admin' ) # deny if not owned by my config
                 flash[:warning] = "Authorization failed. This attempt has been logged."

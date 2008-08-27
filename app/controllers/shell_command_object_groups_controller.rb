@@ -20,7 +20,6 @@ class ShellCommandObjectGroupsController < ApplicationController
     end
 
     def create_entry
-        @configuration = @shell_command_object_group.configuration
         @shell_command_object_group_entry = @shell_command_object_group.shell_command_object_group_entries.build(params[:shell_command_object_group_entry])
 
         respond_to do |format|
@@ -30,7 +29,7 @@ class ShellCommandObjectGroupsController < ApplicationController
                 format.html { render :action => "show" }
                 format.xml  { render :xml => @shell_command_object_group_entry.errors, :status => :not_acceptable }
             elsif @shell_command_object_group_entry.save
-                @local_manager.log(:username => @session_user.username, :configuration_id => @shell_command_object_group.configuration_id, :shell_command_object_group_id => @shell_command_object_group.id, :message => "Created entry #{@shell_command_object_group_entry.command} of Shell Command Object Group #{@shell_command_object_group.name} within configuration #{@configuration.name}.")
+                @local_manager.log(:username => @session_user.username, :configuration_id => @shell_command_object_group.configuration_id, :shell_command_object_group_id => @shell_command_object_group.id, :message => "Created entry #{@shell_command_object_group_entry.sequence} /#{@shell_command_object_group_entry.command}/ of Shell Command Object Group #{@shell_command_object_group.name} within configuration #{@configuration.name}.")
                 format.html { redirect_to shell_command_object_group_url(@shell_command_object_group) }
                 format.xml  { render :xml => @shell_command_object_group_entry.to_xml }
             else
@@ -42,8 +41,6 @@ class ShellCommandObjectGroupsController < ApplicationController
     end
 
     def destroy
-        @configuration = @shell_command_object_group.configuration
-
         respond_to do |format|
             @nav = 'show_nav'
             if (@local_manager.slave?)
@@ -69,7 +66,6 @@ class ShellCommandObjectGroupsController < ApplicationController
     end
 
     def resequence
-        @configuration = @shell_command_object_group.configuration
         respond_to do |format|
             @nav = 'show_nav'
             if (@local_manager.slave?)
@@ -97,7 +93,6 @@ class ShellCommandObjectGroupsController < ApplicationController
 
 
     def update
-        @configuration = @shell_command_object_group.configuration
         respond_to do |format|
             @nav = 'show_nav'
             if (@local_manager.slave?)
@@ -119,6 +114,7 @@ private
 
     def authorize
         @shell_command_object_group = ShellCommandObjectGroup.find(params[:id])
+        @configuration = @shell_command_object_group.configuration
         if (!@session_user.admin?)
             if ( !@configuration_roles.has_key?(@shell_command_object_group.configuration_id) || @configuration_roles[@shell_command_object_group.configuration_id] != 'admin' ) # deny if not owned by my config
                 flash[:warning] = "Authorization failed. This attempt has been logged."

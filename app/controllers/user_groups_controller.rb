@@ -4,7 +4,6 @@ class UserGroupsController < ApplicationController
     before_filter :force_pw_change
 
     def changelog
-        @configuration = @user_group.configuration
         @log_count = SystemLog.count_by_sql("SELECT COUNT(*) FROM system_logs WHERE user_group_id=#{@user_group.id}")
         if ( params.has_key?(:page) )
             page = params[:page]
@@ -21,8 +20,6 @@ class UserGroupsController < ApplicationController
     end
 
     def destroy
-        @configuration = @user_group.configuration
-
         respond_to do |format|
             @nav = '/configurations/user_group_nav'
             if (@local_manager.slave?)
@@ -42,7 +39,6 @@ class UserGroupsController < ApplicationController
 
 
     def edit
-        @configuration = @user_group.configuration
         respond_to do |format|
             format.html {@nav = '/configurations/user_group_nav'}
         end
@@ -55,7 +51,6 @@ class UserGroupsController < ApplicationController
               "AND configured_users.user_group_id = user_groups.id " +
               "AND user_groups.id = #{@user_group.id} " +
               "ORDER BY users.username"
-        @configuration = @user_group.configuration
         @members = User.find_by_sql(sql)
         respond_to do |format|
             @nav = 'configurations/user_group_nav'
@@ -64,8 +59,6 @@ class UserGroupsController < ApplicationController
     end
 
     def update
-        @configuration = @user_group.configuration
-
         respond_to do |format|
             @nav = '/configurations/user_group_nav'
             if (@local_manager.slave?)
@@ -87,6 +80,7 @@ private
 
     def authorize
         @user_group = UserGroup.find(params[:id])
+        @configuration = @user_group.configuration
         if (!@session_user.admin?)
             if ( !@configuration_roles.has_key?(@user_group.configuration_id) || @configuration_roles[@user_group.configuration_id] != 'admin' ) # deny if not owned by my config
                 flash[:warning] = "Authorization failed. This attempt has been logged."

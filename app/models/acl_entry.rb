@@ -42,10 +42,11 @@ class AclEntry < ActiveRecord::Base
 
 
     def description
+        str = "#{self.permission} "
         if (self.network_object_group_id)
-            str = "network object group '#{self.network_object_group.name}' "
+            str << "network-object-group #{self.network_object_group.name} "
         else
-            str = "ip #{self.ip} #{self.wildcard_mask}"
+            str << "ip #{self.ip} #{self.wildcard_mask}"
         end
         return(str)
     end

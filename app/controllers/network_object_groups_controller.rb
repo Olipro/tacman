@@ -20,7 +20,6 @@ class NetworkObjectGroupsController < ApplicationController
     end
 
     def create_entry
-        @configuration = @network_object_group.configuration
         @network_object_group_entry = @network_object_group.network_object_group_entries.build(params[:network_object_group_entry])
 
         respond_to do |format|
@@ -30,7 +29,7 @@ class NetworkObjectGroupsController < ApplicationController
                 format.html { render :action => "show" }
                 format.xml  { render :xml => @network_object_group_entry.errors, :status => :not_acceptable }
             elsif @network_object_group_entry.save
-                @local_manager.log(:username => @session_user.username, :configuration_id => @network_object_group.configuration_id, :network_object_group_id => @network_object_group.id, :message => "Created entry #{@network_object_group_entry.cidr} of Network Object Group #{@network_object_group.name} within configuration #{@configuration.name}.")
+                @local_manager.log(:username => @session_user.username, :configuration_id => @network_object_group.configuration_id, :network_object_group_id => @network_object_group.id, :message => "Created entry #{@network_object_group_entry.sequence} (#{@network_object_group_entry.cidr}) of Network Object Group #{@network_object_group.name} within configuration #{@configuration.name}.")
                 format.html { redirect_to network_object_group_url(@network_object_group) }
                 format.xml  { render :xml => @network_object_group_entry.to_xml }
             else
@@ -42,8 +41,6 @@ class NetworkObjectGroupsController < ApplicationController
     end
 
     def destroy
-        @configuration = @network_object_group.configuration
-
         respond_to do |format|
             @nav = 'show_nav'
             if (@local_manager.slave?)
@@ -78,7 +75,6 @@ class NetworkObjectGroupsController < ApplicationController
     end
 
     def optimize
-        @configuration = @network_object_group.configuration
         respond_to do |format|
             @nav = 'show_nav'
             if (@local_manager.slave?)
@@ -97,7 +93,6 @@ class NetworkObjectGroupsController < ApplicationController
     end
 
     def resequence
-        @configuration = @network_object_group.configuration
         respond_to do |format|
             @nav = 'show_nav'
             if (@local_manager.slave?)
@@ -116,8 +111,6 @@ class NetworkObjectGroupsController < ApplicationController
     end
 
     def update
-        @configuration = @network_object_group.configuration
-
         respond_to do |format|
             @nav = 'show_nav'
             if (@local_manager.slave?)
@@ -139,6 +132,7 @@ private
 
     def authorize
         @network_object_group = NetworkObjectGroup.find(params[:id])
+        @configuration = @network_object_group.configuration
         if (!@session_user.admin?)
             if ( !@configuration_roles.has_key?(@network_object_group.configuration_id) || @configuration_roles[@network_object_group.configuration_id] != 'admin' ) # deny if not owned by my config
                 flash[:warning] = "Authorization failed. This attempt has been logged."

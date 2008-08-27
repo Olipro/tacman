@@ -11,7 +11,7 @@ class AvpairsController < ApplicationController
                 format.html { render edit_author_avpair_entry_url(@author_avpair_entry) }
                 format.xml  { render :xml => @avpair.errors, :status => :not_acceptable }
             elsif (@avpair.destroy)
-                @local_manager.log(:username => @session_user.username, :configuration_id => @author_avpair.configuration_id, :author_avpair_id => @author_avpair.id, :message => "Deleted avpair #{@avpair.avpair}  from entry #{@author_avpair_entry.sequence} of Author AVPair #{@author_avpair.name}.")
+                @local_manager.log(:username => @session_user.username, :configuration_id => @author_avpair.configuration_id, :author_avpair_id => @author_avpair.id, :message => "Deleted avpair (#{@avpair.avpair}) from entry #{@author_avpair_entry.sequence} of Author AVPair #{@author_avpair.name} within configuration #{@configuration.name}.")
                 format.html { redirect_to edit_author_avpair_entry_url(@author_avpair_entry) }
                 format.xml  { head :ok }
             else
@@ -27,6 +27,7 @@ private
         @avpair = Avpair.find(params[:id])
         @author_avpair_entry = @avpair.author_avpair_entry
         @author_avpair = @author_avpair_entry.author_avpair
+        @configuration = @author_avpair.configuration
         if (!@session_user.admin?)
             if ( !@configuration_roles.has_key?(@author_avpair.configuration_id) || @configuration_roles[@author_avpair.configuration_id] != 'admin' ) # deny if not owned by my config
                 flash[:warning] = "Authorization failed. This attempt has been logged."
