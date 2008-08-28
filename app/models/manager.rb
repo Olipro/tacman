@@ -904,7 +904,7 @@ private
         messages = REXML::Element.new("system-messages")
         out_msgs.each do |m|
             if (m.content.blank?)
-                msg = "Error with outbox message #{m.id} for #{self.manager.name}. Content empty or content file missing."
+                msg = "Error with outbox message #{m.id} for #{m.manager.name}. Content empty or content file missing."
                 Manager.local.log(:level => 'error', :manager_id => self.id, :message => msg)
                 m.error_log = msg
                 m.queue = 'unprocessable'
@@ -918,7 +918,7 @@ private
                 messages.add_element(m.to_xml)
             rescue Exception => error
                 local_manager = Manager.local
-                msg = "Error with outbox message #{m.id} for #{self.manager.name}. See unprocessable queue on #{local_manager.name} for details."
+                msg = "Error with outbox message #{m.id} for #{m.manager.name}. See unprocessable queue on #{local_manager.name} for details."
                 local_manager.log(:level => 'error', :manager_id => self.id, :message => msg)
                 m.error_log = msg + " Error:\n\n #{error}"
                 m.queue = 'unprocessable'
