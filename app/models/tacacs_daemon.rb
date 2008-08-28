@@ -489,7 +489,7 @@ private
                     id.text = configuration.id
                     log = REXML::Element.new("log")
                     log.add_attribute('type', 'string')
-                    log.text = logs
+                    log.text = "\n" + logs
                     aaa_xml.add_element(id)
                     aaa_xml.add_element(log)
                     master.add_to_outbox('create', aaa_xml.to_s)
