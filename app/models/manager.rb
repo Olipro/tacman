@@ -920,7 +920,7 @@ private
                 local_manager = Manager.local
                 msg = "Error with outbox message #{m.id} for #{m.manager.name}. See unprocessable queue on #{local_manager.name} for details."
                 local_manager.log(:level => 'error', :manager_id => self.id, :message => msg)
-                m.error_log = msg + " Error:\n\n #{error}"
+                m.error_log = error
                 m.queue = 'unprocessable'
                 m.save
                 cur_revision -= 1
