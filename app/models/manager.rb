@@ -923,7 +923,7 @@ private
                 m.error_log = msg + " Error:\n\n #{error}"
                 m.queue = 'unprocessable'
                 m.save
-                next
+                cur_revision -= 1
             end
 
         end
@@ -933,7 +933,7 @@ private
             response = http.post(uri.path, data.to_s, {'Accept' => 'text/xml', 'Content-type' => 'text/xml'})
 
             if ( response.kind_of?(Net::HTTPOK) )
-                out_msgs.each {|m| m.destroy}
+                out_msgs.each {|m| m.destroy if m.queue != 'unprocessable'}
                 self.outbox_revision = cur_revision
                 return(true)
 
