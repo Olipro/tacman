@@ -40,8 +40,8 @@ private
     end
 
     def cleanup_unprocessable_queue
-        # delete unprocessable messages older than 28 days
-        date = (Date.today - 28).to_s
+        # delete unprocessable messages older than 10 days
+        date = (Date.today - 10).to_s
         datetime = date + ' 23:59:59'
         SystemMessage.delete_all("queue = 'unprocessable' and created_at <= '#{datetime}'")
     end

@@ -130,7 +130,7 @@ class SystemMessage < ActiveRecord::Base
 
     def to_xml
         content = REXML::Element.new("content")
-        content.add_element( REXML::Document.new(self.content) )
+        content.add_element( REXML::Document.new(self.content).root )
 
         verb = REXML::Element.new("verb")
         verb.text = self.verb
