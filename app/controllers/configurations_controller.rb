@@ -570,6 +570,12 @@ class ConfigurationsController < ApplicationController
             @search_opts['search_criteria[user]'] = params[:search_criteria][:user]
         end
 
+        if (!params[:search_criteria][:command].blank?)
+            criteria.push("command regexp ?")
+            criteria_vals.push(params[:search_criteria][:command])
+            @search_opts['search_criteria[command]'] = params[:search_criteria][:command]
+        end
+
         if (!params[:search_criteria][:message].blank?)
             criteria.push("message regexp ?")
             criteria_vals.push(params[:search_criteria][:message])
