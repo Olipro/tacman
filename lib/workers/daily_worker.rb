@@ -9,14 +9,18 @@ class DailyWorker < BackgrounDRb::MetaWorker
     def daily_tasks
         @local_manager = Manager.local
         @configurations = Configuration.find(:all)
-        disable_inactive
-        cleanup_logs
-        check_remote_queues
-        mail_configuration_changelog
-        mail_daily_logs
-        mail_password_expiry
+
+        if (@local_manager.master?)
+            disable_inactive
+            check_remote_queues
+            mail_configuration_changelog
+            mail_daily_logs
+            mail_password_expiry
+        end
+
         tacacs_daemon_maintenance
         cleanup_unprocessable_queue
+        cleanup_logs
     end
 
 
@@ -62,7 +66,7 @@ private
     end
 
     def disable_inactive
-        return(false) if (@local_manager.slave? || @local_manager.disable_inactive_users_after == 0)
+        return(false) if (@local_manager.disable_inactive_users_after == 0)
 
         mail_to = []
         User.find(:all).each do |user|
@@ -86,7 +90,7 @@ private
     end
 
     def mail_configuration_changelog
-        return(false) if (@local_manager.slave? || !@local_manager.enable_mailer)
+        return(false) if (!@local_manager.enable_mailer)
 
         if (@local_manager.enable_mailer)
             yesterday = (Date.today - 1).strftime("%Y-%m-%d")
@@ -112,7 +116,7 @@ private
     end
 
     def mail_daily_logs
-        return(false) if (@local_manager.slave? || !@local_manager.enable_mailer)
+        return(false) if (!@local_manager.enable_mailer)
 
         if (@local_manager.enable_mailer)
             yesterday = (Date.today - 1).strftime("%Y-%m-%d")
@@ -135,7 +139,7 @@ private
     end
 
     def mail_password_expiry
-        return(false) if (@local_manager.slave? || !@local_manager.enable_mailer)
+        return(false) if (!@local_manager.enable_mailer)
 
         day7 = Date.today + 7
         day3 = Date.today + 3
