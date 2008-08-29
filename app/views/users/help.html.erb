@@ -336,6 +336,22 @@ a part of the configuration for which the daemon subscribes (and that your accou
 
 <br />
 <p>
+<b>Problem:</b> How do I manually clear the inbox/outbox?
+
+<br /><br />
+
+<b>Solution:</b> You should only attempt this if something goes bad and your queue gets filled with junk. Here are the steps:
+<ol>
+  <li>ssh to the system and cd to /var/tacman</li>
+  <li>run the command '<code>script/console production</code>' and execute the below commands</li>
+  <li><code>>> m = Manager.find_by_name('manager name here')</code></li>
+  <li><code>>> SystemMessage.destroy_all("manager_id = #{m.id} and queue='outbox'")</code></li>
+  <li><code>>> SystemMessage.destroy_all("manager_id = #{m.id} and queue='inbox'")</code></li>
+</ol>
+</p>
+
+<br />
+<p>
 <b>Problem:</b> How do I manually clean logs from the database.
 
 <br /><br />
