@@ -255,6 +255,25 @@ class Manager < ActiveRecord::Base
         Manager.find(:all, :conditions => "is_local = false", :order => :name)
     end
 
+    # return status of in/out queue of remote managers
+    def Manager.queue_status
+        doc = "<managers>\n"
+        Manager.non_local.each do |m|
+            doc << "  <manager>\n"
+            doc << "    <name type=\"string\">#{m.name}</name>\n"
+            hour_ago = Time.now - 3600
+            out_msg = m.system_messages.find(:first, :conditions => "queue = 'outbox'", :order => :id)
+            in_msg = m.system_messages.find(:first, :conditions => "queue = 'inbox'", :order => :id)
+            out_stuck = true if (out_msg && hour_ago > out_msg.created_at)
+            in_stuck = true if (in_msg && hour_ago > in_msg.created_at)
+            doc << "    <outbox_stuck />\n" if (out_stuck)
+            doc << "    <inbox_stuck />\n" if (in_stuck)
+            doc << "  </manager>\n"
+        end
+        doc << "</managers>\n"
+        return(doc)
+    end
+
     # used by master to register a slave
     # return master, or slave on error
     def Manager.register(url, from=nil)
@@ -527,6 +546,58 @@ class Manager < ActiveRecord::Base
                 self.errors.add_to_base("Manager has not yet been approved by a system administrator.")
             end
         end
+        return(false)
+    end
+
+    # return hash of hashes. key of first is manager name, keys of second are inbox/outbox status
+    def check_remote_queue_status
+        http, uri = prepare_http_request("/queue_status")
+        data = "serial=#{self.serial}&password=#{self.password}"
+
+        begin
+            response = http.post(uri.path, data, {'Accept' => 'text/xml'})
+
+            if ( response.kind_of?(Net::HTTPOK) )
+                doc = REXML::Document.new(response.body)
+                if (doc.root.name == 'managers')
+                     status = {}
+                     doc.root.each_element do |m|
+                        if (m.name == "manager")
+                            name = 'unknown'
+                            outbox = :ok
+                            inbox = :ok
+                            m.each_element do |field|
+                                if (field.name == "name")
+                                    name = field.text
+                                elsif (field.name == "outbox_stuck")
+                                    outbox = :stuck
+                                elsif (field.name == "inbox_stuck")
+                                    inbox = :stuck
+                                end
+                            end
+                            status[name] = {:inbox => inbox, :outbox => outbox}
+                        end
+                     end
+                     return(status)
+                end
+            elsif ( response.kind_of?(Net::HTTPForbidden) )
+                self.errors.add_to_base("Authentication failure.")
+                Manager.local.log(:manager_id => self.id, :message => "Authorization failure on Manager #{self.name}. Disabling messaging.")
+                self.disable!('authentication failure.')
+            elsif (response.kind_of?(Net::HTTPNotAcceptable))
+                body = response.body
+                doc = REXML::Document.new(body)
+                if (doc.root.name == 'errors')
+                     doc.root.each_element {|e| self.errors.add_to_base(e.text) }
+                end
+            else
+                self.errors.add_to_base("Unexpected response: #{response.class}")
+            end
+
+        rescue Exception => error
+            self.errors.add_to_base("Web services call raised errors: #{error}")
+        end
+
         return(false)
     end
 

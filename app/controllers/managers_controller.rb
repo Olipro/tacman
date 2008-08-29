@@ -1,7 +1,7 @@
 class ManagersController < ApplicationController
-    before_filter :define_session_user, :except => [:register, :resync, :read_log_file, :tacacs_daemon_control, :write_to_inbox]
-    before_filter :authorize_admin, :except => [:register, :resync, :read_log_file, :tacacs_daemon_control, :write_to_inbox]
-    before_filter :force_pw_change, :except => [:register, :resync, :read_log_file, :tacacs_daemon_control, :write_to_inbox]
+    before_filter :define_session_user, :except => [:queue_status, :register, :resync, :read_log_file, :tacacs_daemon_control, :write_to_inbox]
+    before_filter :authorize_admin, :except => [:queue_status, :register, :resync, :read_log_file, :tacacs_daemon_control, :write_to_inbox]
+    before_filter :force_pw_change, :except => [:queue_status, :register, :resync, :read_log_file, :tacacs_daemon_control, :write_to_inbox]
 
     filter_parameter_logging :password
 
@@ -254,6 +254,34 @@ class ManagersController < ApplicationController
             format.html { redirect_to inbox_manager_url(@manager) }
             format.xml  { head :ok }
         end
+    end
+
+    # used by remote manager to check queue status on local system
+    def queue_status
+        get_remote_addr()
+        respond_to do |format|
+            begin
+                serial = params[:serial]
+                pw = params[:password]
+                if (serial && pw)
+                    manager = Manager.find_by_serial(serial)
+                    if ( manager && manager.authenticate(pw) )
+                        format.xml  { render :xml => Manager.queue_status }
+                    else
+                        Manager.local.log(:level => 'warn', :message => "Authentication failed for #{creds[0]} from #{@remote_addr}.")
+                        manager = Manager.new if (!manager)
+                        manager.errors.add_to_base("Authentication failed for Manager #{creds[0]}.")
+                        format.xml  { render :xml => manager.errors.to_xml, :status => :forbidden }
+                    end
+                else
+                    format.xml  { render :xml => "<errors><error>XML document must contain a valid Manager serial and password.</error></errors>", :status => :not_acceptable }
+                end
+
+            rescue Exception => error
+                format.xml  { render :xml => "<errors><error>Error processing input for Manager: #{error}</error></errors>", :status => :not_acceptable }
+            end
+        end
+
     end
 
     # used by remote manager to real tacacs daemon log files

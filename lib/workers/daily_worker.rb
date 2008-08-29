@@ -11,6 +11,7 @@ class DailyWorker < BackgrounDRb::MetaWorker
         @configurations = Configuration.find(:all)
         disable_inactive
         cleanup_logs
+        check_remote_queues
         mail_configuration_changelog
         mail_daily_logs
         mail_password_expiry
@@ -20,6 +21,20 @@ class DailyWorker < BackgrounDRb::MetaWorker
 
 
 private
+
+    def check_remote_queues
+        Manager.non_local.each do |m|
+            status = m.check_remote_queue_status
+            if (status)
+                status.each_pair do |name,queues|
+                    @local_manager.log(:level => 'warn', :manager_id => m.id, :message => "Detected possible stuck inbox queue for #{name} on #{m.name}") if (queues[:inbox] == :stuck)
+                    @local_manager.log(:level => 'warn', :manager_id => m.id, :message => "Detected possible stuck outbox queue for #{name} on #{m.name}") if (queues[:outbox] == :stuck)
+                end
+            else
+                @local_manager.log(:manager_id => m.id, :message => "DailyWorker#check_remote_queues - queue status check failed for #{m.name}: #{m.errors.full_messages.join(' ')}")
+            end
+        end
+    end
 
     def cleanup_logs
 
