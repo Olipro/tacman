@@ -278,13 +278,15 @@ table.index_list td {
 margin: 0px;
 padding: 0px;
 padding-top: 5px;
-padding-right: 10px;
+padding-right: 5px;
+padding-left: 5px;
 }
 
 table.index_list th {
 margin: 0px;
 padding: 0px;
-padding-right: 10px;
+padding-right: 5px;
+padding-left: 5px;
 }
 
 table.spaced {border-spacing: 0px 1px;}
@@ -298,6 +300,10 @@ padding-right: 10px;
 
 tr.disabled {
 background-color: #BEBEBE;
+}
+
+td.toggles {
+text-align: center;
 }
 
 tr.disabled td{

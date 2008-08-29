@@ -19,8 +19,10 @@
               <%= link_to(cu.user_group.name, members_user_group_url(cu.user_group_id) ) if (cu.user_group_id) %>
             </td>
 
-            <td class="toggles" style="padding-left: 5px;">
-            <% if (@configuration_roles[@configuration.id] == 'admin' || @session_user.admin?) %>
+            <td class="toggles">
+            <% if (user.disabled?) %>
+              <i style="color: #7B2024; font-size: 10px;" >ACCOUNT DISABLED</i>
+            <% elsif (@configuration_roles[@configuration.id] == 'admin' || @session_user.admin?) %>
               <%= cu_active_toggle(cu,user,blue) %>
             <% elsif (cu.active?) %>
                 active
@@ -36,12 +38,6 @@
                 <% else %>
                     <i>no department</i>
                 <% end %>
-              <% end %>
-            </td>
-
-            <td>
-              <% if (user.disabled?) %>
-              <i style="color: #7B2024; font-size: 10px;" >ACCOUNT DISABLED</i>
               <% end %>
             </td>
 
