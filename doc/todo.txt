@@ -10,8 +10,6 @@
 features & bugs
 ---------------
 
- * web call for master to check slave queues. alert if entries over certain age.
-
 * hash out xml views
 
 

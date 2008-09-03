@@ -734,7 +734,7 @@ class Manager < ActiveRecord::Base
                 MiddleMan.worker(:queue_worker, worker_key).async_process_inbox(:arg => self.id)
             end
         rescue Exception => error
-            Manager.local.log(:level => 'error', :message => "Manager#add_to_inbox - Error with BackgrounDRB: #{error}")
+            Manager.local.log(:level => 'error', :message => "Manager#add_to_inbox for #{self.name} - Error with BackgrounDRB: #{error}")
             return(false)
         end
         return(true)
@@ -749,7 +749,7 @@ class Manager < ActiveRecord::Base
             end
         rescue Exception => error
             local_manager = Manager.local
-            local_manager.log(:level => 'error', :message => "Manager#add_to_outbox - BackgrounDRb error: #{error}") if (!local_manager.slave?)
+            local_manager.log(:level => 'error', :message => "Manager#add_to_outbox for #{self.name} - BackgrounDRb error: #{error}") if (!local_manager.slave?)
             return(false)
         end
         return(true)
