@@ -25,7 +25,12 @@ private
         count = m.system_messages.count(:conditions => "queue = 'outbox'")
         if (count > 0 && m.is_enabled && !m.outbox_locked?)
             m.lock_outbox(1800) # 30 min lock
-            m.unlock_outbox() if (m.write_remote_inbox!)
+            begin
+                m.unlock_outbox() if (m.write_remote_inbox!)
+            rescue Exception => error
+                m.unlock_outbox()
+                @local_manager.log(:level => 'error', :message => "Error with HourlyWorker#do_write for #{m.name}: #{error}")
+            end
         end
 
         return(true)
