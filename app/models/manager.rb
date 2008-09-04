@@ -261,7 +261,7 @@ class Manager < ActiveRecord::Base
         Manager.non_local.each do |m|
             doc << "  <manager>\n"
             doc << "    <name type=\"string\">#{m.name}</name>\n"
-            time = Time.now - 7200
+            time = Time.now - 10800
             out_msg = m.system_messages.find(:first, :conditions => "queue = 'outbox'", :order => :id)
             in_msg = m.system_messages.find(:first, :conditions => "queue = 'inbox'", :order => :id)
             out_stuck = true if (out_msg && time > out_msg.created_at)

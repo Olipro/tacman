@@ -13,6 +13,7 @@ class DailyWorker < BackgrounDRb::MetaWorker
         if (@local_manager.master?)
             disable_inactive
             check_remote_queues
+            check_local_queues
             mail_configuration_changelog
             mail_daily_logs
             mail_password_expiry
@@ -31,12 +32,22 @@ private
             status = m.check_remote_queue_status
             if (status)
                 status.each_pair do |name,queues|
-                    @local_manager.log(:level => 'warn', :manager_id => m.id, :message => "Detected possible stuck inbox queue for #{name} on #{m.name}") if (queues[:inbox] == :stuck)
-                    @local_manager.log(:level => 'warn', :manager_id => m.id, :message => "Detected possible stuck outbox queue for #{name} on #{m.name}") if (queues[:outbox] == :stuck)
+                    @local_manager.log(:level => 'warn', :message => "Detected possible stuck inbox queue for #{name} on #{m.name}") if (queues[:inbox] == :stuck)
+                    @local_manager.log(:level => 'warn', :message => "Detected possible stuck outbox queue for #{name} on #{m.name}") if (queues[:outbox] == :stuck)
                 end
             else
                 @local_manager.log(:manager_id => m.id, :message => "DailyWorker#check_remote_queues - queue status check failed for #{m.name}: #{m.errors.full_messages.join(' ')}")
             end
+        end
+    end
+
+    def check_local_queues
+        time = Time.now - 10800
+        Manager.non_local.each do |m|
+            out_msg = m.system_messages.find(:first, :conditions => "queue = 'outbox'", :order => :id)
+            in_msg = m.system_messages.find(:first, :conditions => "queue = 'inbox'", :order => :id)
+            @local_manager.log(:level => 'warn', :message => "Detected possible stuck outbox queue for #{m.name} on #{@local_manager.name}") if (out_msg && time > out_msg.created_at)
+            @local_manager.log(:level => 'warn', :message => "Detected possible stuck inbox queue for #{m.name} on #{@local_manager.name}") if (in_msg && time > in_msg.created_at)
         end
     end
 
@@ -92,22 +103,21 @@ private
     def mail_configuration_changelog
         return(false) if (!@local_manager.enable_mailer)
 
-        if (@local_manager.enable_mailer)
-            yesterday = (Date.today - 1).strftime("%Y-%m-%d")
-            start_time = yesterday + " 00:00:00"
-            end_time = yesterday + " 23:59:59"
-            @configurations.each do |configuration|
-                mail_to = []
-                configuration.configured_users.find(:all, :conditions => "role = 'admin'").each {|x| mail_to.push(x.user.email) if (!x.user.email.blank?)}
-                logs = configuration.system_logs.find(:all, :conditions => "created_at >= '#{start_time}' and created_at <= '#{end_time}'", :order => :created_at)
+        time = Time.now
+        yesterday = (Date.today - 1).strftime("%Y-%m-%d")
+        start_time = yesterday + time.strftime(" %H:%M:%S")
+        end_time = time.strftime("%Y-%m-%d %H:%M:%S")
+        @configurations.each do |configuration|
+            mail_to = []
+            configuration.configured_users.find(:all, :conditions => "role = 'admin'").each {|x| mail_to.push(x.user.email) if (!x.user.email.blank?)}
+            logs = configuration.system_logs.find(:all, :conditions => "created_at >= '#{start_time}' and created_at <= '#{end_time}'", :order => :created_at)
 
-                if (logs.length > 0 && mail_to.length > 0)
-                    begin
-                        TacmanMailer.deliver_logs(@local_manager, mail_to, logs, "TacacsManager changelog - #{configuration.name}")
-                    rescue Exception => error
-                        @local_manager.log(:message => "Failed to deliver daily logs - #{error}")
-                        return(false)
-                    end
+            if (logs.length > 0 && mail_to.length > 0)
+                begin
+                    TacmanMailer.deliver_logs(@local_manager, mail_to, logs, "TacacsManager changelog - #{configuration.name}")
+                rescue Exception => error
+                    @local_manager.log(:message => "Failed to deliver daily logs - #{error}")
+                    return(false)
                 end
             end
         end
@@ -118,20 +128,19 @@ private
     def mail_daily_logs
         return(false) if (!@local_manager.enable_mailer)
 
-        if (@local_manager.enable_mailer)
-            yesterday = (Date.today - 1).strftime("%Y-%m-%d")
-            start_time = yesterday + " 00:00:00"
-            end_time = yesterday + " 23:59:59"
-            mail_to = []
-            User.find(:all, :conditions => "role = 'admin' and email is not null").each {|x| mail_to.push(x.email)}
-            logs = SystemLog.find(:all, :conditions => "level != 'info' and created_at >= '#{start_time}' and created_at <= '#{end_time}'", :order => :created_at)
-            if (logs.length > 0 && mail_to.length > 0)
-                begin
-                    TacmanMailer.deliver_logs(@local_manager, mail_to, logs)
-                rescue Exception => error
-                    @local_manager.log(:level => 'error', :message => "Failed to deliver daily logs - #{error}")
-                    return(false)
-                end
+        time = Time.now
+        yesterday = (Date.today - 1).strftime("%Y-%m-%d")
+        start_time = yesterday + time.strftime(" %H:%M:%S")
+        end_time = time.strftime("%Y-%m-%d %H:%M:%S")
+        mail_to = []
+        User.find(:all, :conditions => "role = 'admin' and email is not null").each {|x| mail_to.push(x.email)}
+        logs = SystemLog.find(:all, :conditions => "level != 'info' and created_at >= '#{start_time}' and created_at <= '#{end_time}'", :order => :created_at)
+        if (logs.length > 0 && mail_to.length > 0)
+            begin
+                TacmanMailer.deliver_logs(@local_manager, mail_to, logs)
+            rescue Exception => error
+                @local_manager.log(:level => 'error', :message => "Failed to deliver daily logs - #{error}")
+                return(false)
             end
         end
 
