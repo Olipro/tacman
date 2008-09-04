@@ -13,7 +13,7 @@ module ShellCommandObjectGroupsHelper
             str << link_to(image_tag('edit_button.png', :border => 'none'), edit_shell_command_object_group_entry_url(e))
             end
             str << " seq #{e.sequence}"if (show_details)
-            str << " #{e.command} </li>\n"
+            str << " #{e.command.gsub('<', '&lt;').gsub('>', '&gt;')} </li>\n"
         end
         str << "</ul>\n"
         return(str)

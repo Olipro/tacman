@@ -12,7 +12,7 @@ module CommandAuthorizationProfilesHelper
             if (e.shell_command_object_group_id)
                 str << "shell-command-object-group <i>#{e.shell_command_object_group.name}</i> "
             else
-                str << "command /#{e.command}/"
+                str << "command /#{e.command.gsub('<', '&lt;').gsub('>', '&gt;')}/"
             end
             str << " access-list <i>#{e.acl.name}</i>" if (e.acl_id)
             str << "</li>\n"
