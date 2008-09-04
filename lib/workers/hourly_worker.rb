@@ -21,23 +21,8 @@ private
         CGI::Session::ActiveRecordStore::Session.delete_all("updated_at < '#{time}'")
     end
 
-    def do_write(m)
-        count = m.system_messages.count(:conditions => "queue = 'outbox'")
-        if (count > 0 && m.is_enabled && !m.outbox_locked?)
-            m.lock_outbox(1800) # 30 min lock
-            begin
-                m.unlock_outbox() if (m.write_remote_inbox!)
-            rescue Exception => error
-                m.unlock_outbox()
-                @local_manager.log(:level => 'error', :message => "Error with HourlyWorker#do_write for #{m.name}: #{error}")
-            end
-        end
-
-        return(true)
-    end
-
     def process_all_inbox()
-        Manager.find(:all).each do |m|
+        Manager.non_local.each do |m|
             if (!m.inbox_locked?)
                 m.lock_inbox(1800) # 30 min lock
                 m.process_inbox!
@@ -47,8 +32,17 @@ private
     end
 
     def write_all_remote
-        Manager.non_local.each do |manager|
-            thread_pool.defer(:do_write, manager)
+        Manager.non_local.each do |m|
+            count = m.system_messages.count(:conditions => "queue = 'outbox'")
+            if (count > 0 && m.is_enabled && !m.outbox_locked?)
+                m.lock_outbox(1800) # 30 min lock
+                begin
+                    m.unlock_outbox() if (m.write_remote_inbox!)
+                rescue Exception => error
+                    m.unlock_outbox()
+                    @local_manager.log(:level => 'error', :message => "Error with HourlyWorker#do_write for #{m.name}: #{error}")
+                end
+            end
         end
 
         return(true)
