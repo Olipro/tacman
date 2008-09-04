@@ -251,6 +251,12 @@ class Manager < ActiveRecord::Base
         Manager.find(:first, :conditions => "is_local = true")
     end
 
+    def Manager.master_xml
+        Manager.local.to_xml(:skip_instruct => true, :except => [:id, :is_approved,
+                             :is_enabled, :is_local, :base_url, :manager_type, :name, :password, :serial,
+                             :disabled_message, :created_at, :updated_at])
+    end
+
     def Manager.non_local
         Manager.find(:all, :conditions => "is_local = false", :order => :name)
     end
@@ -825,6 +831,7 @@ class Manager < ActiveRecord::Base
         if (!self.is_local && self.is_enabled && self.slave?)
             SystemMessage.destroy_all("manager_id = #{self.id} and queue = 'outbox'")
             self.outbox_revision = 0
+            self.add_to_outbox( 'update', Manager.master_xml )
             self.add_to_outbox('create', Manager.export)
             self.tacacs_daemons.each {|td| self.add_to_outbox('create', td.export_xml)}
             return(self.save)
@@ -1050,10 +1057,7 @@ private
 
     def update_settings_on_remote_managers!
         if (self.is_local)
-            Manager.replicate_to_slaves('update',
-                                        Manager.local.to_xml(:skip_instruct => true, :except => [:id, :is_approved,
-                                        :is_enabled, :is_local, :base_url, :manager_type, :name, :password, :serial,
-                                        :disabled_message, :created_at, :updated_at]) )
+            Manager.replicate_to_slaves('update', Manager.master_xml)
         elsif (self.is_enabled && self.slave?)
             self.add_to_outbox( 'update', self.to_xml(:skip_instruct => true, :only => [:name, :base_url]) )
         end
