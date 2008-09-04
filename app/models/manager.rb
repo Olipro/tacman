@@ -219,6 +219,7 @@ class Manager < ActiveRecord::Base
     # return string of xml elements. no root element provided
     def Manager.export(full=false)
         xml = "<system-export>"
+        xml << Manager.master_xml
         xml << Department.find(:all).to_xml(:indent => 0, :skip_instruct => true)
         xml << User.find(:all).to_xml(:indent => 0, :skip_instruct => true)
         xml << PasswordHistory.find(:all).to_xml(:indent => 0, :skip_instruct => true)
@@ -252,7 +253,7 @@ class Manager < ActiveRecord::Base
     end
 
     def Manager.master_xml
-        Manager.local.to_xml(:skip_instruct => true, :except => [:id, :is_approved,
+        Manager.local.to_xml(:indent => 0, :skip_instruct => true, :except => [:id, :is_approved,
                              :is_enabled, :is_local, :base_url, :manager_type, :name, :password, :serial,
                              :disabled_message, :created_at, :updated_at])
     end
@@ -831,7 +832,6 @@ class Manager < ActiveRecord::Base
         if (!self.is_local && self.is_enabled && self.slave?)
             SystemMessage.destroy_all("manager_id = #{self.id} and queue = 'outbox'")
             self.outbox_revision = 0
-            self.add_to_outbox( 'update', Manager.master_xml )
             self.add_to_outbox('create', Manager.export)
             self.tacacs_daemons.each {|td| self.add_to_outbox('create', td.export_xml)}
             return(self.save)

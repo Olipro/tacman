@@ -52,7 +52,7 @@ class SystemMessage < ActiveRecord::Base
             begin
                 if (key == 'system_export')
                     expected_revision = 1
-                    ordered = ['departments','users','password_histories','configurations',
+                    ordered = ['manager', 'departments','users','password_histories','configurations',
                                'network_object_groups','network_object_group_entries',
                                'shell_command_object_groups', 'shell_command_object_group_entries','acls',
                                'acl_entries','author_avpairs','author_avpair_entries','avpairs',
