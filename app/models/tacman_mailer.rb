@@ -48,7 +48,7 @@ class TacmanMailer < ActionMailer::Base
         log = "User\tDevice\tAttempts\n\n"
         failed_users.each_pair do |user,data|
             data.each_pair do |client,count|
-                log << "#{user}\t#{client}\t#{count}"
+                log << "#{user}\t#{client}\t#{count}\n"
             end
         end
 
