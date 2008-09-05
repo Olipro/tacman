@@ -57,7 +57,7 @@ class TacmanMailer < ActionMailer::Base
         managers = {local_manager.id => local_manager}
         bcc(mail_to)
         subject(subject)
-        body(:full_list => full_list, :devices => devices.keys.join("\n")
+        body(:full_list => full_list, :devices => devices.keys.join("\n") )
         from(local_manager.mail_from)
     end
 
