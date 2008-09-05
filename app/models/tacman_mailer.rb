@@ -45,7 +45,6 @@ class TacmanMailer < ActionMailer::Base
     end
 
     def unknown_users_log(local_manager, mail_to, failed_users, devices, subject)
-        devices = {}
         full_list = ""
         failed_users.keys.sort.each do |user|
             failed_users[user].keys.sort.each do |client|
