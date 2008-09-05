@@ -122,7 +122,7 @@ private
             end
 
             failed_users = {}
-            configuration.aaa_logs.find(:all, :conditions => "timestamp >= '#{start_time}' and timestamp <= '#{end_time}' and message='Unknown user attempted authentication.'").each do |msg|
+            configuration.aaa_logs.find(:all, :conditions => "timestamp >= '#{start_time}' and timestamp <= '#{end_time}' and message='Unknown user attempted authentication.'", :order => 'user').each do |msg|
                 if ( failed_users.has_key?(msg.user) )
                     if ( failed_users[msg.user].has_key?(msg.client) )
                         failed_users[msg.user][msg.client] += 1
