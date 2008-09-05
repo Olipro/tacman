@@ -44,20 +44,24 @@ class TacmanMailer < ActionMailer::Base
         from(local_manager.mail_from)
     end
 
-    def unknown_users_log(local_manager, mail_to, failed_users, subject)
+    def unknown_users_log(local_manager, mail_to, failed_users, devices, subject)
         devices = {}
         full_list = ""
         failed_users.keys.sort.each do |user|
             failed_users[user].keys.sort.each do |client|
                 full_list << "#{user}, #{client}, #{failed_users[user][client]}\n"
-                devices[client] = true
             end
+        end
+
+        device_list = ""
+        devices.keys.sort.each do |client|
+            device_list << "#{client}, #{devices[client]}\n"
         end
 
         managers = {local_manager.id => local_manager}
         bcc(mail_to)
         subject(subject)
-        body(:full_list => full_list, :devices => devices.keys.join("\n") )
+        body(:full_list => full_list, :device_list => device_list )
         from(local_manager.mail_from)
     end
 
