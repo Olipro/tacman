@@ -44,4 +44,12 @@ class TacmanMailer < ActionMailer::Base
         from(local_manager.mail_from)
     end
 
+    def unknown_users_log(local_manager, mail_to, failed_users, subject)
+        managers = {local_manager.id => local_manager}
+        bcc(mail_to)
+        subject(subject)
+        body(:failed_users => failed_users)
+        from(local_manager.mail_from)
+    end
+
 end

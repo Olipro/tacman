@@ -14,8 +14,8 @@ class DailyWorker < BackgrounDRb::MetaWorker
             disable_inactive
             check_remote_queues
             check_local_queues
-            mail_configuration_changelog
             mail_daily_logs
+            mail_configuration_logs
             mail_password_expiry
         end
 
@@ -100,29 +100,49 @@ private
         return(true)
     end
 
-    def mail_configuration_changelog
+    def mail_configuration_logs
         return(false) if (!@local_manager.enable_mailer)
 
-        time = Time.now
         yesterday = (Date.today - 1).strftime("%Y-%m-%d")
-        start_time = yesterday + time.strftime(" %H:%M:%S")
-        end_time = time.strftime("%Y-%m-%d %H:%M:%S")
         @configurations.each do |configuration|
+            start_time = yesterday + Time.now.strftime(" %H:%M:%S")
+            end_time = Time.now.strftime("%Y-%m-%d %H:%M:%S")
             mail_to = []
             configuration.configured_users.find(:all, :conditions => "role = 'admin'").each {|x| mail_to.push(x.user.email) if (!x.user.email.blank?)}
-            logs = configuration.system_logs.find(:all, :conditions => "created_at >= '#{start_time}' and created_at <= '#{end_time}'", :order => :created_at)
+            next if (mail_to.length == 0)
 
-            if (logs.length > 0 && mail_to.length > 0)
+            logs = configuration.system_logs.find(:all, :conditions => "created_at >= '#{start_time}' and created_at <= '#{end_time}'", :order => :created_at)
+            if (logs.length > 0)
                 begin
                     TacmanMailer.deliver_logs(@local_manager, mail_to, logs, "TacacsManager changelog - #{configuration.name}")
                 rescue Exception => error
-                    @local_manager.log(:message => "Failed to deliver daily logs - #{error}")
+                    @local_manager.log(:level => 'error', :message => "Failed to deliver changelog - #{error}")
+                    return(false)
+                end
+            end
+
+            failed_users = {}
+            configuration.aaa_logs.find(:all, :conditions => "timestamp >= '#{start_time}' and timestamp <= '#{end_time}' and message='Unknown user attempted authentication.'").each do |msg|
+                if ( failed_users.has_key?(msg.user) )
+                    if ( failed_users[msg.user].has_key?(msg.client) )
+                        failed_users[msg.user][msg.client] += 1
+                    else
+                        failed_users[msg.user][msg.client] = 1
+                    end
+                else
+                    failed_users[msg.user] = {msg.client => 1}
+                end
+            end
+
+            if (failed_users.keys.length > 0)
+                begin
+                    TacmanMailer.deliver_unknown_users_log(@local_manager, mail_to, failed_users, "Unauthorized Login Attempts - #{configuration.name}")
+                rescue Exception => error
+                    @local_manager.log(:level => 'error', :message => "Failed to deliver unauthorized user logs - #{error}")
                     return(false)
                 end
             end
         end
-
-        return(true)
     end
 
     def mail_daily_logs
@@ -134,8 +154,10 @@ private
         end_time = time.strftime("%Y-%m-%d %H:%M:%S")
         mail_to = []
         User.find(:all, :conditions => "role = 'admin' and email is not null").each {|x| mail_to.push(x.email)}
+        return(true) if (mail_to.length == 0)
+
         logs = SystemLog.find(:all, :conditions => "level != 'info' and created_at >= '#{start_time}' and created_at <= '#{end_time}'", :order => :created_at)
-        if (logs.length > 0 && mail_to.length > 0)
+        if (logs.length > 0)
             begin
                 TacmanMailer.deliver_logs(@local_manager, mail_to, logs)
             rescue Exception => error
