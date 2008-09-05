@@ -1,6 +1,3 @@
 -- Unauthorized Login Attempts --
 
-<% for user in @failed_users.keys %>
-<%= user %>
-<% for client in @failed_users[user].keys %><%= "  #{client} => #{@failed_users[user][client]} attempts\n" %><% end %>
-<% end %>
+<%= @log %>
