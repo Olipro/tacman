@@ -45,17 +45,19 @@ class TacmanMailer < ActionMailer::Base
     end
 
     def unknown_users_log(local_manager, mail_to, failed_users, subject)
-        log = "User\tTarget Device\tNumber of Attempts\n\n"
+        devices = ""
+        full_list = ""
         failed_users.each_pair do |user,data|
             data.each_pair do |client,count|
-                log << "#{user}, #{client}, #{count}\n"
+                full_list << "#{user}, #{client}, #{count}\n"
+                devices << "#{client}\n"
             end
         end
 
         managers = {local_manager.id => local_manager}
         bcc(mail_to)
         subject(subject)
-        body(:log => log)
+        body(:full_list => full_list, :devices => devices)
         from(local_manager.mail_from)
     end
 
