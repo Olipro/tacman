@@ -47,9 +47,9 @@ class TacmanMailer < ActionMailer::Base
     def unknown_users_log(local_manager, mail_to, failed_users, subject)
         devices = {}
         full_list = ""
-        failed_users.each_pair do |user,data|
-            data.each_pair do |client,count|
-                full_list << "#{user}, #{client}, #{count}\n"
+        failed_users.keys.sort.each do |user|
+            failed_users[user].keys.sort.each do |client|
+                full_list << "#{user}, #{client}, #{failed_users[user][client]}\n"
                 devices[client] = true
             end
         end
