@@ -106,12 +106,11 @@ private
         yesterday = (Date.today - 1).strftime("%Y-%m-%d")
         @configurations.each do |configuration|
             start_time = yesterday + Time.now.strftime(" %H:%M:%S")
-            end_time = Time.now.strftime("%Y-%m-%d %H:%M:%S")
             mail_to = []
             configuration.configured_users.find(:all, :conditions => "role = 'admin'").each {|x| mail_to.push(x.user.email) if (!x.user.email.blank?)}
             next if (mail_to.length == 0)
 
-            logs = configuration.system_logs.find(:all, :conditions => "created_at >= '#{start_time}' and created_at <= '#{end_time}'", :order => :created_at)
+            logs = configuration.system_logs.find(:all, :conditions => "created_at >= '#{start_time}'", :order => :created_at)
             if (logs.length > 0)
                 begin
                     TacmanMailer.deliver_logs(@local_manager, mail_to, logs, "TacacsManager changelog - #{configuration.name}")
@@ -123,7 +122,7 @@ private
 
             failed_users = {}
             devices = {}
-            configuration.aaa_logs.find(:all, :conditions => "timestamp >= '#{start_time}' and timestamp <= '#{end_time}' and message='Unknown user attempted authentication.'").each do |msg|
+            configuration.aaa_logs.find(:all, :conditions => "timestamp >= '#{start_time}' and message='Unknown user attempted authentication.'").each do |msg|
                 if ( failed_users.has_key?(msg.user) )
                     if ( failed_users[msg.user].has_key?(msg.client) )
                         failed_users[msg.user][msg.client] += 1
@@ -155,15 +154,14 @@ private
     def mail_daily_logs
         return(false) if (!@local_manager.enable_mailer)
 
-        time = Time.now
         yesterday = (Date.today - 1).strftime("%Y-%m-%d")
-        start_time = yesterday + time.strftime(" %H:%M:%S")
-        end_time = time.strftime("%Y-%m-%d %H:%M:%S")
+        start_time = yesterday + Time.now.strftime(" %H:%M:%S")
+
         mail_to = []
         User.find(:all, :conditions => "role = 'admin' and email is not null").each {|x| mail_to.push(x.email)}
         return(true) if (mail_to.length == 0)
 
-        logs = SystemLog.find(:all, :conditions => "level != 'info' and created_at >= '#{start_time}' and created_at <= '#{end_time}'", :order => :created_at)
+        logs = SystemLog.find(:all, :conditions => "level != 'info' and created_at >= '#{start_time}'", :order => :created_at)
         if (logs.length > 0)
             begin
                 TacmanMailer.deliver_logs(@local_manager, mail_to, logs)
