@@ -70,7 +70,9 @@ class TacacsDaemon < ActiveRecord::Base
 
 
     def aaa_file_locked?
-        return(true) if (self.aaa_lock.active?)
+        lock = self.aaa_lock
+        lock = self.create_aaa_lock(:lock_type => 'aaa') if (!lock)
+        return(true) if (lock.active?)
         return(false)
     end
 
