@@ -120,34 +120,6 @@ private
                 end
             end
 
-            failed_users = {}
-            devices = {}
-            configuration.aaa_logs.find(:all, :conditions => "timestamp >= '#{start_time}' and message='Unknown user attempted authentication.'").each do |msg|
-                if ( failed_users.has_key?(msg.user) )
-                    if ( failed_users[msg.user].has_key?(msg.client) )
-                        failed_users[msg.user][msg.client] += 1
-                    else
-                        failed_users[msg.user][msg.client] = 1
-                    end
-                else
-                    failed_users[msg.user] = {msg.client => 1}
-                end
-
-                if ( devices.has_key?(msg.client) )
-                    devices[msg.client] += 1
-                else
-                    devices[msg.client] = 1
-                end
-            end
-
-            if (devices.keys.length > 0)
-                begin
-                    TacmanMailer.deliver_unknown_users_log(@local_manager, mail_to, failed_users, devices, "Unauthorized Login Attempts - #{configuration.name}")
-                rescue Exception => error
-                    @local_manager.log(:level => 'error', :message => "Failed to deliver unauthorized user logs - #{error}")
-                    return(false)
-                end
-            end
         end
     end
 
