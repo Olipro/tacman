@@ -82,13 +82,14 @@ class SystemMessage < ActiveRecord::Base
                         NetworkObjectGroup.delete_all
                         Configuration.destroy_all
                         Department.destroy_all
+                    end
 
-                        ordered.each do |type|
-                            if ( val.has_key?(type) && val[type].kind_of?(Array) )
-                                val[type].each {|fields| hash_to_model(type.singularize, fields)}
-                            end
+                    ordered.each do |type|
+                        if ( val.has_key?(type) && val[type].kind_of?(Array) )
+                            val[type].each {|fields| hash_to_model(type.singularize, fields)}
                         end
                     end
+
                     Configuration.find(:all).each {|c| c.publish}
 
                 else
