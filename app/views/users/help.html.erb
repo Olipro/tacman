@@ -398,6 +398,20 @@ To bring the system back, simply do the opposite.
 Login as user 'Recover' with password 'password'.
 </p>
 
+<br /><br />
+<p>
+<b>Problem:</b> When I reboot my server BackgrounDRB doesn't restart on its own. How to I correct this?
+
+<br /><br />
+
+<b>Solution:</b> You will want to write an init script to automatically start BackgrounDRB on system start.
+   Here are the commands you will need to run in this script:<br />
+<pre>/var/tacman/script/backgroundrb start -e production
+/var/tacman/script/backgroundrb stop
+</pre>
+</p>
+
+
 
 <br /><br />
 

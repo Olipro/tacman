@@ -27,7 +27,7 @@
         <% for field in log_entry.log_fields %>
         <td><%=h field %></td>
         <% end %>
-        <% if @managers %><td><%=h @managers[log_entry.owning_manager_id].name %></td><% end %>
+        <% if @managers && @managers.has_key?(log_entry.owning_manager_id) %><td><%=h @managers[log_entry.owning_manager_id].name %></td><% end %>
     </tr>
     <% end %>
     <tr>
