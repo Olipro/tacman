@@ -53,8 +53,8 @@ end
 
 def redirect_io(error_log)
     STDIN.reopen('/dev/null')
-    STDOUT.reopen(error_log, 'a') if (error_log)
-    STDERR.reopen(error_log, 'a') if (error_log)
+    STDOUT.reopen(error_log, 'a')
+    STDERR.reopen(error_log, 'a')
 end
 
 
@@ -127,7 +127,7 @@ def start_daemon(conf_file, dump_file, error_log, log_file, pid_file)
                 f.puts(config.to_yaml)
                 f.close
             rescue Exception => error
-                STDERR.puts("#{Time.now.strftime("%Y-%m-%d %H:%M:%S %Z")} - Failed to write TACACS+ server configuration. #{error}")
+                STDERR.puts("#{Time.now.strftime("%Y-%m-%d %H:%M:%S %Z")} - Failed to write TACACS+ server configuration. #{error}\n#{error.backtrace.join("\n")}")
             end
         end
 
@@ -202,17 +202,17 @@ if (ARGV.length == 0)
     puts "\nUsage:\nruby tacacs_plus_server.rb [options]\n\n"
     puts "Example:\nruby tacacs_plus_server.rb --conf_file sample_config.yml --start\n\n"
     puts "Options:\n"
-    puts "--conf_file - configuration file for the server"
-    puts "--dump_file - causes server to packet dump to this file"
-    puts "--error_log - the server error_log file. STDERR by default"
-    puts "--log_file - the AAA log file"
-    puts "--pid_file - the server pid file"
-    puts "--reload - reload the configuration\n"
-    puts "--reload-logger - reload the logger\n"
-    puts "--restart - restart the server with a new pid\n"
-    puts "--start - start the server\n"
-    puts "--stop - stop the server\n"
-    puts "--write - write the currently running configuration\n\n"
+    puts "--conf_file - configuration file for the server."
+    puts "--dump_file - causes server to packet dump to this file."
+    puts "--error_log - the server error_log file. 'error.log' by default."
+    puts "--log_file - the AAA log file. 'aaa.log' by default."
+    puts "--pid_file - the server pid file. 'pid' by default."
+    puts "--reload - reload the configuration."
+    puts "--reload-logger - reload the logger."
+    puts "--restart - restart the server with a new pid."
+    puts "--start - start the server."
+    puts "--stop - stop the server."
+    puts "--write - write the currently running configuration.\n\n"
     puts "Running with no start/stop directive will test the configuration file.\n\n"
     exit(0)
 end
@@ -232,8 +232,8 @@ opts = GetoptLong.new([ '--conf_file', GetoptLong::REQUIRED_ARGUMENT ],
 
 conf_file = nil
 dump_file = nil
-error_log = nil
-log_file = nil
+error_log = File.expand_path('error.log')
+log_file = File.expand_path('aaa.log')
 pid_file = File.expand_path('pid')
 run_directive = nil
 begin

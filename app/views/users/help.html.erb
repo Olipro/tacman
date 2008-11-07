@@ -405,10 +405,61 @@ Login as user 'Recover' with password 'password'.
 <br /><br />
 
 <b>Solution:</b> You will want to write an init script to automatically start BackgrounDRB on system start.
-   Here are the commands you will need to run in this script:<br />
-<pre>/var/tacman/script/backgroundrb start -e production
-/var/tacman/script/backgroundrb stop
-</pre>
+   Here is a sample script:<br />
+<textarea cols="100" rows="15" readonly="readonly">#!/bin/bash
+#
+# author: Chris Krough
+#
+# backgroundrb
+#
+# chkconfig: 345 88 14
+# description:  Starts and stops Ruby BackgroundRB
+
+# Source function library.
+. /etc/init.d/functions
+
+RETVAL=0
+
+start() {
+        echo -n $"Starting BackgroundRB Daemon: "
+        daemon --user apache /var/tacman/script/backgroundrb start -e production
+        RETVAL=$?
+        echo
+        [ $RETVAL -eq 0 ] && touch /var/lock/subsys/backgroundrb
+}
+
+stop() {
+        echo -n $"Stopping BackgroundRB Daemon: "
+        killproc -p /var/tacman/tmp/pids/backgroundrb_11006.pid
+        RETVAL=$?
+        echo
+        if [ $RETVAL -eq 0 ]; then
+        rm -f /var/lock/subsys/backgroundrb
+        fi
+}
+
+# See how we were called.
+case "$1" in
+    start)
+        start
+        ;;
+    stop)
+        stop
+        ;;
+    status)
+        status backgroundrb
+        RETVAL=$?
+        ;;
+    restart)
+        stop
+        start
+        ;;
+    *)
+        echo $"Usage: $0 {start|stop|status|restart}"
+        ;;
+esac
+exit $RETVAL
+</textarea>
 </p>
 
 
