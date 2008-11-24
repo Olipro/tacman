@@ -77,7 +77,7 @@ be able to manually add user2 to this configuration.
 <h4><u>TACACS+ Daemons</u></h4>
 <p>
 TACACS+ Daemons represent actual instances of the daemons on the system. They will have a few unique
-attributes such as IP and port but will derive most of their setup from the configuration to which they 
+attributes such as IP and port but will derive most of their setup from the configuration to which they
 subscribe. TACACS+ Daemons may either run on the local system or may be configured to run on remote systems
 (in the case of a master/slave setup).
 </p>
@@ -186,7 +186,7 @@ Placing a message into this queue causes a back end process to launch, which aft
 the message to the slave. In order to prevent duplicate messages from being delivered this back end process locks the outbox
 (uses a 30 minute lock) until processing is complete. The act of locking the outbox is an indicator to other instances of
 the back end process that the outbox is already being processed. If for some reason the delivery process fails, the lock will
-remain in effect for a full 30 minutes. This is a preventative measure to keep the master from constantly attempting to 
+remain in effect for a full 30 minutes. This is a preventative measure to keep the master from constantly attempting to
 deliver messages to an unreachable slave system. If for some reason an authentication error occurs between the master/slave
 a log will be generated and the messaging will be disabled completely. Messaging may always be manually enabled/disabled by the system
 administrator.
@@ -254,7 +254,7 @@ Configurations must be given a unique name on the system. Additionally, they may
 When creating a new configuration a TACACS+ encryption key (used by any subscribing TACACS+ daemons) is auto generated.
 Log retention (how long logs are searchable and how long they are archived) may be specified here, as well as
 any custom prompts (for client systems that display prompts). The default policy defines how the system will handle
-users with no Command Authorization Profile defined. 
+users with no Command Authorization Profile defined.
 </p>
 
 <h4><u>User Account Administration</u></h4>
@@ -510,7 +510,7 @@ exit $RETVAL
         <li> Install required gems <br>
              <code>
                gem install rails --include-dependencies --no-rdoc --no-ri <br>
-               gem install mongrel --include-dependencies --no-rdoc --no-ri
+               gem install mongrel --include-dependencies --no-rdoc --no-ri <br>
                gem install capistrano --include-dependencies --no-rdoc --no-ri <br>
                gem install mislav-will_paginate --source http://gems.github.com/  --no-rdoc --no-ri <br>
                gem install chronic --no-rdoc --no-ri <br>
@@ -594,7 +594,7 @@ production:
          <code>chown -R apache:apache /var/tacman</code><br>
        </li> <br>
       </ol>
-    
+
     <br>
 
     <p>

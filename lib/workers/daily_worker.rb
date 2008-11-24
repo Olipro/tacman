@@ -17,6 +17,7 @@ class DailyWorker < BackgrounDRb::MetaWorker
             mail_daily_logs
             mail_configuration_logs
             mail_password_expiry
+            mail_daily_reports
         end
 
         tacacs_daemon_maintenance
@@ -159,9 +160,23 @@ private
             next if (user.email.blank?)
             login = user.login_password
             enable = user.enable_password
-            pending7.push(user) if (login.expires_on == day7 || enable.expires_on == day7)
-            pending3.push(user) if (login.expires_on == day3 || enable.expires_on == day3)
-            expired.push(user) if (login.expires_on == today || enable.expires_on == today)
+            if (user.login_password_lifespan > 0)
+                if (login.expires_on == day7)
+                    pending7.push(user)
+                elsif (login.expires_on == day3)
+                    pending3.push(user)
+                elsif (login.expires_on == today)
+                    expired.push(user)
+                end
+            elsif (user.enable_password_lifespan > 0)
+                if (enable.expires_on == day7)
+                    pending7.push(user)
+                elsif (enable.expires_on == day3)
+                    pending3.push(user)
+                elsif (enable.expires_on == today)
+                    expired.push(user)
+                end
+            end
         end
 
         mail_to = []
@@ -195,6 +210,28 @@ private
         end
 
         return(true)
+    end
+
+    def mail_daily_reports
+        return(false) if (!@local_manager.enable_mailer)
+
+        @configurations.each do |configuration|
+            reports = configuration.aaa_reports.find(:all, :conditions => "enable_notifications is true")
+            next if (reports.length == 0)
+            mail_to = []
+            configuration.configured_users.find(:all, :conditions => "role = 'admin'").each {|x| mail_to.push(x.user.email) if (!x.user.email.blank?)}
+            next if (mail_to.length == 0)
+
+            reports.each do |report|
+                begin
+                    TacmanMailer.deliver_logs(@local_manager, mail_to, report.summarize, "TacacsManager report - #{report.name}")
+                rescue Exception => error
+                    @local_manager.log(:level => 'error', :message => "Failed to deliver report - #{error}")
+                    return(false)
+                end
+            end
+
+        end
     end
 
     def tacacs_daemon_maintenance

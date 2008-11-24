@@ -4,6 +4,7 @@ class Configuration < ActiveRecord::Base
     belongs_to :department
     has_many :aaa_log_archives, :dependent => :destroy, :order => :archived_on
     has_many :aaa_logs, :dependent => :destroy, :order => :timestamp
+    has_many :aaa_reports, :dependent => :destroy, :order => :name
     has_many :acls, :dependent => :destroy, :order => :name
     has_many :author_avpairs, :dependent => :destroy, :order => :name
     has_many :command_authorization_profiles, :dependent => :destroy, :order => :name

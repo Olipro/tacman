@@ -1,0 +1,17 @@
+<%= link_to 'Back to Configuration', configuration_url(@configuration) %><br />
+<%= link_to 'Show All Reports', aaa_reports_configuration_url(@configuration) %><br />
+
+<% if (@session_user.admin? || @configuration_roles[@configuration.id] == 'admin') %>
+<%= link_to 'Create New', new_aaa_report_configuration_url(@configuration) %><br />
+<% end %>
+
+<hr /><br />
+
+<%= link_to "Hit Count Report", summary_aaa_report_url(@aaa_report)  %><br />
+
+<% if (@session_user.admin? || @configuration_roles[@configuration.id] == 'admin') %>
+<%= link_to "Edit", edit_aaa_report_url(@aaa_report)  %><br />
+<%= link_to "Delete", aaa_report_url(@aaa_report), :confirm => "Delete report '#{@aaa_report.name}'?", :method => :delete  %><br />
+<% end %>
+<hr /><br />
+

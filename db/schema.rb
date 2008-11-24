@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 6) do
+ActiveRecord::Schema.define(:version => 20081120201615) do
 
   create_table "aaa_log_archives", :force => true do |t|
     t.integer "configuration_id", :limit => 11
@@ -40,6 +40,22 @@ ActiveRecord::Schema.define(:version => 6) do
   end
 
   add_index "aaa_logs", ["user", "client", "client_name"], :name => "index_aaa_logs_on_user_and_client_and_client_name"
+
+  create_table "aaa_reports", :force => true do |t|
+    t.integer  "configuration_id",     :limit => 11
+    t.string   "name"
+    t.boolean  "enable_notifications"
+    t.string   "client"
+    t.string   "client_name"
+    t.string   "command"
+    t.string   "message"
+    t.string   "msg_type"
+    t.string   "rem_addr"
+    t.string   "status"
+    t.string   "user"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "acl_entries", :force => true do |t|
     t.integer  "acl_id",                  :limit => 11
@@ -223,7 +239,7 @@ ActiveRecord::Schema.define(:version => 6) do
   end
 
   create_table "sessions", :force => true do |t|
-    t.string   "session_id", :default => "", :null => false
+    t.string   "session_id", :null => false
     t.text     "data"
     t.datetime "created_at"
     t.datetime "updated_at"

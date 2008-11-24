@@ -1,13 +1,14 @@
 class ConfigurationsController < ApplicationController
-    viewer_access = [:aaa_log_archives, :aaa_log_file, :aaa_logs, :aaa_log_details, :acls, :author_avpairs, :changelog, :command_authorization_profiles,
-                     :command_authorization_whitelist, :download_archived_log, :log_search_form, :network_object_groups,
-                     :search_aaa_logs, :settings, :shell_command_object_groups, :show, :tacacs_daemons, :tacacs_daemon_changelog,
+    viewer_access = [:aaa_log_archives, :aaa_log_file, :aaa_logs, :aaa_log_details, :aaa_log_search, :search_aaa_logs,
+                     :aaa_reports, :acls, :author_avpairs, :changelog, :command_authorization_profiles,
+                     :command_authorization_whitelist, :download_archived_log, :network_object_groups,
+                     :settings, :shell_command_object_groups, :show, :tacacs_daemons, :tacacs_daemon_changelog,
                      :tacacs_daemon_logs, :tacacs_daemon_control, :user_groups]
-    admin_access = [:add_users, :create_acl, :create_author_avpair, :create_configured_user, :create_command_authorization_profile,
-                    :create_command_authorization_whitelist_entry,:create_network_object_group, 
-                    :create_shell_command_object_group, :create_user_group, :edit, :new_acl, :new_author_avpair,
+    admin_access = [:add_users, :create_aaa_report, :create_acl, :create_author_avpair, :create_configured_user, :create_command_authorization_profile,
+                    :create_command_authorization_whitelist_entry,:create_network_object_group,
+                    :create_shell_command_object_group, :create_user_group, :edit, :new_aaa_report, :new_acl, :new_author_avpair,
                     :new_command_authorization_profile, :new_command_authorization_whitelist_entry,
-                    :new_configured_user, :new_network_object_group, :new_shell_command_object_group, 
+                    :new_configured_user, :new_network_object_group, :new_shell_command_object_group,
                     :new_user_group, :publish, :resequence_whitelist, :update]
     su_exclude = admin_access.dup.concat(viewer_access)
 
@@ -73,6 +74,22 @@ class ConfigurationsController < ApplicationController
         respond_to do |format|
             @nav = 'show_nav'
             format.html
+        end
+    end
+
+    def aaa_log_search
+        respond_to do |format|
+            @nav = 'show_nav'
+            format.html
+        end
+    end
+
+    def aaa_reports
+        @aaa_reports = @configuration.aaa_reports
+        respond_to do |format|
+            @nav = 'aaa_report_nav'
+            format.html
+            format.xml  { render :xml => @aaa_reports.to_xml }
         end
     end
 
@@ -190,6 +207,29 @@ class ConfigurationsController < ApplicationController
         end
     end
 
+    def create_aaa_report
+        @data = params[:data]
+
+        respond_to do |format|
+            @nav = 'aaa_report_nav'
+            if (@local_manager.slave?)
+                @aaa_report = AaaReport.new
+                @aaa_report.errors.add_to_base("This action is prohibited on slave systems.")
+                format.html { render :action => "new_aaa_report" }
+                format.xml  { render :xml => @aaa_report.errors, :status => :not_acceptable }
+            else
+                @aaa_report = @configuration.aaa_reports.create(params[:aaa_report])
+                if (@aaa_report.errors.length == 0)
+                    @local_manager.log(:username => @session_user.username, :configuration_id => @configuration.id, :message => "Created report #{@aaa_report.name} within configuration #{@configuration.name}.")
+                    format.html { redirect_to aaa_reports_configuration_url(@configuration) }
+                    format.xml  { render :xml => @aaa_report, :status => :created, :location => @aaa_report }
+                else
+                    format.html { render :action => "new_aaa_report" }
+                    format.xml  { render :xml => @aaa_report.errors, :status => :unprocessable_entity }
+                end
+            end
+        end
+    end
 
     def create_author_avpair
         @data = params[:data]
@@ -397,12 +437,6 @@ class ConfigurationsController < ApplicationController
         end
     end
 
-    def log_search_form
-        respond_to do |format|
-            @nav = 'show_nav'
-            format.html
-        end
-    end
 
     def network_object_groups
         @network_object_groups = @configuration.network_object_groups
@@ -433,6 +467,15 @@ class ConfigurationsController < ApplicationController
 
         respond_to do |format|
             @nav = 'acl_nav'
+            format.html
+        end
+    end
+
+    def new_aaa_report
+        @aaa_report = @configuration.aaa_reports.build
+
+        respond_to do |format|
+            @nav = 'aaa_report_nav'
             format.html
         end
     end
@@ -536,72 +579,21 @@ class ConfigurationsController < ApplicationController
     end
 
     def search_aaa_logs
-        @search_opts = {}
-        criteria = []
-        criteria_vals = []
-
-        if (!params[:search_criteria][:start_time].blank?)
-            criteria.push("timestamp >= ?")
-            criteria_vals.push(params[:search_criteria][:start_time])
-            @search_opts['search_criteria[start_time]'] = params[:search_criteria][:start_time]
-        end
-
-        if (!params[:search_criteria][:end_time].blank?)
-            criteria.push("timestamp <= ?")
-            criteria_vals.push(params[:search_criteria][:end_time])
-            @search_opts['search_criteria[end_time]'] = params[:search_criteria][:end_time]
-        end
-
-        if (!params[:search_criteria][:client].blank?)
-            criteria.push("client regexp ?")
-            criteria_vals.push(params[:search_criteria][:client])
-            @search_opts['search_criteria[client]'] = params[:search_criteria][:client]
-        end
-
-        if (!params[:search_criteria][:client_name].blank?)
-            criteria.push("client_name regexp ?")
-            criteria_vals.push(params[:search_criteria][:client_name])
-            @search_opts['search_criteria[client_name]'] = params[:search_criteria][:client_name]
-        end
-
-        if (!params[:search_criteria][:user].blank?)
-            criteria.push("user regexp ?")
-            criteria_vals.push(params[:search_criteria][:user])
-            @search_opts['search_criteria[user]'] = params[:search_criteria][:user]
-        end
-
-        if (!params[:search_criteria][:command].blank?)
-            criteria.push("command regexp ?")
-            criteria_vals.push(params[:search_criteria][:command])
-            @search_opts['search_criteria[command]'] = params[:search_criteria][:command]
-        end
-
-        if (!params[:search_criteria][:message].blank?)
-            criteria.push("message regexp ?")
-            criteria_vals.push(params[:search_criteria][:message])
-            @search_opts['search_criteria[message]'] = params[:search_criteria][:message]
-        end
-
+        @aaa_report = @configuration.aaa_reports.build(params[:aaa_report])
+        conditions = @aaa_report.search_criteria
         respond_to do |format|
             @nav = 'show_nav'
-            if (criteria.length != 0)
-                criteria.push("configuration_id = ?")
-                criteria_vals.push(@configuration.id)
-                conditions = criteria.join(" and ")
-                @log_count = AaaLog.count_by_sql( ["SELECT COUNT(*) FROM aaa_logs WHERE #{conditions}"].concat(criteria_vals) )
+            @log_count = AaaLog.count_by_sql("SELECT COUNT(*) FROM aaa_logs WHERE #{conditions}")
 
-                if ( params.has_key?(:page) )
-                    page = params[:page]
-                elsif (@log_count > 0)
-                    page = @log_count / @local_manager.pagination_per_page
-                    page = page + 1 if (@log_count % @local_manager.pagination_per_page > 0)
-                end
-                @logs = AaaLog.paginate(:page => page, :per_page => @local_manager.pagination_per_page,
-                                        :conditions => [conditions].concat(criteria_vals), :order => :timestamp)
-                format.html { render :action => :aaa_logs}
-            else
-                format.html { redirect_to aaa_logs_configuration_url(@configuration) }
+            if ( params.has_key?(:page) )
+                page = params[:page]
+            elsif (@log_count > 0)
+                page = @log_count / @local_manager.pagination_per_page
+                page = page + 1 if (@log_count % @local_manager.pagination_per_page > 0)
             end
+            @logs = AaaLog.paginate(:page => page, :per_page => @local_manager.pagination_per_page,
+                                    :conditions => conditions, :order => :timestamp)
+            format.html { render :action => :aaa_logs}
         end
     end
 

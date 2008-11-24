@@ -1,0 +1,53 @@
+<b style="font-size: 16px;">AAA Log Search</b><br /><br />
+
+<p>
+  All fields (except time fields) support regular expression searches.
+  Time fields are in the format "yyyy-mm-dd hh:mm:ss". Hour/Minute/Second defaults to 00:00:00 if not specified.
+</p>
+
+<% form_for(:aaa_report, :url => search_aaa_logs_configuration_url(@configuration), :html => { :method => :get } ) do |f| %>
+  <table>
+
+    <tr>
+        <td><b>Start Time:</b></td> <td><%= f.text_field :start_time, :size => 30  %></td>
+    </tr>
+
+    <tr>
+        <td><b>End Time:</b></td> <td><%= f.text_field :end_time, :size => 30  %></td>
+    </tr>
+
+    <tr>
+        <td><b>Type:</b></td> <td><%= f.select :msg_type, [["Authentication","Authentication"], ["Authorization","Authorization"], ["Accounting","Accounting"]], :include_blank => true  %></td>
+    </tr>
+
+    <tr>
+        <td><b>Username:</b></td> <td><%= f.text_field :user, :size => 30  %></td>
+    </tr>
+
+    <tr>
+        <td><b>Client IP:</b></td> <td><%= f.text_field :client, :size => 19 %></td>
+    </tr>
+
+    <tr>
+        <td><b>Client Hostname:</b></td> <td><%= f.text_field :client_name, :size => 19 %></td>
+    </tr>
+
+    <tr>
+        <td><b>Command:</b></td> <td><%= f.text_field :command, :size => 50  %></td>
+    </tr>
+
+    <tr>
+        <td><b>Message:</b></td> <td><%= f.text_field :message, :size => 50  %></td>
+    </tr>
+
+    <tr>
+        <td><b>Status:</b></td> <td><%= f.text_field :status, :size => 19  %></td>
+    </tr>
+
+  </table>
+<%= submit_tag "Search" %>
+<% end %>
+
+<br />
+
+

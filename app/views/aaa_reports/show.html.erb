@@ -1,0 +1,43 @@
+<b style="font-size: 16px;">AAA Report - <%= @aaa_report.name %></b><br /><br />
+
+<b>Enable Notifications:</b> <%= @aaa_report.enable_notifications %><br />
+
+<b>Type:</b> <%= @aaa_report.msg_type %><br />
+
+<b>Username:</b> <%= @aaa_report.user %><br />
+
+<b>Client IP:</b> <%= @aaa_report.client %><br />
+
+<b>Client Hostname:</b> <%= @aaa_report.client_name %><br />
+
+<b>Command:</b> <%= @aaa_report.command %><br />
+
+<b>Message:</b> <%= @aaa_report.message %><br />
+
+<b>Status:</b> <%= @aaa_report.status %><br />
+
+
+<br />
+
+<% form_for(:aaa_report, :url => search_aaa_logs_configuration_url(@configuration), :html => { :method => :get } ) do |f| %>
+  <table>
+    <tr>
+        <td><b>Start Time:</b></td> <td><%= f.text_field :start_time, :size => 30  %></td>
+    </tr>
+    <tr>
+        <td><b>End Time:</b></td> <td><%= f.text_field :end_time, :size => 30 %></td>
+    </tr>
+  </table>
+  <%= f.hidden_field :msg_type %>
+  <%= f.hidden_field :user %>
+  <%= f.hidden_field :client %>
+  <%= f.hidden_field :client_name %>
+  <%= f.hidden_field :command %>
+  <%= f.hidden_field :message %>
+  <%= f.hidden_field :status %>
+  <%= submit_tag "Run Report" %>
+<% end %>
+
+<br />
+
+

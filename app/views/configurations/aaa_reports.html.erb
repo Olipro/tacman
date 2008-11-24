@@ -1,0 +1,16 @@
+<b style="font-size: 16px;">AAA Reports</b><br /><br />
+
+<hr />
+
+<% if @aaa_reports.length != 0 %>
+    <% for aaa_report in @aaa_reports %>
+      <%= link_to aaa_report.name, aaa_report_url(aaa_report) %>
+    <% end %>
+
+<% else %>
+<b style="font-size: 14px;">No aaa_reports have been created yet.</b><br />
+<% end %>
+
+<br />
+
+

@@ -1,0 +1,58 @@
+<b style="font-size: 16px;">New AAA Report</b><br /><br />
+
+<%= error_messages_for :aaa_report %>
+
+<% form_for(:aaa_report, :url => create_aaa_report_configuration_url(@configuration) ) do |f| %>
+  <table>
+
+    <tr>
+        <td><b>Name:</b></td> <td><%= f.text_field :name, :size => 19  %></td>
+    </tr>
+
+    <tr>
+        <td><b>Enable Notifications:</b></td> <td><%= f.check_box :enable_notifications %></td>
+    </tr>
+  </table>
+
+  <hr /><br />
+
+  <table>
+    <tr>
+        <td colspan="2"><b style="font-size: 14px;"><u>Filters</u></b></td>
+    </tr>
+
+    <tr>
+        <td><b>Type:</b></td> <td><%= f.select :msg_type, [["Authentication","Authentication"], ["Authorization","Authorization"], ["Accounting","Accounting"]], :include_blank => true  %></td>
+    </tr>
+
+    <tr>
+        <td><b>Username:</b></td> <td><%= f.text_field :user, :size => 30  %></td>
+    </tr>
+
+    <tr>
+        <td><b>Client IP:</b></td> <td><%= f.text_field :client, :size => 19 %></td>
+    </tr>
+
+    <tr>
+        <td><b>Client Hostname:</b></td> <td><%= f.text_field :client_name, :size => 19 %></td>
+    </tr>
+
+    <tr>
+        <td><b>Command:</b></td> <td><%= f.text_field :command, :size => 50  %></td>
+    </tr>
+
+    <tr>
+        <td><b>Message:</b></td> <td><%= f.text_field :message, :size => 50  %></td>
+    </tr>
+
+    <tr>
+        <td><b>Status:</b></td> <td><%= f.text_field :status, :size => 19  %></td>
+    </tr>
+
+  </table>
+<%= submit_tag "Save" %>
+<% end %>
+
+<br />
+
+

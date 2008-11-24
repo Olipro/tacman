@@ -1,0 +1,57 @@
+<b style="font-size: 16px;">Edit AAA Report - <%= @aaa_report.name %></b><br /><br />
+
+
+<% form_for(:aaa_report, :url => aaa_report_url(@aaa_report), :html => { :method => :put } ) do |f| %>
+  <table>
+
+    <tr>
+        <td><b>Name:</b></td> <td><%= f.text_field :name, :size => 19  %></td>
+    </tr>
+
+    <tr>
+        <td><b>Enable Notifications:</b></td> <td><%= f.check_box :enable_notifications %></td>
+    </tr>
+  </table>
+
+  <hr /><br />
+
+  <table>
+    <tr>
+        <td colspan="2"><b style="font-size: 14px;"><u>Filters</u></b></td>
+    </tr>
+
+    <tr>
+        <td><b>Type:</b></td> <td><%= f.select :msg_type, [["Authentication","Authentication"], ["Authorization","Authorization"], ["Accounting","Accounting"]], :include_blank => true  %></td>
+    </tr>
+
+    <tr>
+        <td><b>Username:</b></td> <td><%= f.text_field :user, :size => 30  %></td>
+    </tr>
+
+    <tr>
+        <td><b>Client IP:</b></td> <td><%= f.text_field :client, :size => 19 %></td>
+    </tr>
+
+    <tr>
+        <td><b>Client Hostname:</b></td> <td><%= f.text_field :client_name, :size => 19 %></td>
+    </tr>
+
+    <tr>
+        <td><b>Command:</b></td> <td><%= f.text_field :command, :size => 50  %></td>
+    </tr>
+
+    <tr>
+        <td><b>Message:</b></td> <td><%= f.text_field :message, :size => 50  %></td>
+    </tr>
+
+    <tr>
+        <td><b>Status:</b></td> <td><%= f.text_field :status, :size => 19  %></td>
+    </tr>
+
+  </table>
+<%= submit_tag "Update" %>
+<% end %>
+
+<br />
+
+

@@ -1,4 +1,7 @@
 ActionController::Routing::Routes.draw do |map|
+  map.resources :aaa_reports,
+                :member => {:summary => :get}
+
   map.resources :departments
 
   map.resources :avpairs
@@ -48,19 +51,20 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :configurations,
                 :member => {:aaa_log_archives => :get, :aaa_log_file => :get, :aaa_logs => :get, :aaa_log_details => :get,
+                            :aaa_reports => :get, :new_aaa_report => :get, :create_aaa_report => :post,
+                            :aaa_log_search => :get, :search_aaa_logs => :get,
                             :add => :post, :download_archived_log => :post,
                             :acls => :get, :new_acl => :get, :create_acl => :post,
                             :author_avpairs => :get, :new_author_avpair => :get, :create_author_avpair => :post,
                             :command_authorization_profiles => :get, :new_command_authorization_profile => :get, :create_command_authorization_profile => :post,
-                            :command_authorization_whitelist => :get, :new_command_authorization_whitelist_entry => :get, 
+                            :command_authorization_whitelist => :get, :new_command_authorization_whitelist_entry => :get,
                             :create_configured_user => :post, :new_configured_user => :get, :create_command_authorization_whitelist_entry => :post,
                             :network_object_groups => :get, :new_network_object_group => :get, :create_network_object_group => :post,
                             :shell_command_object_groups => :get, :new_shell_command_object_group => :get, :create_shell_command_object_group => :post,
                             :tacacs_daemons => :get, :tacacs_daemon_changelog => :get, :tacacs_daemon_control => :put, :tacacs_daemon_logs => :get,
                             :user_groups => :get, :new_user_group => :get, :create_user_group => :post,
                             :add_users => :get, :settings => :get,
-                            :resequence_whitelist => :put, :search_aaa_logs => :get, :log_search_form => :get,
-                            :changelog => :get, :publish => :put}
+                            :resequence_whitelist => :put, :changelog => :get, :publish => :put}
 
   map.resources :users,
                 :collection => {:authenticate => :put, :home => :get, :help => :get,

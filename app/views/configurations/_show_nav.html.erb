@@ -25,9 +25,12 @@
 
 <hr /><br />
 
-<%= link_to 'Search Logs', log_search_form_configuration_url(@configuration) %><br />
-<%= link_to 'View Logs', aaa_logs_configuration_url(@configuration) %><br />
-<%= link_to 'Log Archives', aaa_log_archives_configuration_url(@configuration) %><br />
+<%= link_to 'AAA Logs', aaa_logs_configuration_url(@configuration) %><br />
+<%= link_to 'AAA Log Search', aaa_log_search_configuration_url(@configuration) %><br />
+<% if (@session_user.admin? || @configuration_roles[@configuration.id] == 'admin') %>
+<%= link_to 'AAA Log Reports', aaa_reports_configuration_url(@configuration) %><br />
+<% end %>
+<%= link_to 'AAA Log Archives', aaa_log_archives_configuration_url(@configuration) %><br />
 <%= link_to 'Changelog', changelog_configuration_url(@configuration) %><br />
 
 <hr /><br />
