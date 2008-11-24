@@ -7,6 +7,7 @@
 
 <hr /><br />
 
+<%= link_to "Show Report", aaa_report_url(@aaa_report)  %><br />
 <%= link_to "Hit Count Report", summary_aaa_report_url(@aaa_report)  %><br />
 
 <% if (@session_user.admin? || @configuration_roles[@configuration.id] == 'admin') %>

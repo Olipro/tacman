@@ -4,7 +4,7 @@
 
 <% if @aaa_reports.length != 0 %>
     <% for aaa_report in @aaa_reports %>
-      <%= link_to aaa_report.name, aaa_report_url(aaa_report) %>
+      <%= link_to aaa_report.name, aaa_report_url(aaa_report) %><br />
     <% end %>
 
 <% else %>
