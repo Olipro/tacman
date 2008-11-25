@@ -44,4 +44,11 @@ class TacmanMailer < ActionMailer::Base
         from(local_manager.mail_from)
     end
 
+    def reports(local_manager, mail_to, report)
+        bcc(mail_to)
+        subject("TacacsManager report - #{report.name}")
+        body(:report => report)
+        from(local_manager.mail_from)
+    end
+
 end

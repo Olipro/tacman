@@ -14,10 +14,12 @@ class DailyWorker < BackgrounDRb::MetaWorker
             disable_inactive
             check_remote_queues
             check_local_queues
-            mail_daily_logs
-            mail_configuration_logs
-            mail_password_expiry
-            mail_daily_reports
+            if (@local_manager.enable_mailer)
+                mail_daily_logs
+                mail_configuration_logs
+                mail_password_expiry
+                mail_daily_reports
+            end
         end
 
         tacacs_daemon_maintenance
@@ -102,8 +104,6 @@ private
     end
 
     def mail_configuration_logs
-        return(false) if (!@local_manager.enable_mailer)
-
         yesterday = (Date.today - 1).strftime("%Y-%m-%d")
         @configurations.each do |configuration|
             start_time = yesterday + Time.now.strftime(" %H:%M:%S")
@@ -125,8 +125,6 @@ private
     end
 
     def mail_daily_logs
-        return(false) if (!@local_manager.enable_mailer)
-
         yesterday = (Date.today - 1).strftime("%Y-%m-%d")
         start_time = yesterday + Time.now.strftime(" %H:%M:%S")
 
@@ -148,8 +146,6 @@ private
     end
 
     def mail_password_expiry
-        return(false) if (!@local_manager.enable_mailer)
-
         day7 = Date.today + 7
         day3 = Date.today + 3
         today = Date.today
@@ -213,8 +209,6 @@ private
     end
 
     def mail_daily_reports
-        return(false) if (!@local_manager.enable_mailer)
-
         @configurations.each do |configuration|
             reports = configuration.aaa_reports.find(:all, :conditions => "enable_notifications is true")
             next if (reports.length == 0)
@@ -224,9 +218,9 @@ private
 
             reports.each do |report|
                 begin
-                    TacmanMailer.deliver_logs(@local_manager, mail_to, report.summarize, "TacacsManager report - #{report.name}")
+                    TacmanMailer.deliver_reports(@local_manager, mail_to, report)
                 rescue Exception => error
-                    @local_manager.log(:level => 'error', :message => "Failed to deliver report - #{error}")
+                    @local_manager.log(:level => 'error', :message => "Failed to deliver report #{report.name} - #{error}")
                     return(false)
                 end
             end
