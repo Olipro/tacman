@@ -221,7 +221,7 @@ class ConfigurationsController < ApplicationController
                 @aaa_report = @configuration.aaa_reports.create(params[:aaa_report])
                 if (@aaa_report.errors.length == 0)
                     @local_manager.log(:username => @session_user.username, :configuration_id => @configuration.id, :message => "Created report #{@aaa_report.name} within configuration #{@configuration.name}.")
-                    format.html { redirect_to aaa_reports_configuration_url(@configuration) }
+                    format.html { redirect_to aaa_report_url(@aaa_report) }
                     format.xml  { render :xml => @aaa_report, :status => :created, :location => @aaa_report }
                 else
                     format.html { render :action => "new_aaa_report" }

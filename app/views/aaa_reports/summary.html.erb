@@ -1,5 +1,9 @@
 <b style="font-size: 16px;">24-hour hit count report for:<br /><%= @aaa_report.name %></b><br /><br />
+<% if @aaa_report.hits > 0 %>
 <pre><%= @aaa_report.summarize %></pre>
+<% else %>
+<i style="font-size: 14px;">No hits for this report.</i><br />
+<% end %>
 <br />
 
 

@@ -217,6 +217,7 @@ private
             next if (mail_to.length == 0)
 
             reports.each do |report|
+                next if (report.hits == 0)
                 begin
                     TacmanMailer.deliver_reports(@local_manager, mail_to, report)
                 rescue Exception => error

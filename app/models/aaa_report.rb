@@ -15,6 +15,10 @@ class AaaReport < ActiveRecord::Base
         @end_time = time
     end
 
+    def hits
+        AaaLog.count_by_sql("SELECT COUNT(*) FROM aaa_logs WHERE #{self.search_criteria}")
+    end
+
     def search_criteria
         criteria = [ "configuration_id = #{self.configuration_id}" ]
         criteria.push("timestamp >= '#{self.start_time}'") if (!self.start_time.blank?)
@@ -44,57 +48,103 @@ class AaaReport < ActiveRecord::Base
 
     def summarize
         self.set_start_time
-        by_client = {}
-        by_user = {}
-        longest_user = 4
-        longest_client = 15
-        longest_rem = 15
+        matrix = {'Authentication' => {}, 'Authorization' => {}, 'Accounting' => {}}
+        user_len = 4
+        client_len = 6
+        rem_len = 11
+        msg_len = 7
+        stat_len = 6
+        cmd_len = 7
         AaaLog.find(:all, :conditions => self.search_criteria).each do |l|
-            host = l.client
-            host << " (#{l.client_name})" if (!l.client_name.blank?)
-            l.rem_addr = '-' if (l.rem_addr.blank?)
-            longest_user = l.user.length if (l.user.length > longest_user)
-            longest_client = host.length if (host.length > longest_client)
-            longest_rem = l.rem_addr.length if (l.rem_addr.length > longest_rem)
-
-            if ( by_client.has_key?(host) )
-                by_client[host] += 1
+            if (l.client_name.blank?)
+                client = l.client
             else
-                by_client[host] = 1
+                client = l.client_name
             end
+            l.rem_addr = '' if (l.rem_addr.blank?)
+            l.command = '' if (l.msg_type == 'Authentication' || l.command.blank?)
+            l.message = '' if (l.message.blank?)
+            user_len = l.user.length if (l.user.length > user_len)
+            rem_len = l.rem_addr.length if (l.rem_addr.length > rem_len)
+            msg_len = l.message.length if (l.message.length > msg_len)
+            stat_len = l.status.length if (l.status.length > stat_len)
+            cmd_len = l.command.length if (l.command.length > cmd_len)
+            client_len = client.length if (client.length > client_len)
 
-
-            if ( by_user.has_key?(l.user) )
-                if( by_user[l.user].has_key?(l.rem_addr) )
-                    if( by_user[l.user][l.rem_addr].has_key?(host) )
-                        by_user[l.user][l.rem_addr][host] += 1
+            if ( matrix[l.msg_type].has_key?(l.status) )
+                if ( matrix[l.msg_type][l.status].has_key?(client) )
+                    if ( matrix[l.msg_type][l.status][client].has_key?(l.user) )
+                        if ( matrix[l.msg_type][l.status][client][l.user].has_key?(l.rem_addr) )
+                            if ( matrix[l.msg_type][l.status][client][l.user][l.rem_addr].has_key?(l.message) )
+                                if ( matrix[l.msg_type][l.status][client][l.user][l.rem_addr][l.message].has_key?(l.command) )
+                                    matrix[l.msg_type][l.status][client][l.user][l.rem_addr][l.message][l.command] += 1
+                                else
+                                    matrix[l.msg_type][l.status][client][l.user][l.rem_addr][l.message][l.command] = 1
+                                end
+                            else
+                                matrix[l.msg_type][l.status][client][l.user][l.rem_addr][l.message] = {l.command => 1}
+                            end
+                        else
+                            matrix[l.msg_type][l.status][client][l.user][l.rem_addr] = { l.message => {l.command => 1} }
+                        end
                     else
-                        by_user[l.user][l.rem_addr][host] = 1
+                        matrix[l.msg_type][l.status][client][l.user] = { l.rem_addr => { l.message => {l.command => 1} } }
                     end
                 else
-                    by_user[l.user][l.rem_addr] = {host => 1}
+                    matrix[l.msg_type][l.status][client] = { l.user => { l.rem_addr => { l.message => {l.command => 1} } } }
                 end
             else
-                by_user[l.user] = { l.rem_addr => {host => 1} }
+                matrix[l.msg_type][l.status] = { client => { l.user => { l.rem_addr => { l.message => {l.command => 1} } } } }
             end
 
         end
 
-        summary = "Hits per target host:\n"
-        summary << "    Target Host#{' ' * (longest_client - 9)}Hits\n"
-        summary << "    -----------#{'-' * (longest_client - 9)}------------------\n"
-        by_client.keys.sort.each {|host| summary << "    #{host}#{' ' * (longest_client - host.length + 2)}#{by_client[host]} hits\n"}
-        summary << "\nAttempts per user:\n"
-        summary << "    User#{' ' * (longest_user - 2)}Remote Addr#{' ' * (longest_rem - 9)}Target Host#{' ' * (longest_client - 9)}Hits\n"
-        summary << "    ----#{'-' * (longest_user - 2)}-----------#{'-' * (longest_rem - 9)}-----------#{'-' * (longest_client - 9)}------------------\n"
-        by_user.keys.sort.each do |user|
-            by_user[user].keys.each do |rem|
-                by_user[user][rem].each_pair do |host, hits|
-                    summary << "    #{user}#{' ' * (longest_user - user.length + 2)}#{rem}#{' ' * (longest_rem - rem.length + 2)}#{host}#{' ' * (longest_client - host.length + 2)}#{hits} hits\n"
+        col_lens = [user_len + 2, client_len + 2, rem_len + 2, msg_len + 2, stat_len + 2, cmd_len + 2]
+        summary = ''
+        summary << print_matrix(matrix, 'Authentication', col_lens)
+        summary << print_matrix(matrix, 'Authorization', col_lens)
+        summary << print_matrix(matrix, 'Accounting', col_lens)
+
+        return(summary)
+    end
+
+private
+
+    def print_matrix(matrix, msg_type, col_lens)
+        summary = ''
+        user_len, client_len, rem_len, msg_len, stat_len, cmd_len = col_lens
+        if (!matrix[msg_type].empty?)
+            summary << "\n\n#{msg_type} summary:\n"
+            if (msg_type == 'Authentication')
+                summary << "  Status#{' ' * (stat_len - 6)}Client#{' ' * (client_len - 6)}User#{' ' * (user_len - 4)}Remote Addr#{' ' * (rem_len - 11)}Message#{' ' * (msg_len - 7)}Hits\n"
+                summary << "  ------#{'-' * (stat_len - 6)}------#{'-' * (client_len - 6)}----#{'-' * (user_len - 4)}-----------#{'-' * (rem_len - 11)}-------#{'-' * (msg_len - 7)}----------\n"
+            else
+                summary << "  Status#{' ' * (stat_len - 6)}Client#{' ' * (client_len - 6)}User#{' ' * (user_len - 4)}Remote Addr#{' ' * (rem_len - 11)}Message#{' ' * (msg_len - 7)}Command#{' ' * (cmd_len - 7)}Hits\n"
+                summary << "  ------#{'-' * (stat_len - 6)}------#{'-' * (client_len - 6)}----#{'-' * (user_len - 4)}-----------#{'-' * (rem_len - 11)}-------#{'-' * (msg_len - 7)}-------#{'-' * (cmd_len - 7)}----------\n"
+            end
+
+            matrix[msg_type].keys.sort.each do |stat|
+                matrix[msg_type][stat].keys.sort.each do |client|
+                    matrix[msg_type][stat][client].keys.sort.each do |user|
+                        matrix[msg_type][stat][client][user].keys.sort.each do |rem|
+                            matrix[msg_type][stat][client][user][rem].keys.sort.each do |msg|
+                                matrix[msg_type][stat][client][user][rem][msg].keys.sort.each do |cmd|
+                                    summary << "  " << stat << ' ' * (stat_len - stat.length)
+                                    summary << client << ' ' * (client_len - client.length)
+                                    summary << user << ' ' * (user_len - user.length)
+                                    summary << rem << ' ' * (rem_len - rem.length)
+                                    summary << msg << ' ' * (msg_len - msg.length)
+                                    if (msg_type != 'Authentication')
+                                        summary << cmd << ' ' * (cmd_len - cmd.length)
+                                    end
+                                    summary << "#{matrix[msg_type][stat][client][user][rem][msg][cmd]}\n"
+                                end
+                            end
+                        end
+                    end
                 end
             end
         end
-
         return(summary)
     end
 
