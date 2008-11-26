@@ -4,7 +4,7 @@
 
 <% if @aaa_reports.length != 0 %>
     <% for aaa_report in @aaa_reports %>
-      <%= link_to aaa_report.name, aaa_report_url(aaa_report) %><br />
+      <%= link_to aaa_report.name, aaa_report_url(aaa_report) %> &nbsp&nbsp&nbsp <%if (aaa_report.enable_notifications) %>(<i>notifications enabled</i>)<% end %><br />
     <% end %>
 
 <% else %>
