@@ -52,7 +52,6 @@ class AaaReport < ActiveRecord::Base
         user_len = 4
         client_len = 6
         rem_len = 11
-        msg_len = 7
         stat_len = 6
         cmd_len = 7
         AaaLog.find(:all, :conditions => self.search_criteria).each do |l|
@@ -66,7 +65,6 @@ class AaaReport < ActiveRecord::Base
             l.message = '' if (l.message.blank?)
             user_len = l.user.length if (l.user.length > user_len)
             rem_len = l.rem_addr.length if (l.rem_addr.length > rem_len)
-            msg_len = l.message.length if (l.message.length > msg_len)
             stat_len = l.status.length if (l.status.length > stat_len)
             cmd_len = l.command.length if (l.command.length > cmd_len)
             client_len = client.length if (client.length > client_len)
@@ -99,7 +97,7 @@ class AaaReport < ActiveRecord::Base
 
         end
 
-        col_lens = [user_len + 2, client_len + 2, rem_len + 2, msg_len + 2, stat_len + 2, cmd_len + 2]
+        col_lens = [user_len + 2, client_len + 2, rem_len + 2, stat_len + 2, cmd_len + 2]
         summary = ''
         summary << print_matrix(matrix, 'Authentication', col_lens)
         summary << print_matrix(matrix, 'Authorization', col_lens)
@@ -112,15 +110,15 @@ private
 
     def print_matrix(matrix, msg_type, col_lens)
         summary = ''
-        user_len, client_len, rem_len, msg_len, stat_len, cmd_len = col_lens
+        user_len, client_len, rem_len, stat_len, cmd_len = col_lens
         if (!matrix[msg_type].empty?)
             summary << "\n\n#{msg_type} summary:\n"
             if (msg_type == 'Authentication')
-                summary << "  Status#{' ' * (stat_len - 6)}Client#{' ' * (client_len - 6)}User#{' ' * (user_len - 4)}Remote Addr#{' ' * (rem_len - 11)}Message#{' ' * (msg_len - 7)}Hits\n"
-                summary << "  ------#{'-' * (stat_len - 6)}------#{'-' * (client_len - 6)}----#{'-' * (user_len - 4)}-----------#{'-' * (rem_len - 11)}-------#{'-' * (msg_len - 7)}----------\n"
+                summary << "  Hits     Status#{' ' * (stat_len - 6)}Client#{' ' * (client_len - 6)}User#{' ' * (user_len - 4)}Remote Addr#{' ' * (rem_len - 11)}Message\n"
+                summary << "  ---------------#{'-' * (stat_len - 6)}------#{'-' * (client_len - 6)}----#{'-' * (user_len - 4)}-----------#{'-' * (rem_len - 11)}------------------------\n"
             else
-                summary << "  Status#{' ' * (stat_len - 6)}Client#{' ' * (client_len - 6)}User#{' ' * (user_len - 4)}Remote Addr#{' ' * (rem_len - 11)}Message#{' ' * (msg_len - 7)}Command#{' ' * (cmd_len - 7)}Hits\n"
-                summary << "  ------#{'-' * (stat_len - 6)}------#{'-' * (client_len - 6)}----#{'-' * (user_len - 4)}-----------#{'-' * (rem_len - 11)}-------#{'-' * (msg_len - 7)}-------#{'-' * (cmd_len - 7)}----------\n"
+                summary << "  Hits     Status#{' ' * (stat_len - 6)}Client#{' ' * (client_len - 6)}User#{' ' * (user_len - 4)}Remote Addr#{' ' * (rem_len - 11)}Command#{' ' * (cmd_len - 7)}Message\n"
+                summary << "  ---------------#{'-' * (stat_len - 6)}------#{'-' * (client_len - 6)}----#{'-' * (user_len - 4)}-----------#{'-' * (rem_len - 11)}-------#{'-' * (cmd_len - 7)}------------------------\n"
             end
 
             matrix[msg_type].keys.sort.each do |stat|
@@ -129,15 +127,16 @@ private
                         matrix[msg_type][stat][client][user].keys.sort.each do |rem|
                             matrix[msg_type][stat][client][user][rem].keys.sort.each do |msg|
                                 matrix[msg_type][stat][client][user][rem][msg].keys.sort.each do |cmd|
-                                    summary << "  " << stat << ' ' * (stat_len - stat.length)
+                                    hits = matrix[msg_type][stat][client][user][rem][msg][cmd].to_s
+                                    summary << "  " << hits << ' ' * (9 - hits.length)
+                                    summary << stat << ' ' * (stat_len - stat.length)
                                     summary << client << ' ' * (client_len - client.length)
                                     summary << user << ' ' * (user_len - user.length)
                                     summary << rem << ' ' * (rem_len - rem.length)
-                                    summary << msg << ' ' * (msg_len - msg.length)
                                     if (msg_type != 'Authentication')
                                         summary << cmd << ' ' * (cmd_len - cmd.length)
                                     end
-                                    summary << "#{matrix[msg_type][stat][client][user][rem][msg][cmd]}\n"
+                                    summary << msg << "\n"
                                 end
                             end
                         end
