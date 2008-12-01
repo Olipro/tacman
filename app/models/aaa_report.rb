@@ -15,7 +15,8 @@ class AaaReport < ActiveRecord::Base
         @end_time = time
     end
 
-    def hits
+    def hits(recent_only=true)
+        set_start_time if (recent_only)
         AaaLog.count_by_sql("SELECT COUNT(*) FROM aaa_logs WHERE #{self.search_criteria}")
     end
 
