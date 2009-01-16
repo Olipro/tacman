@@ -3,8 +3,8 @@
 <% form_for(:shell_command_object_group_entry, :url => shell_command_object_group_entry_url(@shell_command_object_group_entry), :html => { :method => :put }) do |f| %>
 <table>
   <tr>
-    <td><b>Command:</b></td> 
-    <td><%= f.text_field :command %></td>
+    <td><b>Command:</b></td>
+    <td><%= f.text_field :command, :size => 50 %></td>
   </tr>
   <tr><td>&nbsp</td></tr>
   <tr>

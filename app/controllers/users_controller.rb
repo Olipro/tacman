@@ -4,7 +4,7 @@ class UsersController < ApplicationController
     user_pages = [:authenticate, :change_password, :change_enable, :help, :home, :login, :logout,
                   :update_change_password, :update_change_enable]
     user_admin_pages = [:aaa_logs, :add_to_configuration, :changelog, :create, :destroy, :edit,
-                        :index, :new, :publish, :reset_enable, :reset_password, :remove_from_configuration, 
+                        :index, :new, :password_summary, :publish, :reset_enable, :reset_password, :remove_from_configuration,
                         :show, :system_logs, :toggle_allow_web_login, :toggle_disabled, :toggle_enable_expiry,
                         :toggle_password_expiry, :update, :update_reset_enable, :update_reset_password ]
     su_exclude = user_pages.concat(user_admin_pages)
@@ -368,6 +368,14 @@ class UsersController < ApplicationController
             @nav = 'index_nav'
             format.html # new.html.erb
             format.xml  { render :xml => @user }
+        end
+    end
+
+    def password_summary
+        @users = User.find(:all, :order => :username)
+        respond_to do |format|
+            @nav = 'index_nav'
+            format.html
         end
     end
 
