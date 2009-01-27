@@ -302,10 +302,6 @@ tr.disabled {
 background-color: #BEBEBE;
 }
 
-td.toggles {
-text-align: center;
-}
-
 tr.disabled td{
 font-style: italic;
 color: #696969;
@@ -340,4 +336,5 @@ td.toggles {
 border: 0px;
 border-left: 1px solid  #AEAEAE;
 border-right: 1px solid  #AEAEAE;
+text-align: center;
 }

@@ -407,35 +407,49 @@ Login as user 'Recover' with password 'password'.
 <b>Solution:</b> You will want to write an init script to automatically start BackgrounDRB on system start.
    Here is a sample script:<br />
 <textarea cols="100" rows="15" readonly="readonly">#!/bin/bash
+#!/bin/bash
+#
+# /etc/rc.d/init.d/backgroundrb
 #
 # author: Chris Krough
 #
-# backgroundrb
+# chkconfig: 345 88 12
+# description:  Starts and stops backgroundrb process for Tacacs Plus
 #
-# chkconfig: 345 88 14
-# description:  Starts and stops Ruby BackgroundRB
-
+# processname: backgroundrb
+#
 # Source function library.
 . /etc/init.d/functions
 
+runuser=apache
+backgroundrb=/var/tacman/script/backgroundrb
+
 RETVAL=0
+
+if [ ! -x $backgroundrb ]; then
+    echo -n $"$backgroundrb does not exist."; warning; echo
+    exit 5
+fi
 
 start() {
         echo -n $"Starting BackgroundRB Daemon: "
-        daemon --user apache /var/tacman/script/backgroundrb start -e production
+        daemon --user $runuser $backgroundrb start -e production
         RETVAL=$?
         echo
         [ $RETVAL -eq 0 ] && touch /var/lock/subsys/backgroundrb
+        return $RETVAL
 }
 
 stop() {
         echo -n $"Stopping BackgroundRB Daemon: "
-        killproc -p /var/tacman/tmp/pids/backgroundrb_11006.pid
+        # give backgroundrb a chance to stop gracefully
+        $backgroundrb stop
         RETVAL=$?
         echo
         if [ $RETVAL -eq 0 ]; then
-        rm -f /var/lock/subsys/backgroundrb
+                rm -f /var/lock/subsys/backgroundrb
         fi
+        return $RETVAL
 }
 
 # See how we were called.
@@ -446,16 +460,12 @@ case "$1" in
     stop)
         stop
         ;;
-    status)
-        status backgroundrb
-        RETVAL=$?
-        ;;
     restart)
         stop
         start
         ;;
     *)
-        echo $"Usage: $0 {start|stop|status|restart}"
+        echo $"Usage: $0 {start|stop|restart}"
         ;;
 esac
 exit $RETVAL
