@@ -1,0 +1,19 @@
+<h3>Change Manager Type</h3>
+
+<%= role_checkboxes %>
+
+<br /> <br />
+
+<p>
+<u><b>What this does</b></u><br /><br />
+The manager type determines how the sytem behaves. Master systems will act as a central
+controller for slave systems, slave systems will receive all configuration data from their master,
+and stand alone systems will operate in isolation. Changing the manager type will cause data
+loss on your system in the following cases:
+<ol>
+ <li>Master -> Slave transition: master will delete all slaves and assume ownership of all TACACS Daemons</li>
+ <li>Master -> Stand Alone transition: same as above</li>
+ <li>Slave -> Stand Alone transition: slave will delete its association to its master</li>
+ <li>Stand Alone -> Slave transition: slave will delete nearly all settings in anticipation of receiving data from a master</li>
+</ol>
+</p>

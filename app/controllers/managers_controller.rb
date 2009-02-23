@@ -128,6 +128,15 @@ class ManagersController < ApplicationController
         end
     end
 
+    def edit_role
+        @manager = Manager.find(params[:id])
+        if (@manager.is_local)
+            @nav = "local_nav"
+        else
+            @nav = "remote_nav"
+        end
+    end
+
     def enable
         @manager = Manager.find(params[:id])
 
@@ -460,7 +469,7 @@ class ManagersController < ApplicationController
 
         respond_to do |format|
             @nav = "remote_nav"
-            format.html 
+            format.html
             format.xml  {render :xml => @manager.to_xml}
         end
     end
@@ -641,10 +650,10 @@ class ManagersController < ApplicationController
                 @local_manager.log(:username => @session_user.username, :manager_id=> @manager.id, :message => "Updated Manager #{@manager.name}")
                 if (@manager.is_local)
                     @nav = "local_nav"
-                    format.html { redirect_to local_managers_url} 
+                    format.html { redirect_to local_managers_url}
                 else
                     @nav = "remote_nav"
-                    format.html { redirect_to manager_url(@manager)} 
+                    format.html { redirect_to manager_url(@manager)}
                 end
                 format.xml  { head :ok }
             else

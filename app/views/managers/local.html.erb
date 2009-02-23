@@ -1,7 +1,7 @@
 <%= error_messages_for :manager %>
 
 <table>
-    <tr><td><b>Type:</b></td> <td><%= role_checkboxes %></td></tr>
+    <tr><td><b>Type:</b></td> <td><%= link_to role_display, edit_role_manager_url(@manager) %></td></tr>
     <tr><td>&nbsp</td></tr>
     <tr><td><b>Serial:</b></td> <td><%=h @manager.serial %></td></tr>
     <tr><td><b>Name:</b></td> <td><%=h @manager.name %></td></tr>

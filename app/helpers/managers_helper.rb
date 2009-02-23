@@ -36,4 +36,14 @@ module ManagersHelper
         end
     end
 
+    def role_display
+        if (@manager.stand_alone?)
+            return ("Stand Alone")
+        elsif (@manager.master?)
+            return("Master")
+        elsif (@manager.slave?)
+            return("Slave")
+        end
+    end
+
 end
