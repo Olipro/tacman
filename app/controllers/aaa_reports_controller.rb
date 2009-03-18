@@ -30,7 +30,6 @@ class AaaReportsController < ApplicationController
 
     def show
         @aaa_report = AaaReport.find(params[:id])
-        @aaa_report.set_start_time
         respond_to do |format|
             @nav = 'show_nav'
             format.html

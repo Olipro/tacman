@@ -1,3 +1,7 @@
+<% last1day = (Date.today - 1).strftime("%Y-%m-%d") + " 00:00:00" %>
+<% last7day = (Date.today - 7).strftime("%Y-%m-%d") + " 00:00:00" %>
+<% last30day = (Date.today - 30).strftime("%Y-%m-%d") + " 00:00:00" %>
+
 <b style="font-size: 16px;">AAA Report - <%= @aaa_report.name %></b><br /><br />
 
 <b>Enable Notifications:</b> <%= @aaa_report.enable_notifications %><br />
@@ -19,15 +23,20 @@
 
 <br />
 
+<br /><br />
+<b style="font-size: 14px;"><u>Preset Timeline</u></b><br /><br />
 <% form_for(:aaa_report, :url => search_aaa_logs_configuration_url(@configuration), :html => { :method => :get } ) do |f| %>
   <table>
     <tr>
-        <td><b>Start Time:</b></td> <td><%= f.text_field :start_time, :size => 30  %></td>
+      <th>Start Time</th>
+      <th>Format</th>
     </tr>
     <tr>
-        <td><b>End Time:</b></td> <td><%= f.text_field :end_time, :size => 30 %></td>
+      <td><%= f.select :start_time, [['last 1 day', last1day], ['last 7 days', last7day], ['last 30 days', last30day]] %></td>
+      <td><%= select_tag :output_format, '<option value="html">html</option><option value="csv">csv</option>' %></td>
+      <td><%= submit_tag "Run" %></td>
     </tr>
-  </table>
+  </table><br />
   <%= f.hidden_field :msg_type %>
   <%= f.hidden_field :user %>
   <%= f.hidden_field :client %>
@@ -35,7 +44,31 @@
   <%= f.hidden_field :command %>
   <%= f.hidden_field :message %>
   <%= f.hidden_field :status %>
-  <%= submit_tag "Run Report" %>
+<% end %>
+
+<br /><br />
+<b style="font-size: 14px;"><u>Custom Timeline</u></b><br /><br />
+<% form_for(:aaa_report, :url => search_aaa_logs_configuration_url(@configuration), :html => { :method => :get } ) do |f| %>
+  <table>
+    <tr>
+      <th>Start Time</th>
+      <th>End Time</th></th>
+      <th>Format</th>
+    </tr>
+    <tr>
+      <td><%= f.text_field :start_time, :size => 15  %></td>
+      <td><%= f.text_field :end_time, :size => 15, :value => Time.now.strftime("%Y-%m-%d %H:%M:%S") %></td>
+      <td><%= select_tag :output_format, '<option value="html">html</option><option value="csv">csv</option>' %></td>
+      <td><%= submit_tag "Run" %></td>
+    </tr>
+  </table><br />
+  <%= f.hidden_field :msg_type %>
+  <%= f.hidden_field :user %>
+  <%= f.hidden_field :client %>
+  <%= f.hidden_field :client_name %>
+  <%= f.hidden_field :command %>
+  <%= f.hidden_field :message %>
+  <%= f.hidden_field :status %>
 <% end %>
 
 <br />

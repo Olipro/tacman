@@ -579,21 +579,32 @@ class ConfigurationsController < ApplicationController
     end
 
     def search_aaa_logs
+        output_format = params[:output_format] if (params.has_key?(:output_format))
         @aaa_report = @configuration.aaa_reports.build(params[:aaa_report])
         conditions = @aaa_report.search_criteria
         respond_to do |format|
-            @nav = 'show_nav'
-            @log_count = AaaLog.count_by_sql("SELECT COUNT(*) FROM aaa_logs WHERE #{conditions}")
+            format.html do
+                if (output_format == 'csv')
+                    csv = AaaLog.short_log_fields_header.join(", ") + "\n"
+                    AaaLog.find(:all, :conditions => conditions, :order => :timestamp).each do |log|
+                        csv << log.short_log_fields.join(", ") << "\n"
+                    end
+                    send_data(csv, :filename => 'report.csv', :type => 'text/csv; charset=iso-8859-1; header=present')
+                else
+                    @nav = 'show_nav'
+                    @log_count = AaaLog.count_by_sql("SELECT COUNT(*) FROM aaa_logs WHERE #{conditions}")
 
-            if ( params.has_key?(:page) )
-                page = params[:page]
-            elsif (@log_count > 0)
-                page = @log_count / @local_manager.pagination_per_page
-                page = page + 1 if (@log_count % @local_manager.pagination_per_page > 0)
+                    if ( params.has_key?(:page) )
+                        page = params[:page]
+                    elsif (@log_count > 0)
+                        page = @log_count / @local_manager.pagination_per_page
+                        page = page + 1 if (@log_count % @local_manager.pagination_per_page > 0)
+                    end
+                    @logs = AaaLog.paginate(:page => page, :per_page => @local_manager.pagination_per_page,
+                                            :conditions => conditions, :order => :timestamp)
+                    render :action => :aaa_logs
+                end
             end
-            @logs = AaaLog.paginate(:page => page, :per_page => @local_manager.pagination_per_page,
-                                    :conditions => conditions, :order => :timestamp)
-            format.html { render :action => :aaa_logs}
         end
     end
 

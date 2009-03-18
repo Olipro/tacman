@@ -35,8 +35,8 @@ class AaaReport < ActiveRecord::Base
         return( criteria.join(" and ") )
     end
 
-    def set_start_time
-        @start_time = (Time.now - 86400).strftime("%Y-%m-%d %H:%M:%S")
+    def set_start_time(seconds=86400)
+        @start_time = (Time.now - seconds).strftime("%Y-%m-%d %H:%M:%S")
     end
 
     def start_time
