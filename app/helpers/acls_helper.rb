@@ -11,7 +11,7 @@ module AclsHelper
             str << " seq #{e.sequence}"if (show_details)
             str << " #{e.permission} "
             if (e.network_object_group_id)
-                str << "network-object-group <i>#{e.network_object_group.name}</i> "
+                str << "network-object-group <i>#{link_to e.network_object_group.name, network_object_groups_configuration_url(@configuration) }</i> "
             else
                 str << "ip #{e.ip} #{e.wildcard_mask}"
             end

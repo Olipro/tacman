@@ -10,11 +10,11 @@ module CommandAuthorizationProfilesHelper
             str << link_to(image_tag('delete_button.png', :border => 'none'), command_authorization_profile_entry_url(e), :method => :delete) if (show_details)
             str << " seq #{e.sequence} "if (show_details)
             if (e.shell_command_object_group_id)
-                str << "shell-command-object-group <i>#{e.shell_command_object_group.name}</i> "
+                str << "shell-command-object-group <i>#{link_to e.shell_command_object_group.name, shell_command_object_groups_configuration_url(@configuration) }</i> "
             else
                 str << "command /#{e.command.gsub('<', '&lt;').gsub('>', '&gt;')}/"
             end
-            str << " access-list <i>#{e.acl.name}</i>" if (e.acl_id)
+            str << " access-list <i>#{link_to e.acl.name, acls_configuration_url(@configuration) }</i>" if (e.acl_id)
             str << "</li>\n"
         end
         str << "</ul>\n"

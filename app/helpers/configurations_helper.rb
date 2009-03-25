@@ -14,11 +14,11 @@ module ConfigurationsHelper
             str << link_to(image_tag('delete_button.png', :border => 'none'), command_authorization_whitelist_entry_url(e), :method => :delete) if (include_delete)
             str << " seq #{e.sequence} "
             if (e.shell_command_object_group_id)
-                str << "shell-command-object-group #{e.shell_command_object_group.name} "
+                str << "shell-command-object-group #{link_to e.shell_command_object_group.name, shell_command_object_groups_configuration_url(@configuration) } "
             else
                 str << "command /#{e.command}/"
             end
-            str << " access-list #{e.acl.name}" if (e.acl_id)
+            str << " access-list #{link_to e.acl.name, acls_configuration_url(@configuration) }" if (e.acl_id)
             str << "</li>\n"
         end
         str << "</ul>\n"
