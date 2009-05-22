@@ -21,7 +21,6 @@ class AuthorAvpairsController < ApplicationController
 
     def create_entry
         @author_avpair_entry = @author_avpair.author_avpair_entries.build(params[:author_avpair_entry])
-        avpairs = params[:avpairs]
 
         respond_to do |format|
             @nav = 'show_nav'
@@ -29,27 +28,13 @@ class AuthorAvpairsController < ApplicationController
                 @author_avpair.errors.add_to_base("This action is prohibited on slave systems.")
                 format.html { render :action => "show" }
                 format.xml  { render :xml => @author_avpair.errors, :status => :not_acceptable }
-            end
+            elsif (@author_avpair_entry.save!)
 
-            begin
-                AuthorAvpairEntry.transaction do
-                    @author_avpair_entry.save!
-                    avpairs.each_pair do |attr,val|
-                        next if (val.blank?)
-                        avpair = nil
-                        if (attr == 'custom')
-                            avpair = val
-                        else
-                            avpair = attr + '=' + val
-                        end
-                        @author_avpair_entry.avpairs.create!(:avpair => avpair)
-                    end
-                end
                 @local_manager.log(:username => @session_user.username, :configuration_id => @author_avpair.configuration_id, :author_avpair_id => @author_avpair.id, :message => "Created entry #{@author_avpair_entry.sequence} of Author AVPair #{@author_avpair.name} within configuration #{@configuration.name}.")
                 format.html { redirect_to author_avpair_url(@author_avpair) }
                 format.xml  { render :xml => @author_avpair_entry.to_xml }
 
-            rescue Exception => error
+            else
                 @author_avpair_entry.errors.add_to_base(error)
                 @author_avpair.reload
                 format.html { render :action => "show" }

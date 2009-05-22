@@ -34,7 +34,7 @@ function addAVPair() {
   <% if (!in_use.has_key?('nocallback-verify')) %><div>set nocallback-verify <%= check_box_tag 'avpairs[nocallback-verify]', true %></div><% end %>
   <% if (!in_use.has_key?('noescape')) %><div>set noescape <%= check_box_tag 'avpairs[noescape]', true %></div><% end %>
   <% if (!in_use.has_key?('nohangup')) %><div>set nohangup <%= check_box_tag 'avpairs[nohangup]', true %></div><% end %>
-  <% if (!in_use.has_key?('priv_lvl')) %><div>set priv_lvl=<%= text_field_tag 'avpairs[priv_lvl]',nil, :size => 3 %></div><% end %>
+  <% if (!in_use.has_key?('priv_lvl')) %><div>set priv_lvl=<%= select_tag 'avpairs[priv_lvl]', options_for_select([''].concat( (0..15). collect {|n| [n,n] }) ) %></div><% end %>
   <% if (!in_use.has_key?('timeout')) %><div>set timeout=<%= text_field_tag 'avpairs[timeout]',nil, :size => 3 %></div><% end %>
 </div>
 
@@ -42,15 +42,16 @@ function addAVPair() {
   <br />
       <input type=button value="Custom AVPair" onclick="javascript:addAVPair()" />
       &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-      <%= submit_tag "Update" %>
+      <%= submit_tag "Save" %>
       <input type=button value="Cancel" onclick="window.location.href='<%= author_avpair_url(@author_avpair) %>'" />
 <% end %>
 
 
-<br /><br />
+<hr /><br />
 <b><u>Delete AVPairs</u></b><br /><br />
 <% @author_avpair_entry.avpairs.each do |avpair| %>
   <%= link_to(image_tag('delete_button.png', :border => 'none'), avpair_url(avpair), :method => :delete) %> set <%=h avpair.avpair %> <br />
 <% end %>
-
+ <br />
+ <input type=button value="Finished" onclick="window.location.href='<%= author_avpair_url(@author_avpair) %>'" />
 <br /><br />
