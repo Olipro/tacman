@@ -44,7 +44,7 @@ class AuthorAvpairEntriesController < ApplicationController
                     avpairs.each_pair do |attr,val|
                         next if (val.blank?)
                         avpair = nil
-                        if (attr == 'custom')
+                        if (attr =~ /^custom/)
                             avpair = val
                         else
                             avpair = attr + '=' + val

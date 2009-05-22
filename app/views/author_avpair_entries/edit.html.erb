@@ -1,3 +1,17 @@
+<script type="text/javascript">
+function addAVPair() {
+  var top = document.getElementById('AvDiv');
+  var newdiv = document.createElement('div');
+  var divIdName = 'AvDiv' + top.childNodes.length;
+  var fieldName = 'custom' + top.childNodes.length;
+  newdiv.setAttribute('id',divIdName);
+  newdiv.innerHTML = 'set <input id="avpairs[' + fieldName +']" name="avpairs[' + fieldName + ']" type="text" size="50" />';
+  top.appendChild(newdiv);
+}
+</script>
+
+
+
 <b style="font-size: 16px;">author-avpair-list '<%=h @author_avpair.name %>' <%=h @author_avpair_entry.sequence %></b><br /><br />
 
 <%= error_messages_for :author_avpair_entry %>
@@ -5,68 +19,38 @@
 <% in_use = {}
    @author_avpair_entry.avpairs.each {|x| in_use[x.attr] = x}
 %>
+<b><u>Update Settings</u></b><br /><br />
 <% form_for(:author_avpair_entry, :url => author_avpair_entry_url(@author_avpair_entry), :html => {:method => :put} )  do |f| %>
       <%= f.hidden_field :author_avpair_id, :value => @author_avpair.id %>
-      <table>
-        <tr>
-          <td>seq</td><td><%= f.text_field :sequence,:size => 2 %></td>
-        </tr>
-        <tr>
-          <td>match access-list</td> <td><%= f.select :acl_id, @author_avpair.configuration.acls.collect {|p| [ p.name, p.id ] }, { :include_blank => true } %></td>
-        </tr>
-        <tr>
-          <td>set service</td> <td><%= f.text_field :service, :value => 'shell', :size => 20 %></td>
-        </tr>
-        <% @author_avpair_entry.avpairs.each do |avpair| %>
-        <tr><td colspan="2"><%= link_to(image_tag('delete_button.png', :border => 'none'), avpair_url(avpair), :method => :delete) %> set <%=h avpair.avpair %></td></tr>
-        <% end %>
-        <tr><td>&nbsp</td></tr>
-        <tr><td>&nbsp</td></tr>
+<div id="AvDiv">
+      <div>seq <%= f.text_field :sequence,:size => 2 %></div>
+      <div>match access-list <%= f.select :acl_id, @author_avpair.configuration.acls.collect {|p| [ p.name, p.id ] }, { :include_blank => true } %></div>
+      <div>set service= <%= f.text_field :service, :value => @author_avpair_entry.service, :size => 20 %></div>
 
-        <% if (!in_use.has_key?('autocmd')) %>
-        <tr><td>set autocmd</td> <td><%= text_field_tag 'avpairs[autocmd]' %></td> <td></td></tr>
-        <% end %>
+  <% if (!in_use.has_key?('autocmd')) %><div>set autocmd=<%= text_field_tag 'avpairs[autocmd]',nil, :size => 15 %></div><% end %>
+  <% if (!in_use.has_key?('callback-line')) %><div>set callback-line=<%= text_field_tag 'avpairs[callback-line]',nil, :size => 10 %></div><% end %>
+  <% if (!in_use.has_key?('callback-rotary')) %><div>set callback-rotary=<%= text_field_tag 'avpairs[callback-rotary]',nil, :size => 10 %></div><% end %>
+  <% if (!in_use.has_key?('idletime')) %><div>set idletime=<%= text_field_tag 'avpairs[idletime]',nil, :size => 3 %></div><% end %>
+  <% if (!in_use.has_key?('nocallback-verify')) %><div>set nocallback-verify <%= check_box_tag 'avpairs[nocallback-verify]', true %></div><% end %>
+  <% if (!in_use.has_key?('noescape')) %><div>set noescape <%= check_box_tag 'avpairs[noescape]', true %></div><% end %>
+  <% if (!in_use.has_key?('nohangup')) %><div>set nohangup <%= check_box_tag 'avpairs[nohangup]', true %></div><% end %>
+  <% if (!in_use.has_key?('priv_lvl')) %><div>set priv_lvl=<%= text_field_tag 'avpairs[priv_lvl]',nil, :size => 3 %></div><% end %>
+  <% if (!in_use.has_key?('timeout')) %><div>set timeout=<%= text_field_tag 'avpairs[timeout]',nil, :size => 3 %></div><% end %>
+</div>
 
-        <% if (!in_use.has_key?('callback-line')) %>
-        <tr><td>set callback-line</td> <td><%= text_field_tag 'avpairs[callback-line]' %></td></tr>
-        <% end %>
 
-        <% if (!in_use.has_key?('callback-rotary')) %>
-        <tr><td>set callback-rotary</td> <td><%= text_field_tag 'avpairs[callback-rotary]' %></td></tr>
-        <% end %>
+  <br />
+      <input type=button value="Custom AVPair" onclick="javascript:addAVPair()" />
+      &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+      <%= submit_tag "Update" %>
+      <input type=button value="Cancel" onclick="window.location.href='<%= author_avpair_url(@author_avpair) %>'" />
+<% end %>
 
-        <% if (!in_use.has_key?('idletime')) %>
-        <tr><td>set idletime</td> <td><%= text_field_tag 'avpairs[idletime]' %></td></tr>
-        <% end %>
 
-        <% if (!in_use.has_key?('nocallback-verify')) %>
-        <tr><td>nocallback-verify</td> <td><%= check_box_tag 'avpairs[nocallback-verify]', true %></td></tr>
-        <% end %>
-
-        <% if (!in_use.has_key?('noescape')) %>
-        <tr><td>set noescape</td> <td><%= check_box_tag 'avpairs[noescape]', true %></td></tr>
-        <% end %>
-
-        <% if (!in_use.has_key?('nohangup')) %>
-        <tr><td>set nohangup</td> <td><%= check_box_tag 'avpairs[nohangup]', true %></td></tr>
-        <% end %>
-
-        <% if (!in_use.has_key?('priv_lvl')) %>
-        <tr><td>set priv_lvl</td> <td><%= select_tag 'avpairs[priv_lvl]', options_for_select(['',''].concat( (0..15). collect {|n| [n,n] }) ) %></td></tr>
-        <% end %>
-
-        <% if (!in_use.has_key?('timeout')) %>
-        <tr><td>set timeout</td> <td><%= text_field_tag 'avpairs[timeout]' %></td></tr>
-        <% end %>
-
-        <tr><td>&nbsp</td></tr>
-        <tr><td>set custom</td> <td><%= text_field_tag 'avpairs[custom]', nil, :size => 50 %></td></tr>
-        <tr><td>&nbsp</td> <td><i>Example: shell:Admin*Admin default-domain</i></td></tr>
-        <tr><td>&nbsp</td></tr>
-        <tr>
-          <td><%= submit_tag "Update" %></td> <td><input type=button value="Cancel" onclick="window.location.href='<%= author_avpair_url(@author_avpair) %>'" /></td>
-        </tr>
-      </table>
+<br /><br />
+<b><u>Delete AVPairs</u></b><br /><br />
+<% @author_avpair_entry.avpairs.each do |avpair| %>
+  <%= link_to(image_tag('delete_button.png', :border => 'none'), avpair_url(avpair), :method => :delete) %> set <%=h avpair.avpair %> <br />
 <% end %>
 
 <br /><br />
