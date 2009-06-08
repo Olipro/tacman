@@ -55,8 +55,8 @@ class SystemMessage < ActiveRecord::Base
                     ordered = ['manager', 'departments','users','password_histories','configurations',
                                'network_object_groups','network_object_group_entries',
                                'shell_command_object_groups', 'shell_command_object_group_entries','acls',
-                               'acl_entries','author_avpairs','author_avpair_entries','avpairs',
-                               'command_authorization_profiles', 'command_authorization_profile_entries',
+                               'acl_entries','author_avpairs','author_avpair_entries','avpairs', 'dynamic_avpairs',
+                               'dynamic_avpair_values', 'command_authorization_profiles', 'command_authorization_profile_entries',
                                'user_groups', 'configured_users', 'command_authorization_whitelist_entries']
 
                     Manager.transaction do
@@ -69,6 +69,8 @@ class SystemMessage < ActiveRecord::Base
                         User.delete_all
                         UserGroup.delete_all
                         CommandAuthorizationWhitelistEntry.delete_all
+                        DyanamicAvpairValue.delete_all
+                        DynamicAvpair.delete_all
                         Avpair.delete_all
                         AuthorAvpairEntry.delete_all
                         AuthorAvpair.delete_all
@@ -235,6 +237,34 @@ private
             else
                 command_authorization_whitelist_entry = CommandAuthorizationWhitelistEntry.find(fields['id'])
                 raise( command_authorization_whitelist_entry.errors.full_messages.join("\n") ) if ( !command_authorization_whitelist_entry.destroy )
+            end
+
+        elsif (type == 'dynamic_avpair_value')
+            if (self.verb == 'update')
+                dav = DynamicAvpairValue.find(fields['id'])
+                raise( dav.errors.full_messages.join("\n") ) if ( !dav.update_attributes(fields) )
+            elsif (self.verb == 'create')
+                dav = DynamicAvpairValue.new(fields)
+                dav.dynamic_avpair_id = fields['dynamic_avpair_id']
+                dav.id = fields['id']
+                raise( dav.errors.full_messages.join("\n") ) if ( !dav.save )
+            else
+                dav = DynamicAvpairValue.find(fields['id'])
+                raise( dav.errors.full_messages.join("\n") ) if ( !dav.destroy )
+            end
+
+        elsif (type == 'dynamic_avpair')
+            if (self.verb == 'update')
+                dav = DynamicAvpair.find(fields['id'])
+                raise( dav.errors.full_messages.join("\n") ) if ( !dav.update_attributes(fields) )
+            elsif (self.verb == 'create')
+                dav = DynamicAvpair.new(fields)
+                dav.author_avpair_entry_id = fields['author_avpair_entry_id']
+                dav.id = fields['id']
+                raise( dav.errors.full_messages.join("\n") ) if ( !dav.save )
+            else
+                dav = DynamicAvpair.find(fields['id'])
+                raise( dav.errors.full_messages.join("\n") ) if ( !dav.destroy )
             end
 
         elsif (type == 'avpair')

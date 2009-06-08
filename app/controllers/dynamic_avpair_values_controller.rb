@@ -1,0 +1,2 @@
+class DynamicAvpairValuesController < ApplicationController
+end

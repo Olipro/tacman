@@ -1,0 +1,10 @@
+<b style="font-size: 16px;">Edit AVPair for author-avpair-list '<%=h @author_avpair.name %>'</b><br /><br />
+
+<%= error_messages_for :avpair %>
+
+<% form_for(:avpair, :url => avpair_url(@avpair), :html => {:method => :put} )  do |f| %>
+      <b>set</b> <%= f.text_field :avpair, :size => 50 %><br />
+      <br /><br />
+      <%= submit_tag "Save" %>
+      <input type=button value="Cancel" onclick="window.location.href='<%= edit_author_avpair_entry_url(@author_avpair_entry) %>'" />
+<% end %>

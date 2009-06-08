@@ -1,0 +1,1040 @@
+Script started on Thu 28 May 2009 03:23:57 PM CDT
+]0;dspinhir@ds1: ~/dev/rubyforge/tacacs-plus/tacmandspinhir@ds1:~/dev/rubyforge/tacacs-plus/tacman$ ./script/generate 
+/home/dspinhir/dev/rubyforge/tacacs-plus/tacman/vendor/rails/railties/lib/rails_generator/lookup.rb:211:Warning: Gem::SourceIndex#search support for Regexp patterns is deprecated
+Usage: ./script/generate generator [options] [args]
+Rails Info:
+    -v, --version                    Show the Rails version number and quit.
+    -h, --help                       Show this help message and quit.
+General Options:
+    -p, --pretend                    Run but do not make any changes.
+    -f, --force                      Overwrite files that already exist.
+    -s, --skip                       Skip files that already exist.
+    -q, --quiet                      Suppress normal output.
+    -t, --backtrace                  Debugging: show backtrace on errors.
+    -c, --svn                        Modify files with subversion. (Note: svn must be in path)
+    -g, --git                        Modify files with git. (Note: git must be in path)
+
+
+Installed Generators
+  Plugins (vendor/plugins): worker
+  Builtin: controller, integration_test, mailer, migration, model, observer, plugin, resource, scaffold, session_migration
+
+More are available at http://wiki.rubyonrails.org/rails/pages/AvailableGenerators
+  1. Download, for example, login_generator.zip
+  2. Unzip to directory /home/dspinhir/.rails/generators/login
+     to use the generator with all your Rails apps
+     or to /home/dspinhir/dev/rubyforge/tacacs-plus/tacman/lib/generators/login
+     to use with this app only.
+  3. Run generate with no arguments for usage information
+       ./script/generate login
+
+Generator gems are also available:
+  1. gem search -r generator
+  2. gem install login_generator
+  3. ./script/generate login
+
+]0;dspinhir@ds1: ~/dev/rubyforge/tacacs-plus/tacmandspinhir@ds1:~/dev/rubyforge/tacacs-plus/tacman$ ./script/generate -v
+/home/dspinhir/dev/rubyforge/tacacs-plus/tacman/vendor/rails/railties/lib/rails_generator/lookup.rb:211:Warning: Gem::SourceIndex#search support for Regexp patterns is deprecated
+Couldn't find '-v' generator
+]0;dspinhir@ds1: ~/dev/rubyforge/tacacs-plus/tacmandspinhir@ds1:~/dev/rubyforge/tacacs-plus/tacman$ ./script/generate -v[K-version
+/home/dspinhir/dev/rubyforge/tacacs-plus/tacman/vendor/rails/railties/lib/rails_generator/lookup.rb:211:Warning: Gem::SourceIndex#search support for Regexp patterns is deprecated
+Couldn't find '--version' generator
+]0;dspinhir@ds1: ~/dev/rubyforge/tacacs-plus/tacmandspinhir@ds1:~/dev/rubyforge/tacacs-plus/tacman$ 
+]0;dspinhir@ds1: ~/dev/rubyforge/tacacs-plus/tacmandspinhir@ds1:~/dev/rubyforge/tacacs-plus/tacman$ 
+]0;dspinhir@ds1: ~/dev/rubyforge/tacacs-plus/tacmandspinhir@ds1:~/dev/rubyforge/tacacs-plus/tacman$ 
+]0;dspinhir@ds1: ~/dev/rubyforge/tacacs-plus/tacmandspinhir@ds1:~/dev/rubyforge/tacacs-plus/tacman$ 
+]0;dspinhir@ds1: ~/dev/rubyforge/tacacs-plus/tacmandspinhir@ds1:~/dev/rubyforge/tacacs-plus/tacman$ 
+]0;dspinhir@ds1: ~/dev/rubyforge/tacacs-plus/tacmandspinhir@ds1:~/dev/rubyforge/tacacs-plus/tacman$ ./script/generate --version[K[K[K[K[K[K[K[K[Kresource
+/home/dspinhir/dev/rubyforge/tacacs-plus/tacman/vendor/rails/railties/lib/rails_generator/lookup.rb:211:Warning: Gem::SourceIndex#search support for Regexp patterns is deprecated
+Usage: ./script/generate resource ModelName [field:type, field:type]
+Options:
+        --skip-timestamps            Don't add timestamps to the migration file for this model
+        --skip-migration             Don't generate a migration file for this model
+Rails Info:
+    -v, --version                    Show the Rails version number and quit.
+    -h, --help                       Show this help message and quit.
+General Options:
+    -p, --pretend                    Run but do not make any changes.
+    -f, --force                      Overwrite files that already exist.
+    -s, --skip                       Skip files that already exist.
+    -q, --quiet                      Suppress normal output.
+    -t, --backtrace                  Debugging: show backtrace on errors.
+    -c, --svn                        Modify files with subversion. (Note: svn must be in path)
+    -g, --git                        Modify files with git. (Note: git must be in path)
+
+Description:
+    Stubs out a new resource including an empty model and controller suitable
+    for a restful, resource-oriented application. Pass the singular model name,
+    either CamelCased or under_scored, as the first argument, and an optional
+    list of attribute pairs.
+
+    Attribute pairs are column_name:sql_type arguments specifying the
+    model's attributes. Timestamps are added by default, so you don't have to
+    specify them by hand as 'created_at:datetime updated_at:datetime'.
+
+    You don't have to think up every attribute up front, but it helps to
+    sketch out a few so you can start working with the resource immediately.
+
+    This creates a model, controller, tests and fixtures for both, and the
+    corresponding map.resources declaration in config/routes.rb
+
+    Unlike the scaffold generator, the resource generator does not create
+    views or add any methods to the generated controller.
+
+Examples:
+    `./script/generate resource post` # no attributes
+    `./script/generate resource post title:string body:text published:boolean`
+    `./script/generate resource purchase order_id:integer amount:decimal`
+]0;dspinhir@ds1: ~/dev/rubyforge/tacacs-plus/tacmandspinhir@ds1:~/dev/rubyforge/tacacs-plus/tacman$ ./script/generate resource dyn[K[K[KDynamica[KAvpair [author_avpair-id[K[K[K_id:integer]
+/home/dspinhir/dev/rubyforge/tacacs-plus/tacman/vendor/rails/railties/lib/rails_generator/lookup.rb:211:Warning: Gem::SourceIndex#search support for Regexp patterns is deprecated
+      exists  app/models/
+      exists  app/controllers/
+      exists  app/helpers/
+      create  app/views/dynamic_avpairs
+      exists  test/functional/
+      exists  test/unit/
+  dependency  model
+/home/dspinhir/dev/rubyforge/tacacs-plus/tacman/vendor/rails/railties/lib/rails_generator/lookup.rb:211:Warning: Gem::SourceIndex#search support for Regexp patterns is deprecated
+      exists    app/models/
+      exists    test/unit/
+      exists    test/fixtures/
+      create    app/models/dynamic_avpair.rb
+      create    test/unit/dynamic_avpair_test.rb
+      create    test/fixtures/dynamic_avpairs.yml
+      exists    db/migrate
+      create    db/migrate/20090528202709_create_dynamic_avpairs.rb
+      create  app/controllers/dynamic_avpairs_controller.rb
+      create  test/functional/dynamic_avpairs_controller_test.rb
+      create  app/helpers/dynamic_avpairs_helper.rb
+       route  map.resources :dynamic_avpairs
+]0;dspinhir@ds1: ~/dev/rubyforge/tacacs-plus/tacmandspinhir@ds1:~/dev/rubyforge/tacacs-plus/tacman$ 
+]0;dspinhir@ds1: ~/dev/rubyforge/tacacs-plus/tacmandspinhir@ds1:~/dev/rubyforge/tacacs-plus/tacman$ 
+]0;dspinhir@ds1: ~/dev/rubyforge/tacacs-plus/tacmandspinhir@ds1:~/dev/rubyforge/tacacs-plus/tacman$ 
+]0;dspinhir@ds1: ~/dev/rubyforge/tacacs-plus/tacmandspinhir@ds1:~/dev/rubyforge/tacacs-plus/tacman$ 
+]0;dspinhir@ds1: ~/dev/rubyforge/tacacs-plus/tacmandspinhir@ds1:~/dev/rubyforge/tacacs-plus/tacman$ 
+]0;dspinhir@ds1: ~/dev/rubyforge/tacacs-plus/tacmandspinhir@ds1:~/dev/rubyforge/tacacs-plus/tacman$ 
+]0;dspinhir@ds1: ~/dev/rubyforge/tacacs-plus/tacmandspinhir@ds1:~/dev/rubyforge/tacacs-plus/tacman$ 
+]0;dspinhir@ds1: ~/dev/rubyforge/tacacs-plus/tacmandspinhir@ds1:~/dev/rubyforge/tacacs-plus/tacman$ 
+]0;dspinhir@ds1: ~/dev/rubyforge/tacacs-plus/tacmandspinhir@ds1:~/dev/rubyforge/tacacs-plus/tacman$ ./script/generate resource DynamicAvpair [author_avpair_id:integer][1P_avpair_id:integer][1P_avpair_id:integer][1P_avpair_id:integer][1P_avpair_id:integer][1P_avpair_id:integer][1P_avpair_id:integer]d_avpair_id:integer]y_avpair_id:integer]n_avpair_id:integer]a_avpair_id:integer]m_avpair_id:integer]i_avpair_id:integer]c_avpair_id:integer]E [dynamic_avpair_id:integer]n [dynamic_avpair_id:integer]t [dynamic_avpair_id:integer]r [dynamic_avpair_id:integer]i [dynamic_avpair_id:integer][1P [dynamic_avpair_id:integer]y [dynamic_avpair_id:integer][1P [dynamic_avpair_id:integer][1P [dynamic_avpair_id:integer][1P [dynamic_avpair_id:integer][1P [dynamic_avpair_id:integer][1P [dynamic_avpair_id:integer]V [dynamic_avpair_id:integer]a [dynamic_avpair_id:integer]l [dynamic_avpair_id:integer]u [dynamic_avpair_id:integer]e [dynamic_avpair_id:integer]
+/home/dspinhir/dev/rubyforge/tacacs-plus/tacman/vendor/rails/railties/lib/rails_generator/lookup.rb:211:Warning: Gem::SourceIndex#search support for Regexp patterns is deprecated
+      exists  app/models/
+      exists  app/controllers/
+      exists  app/helpers/
+      create  app/views/dynamic_avpair_values
+      exists  test/functional/
+      exists  test/unit/
+  dependency  model
+/home/dspinhir/dev/rubyforge/tacacs-plus/tacman/vendor/rails/railties/lib/rails_generator/lookup.rb:211:Warning: Gem::SourceIndex#search support for Regexp patterns is deprecated
+      exists    app/models/
+      exists    test/unit/
+      exists    test/fixtures/
+      create    app/models/dynamic_avpair_value.rb
+      create    test/unit/dynamic_avpair_value_test.rb
+      create    test/fixtures/dynamic_avpair_values.yml
+      exists    db/migrate
+      create    db/migrate/20090528202736_create_dynamic_avpair_values.rb
+      create  app/controllers/dynamic_avpair_values_controller.rb
+      create  test/functional/dynamic_avpair_values_controller_test.rb
+      create  app/helpers/dynamic_avpair_values_helper.rb
+       route  map.resources :dynamic_avpair_values
+]0;dspinhir@ds1: ~/dev/rubyforge/tacacs-plus/tacmandspinhir@ds1:~/dev/rubyforge/tacacs-plus/tacman$ rm db/migrate/10[K[K200905282027*
+]0;dspinhir@ds1: ~/dev/rubyforge/tacacs-plus/tacmandspinhir@ds1:~/dev/rubyforge/tacacs-plus/tacman$ ls db/migrate/
+[00m[00m001_create_sessions.rb[00m  [00m003_create_system_logs.rb[00m  [00m005_create_configurations.rb[00m  [00m007_create_aaa_reports.rb[00m
+[00m002_create_managers.rb[00m  [00m004_create_users.rb[00m        [00m006_create_tacacs_daemons.rb[00m  [00m008_update_for_tacplus110.rb[00m
+[m]0;dspinhir@ds1: ~/dev/rubyforge/tacacs-plus/tacmandspinhir@ds1:~/dev/rubyforge/tacacs-plus/tacman$ cd app/views/author_avpair_entries/
+]0;dspinhir@ds1: ~/dev/rubyforge/tacacs-plus/tacman/app/views/author_avpair_entriesdspinhir@ds1:~/dev/rubyforge/tacacs-plus/tacman/app/views/author_avpair_entries$ ls
+[00m[00mdynamic_avpair.html.erb[00m  [00m_dynamic_avpair_nav.html.erb[00m  [00medit.html.erb[00m
+[m]0;dspinhir@ds1: ~/dev/rubyforge/tacacs-plus/tacman/app/views/author_avpair_entriesdspinhir@ds1:~/dev/rubyforge/tacacs-plus/tacman/app/views/author_avpair_entries$ mv dynamic_avpair.html.erb new_dynamic_avpair.html.erb
+]0;dspinhir@ds1: ~/dev/rubyforge/tacacs-plus/tacman/app/views/author_avpair_entriesdspinhir@ds1:~/dev/rubyforge/tacacs-plus/tacman/app/views/author_avpair_entries$ 
+]0;dspinhir@ds1: ~/dev/rubyforge/tacacs-plus/tacman/app/views/author_avpair_entriesdspinhir@ds1:~/dev/rubyforge/tacacs-plus/tacman/app/views/author_avpair_entries$ 
+]0;dspinhir@ds1: ~/dev/rubyforge/tacacs-plus/tacman/app/views/author_avpair_entriesdspinhir@ds1:~/dev/rubyforge/tacacs-plus/tacman/app/views/author_avpair_entries$ 
+]0;dspinhir@ds1: ~/dev/rubyforge/tacacs-plus/tacman/app/views/author_avpair_entriesdspinhir@ds1:~/dev/rubyforge/tacacs-plus/tacman/app/views/author_avpair_entries$ 
+]0;dspinhir@ds1: ~/dev/rubyforge/tacacs-plus/tacman/app/views/author_avpair_entriesdspinhir@ds1:~/dev/rubyforge/tacacs-plus/tacman/app/views/author_avpair_entries$ 
+]0;dspinhir@ds1: ~/dev/rubyforge/tacacs-plus/tacman/app/views/author_avpair_entriesdspinhir@ds1:~/dev/rubyforge/tacacs-plus/tacman/app/views/author_avpair_entries$ 
+]0;dspinhir@ds1: ~/dev/rubyforge/tacacs-plus/tacman/app/views/author_avpair_entriesdspinhir@ds1:~/dev/rubyforge/tacacs-plus/tacman/app/views/author_avpair_entries$ 
+]0;dspinhir@ds1: ~/dev/rubyforge/tacacs-plus/tacman/app/views/author_avpair_entriesdspinhir@ds1:~/dev/rubyforge/tacacs-plus/tacman/app/views/author_avpair_entries$ 
+]0;dspinhir@ds1: ~/dev/rubyforge/tacacs-plus/tacman/app/views/author_avpair_entriesdspinhir@ds1:~/dev/rubyforge/tacacs-plus/tacman/app/views/author_avpair_entries$ 
+]0;dspinhir@ds1: ~/dev/rubyforge/tacacs-plus/tacman/app/views/author_avpair_entriesdspinhir@ds1:~/dev/rubyforge/tacacs-plus/tacman/app/views/author_avpair_entries$ 
+]0;dspinhir@ds1: ~/dev/rubyforge/tacacs-plus/tacman/app/views/author_avpair_entriesdspinhir@ds1:~/dev/rubyforge/tacacs-plus/tacman/app/views/author_avpair_entries$ 
+]0;dspinhir@ds1: ~/dev/rubyforge/tacacs-plus/tacman/app/views/author_avpair_entriesdspinhir@ds1:~/dev/rubyforge/tacacs-plus/tacman/app/views/author_avpair_entries$ 
+]0;dspinhir@ds1: ~/dev/rubyforge/tacacs-plus/tacman/app/views/author_avpair_entriesdspinhir@ds1:~/dev/rubyforge/tacacs-plus/tacman/app/views/author_avpair_entries$ 
+]0;dspinhir@ds1: ~/dev/rubyforge/tacacs-plus/tacman/app/views/author_avpair_entriesdspinhir@ds1:~/dev/rubyforge/tacacs-plus/tacman/app/views/author_avpair_entries$ 
+]0;dspinhir@ds1: ~/dev/rubyforge/tacacs-plus/tacman/app/views/author_avpair_entriesdspinhir@ds1:~/dev/rubyforge/tacacs-plus/tacman/app/views/author_avpair_entries$ 
+]0;dspinhir@ds1: ~/dev/rubyforge/tacacs-plus/tacman/app/views/author_avpair_entriesdspinhir@ds1:~/dev/rubyforge/tacacs-plus/tacman/app/views/author_avpair_entries$ 
+]0;dspinhir@ds1: ~/dev/rubyforge/tacacs-plus/tacman/app/views/author_avpair_entriesdspinhir@ds1:~/dev/rubyforge/tacacs-plus/tacman/app/views/author_avpair_entries$ script/console
+bash: script/console: No such file or directory
+]0;dspinhir@ds1: ~/dev/rubyforge/tacacs-plus/tacman/app/views/author_avpair_entriesdspinhir@ds1:~/dev/rubyforge/tacacs-plus/tacman/app/views/author_avpair_entries$ cd ../../../
+]0;dspinhir@ds1: ~/dev/rubyforge/tacacs-plus/tacmandspinhir@ds1:~/dev/rubyforge/tacacs-plus/tacman$ script/console
+Loading development environment (Rails 2.1.0)
+>> 
+?> 
+?> 
+?> DynamicAvpair.find(1)[C[C[CaDynamicAvpair.find(1)[C[C[C[CvDynamicAvpair.find(1)[C[C[C[C[C[1PDynamicAvpair.find(1)[C[C[C[C[1PDynamicAvpair.find(1)[C[C[CdDynamicAvpair.find(1)[C[C[C[CaDynamicAvpair.find(1)[C[C[C[C[CvDynamicAvpair.find(1)[C[C[C[C[C[C DynamicAvpair.find(1)[C[C[C[C[C[C[C=DynamicAvpair.find(1)[C[C[C[C[C[C[C[C DynamicAvpair.find(1)[C[C[C[C[C[C[C[C[C
+=> #<DynamicAvpair id: 1, author_avpair_entry_id: 3, obj_type: "network_av", attr: "networks=", delimiter: ",", created_at: "2009-05-29 16:27:00", updated_at: "2009-05-29 16:27:00">
+>> dav.dynamic_avpair_entries.count
+NoMethodError: undefined method `dynamic_avpair_entries' for #<DynamicAvpair:0x7f0f6760d4c0>
+	from /home/dspinhir/dev/rubyforge/tacacs-plus/tacman/vendor/rails/activerecord/lib/active_record/attribute_methods.rb:256:in `method_missing'
+	from (irb):5
+>> dyn[K[K[KDynamicAvpairEntrie[K[Ky.count
+NameError: uninitialized constant DynamicAvpairEntry
+	from /home/dspinhir/dev/rubyforge/tacacs-plus/tacman/vendor/rails/activerecord/lib/../../activesupport/lib/active_support/dependencies.rb:278:in `load_missing_constant'
+	from /home/dspinhir/dev/rubyforge/tacacs-plus/tacman/vendor/rails/activerecord/lib/../../activesupport/lib/active_support/dependencies.rb:467:in `const_missing'
+	from /home/dspinhir/dev/rubyforge/tacacs-plus/tacman/vendor/rails/activerecord/lib/../../activesupport/lib/active_support/dependencies.rb:479:in `const_missing'
+	from (irb):6
+>> DynamicAvpairEntry.count[1P.count[1P.count[1P.count[1P.count[1P.countV.counta.countl.countu.counte.count
+=> 0
+>> DynamicAvpairValue.countEntry.count[C[C[Cdav.dynamic_avpair_entries.count[1Ps.count[1Ps.count[1Ps.count[1Ps.count[1Ps.count[1Ps.countvs.countas.countls.countus.countes.count
+=> 0
+>> A[Ke = AuthorAvpairEntry.find(3)
+=> #<AuthorAvpairEntry id: 3, author_avpair_id: 1, acl_id: nil, service: "dustin", sequence: 20, created_at: "2009-05-22 16:56:11", updated_at: "2009-05-22 16:56:11">
+>> 
+?> 
+?> dav [K[K[K[Knav[K[K = e.network-av[K[K[K_av
+=> #<AuthorAvpairEntry id: 3, author_avpair_id: 1, acl_id: nil, service: "dustin", sequence: 20, created_at: "2009-05-22 16:56:11", updated_at: "2009-05-22 16:56:11">
+>> ]0;dspinhir@ds1: ~/dev/rubyforge/tacacs-plus/tacmandspinhir@ds1:~/dev/rubyforge/tacacs-plus/tacman$ script/console[Kscript/console
+Loading development environment (Rails 2.1.0)
+>> e = AuthorAvpairEntry.find(3)
+=> #<AuthorAvpairEntry id: 3, author_avpair_id: 1, acl_id: nil, service: "dustin", sequence: 20, created_at: "2009-05-22 16:56:11", updated_at: "2009-05-22 16:56:11">
+>> n = e.network_av
+=> #<DynamicAvpair id: 1, author_avpair_entry_id: 3, obj_type: "network_av", attr: "networks=", delimiter: ",", created_at: "2009-05-29 16:27:00", updated_at: "2009-05-29 16:27:00">
+>> ]0;dspinhir@ds1: ~/dev/rubyforge/tacacs-plus/tacmandspinhir@ds1:~/dev/rubyforge/tacacs-plus/tacman$ 
+]0;dspinhir@ds1: ~/dev/rubyforge/tacacs-plus/tacmandspinhir@ds1:~/dev/rubyforge/tacacs-plus/tacman$ 
+]0;dspinhir@ds1: ~/dev/rubyforge/tacacs-plus/tacmandspinhir@ds1:~/dev/rubyforge/tacacs-plus/tacman$ 
+]0;dspinhir@ds1: ~/dev/rubyforge/tacacs-plus/tacmandspinhir@ds1:~/dev/rubyforge/tacacs-plus/tacman$ 
+]0;dspinhir@ds1: ~/dev/rubyforge/tacacs-plus/tacmandspinhir@ds1:~/dev/rubyforge/tacacs-plus/tacman$ 
+]0;dspinhir@ds1: ~/dev/rubyforge/tacacs-plus/tacmandspinhir@ds1:~/dev/rubyforge/tacacs-plus/tacman$ 
+]0;dspinhir@ds1: ~/dev/rubyforge/tacacs-plus/tacmandspinhir@ds1:~/dev/rubyforge/tacacs-plus/tacman$ 
+]0;dspinhir@ds1: ~/dev/rubyforge/tacacs-plus/tacmandspinhir@ds1:~/dev/rubyforge/tacacs-plus/tacman$ 
+]0;dspinhir@ds1: ~/dev/rubyforge/tacacs-plus/tacmandspinhir@ds1:~/dev/rubyforge/tacacs-plus/tacman$ 
+]0;dspinhir@ds1: ~/dev/rubyforge/tacacs-plus/tacmandspinhir@ds1:~/dev/rubyforge/tacacs-plus/tacman$ 
+]0;dspinhir@ds1: ~/dev/rubyforge/tacacs-plus/tacmandspinhir@ds1:~/dev/rubyforge/tacacs-plus/tacman$ 
+]0;dspinhir@ds1: ~/dev/rubyforge/tacacs-plus/tacmandspinhir@ds1:~/dev/rubyforge/tacacs-plus/tacman$ 
+]0;dspinhir@ds1: ~/dev/rubyforge/tacacs-plus/tacmandspinhir@ds1:~/dev/rubyforge/tacacs-plus/tacman$ cat log/pr[K[Kdevelopment.log [1P[1P[1P[1@t[1@a[1@i[1@l[C[1@ [1@-[1@f[C[1@ 
+    /usr/local/lib/site_ruby/1.8/rubygems/custom_require.rb:31:in `gem_original_require'
+    /usr/local/lib/site_ruby/1.8/rubygems/custom_require.rb:31:in `require'
+    /vendor/rails/activesupport/lib/active_support/dependencies.rb:509:in `require'
+    /vendor/rails/activesupport/lib/active_support/dependencies.rb:354:in `new_constants_in'
+    /vendor/rails/activesupport/lib/active_support/dependencies.rb:509:in `require'
+    /vendor/rails/railties/lib/commands/server.rb:39
+    script/server:3:in `require'
+    script/server:3
+
+Rendering /home/dspinhir/dev/rubyforge/tacacs-plus/tacman/vendor/rails/actionpack/lib/action_controller/templates/rescues/layout.erb (internal_server_error)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Processing AuthorAvpairEntriesController#create_dynamic_avpair (for 127.0.0.1 at 2009-05-29 13:45:26) [POST]
+  Session ID: 79e8d5cbc993b74990d98e428b98ddbb
+  Parameters: {"object_groups"=>{"1"=>"1"}, "commit"=>"Save", "action"=>"create_dynamic_avpair", "id"=>"3", "dynamic_avpair"=>{"obj_type"=>"network_av", "delimiter"=>",", "attr"=>"networks*"}, "controller"=>"author_avpair_entries"}
+  [4;35;1mUser Columns (0.001304)[0m   [0mSHOW FIELDS FROM `users`[0m
+  [4;36;1mUser Load (0.000131)[0m   [0;1mSELECT * FROM `users` WHERE (disabled = false and allow_web_login = true) AND (`users`.`id` = 1) LIMIT 1[0m
+  [4;35;1mManager Load (0.000139)[0m   [0mSELECT * FROM `managers` WHERE (is_local = true) LIMIT 1[0m
+  [4;36;1mConfiguredUser Load (0.000133)[0m   [0;1mSELECT * FROM `configured_users` WHERE (`configured_users`.user_id = 1) [0m
+  [4;35;1mAuthorAvpairEntry Columns (0.000818)[0m   [0mSHOW FIELDS FROM `author_avpair_entries`[0m
+  [4;36;1mAuthorAvpairEntry Load (0.000116)[0m   [0;1mSELECT * FROM `author_avpair_entries` WHERE (`author_avpair_entries`.`id` = 3) [0m
+  [4;35;1mAuthorAvpair Columns (0.000813)[0m   [0mSHOW FIELDS FROM `author_avpairs`[0m
+  [4;36;1mAuthorAvpair Load (0.000106)[0m   [0;1mSELECT * FROM `author_avpairs` WHERE (`author_avpairs`.`id` = 1) [0m
+  [4;35;1mConfiguration Columns (0.001154)[0m   [0mSHOW FIELDS FROM `configurations`[0m
+  [4;36;1mConfiguration Load (0.000145)[0m   [0;1mSELECT * FROM `configurations` WHERE (`configurations`.`id` = 1) [0m
+  [4;35;1mPasswordHistory Load (0.000139)[0m   [0mSELECT * FROM `password_histories` WHERE (`password_histories`.user_id = 1 AND (is_enable = false)) ORDER BY id desc LIMIT 1[0m
+  [4;36;1mPasswordHistory Load (0.000102)[0m   [0;1mSELECT * FROM `password_histories` WHERE (`password_histories`.user_id = 1 AND (is_enable = true)) ORDER BY id desc LIMIT 1[0m
+  [4;35;1mDynamicAvpair Columns (0.000811)[0m   [0mSHOW FIELDS FROM `dynamic_avpairs`[0m
+  [4;36;1mManager Columns (0.001574)[0m   [0;1mSHOW FIELDS FROM `managers`[0m
+  [4;35;1mSQL (0.000118)[0m   [0mBEGIN[0m
+  [4;36;1mDynamicAvpair Create (0.000287)[0m   [0;1mINSERT INTO `dynamic_avpairs` (`created_at`, `updated_at`, `obj_type`, `author_avpair_entry_id`, `delimiter`, `attr`) VALUES('2009-05-29 18:45:26', '2009-05-29 18:45:26', 'network_av', 3, ',', 'networks*')[0m
+  [4;35;1mManager Load (0.000147)[0m   [0mSELECT * FROM `managers` WHERE (is_local = true) LIMIT 1[0m
+  [4;36;1mSQL (0.004730)[0m   [0;1mCOMMIT[0m
+
+
+NoMethodError (You have a nil object when you didn't expect it!
+The error occurred while evaluating nil.keys):
+    /app/controllers/author_avpair_entries_controller.rb:24:in `create_dynamic_avpair'
+    /vendor/rails/actionpack/lib/action_controller/mime_responds.rb:106:in `call'
+    /vendor/rails/actionpack/lib/action_controller/mime_responds.rb:106:in `respond_to'
+    /app/controllers/author_avpair_entries_controller.rb:10:in `create_dynamic_avpair'
+    /vendor/rails/actionpack/lib/action_controller/base.rb:1162:in `send'
+    /vendor/rails/actionpack/lib/action_controller/base.rb:1162:in `perform_action_without_filters'
+    /vendor/rails/actionpack/lib/action_controller/filters.rb:580:in `call_filters'
+    /vendor/rails/actionpack/lib/action_controller/filters.rb:573:in `perform_action_without_benchmark'
+    /vendor/rails/actionpack/lib/action_controller/benchmarking.rb:68:in `perform_action_without_rescue'
+    /usr/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    /vendor/rails/actionpack/lib/action_controller/benchmarking.rb:68:in `perform_action_without_rescue'
+    /vendor/rails/actionpack/lib/action_controller/rescue.rb:201:in `perform_action_without_caching'
+    /vendor/rails/actionpack/lib/action_controller/caching/sql_cache.rb:13:in `perform_action'
+    /vendor/rails/activerecord/lib/active_record/connection_adapters/abstract/query_cache.rb:33:in `cache'
+    /vendor/rails/activerecord/lib/active_record/query_cache.rb:8:in `cache'
+    /vendor/rails/actionpack/lib/action_controller/caching/sql_cache.rb:12:in `perform_action'
+    /vendor/rails/actionpack/lib/action_controller/base.rb:529:in `send'
+    /vendor/rails/actionpack/lib/action_controller/base.rb:529:in `process_without_filters'
+    /vendor/rails/actionpack/lib/action_controller/filters.rb:569:in `process_without_session_management_support'
+    /vendor/rails/actionpack/lib/action_controller/session_management.rb:130:in `process'
+    /vendor/rails/actionpack/lib/action_controller/base.rb:389:in `process'
+    /vendor/rails/actionpack/lib/action_controller/dispatcher.rb:149:in `handle_request'
+    /vendor/rails/actionpack/lib/action_controller/dispatcher.rb:107:in `dispatch'
+    /vendor/rails/actionpack/lib/action_controller/dispatcher.rb:104:in `synchronize'
+    /vendor/rails/actionpack/lib/action_controller/dispatcher.rb:104:in `dispatch'
+    /vendor/rails/actionpack/lib/action_controller/dispatcher.rb:120:in `dispatch_cgi'
+    /vendor/rails/actionpack/lib/action_controller/dispatcher.rb:35:in `dispatch'
+    /vendor/rails/railties/lib/webrick_server.rb:112:in `handle_dispatch'
+    /vendor/rails/railties/lib/webrick_server.rb:78:in `service'
+    /usr/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+    /usr/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+    /usr/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+    /usr/lib/ruby/1.8/webrick/server.rb:162:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+    /usr/lib/ruby/1.8/webrick/server.rb:95:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:92:in `each'
+    /usr/lib/ruby/1.8/webrick/server.rb:92:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:23:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:82:in `start'
+    /vendor/rails/railties/lib/webrick_server.rb:62:in `dispatch'
+    /vendor/rails/railties/lib/commands/servers/webrick.rb:66
+    /usr/local/lib/site_ruby/1.8/rubygems/custom_require.rb:31:in `gem_original_require'
+    /usr/local/lib/site_ruby/1.8/rubygems/custom_require.rb:31:in `require'
+    /vendor/rails/activesupport/lib/active_support/dependencies.rb:509:in `require'
+    /vendor/rails/activesupport/lib/active_support/dependencies.rb:354:in `new_constants_in'
+    /vendor/rails/activesupport/lib/active_support/dependencies.rb:509:in `require'
+    /vendor/rails/railties/lib/commands/server.rb:39
+    script/server:3:in `require'
+    script/server:3
+
+Rendering /home/dspinhir/dev/rubyforge/tacacs-plus/tacman/vendor/rails/actionpack/lib/action_controller/templates/rescues/layout.erb (internal_server_error)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Processing AuthorAvpairEntriesController#create_dynamic_avpair (for 127.0.0.1 at 2009-05-29 13:46:30) [POST]
+  Session ID: 79e8d5cbc993b74990d98e428b98ddbb
+  Parameters: {"object_groups"=>{"1"=>"1"}, "commit"=>"Save", "action"=>"create_dynamic_avpair", "id"=>"3", "dynamic_avpair"=>{"obj_type"=>"network_av", "delimiter"=>",", "attr"=>"networks*"}, "controller"=>"author_avpair_entries"}
+  [4;35;1mUser Columns (0.001258)[0m   [0mSHOW FIELDS FROM `users`[0m
+  [4;36;1mUser Load (0.000136)[0m   [0;1mSELECT * FROM `users` WHERE (disabled = false and allow_web_login = true) AND (`users`.`id` = 1) LIMIT 1[0m
+  [4;35;1mManager Load (0.000156)[0m   [0mSELECT * FROM `managers` WHERE (is_local = true) LIMIT 1[0m
+  [4;36;1mConfiguredUser Load (0.000137)[0m   [0;1mSELECT * FROM `configured_users` WHERE (`configured_users`.user_id = 1) [0m
+  [4;35;1mAuthorAvpairEntry Columns (0.000844)[0m   [0mSHOW FIELDS FROM `author_avpair_entries`[0m
+  [4;36;1mAuthorAvpairEntry Load (0.000112)[0m   [0;1mSELECT * FROM `author_avpair_entries` WHERE (`author_avpair_entries`.`id` = 3) [0m
+  [4;35;1mAuthorAvpair Columns (0.000748)[0m   [0mSHOW FIELDS FROM `author_avpairs`[0m
+  [4;36;1mAuthorAvpair Load (0.000111)[0m   [0;1mSELECT * FROM `author_avpairs` WHERE (`author_avpairs`.`id` = 1) [0m
+  [4;35;1mConfiguration Columns (0.001160)[0m   [0mSHOW FIELDS FROM `configurations`[0m
+  [4;36;1mConfiguration Load (0.000125)[0m   [0;1mSELECT * FROM `configurations` WHERE (`configurations`.`id` = 1) [0m
+  [4;35;1mPasswordHistory Load (0.000132)[0m   [0mSELECT * FROM `password_histories` WHERE (`password_histories`.user_id = 1 AND (is_enable = false)) ORDER BY id desc LIMIT 1[0m
+  [4;36;1mPasswordHistory Load (0.000102)[0m   [0;1mSELECT * FROM `password_histories` WHERE (`password_histories`.user_id = 1 AND (is_enable = true)) ORDER BY id desc LIMIT 1[0m
+  [4;35;1mDynamicAvpair Columns (0.001616)[0m   [0mSHOW FIELDS FROM `dynamic_avpairs`[0m
+  [4;36;1mManager Columns (0.001573)[0m   [0;1mSHOW FIELDS FROM `managers`[0m
+  [4;35;1mSQL (0.000114)[0m   [0mBEGIN[0m
+  [4;36;1mDynamicAvpair Create (0.000302)[0m   [0;1mINSERT INTO `dynamic_avpairs` (`created_at`, `updated_at`, `obj_type`, `author_avpair_entry_id`, `delimiter`, `attr`) VALUES('2009-05-29 18:46:30', '2009-05-29 18:46:30', 'network_av', 3, ',', 'networks*')[0m
+  [4;35;1mManager Load (0.000166)[0m   [0mSELECT * FROM `managers` WHERE (is_local = true) LIMIT 1[0m
+  [4;36;1mSQL (0.003328)[0m   [0;1mCOMMIT[0m
+
+
+NoMethodError (You have a nil object when you didn't expect it!
+The error occurred while evaluating nil.keys):
+    /app/controllers/author_avpair_entries_controller.rb:24:in `create_dynamic_avpair'
+    /vendor/rails/actionpack/lib/action_controller/mime_responds.rb:106:in `call'
+    /vendor/rails/actionpack/lib/action_controller/mime_responds.rb:106:in `respond_to'
+    /app/controllers/author_avpair_entries_controller.rb:10:in `create_dynamic_avpair'
+    /vendor/rails/actionpack/lib/action_controller/base.rb:1162:in `send'
+    /vendor/rails/actionpack/lib/action_controller/base.rb:1162:in `perform_action_without_filters'
+    /vendor/rails/actionpack/lib/action_controller/filters.rb:580:in `call_filters'
+    /vendor/rails/actionpack/lib/action_controller/filters.rb:573:in `perform_action_without_benchmark'
+    /vendor/rails/actionpack/lib/action_controller/benchmarking.rb:68:in `perform_action_without_rescue'
+    /usr/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    /vendor/rails/actionpack/lib/action_controller/benchmarking.rb:68:in `perform_action_without_rescue'
+    /vendor/rails/actionpack/lib/action_controller/rescue.rb:201:in `perform_action_without_caching'
+    /vendor/rails/actionpack/lib/action_controller/caching/sql_cache.rb:13:in `perform_action'
+    /vendor/rails/activerecord/lib/active_record/connection_adapters/abstract/query_cache.rb:33:in `cache'
+    /vendor/rails/activerecord/lib/active_record/query_cache.rb:8:in `cache'
+    /vendor/rails/actionpack/lib/action_controller/caching/sql_cache.rb:12:in `perform_action'
+    /vendor/rails/actionpack/lib/action_controller/base.rb:529:in `send'
+    /vendor/rails/actionpack/lib/action_controller/base.rb:529:in `process_without_filters'
+    /vendor/rails/actionpack/lib/action_controller/filters.rb:569:in `process_without_session_management_support'
+    /vendor/rails/actionpack/lib/action_controller/session_management.rb:130:in `process'
+    /vendor/rails/actionpack/lib/action_controller/base.rb:389:in `process'
+    /vendor/rails/actionpack/lib/action_controller/dispatcher.rb:149:in `handle_request'
+    /vendor/rails/actionpack/lib/action_controller/dispatcher.rb:107:in `dispatch'
+    /vendor/rails/actionpack/lib/action_controller/dispatcher.rb:104:in `synchronize'
+    /vendor/rails/actionpack/lib/action_controller/dispatcher.rb:104:in `dispatch'
+    /vendor/rails/actionpack/lib/action_controller/dispatcher.rb:120:in `dispatch_cgi'
+    /vendor/rails/actionpack/lib/action_controller/dispatcher.rb:35:in `dispatch'
+    /vendor/rails/railties/lib/webrick_server.rb:112:in `handle_dispatch'
+    /vendor/rails/railties/lib/webrick_server.rb:78:in `service'
+    /usr/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+    /usr/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+    /usr/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+    /usr/lib/ruby/1.8/webrick/server.rb:162:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+    /usr/lib/ruby/1.8/webrick/server.rb:95:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:92:in `each'
+    /usr/lib/ruby/1.8/webrick/server.rb:92:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:23:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:82:in `start'
+    /vendor/rails/railties/lib/webrick_server.rb:62:in `dispatch'
+    /vendor/rails/railties/lib/commands/servers/webrick.rb:66
+    /usr/local/lib/site_ruby/1.8/rubygems/custom_require.rb:31:in `gem_original_require'
+    /usr/local/lib/site_ruby/1.8/rubygems/custom_require.rb:31:in `require'
+    /vendor/rails/activesupport/lib/active_support/dependencies.rb:509:in `require'
+    /vendor/rails/activesupport/lib/active_support/dependencies.rb:354:in `new_constants_in'
+    /vendor/rails/activesupport/lib/active_support/dependencies.rb:509:in `require'
+    /vendor/rails/railties/lib/commands/server.rb:39
+    script/server:3:in `require'
+    script/server:3
+
+Rendering /home/dspinhir/dev/rubyforge/tacacs-plus/tacman/vendor/rails/actionpack/lib/action_controller/templates/rescues/layout.erb (internal_server_error)
+
+
+Processing AuthorAvpairEntriesController#create_dynamic_avpair (for 127.0.0.1 at 2009-05-29 13:47:28) [POST]
+  Session ID: 79e8d5cbc993b74990d98e428b98ddbb
+  Parameters: {"object_groups"=>{"1"=>"1"}, "commit"=>"Save", "action"=>"create_dynamic_avpair", "id"=>"3", "dynamic_avpair"=>{"obj_type"=>"network_av", "delimiter"=>",", "attr"=>"networks*"}, "controller"=>"author_avpair_entries"}
+  [4;35;1mUser Columns (0.001155)[0m   [0mSHOW FIELDS FROM `users`[0m
+  [4;36;1mUser Load (0.000150)[0m   [0;1mSELECT * FROM `users` WHERE (disabled = false and allow_web_login = true) AND (`users`.`id` = 1) LIMIT 1[0m
+  [4;35;1mManager Load (0.000164)[0m   [0mSELECT * FROM `managers` WHERE (is_local = true) LIMIT 1[0m
+  [4;36;1mConfiguredUser Load (0.000133)[0m   [0;1mSELECT * FROM `configured_users` WHERE (`configured_users`.user_id = 1) [0m
+  [4;35;1mAuthorAvpairEntry Columns (0.000917)[0m   [0mSHOW FIELDS FROM `author_avpair_entries`[0m
+  [4;36;1mAuthorAvpairEntry Load (0.000123)[0m   [0;1mSELECT * FROM `author_avpair_entries` WHERE (`author_avpair_entries`.`id` = 3) [0m
+  [4;35;1mAuthorAvpair Columns (0.000815)[0m   [0mSHOW FIELDS FROM `author_avpairs`[0m
+  [4;36;1mAuthorAvpair Load (0.000123)[0m   [0;1mSELECT * FROM `author_avpairs` WHERE (`author_avpairs`.`id` = 1) [0m
+  [4;35;1mConfiguration Columns (0.001191)[0m   [0mSHOW FIELDS FROM `configurations`[0m
+  [4;36;1mConfiguration Load (0.000134)[0m   [0;1mSELECT * FROM `configurations` WHERE (`configurations`.`id` = 1) [0m
+  [4;35;1mPasswordHistory Load (0.000188)[0m   [0mSELECT * FROM `password_histories` WHERE (`password_histories`.user_id = 1 AND (is_enable = false)) ORDER BY id desc LIMIT 1[0m
+  [4;36;1mPasswordHistory Load (0.000123)[0m   [0;1mSELECT * FROM `password_histories` WHERE (`password_histories`.user_id = 1 AND (is_enable = true)) ORDER BY id desc LIMIT 1[0m
+  [4;35;1mDynamicAvpair Columns (0.000824)[0m   [0mSHOW FIELDS FROM `dynamic_avpairs`[0m
+  [4;36;1mManager Columns (0.001604)[0m   [0;1mSHOW FIELDS FROM `managers`[0m
+  [4;35;1mSQL (0.000115)[0m   [0mBEGIN[0m
+  [4;36;1mDynamicAvpair Create (0.000307)[0m   [0;1mINSERT INTO `dynamic_avpairs` (`created_at`, `updated_at`, `obj_type`, `author_avpair_entry_id`, `delimiter`, `attr`) VALUES('2009-05-29 18:47:28', '2009-05-29 18:47:28', 'network_av', 3, ',', 'networks*')[0m
+  [4;35;1mManager Load (0.000152)[0m   [0mSELECT * FROM `managers` WHERE (is_local = true) LIMIT 1[0m
+  [4;36;1mSQL (0.005774)[0m   [0;1mCOMMIT[0m
+
+
+NoMethodError (undefined method `dynamic_avpair_value' for #<DynamicAvpair:0x7f831211d8b0>):
+    /vendor/rails/activerecord/lib/active_record/attribute_methods.rb:256:in `method_missing'
+    /app/controllers/author_avpair_entries_controller.rb:26:in `create_dynamic_avpair'
+    /app/controllers/author_avpair_entries_controller.rb:24:in `each'
+    /app/controllers/author_avpair_entries_controller.rb:24:in `create_dynamic_avpair'
+    /vendor/rails/actionpack/lib/action_controller/mime_responds.rb:106:in `call'
+    /vendor/rails/actionpack/lib/action_controller/mime_responds.rb:106:in `respond_to'
+    /app/controllers/author_avpair_entries_controller.rb:10:in `create_dynamic_avpair'
+    /vendor/rails/actionpack/lib/action_controller/base.rb:1162:in `send'
+    /vendor/rails/actionpack/lib/action_controller/base.rb:1162:in `perform_action_without_filters'
+    /vendor/rails/actionpack/lib/action_controller/filters.rb:580:in `call_filters'
+    /vendor/rails/actionpack/lib/action_controller/filters.rb:573:in `perform_action_without_benchmark'
+    /vendor/rails/actionpack/lib/action_controller/benchmarking.rb:68:in `perform_action_without_rescue'
+    /usr/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    /vendor/rails/actionpack/lib/action_controller/benchmarking.rb:68:in `perform_action_without_rescue'
+    /vendor/rails/actionpack/lib/action_controller/rescue.rb:201:in `perform_action_without_caching'
+    /vendor/rails/actionpack/lib/action_controller/caching/sql_cache.rb:13:in `perform_action'
+    /vendor/rails/activerecord/lib/active_record/connection_adapters/abstract/query_cache.rb:33:in `cache'
+    /vendor/rails/activerecord/lib/active_record/query_cache.rb:8:in `cache'
+    /vendor/rails/actionpack/lib/action_controller/caching/sql_cache.rb:12:in `perform_action'
+    /vendor/rails/actionpack/lib/action_controller/base.rb:529:in `send'
+    /vendor/rails/actionpack/lib/action_controller/base.rb:529:in `process_without_filters'
+    /vendor/rails/actionpack/lib/action_controller/filters.rb:569:in `process_without_session_management_support'
+    /vendor/rails/actionpack/lib/action_controller/session_management.rb:130:in `process'
+    /vendor/rails/actionpack/lib/action_controller/base.rb:389:in `process'
+    /vendor/rails/actionpack/lib/action_controller/dispatcher.rb:149:in `handle_request'
+    /vendor/rails/actionpack/lib/action_controller/dispatcher.rb:107:in `dispatch'
+    /vendor/rails/actionpack/lib/action_controller/dispatcher.rb:104:in `synchronize'
+    /vendor/rails/actionpack/lib/action_controller/dispatcher.rb:104:in `dispatch'
+    /vendor/rails/actionpack/lib/action_controller/dispatcher.rb:120:in `dispatch_cgi'
+    /vendor/rails/actionpack/lib/action_controller/dispatcher.rb:35:in `dispatch'
+    /vendor/rails/railties/lib/webrick_server.rb:112:in `handle_dispatch'
+    /vendor/rails/railties/lib/webrick_server.rb:78:in `service'
+    /usr/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+    /usr/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+    /usr/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+    /usr/lib/ruby/1.8/webrick/server.rb:162:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+    /usr/lib/ruby/1.8/webrick/server.rb:95:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:92:in `each'
+    /usr/lib/ruby/1.8/webrick/server.rb:92:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:23:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:82:in `start'
+    /vendor/rails/railties/lib/webrick_server.rb:62:in `dispatch'
+    /vendor/rails/railties/lib/commands/servers/webrick.rb:66
+    /usr/local/lib/site_ruby/1.8/rubygems/custom_require.rb:31:in `gem_original_require'
+    /usr/local/lib/site_ruby/1.8/rubygems/custom_require.rb:31:in `require'
+    /vendor/rails/activesupport/lib/active_support/dependencies.rb:509:in `require'
+    /vendor/rails/activesupport/lib/active_support/dependencies.rb:354:in `new_constants_in'
+    /vendor/rails/activesupport/lib/active_support/dependencies.rb:509:in `require'
+    /vendor/rails/railties/lib/commands/server.rb:39
+    script/server:3:in `require'
+    script/server:3
+
+Rendering /home/dspinhir/dev/rubyforge/tacacs-plus/tacman/vendor/rails/actionpack/lib/action_controller/templates/rescues/layout.erb (internal_server_error)
+
+
+Processing AuthorAvpairEntriesController#create_dynamic_avpair (for 127.0.0.1 at 2009-05-29 13:48:06) [POST]
+  Session ID: 79e8d5cbc993b74990d98e428b98ddbb
+  Parameters: {"object_groups"=>{"1"=>"1"}, "commit"=>"Save", "action"=>"create_dynamic_avpair", "id"=>"3", "dynamic_avpair"=>{"obj_type"=>"network_av", "delimiter"=>",", "attr"=>"networks*"}, "controller"=>"author_avpair_entries"}
+  [4;35;1mUser Columns (0.001182)[0m   [0mSHOW FIELDS FROM `users`[0m
+  [4;36;1mUser Load (0.000150)[0m   [0;1mSELECT * FROM `users` WHERE (disabled = false and allow_web_login = true) AND (`users`.`id` = 1) LIMIT 1[0m
+  [4;35;1mManager Load (0.000170)[0m   [0mSELECT * FROM `managers` WHERE (is_local = true) LIMIT 1[0m
+  [4;36;1mConfiguredUser Load (0.000153)[0m   [0;1mSELECT * FROM `configured_users` WHERE (`configured_users`.user_id = 1) [0m
+  [4;35;1mAuthorAvpairEntry Columns (0.000916)[0m   [0mSHOW FIELDS FROM `author_avpair_entries`[0m
+  [4;36;1mAuthorAvpairEntry Load (0.000124)[0m   [0;1mSELECT * FROM `author_avpair_entries` WHERE (`author_avpair_entries`.`id` = 3) [0m
+  [4;35;1mAuthorAvpair Columns (0.000787)[0m   [0mSHOW FIELDS FROM `author_avpairs`[0m
+  [4;36;1mAuthorAvpair Load (0.000119)[0m   [0;1mSELECT * FROM `author_avpairs` WHERE (`author_avpairs`.`id` = 1) [0m
+  [4;35;1mConfiguration Columns (0.001179)[0m   [0mSHOW FIELDS FROM `configurations`[0m
+  [4;36;1mConfiguration Load (0.000150)[0m   [0;1mSELECT * FROM `configurations` WHERE (`configurations`.`id` = 1) [0m
+  [4;35;1mPasswordHistory Load (0.000140)[0m   [0mSELECT * FROM `password_histories` WHERE (`password_histories`.user_id = 1 AND (is_enable = false)) ORDER BY id desc LIMIT 1[0m
+  [4;36;1mPasswordHistory Load (0.000105)[0m   [0;1mSELECT * FROM `password_histories` WHERE (`password_histories`.user_id = 1 AND (is_enable = true)) ORDER BY id desc LIMIT 1[0m
+  [4;35;1mDynamicAvpair Columns (0.000841)[0m   [0mSHOW FIELDS FROM `dynamic_avpairs`[0m
+  [4;36;1mManager Columns (0.001634)[0m   [0;1mSHOW FIELDS FROM `managers`[0m
+  [4;35;1mSQL (0.000132)[0m   [0mBEGIN[0m
+  [4;36;1mDynamicAvpair Create (0.000287)[0m   [0;1mINSERT INTO `dynamic_avpairs` (`created_at`, `updated_at`, `obj_type`, `author_avpair_entry_id`, `delimiter`, `attr`) VALUES('2009-05-29 18:48:06', '2009-05-29 18:48:06', 'network_av', 3, ',', 'networks*')[0m
+  [4;35;1mManager Load (0.000175)[0m   [0mSELECT * FROM `managers` WHERE (is_local = true) LIMIT 1[0m
+  [4;36;1mSQL (0.007327)[0m   [0;1mCOMMIT[0m
+  [4;35;1mDynamicAvpairValue Columns (0.000788)[0m   [0mSHOW FIELDS FROM `dynamic_avpair_values`[0m
+  [4;36;1mSQL (0.000132)[0m   [0;1mBEGIN[0m
+  [4;35;1mDynamicAvpairValue Create (0.000312)[0m   [0mINSERT INTO `dynamic_avpair_values` (`network_object_group_id`, `created_at`, `updated_at`, `dynamic_avpair_id`, `shell_command_object_group_id`) VALUES(1, '2009-05-29 18:48:06', '2009-05-29 18:48:06', 6, NULL)[0m
+  [4;36;1mManager Load (0.000176)[0m   [0;1mSELECT * FROM `managers` WHERE (is_local = true) LIMIT 1[0m
+  [4;35;1mSQL (0.000458)[0m   [0mCOMMIT[0m
+  [4;36;1mSystemLog Columns (0.001167)[0m   [0;1mSHOW FIELDS FROM `system_logs`[0m
+  [4;35;1mSQL (0.000133)[0m   [0mBEGIN[0m
+  [4;36;1mSystemLog Create (0.000323)[0m   [0;1mINSERT INTO `system_logs` (`network_object_group_id`, `created_at`, `author_avpair_id`, `updated_at`, `username`, `level`, `manager_id`, `command_authorization_profile_id`, `shell_command_object_group_id`, `configured_user_id`, `user_id`, `user_group_id`, `owning_manager_id`, `acl_id`, `configuration_id`, `message`, `tacacs_daemon_id`, `department_id`, `archived_on`) VALUES(NULL, '2009-05-29 18:48:06', 1, '2009-05-29 18:48:06', 'admin', 'info', NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, 1, 'Defined network_av from entry 20 of Author AVPair av1 within configuration backbone.', NULL, NULL, NULL)[0m
+  [4;35;1mManager Load (0.000164)[0m   [0mSELECT * FROM `managers` WHERE (is_local = true) LIMIT 1[0m
+  [4;36;1mSQL (0.011128)[0m   [0;1mCOMMIT[0m
+Redirected to http://localhost:3000/author_avpair_entries/3/edit
+Completed in 0.27344 (3 reqs/sec) | DB: 0.08330 (30%) | 302 Found [http://localhost/author_avpair_entries/3/create_dynamic_avpair]
+
+
+Processing AuthorAvpairEntriesController#edit (for 127.0.0.1 at 2009-05-29 13:48:06) [GET]
+  Session ID: 79e8d5cbc993b74990d98e428b98ddbb
+  Parameters: {"action"=>"edit", "id"=>"3", "controller"=>"author_avpair_entries"}
+  [4;35;1mUser Columns (0.001227)[0m   [0mSHOW FIELDS FROM `users`[0m
+  [4;36;1mUser Load (0.000135)[0m   [0;1mSELECT * FROM `users` WHERE (disabled = false and allow_web_login = true) AND (`users`.`id` = 1) LIMIT 1[0m
+  [4;35;1mManager Load (0.000140)[0m   [0mSELECT * FROM `managers` WHERE (is_local = true) LIMIT 1[0m
+  [4;36;1mConfiguredUser Load (0.000119)[0m   [0;1mSELECT * FROM `configured_users` WHERE (`configured_users`.user_id = 1) [0m
+  [4;35;1mAuthorAvpairEntry Columns (0.000826)[0m   [0mSHOW FIELDS FROM `author_avpair_entries`[0m
+  [4;36;1mAuthorAvpairEntry Load (0.000130)[0m   [0;1mSELECT * FROM `author_avpair_entries` WHERE (`author_avpair_entries`.`id` = 3) [0m
+  [4;35;1mAuthorAvpair Columns (0.000755)[0m   [0mSHOW FIELDS FROM `author_avpairs`[0m
+  [4;36;1mAuthorAvpair Load (0.000110)[0m   [0;1mSELECT * FROM `author_avpairs` WHERE (`author_avpairs`.`id` = 1) [0m
+  [4;35;1mConfiguration Columns (0.001160)[0m   [0mSHOW FIELDS FROM `configurations`[0m
+  [4;36;1mConfiguration Load (0.000124)[0m   [0;1mSELECT * FROM `configurations` WHERE (`configurations`.`id` = 1) [0m
+  [4;35;1mPasswordHistory Load (0.000132)[0m   [0mSELECT * FROM `password_histories` WHERE (`password_histories`.user_id = 1 AND (is_enable = false)) ORDER BY id desc LIMIT 1[0m
+  [4;36;1mPasswordHistory Load (0.000104)[0m   [0;1mSELECT * FROM `password_histories` WHERE (`password_histories`.user_id = 1 AND (is_enable = true)) ORDER BY id desc LIMIT 1[0m
+Rendering template within layouts/application
+Rendering author_avpair_entries/edit
+  [4;35;1mDynamicAvpair Load (0.000350)[0m   [0mSELECT * FROM `dynamic_avpairs` WHERE (`dynamic_avpairs`.author_avpair_entry_id = 3 AND (obj_type = 'network_av')) LIMIT 1[0m
+  [4;36;1mDynamicAvpair Load (0.000458)[0m   [0;1mSELECT * FROM `dynamic_avpairs` WHERE (`dynamic_avpairs`.author_avpair_entry_id = 3 AND (obj_type = 'shell_command_av')) LIMIT 1[0m
+  [4;35;1mAvpair Load (0.000130)[0m   [0mSELECT * FROM `avpairs` WHERE (`avpairs`.author_avpair_entry_id = 3) ORDER BY id[0m
+  [4;36;1mAcl Load (0.000157)[0m   [0;1mSELECT * FROM `acls` WHERE (`acls`.configuration_id = 1) ORDER BY name[0m
+  [4;35;1mAcl Columns (0.000754)[0m   [0mSHOW FIELDS FROM `acls`[0m
+  [4;36;1mDynamicAvpair Columns (0.000853)[0m   [0;1mSHOW FIELDS FROM `dynamic_avpairs`[0m
+  [4;35;1mDynamicAvpairValue Load (0.000347)[0m   [0mSELECT * FROM `dynamic_avpair_values` WHERE (`dynamic_avpair_values`.dynamic_avpair_id = 2) ORDER BY id[0m
+  [4;36;1mUserGroup Columns (0.000907)[0m   [0;1mSHOW FIELDS FROM `user_groups`[0m
+  [4;35;1mSQL (0.000118)[0m   [0mSELECT count(*) AS count_all FROM `user_groups` WHERE (`user_groups`.author_avpair_id = 1) [0m
+Rendered author_avpairs/_show_nav (0.01102)
+  [4;36;1mManager Columns (0.001538)[0m   [0;1mSHOW FIELDS FROM `managers`[0m
+Completed in 0.26949 (3 reqs/sec) | Rendering: 0.16629 (61%) | DB: 0.01093 (4%) | 200 OK [http://localhost/author_avpair_entries/3/edit]
+^C
+]0;dspinhir@ds1: ~/dev/rubyforge/tacacs-plus/tacmandspinhir@ds1:~/dev/rubyforge/tacacs-plus/tacman$ 
+]0;dspinhir@ds1: ~/dev/rubyforge/tacacs-plus/tacmandspinhir@ds1:~/dev/rubyforge/tacacs-plus/tacman$ 
+]0;dspinhir@ds1: ~/dev/rubyforge/tacacs-plus/tacmandspinhir@ds1:~/dev/rubyforge/tacacs-plus/tacman$ 
+]0;dspinhir@ds1: ~/dev/rubyforge/tacacs-plus/tacmandspinhir@ds1:~/dev/rubyforge/tacacs-plus/tacman$ 
+]0;dspinhir@ds1: ~/dev/rubyforge/tacacs-plus/tacmandspinhir@ds1:~/dev/rubyforge/tacacs-plus/tacman$ 
+]0;dspinhir@ds1: ~/dev/rubyforge/tacacs-plus/tacmandspinhir@ds1:~/dev/rubyforge/tacacs-plus/tacman$ script/console
+Loading development environment (Rails 2.1.0)
+>> Dyanic[K[K[KmicAvparVa[K[K[Kir[K[KirValue.find[K[K[K[Kcount
+NameError: uninitialized constant DyamicAvpairValue
+	from /home/dspinhir/dev/rubyforge/tacacs-plus/tacman/vendor/rails/activerecord/lib/../../activesupport/lib/active_support/dependencies.rb:278:in `load_missing_constant'
+	from /home/dspinhir/dev/rubyforge/tacacs-plus/tacman/vendor/rails/activerecord/lib/../../activesupport/lib/active_support/dependencies.rb:467:in `const_missing'
+	from /home/dspinhir/dev/rubyforge/tacacs-plus/tacman/vendor/rails/activerecord/lib/../../activesupport/lib/active_support/dependencies.rb:479:in `const_missing'
+	from (irb):1
+>> DynamicAvpairValue.count
+=> 1
+>> 
+?> 
+?> 
+?> DynamicAvpairValue.count[K[K[K[K[Kfind(1)
+=> #<DynamicAvpairValue id: 1, dynamic_avpair_id: 6, network_object_group_id: 1, shell_command_object_group_id: nil, created_at: "2009-05-29 18:48:06", updated_at: "2009-05-29 18:48:06">
+>> Dyan[Ka[Kmic[K[K[K[KnamicAvpair.find(6)
+=> #<DynamicAvpair id: 6, author_avpair_entry_id: 3, obj_type: "network_av", attr: "networks*", delimiter: ",", created_at: "2009-05-29 18:48:06", updated_at: "2009-05-29 18:48:06">
+>> DynamicAvpair.find(6)Value.find(1).network_object_group.name[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K]0;dspinhir@ds1: ~/dev/rubyforge/tacacs-plus/tacmandspinhir@ds1:~/dev/rubyforge/tacacs-plus/tacman$ script/console
+Loading development environment (Rails 2.1.0)
+>> DynamicAvpairValue.find(1).network_object_group
+ActiveRecord::StatementInvalid: Mysql::Error: Unknown column 'network_object_groups.dynamic_avpair_value_id' in 'where clause': SELECT * FROM `network_object_groups`     WHERE (`network_object_groups`.dynamic_avpair_value_id = 1)  LIMIT 1
+	from /home/dspinhir/dev/rubyforge/tacacs-plus/tacman/vendor/rails/activerecord/lib/active_record/connection_adapters/abstract_adapter.rb:147:in `log'
+	from /home/dspinhir/dev/rubyforge/tacacs-plus/tacman/vendor/rails/activerecord/lib/active_record/connection_adapters/mysql_adapter.rb:299:in `execute'
+	from /home/dspinhir/dev/rubyforge/tacacs-plus/tacman/vendor/rails/activerecord/lib/active_record/connection_adapters/mysql_adapter.rb:515:in `select'
+	from /home/dspinhir/dev/rubyforge/tacacs-plus/tacman/vendor/rails/activerecord/lib/active_record/connection_adapters/abstract/database_statements.rb:7:in `select_all_without_query_cache'
+	from /home/dspinhir/dev/rubyforge/tacacs-plus/tacman/vendor/rails/activerecord/lib/active_record/connection_adapters/abstract/query_cache.rb:61:in `select_all'
+	from /home/dspinhir/dev/rubyforge/tacacs-plus/tacman/vendor/rails/activerecord/lib/active_record/base.rb:582:in `find_by_sql'
+	from /home/dspinhir/dev/rubyforge/tacacs-plus/tacman/vendor/rails/activerecord/lib/active_record/base.rb:1341:in `find_every'
+	from /home/dspinhir/dev/rubyforge/tacacs-plus/tacman/vendor/rails/activerecord/lib/active_record/base.rb:1303:in `find_initial'
+	from /home/dspinhir/dev/rubyforge/tacacs-plus/tacman/vendor/rails/activerecord/lib/active_record/base.rb:534:in `find'
+	from /home/dspinhir/dev/rubyforge/tacacs-plus/tacman/vendor/rails/activerecord/lib/active_record/associations/has_one_association.rb:53:in `find_target'
+	from /home/dspinhir/dev/rubyforge/tacacs-plus/tacman/vendor/rails/activerecord/lib/active_record/associations/association_proxy.rb:196:in `load_target'
+	from /home/dspinhir/dev/rubyforge/tacacs-plus/tacman/vendor/rails/activerecord/lib/active_record/associations/association_proxy.rb:99:in `reload'
+	from /home/dspinhir/dev/rubyforge/tacacs-plus/tacman/vendor/rails/activerecord/lib/active_record/associations.rb:1084:in `network_object_group'
+	from (irb):1
+>> ]0;dspinhir@ds1: ~/dev/rubyforge/tacacs-plus/tacmandspinhir@ds1:~/dev/rubyforge/tacacs-plus/tacman$ script/console
+Loading development environment (Rails 2.1.0)
+>> DynamicAvpairValue.find(1)
+=> #<DynamicAvpairValue id: 1, dynamic_avpair_id: 6, network_object_group_id: 1, shell_command_object_group_id: nil, created_at: "2009-05-29 18:48:06", updated_at: "2009-05-29 18:48:06">
+>> DynamicAvpairValue.find(1).network_object_group
+ActiveRecord::StatementInvalid: Mysql::Error: Unknown column 'network_object_groups.dynamic_avpair_value_id' in 'where clause': SELECT * FROM `network_object_groups`     WHERE (`network_object_groups`.dynamic_avpair_value_id = 1)  LIMIT 1
+	from /home/dspinhir/dev/rubyforge/tacacs-plus/tacman/vendor/rails/activerecord/lib/active_record/connection_adapters/abstract_adapter.rb:147:in `log'
+	from /home/dspinhir/dev/rubyforge/tacacs-plus/tacman/vendor/rails/activerecord/lib/active_record/connection_adapters/mysql_adapter.rb:299:in `execute'
+	from /home/dspinhir/dev/rubyforge/tacacs-plus/tacman/vendor/rails/activerecord/lib/active_record/connection_adapters/mysql_adapter.rb:515:in `select'
+	from /home/dspinhir/dev/rubyforge/tacacs-plus/tacman/vendor/rails/activerecord/lib/active_record/connection_adapters/abstract/database_statements.rb:7:in `select_all_without_query_cache'
+	from /home/dspinhir/dev/rubyforge/tacacs-plus/tacman/vendor/rails/activerecord/lib/active_record/connection_adapters/abstract/query_cache.rb:61:in `select_all'
+	from /home/dspinhir/dev/rubyforge/tacacs-plus/tacman/vendor/rails/activerecord/lib/active_record/base.rb:582:in `find_by_sql'
+	from /home/dspinhir/dev/rubyforge/tacacs-plus/tacman/vendor/rails/activerecord/lib/active_record/base.rb:1341:in `find_every'
+	from /home/dspinhir/dev/rubyforge/tacacs-plus/tacman/vendor/rails/activerecord/lib/active_record/base.rb:1303:in `find_initial'
+	from /home/dspinhir/dev/rubyforge/tacacs-plus/tacman/vendor/rails/activerecord/lib/active_record/base.rb:534:in `find'
+	from /home/dspinhir/dev/rubyforge/tacacs-plus/tacman/vendor/rails/activerecord/lib/active_record/associations/has_one_association.rb:53:in `find_target'
+	from /home/dspinhir/dev/rubyforge/tacacs-plus/tacman/vendor/rails/activerecord/lib/active_record/associations/association_proxy.rb:196:in `load_target'
+	from /home/dspinhir/dev/rubyforge/tacacs-plus/tacman/vendor/rails/activerecord/lib/active_record/associations/association_proxy.rb:99:in `reload'
+	from /home/dspinhir/dev/rubyforge/tacacs-plus/tacman/vendor/rails/activerecord/lib/active_record/associations.rb:1084:in `network_object_group'
+	from (irb):2
+>> 
+?> 
+?> 
+?> 
+?> 
+?> 
+?> 
+?> DynamicAvpairValue.find(1).network_object_group
+[1]+  Stopped                 script/console
+]0;dspinhir@ds1: ~/dev/rubyforge/tacacs-plus/tacmandspinhir@ds1:~/dev/rubyforge/tacacs-plus/tacman$ script/console
+Loading development environment (Rails 2.1.0)
+>> DynamicAvpairValue.find(1)
+=> #<DynamicAvpairValue id: 1, dynamic_avpair_id: 6, network_object_group_id: 1, shell_command_object_group_id: nil, created_at: "2009-05-29 18:48:06", updated_at: "2009-05-29 18:48:06">
+>> 
+?> 
+?> >> => nil
+]0;dspinhir@ds1: ~/dev/rubyforge/tacacs-plus/tacmandspinhir@ds1:~/dev/rubyforge/tacacs-plus/tacman$ script/console
+Loading development environment (Rails 2.1.0)
+>> DynamicAvpairValue.find(1).network_object_group
+=> #<NetworkObjectGroup id: 1, configuration_id: 1, name: "nog1", created_at: "2009-03-25 12:29:40", updated_at: "2009-03-25 12:29:40">
+>> ]0;dspinhir@ds1: ~/dev/rubyforge/tacacs-plus/tacmandspinhir@ds1:~/dev/rubyforge/tacacs-plus/tacman$ script/consoletail -f  log/development.log [15Pscript/console[2Pcd ../../../script/consoletail -f  log/development.log 
+  [4;35;1mAvpair Load (0.000121)[0m   [0mSELECT * FROM `avpairs` WHERE (`avpairs`.author_avpair_entry_id = 3) ORDER BY id[0m
+  [4;36;1mAcl Load (0.000115)[0m   [0;1mSELECT * FROM `acls` WHERE (`acls`.configuration_id = 1) ORDER BY name[0m
+  [4;35;1mAcl Columns (0.000710)[0m   [0mSHOW FIELDS FROM `acls`[0m
+  [4;36;1mDynamicAvpair Columns (0.000850)[0m   [0;1mSHOW FIELDS FROM `dynamic_avpairs`[0m
+  [4;35;1mDynamicAvpairValue Load (0.000126)[0m   [0mSELECT * FROM `dynamic_avpair_values` WHERE (`dynamic_avpair_values`.dynamic_avpair_id = 2) ORDER BY id[0m
+  [4;36;1mUserGroup Columns (0.000933)[0m   [0;1mSHOW FIELDS FROM `user_groups`[0m
+  [4;35;1mSQL (0.000108)[0m   [0mSELECT count(*) AS count_all FROM `user_groups` WHERE (`user_groups`.author_avpair_id = 1) [0m
+Rendered author_avpairs/_show_nav (0.01026)
+  [4;36;1mManager Columns (0.001533)[0m   [0;1mSHOW FIELDS FROM `managers`[0m
+Completed in 0.36250 (2 reqs/sec) | Rendering: 0.15740 (43%) | DB: 0.00998 (2%) | 200 OK [http://localhost/author_avpair_entries/3/edit]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Processing AuthorAvpairEntriesController#edit (for 127.0.0.1 at 2009-05-29 13:59:35) [GET]
+  Session ID: 79e8d5cbc993b74990d98e428b98ddbb
+  Parameters: {"action"=>"edit", "id"=>"3", "controller"=>"author_avpair_entries"}
+  [4;35;1mUser Columns (0.001155)[0m   [0mSHOW FIELDS FROM `users`[0m
+  [4;36;1mUser Load (0.000145)[0m   [0;1mSELECT * FROM `users` WHERE (disabled = false and allow_web_login = true) AND (`users`.`id` = 1) LIMIT 1[0m
+  [4;35;1mManager Load (0.000157)[0m   [0mSELECT * FROM `managers` WHERE (is_local = true) LIMIT 1[0m
+  [4;36;1mConfiguredUser Load (0.000133)[0m   [0;1mSELECT * FROM `configured_users` WHERE (`configured_users`.user_id = 1) [0m
+  [4;35;1mAuthorAvpairEntry Columns (0.000825)[0m   [0mSHOW FIELDS FROM `author_avpair_entries`[0m
+  [4;36;1mAuthorAvpairEntry Load (0.000107)[0m   [0;1mSELECT * FROM `author_avpair_entries` WHERE (`author_avpair_entries`.`id` = 3) [0m
+  [4;35;1mAuthorAvpair Columns (0.000762)[0m   [0mSHOW FIELDS FROM `author_avpairs`[0m
+  [4;36;1mAuthorAvpair Load (0.000108)[0m   [0;1mSELECT * FROM `author_avpairs` WHERE (`author_avpairs`.`id` = 1) [0m
+  [4;35;1mConfiguration Columns (0.001178)[0m   [0mSHOW FIELDS FROM `configurations`[0m
+  [4;36;1mConfiguration Load (0.000121)[0m   [0;1mSELECT * FROM `configurations` WHERE (`configurations`.`id` = 1) [0m
+  [4;35;1mPasswordHistory Load (0.000123)[0m   [0mSELECT * FROM `password_histories` WHERE (`password_histories`.user_id = 1 AND (is_enable = false)) ORDER BY id desc LIMIT 1[0m
+  [4;36;1mPasswordHistory Load (0.000086)[0m   [0;1mSELECT * FROM `password_histories` WHERE (`password_histories`.user_id = 1 AND (is_enable = true)) ORDER BY id desc LIMIT 1[0m
+Rendering template within layouts/application
+Rendering author_avpair_entries/edit
+  [4;35;1mDynamicAvpair Load (0.000126)[0m   [0mSELECT * FROM `dynamic_avpairs` WHERE (`dynamic_avpairs`.author_avpair_entry_id = 3 AND (obj_type = 'network_av')) LIMIT 1[0m
+  [4;36;1mDynamicAvpair Load (0.000110)[0m   [0;1mSELECT * FROM `dynamic_avpairs` WHERE (`dynamic_avpairs`.author_avpair_entry_id = 3 AND (obj_type = 'shell_command_av')) LIMIT 1[0m
+  [4;35;1mAvpair Load (0.000125)[0m   [0mSELECT * FROM `avpairs` WHERE (`avpairs`.author_avpair_entry_id = 3) ORDER BY id[0m
+  [4;36;1mAcl Load (0.000122)[0m   [0;1mSELECT * FROM `acls` WHERE (`acls`.configuration_id = 1) ORDER BY name[0m
+  [4;35;1mAcl Columns (0.000725)[0m   [0mSHOW FIELDS FROM `acls`[0m
+  [4;36;1mDynamicAvpair Columns (0.000827)[0m   [0;1mSHOW FIELDS FROM `dynamic_avpairs`[0m
+  [4;35;1mDynamicAvpairValue Load (0.000123)[0m   [0mSELECT * FROM `dynamic_avpair_values` WHERE (`dynamic_avpair_values`.dynamic_avpair_id = 2) ORDER BY id[0m
+  [4;36;1mUserGroup Columns (0.000912)[0m   [0;1mSHOW FIELDS FROM `user_groups`[0m
+  [4;35;1mSQL (0.000113)[0m   [0mSELECT count(*) AS count_all FROM `user_groups` WHERE (`user_groups`.author_avpair_id = 1) [0m
+Rendered author_avpairs/_show_nav (0.01081)
+  [4;36;1mManager Columns (0.001622)[0m   [0;1mSHOW FIELDS FROM `managers`[0m
+Completed in 0.36013 (2 reqs/sec) | Rendering: 0.14798 (41%) | DB: 0.01003 (2%) | 200 OK [http://localhost/author_avpair_entries/3/edit]
+
+
+Processing DynamicAvpairsController#destroy (for 127.0.0.1 at 2009-05-29 13:59:56) [DELETE]
+  Session ID: 79e8d5cbc993b74990d98e428b98ddbb
+  Parameters: {"_method"=>"delete", "action"=>"destroy", "id"=>"2", "controller"=>"dynamic_avpairs"}
+  [4;35;1mUser Columns (0.004152)[0m   [0mSHOW FIELDS FROM `users`[0m
+  [4;36;1mUser Load (0.000125)[0m   [0;1mSELECT * FROM `users` WHERE (disabled = false and allow_web_login = true) AND (`users`.`id` = 1) LIMIT 1[0m
+  [4;35;1mManager Load (0.000145)[0m   [0mSELECT * FROM `managers` WHERE (is_local = true) LIMIT 1[0m
+  [4;36;1mConfiguredUser Load (0.000126)[0m   [0;1mSELECT * FROM `configured_users` WHERE (`configured_users`.user_id = 1) [0m
+  [4;35;1mDynamicAvpair Columns (0.000856)[0m   [0mSHOW FIELDS FROM `dynamic_avpairs`[0m
+  [4;36;1mDynamicAvpair Load (0.000311)[0m   [0;1mSELECT * FROM `dynamic_avpairs` WHERE (`dynamic_avpairs`.`id` = 2) [0m
+  [4;35;1mAuthorAvpairEntry Columns (0.000832)[0m   [0mSHOW FIELDS FROM `author_avpair_entries`[0m
+  [4;36;1mAuthorAvpairEntry Load (0.000104)[0m   [0;1mSELECT * FROM `author_avpair_entries` WHERE (`author_avpair_entries`.`id` = 3) [0m
+  [4;35;1mAuthorAvpair Columns (0.000758)[0m   [0mSHOW FIELDS FROM `author_avpairs`[0m
+  [4;36;1mAuthorAvpair Load (0.000099)[0m   [0;1mSELECT * FROM `author_avpairs` WHERE (`author_avpairs`.`id` = 1) [0m
+  [4;35;1mConfiguration Columns (0.001178)[0m   [0mSHOW FIELDS FROM `configurations`[0m
+  [4;36;1mConfiguration Load (0.000119)[0m   [0;1mSELECT * FROM `configurations` WHERE (`configurations`.`id` = 1) [0m
+  [4;35;1mPasswordHistory Load (0.000122)[0m   [0mSELECT * FROM `password_histories` WHERE (`password_histories`.user_id = 1 AND (is_enable = false)) ORDER BY id desc LIMIT 1[0m
+  [4;36;1mPasswordHistory Load (0.000088)[0m   [0;1mSELECT * FROM `password_histories` WHERE (`password_histories`.user_id = 1 AND (is_enable = true)) ORDER BY id desc LIMIT 1[0m
+  [4;35;1mManager Columns (0.001619)[0m   [0mSHOW FIELDS FROM `managers`[0m
+  [4;36;1mSQL (0.000114)[0m   [0;1mBEGIN[0m
+  [4;35;1mDynamicAvpairValue Load (0.000129)[0m   [0mSELECT * FROM `dynamic_avpair_values` WHERE (`dynamic_avpair_values`.dynamic_avpair_id = 2) ORDER BY id[0m
+  [4;36;1mDynamicAvpair Destroy (0.000298)[0m   [0;1m DELETE FROM `dynamic_avpairs`
+ WHERE `id` = 2
+[0m
+  [4;35;1mManager Load (0.000150)[0m   [0mSELECT * FROM `managers` WHERE (is_local = true) LIMIT 1[0m
+  [4;36;1mSQL (0.001520)[0m   [0;1mCOMMIT[0m
+  [4;35;1mSystemLog Columns (0.001206)[0m   [0mSHOW FIELDS FROM `system_logs`[0m
+  [4;36;1mSQL (0.000109)[0m   [0;1mBEGIN[0m
+  [4;35;1mSystemLog Create (0.000304)[0m   [0mINSERT INTO `system_logs` (`network_object_group_id`, `created_at`, `author_avpair_id`, `updated_at`, `username`, `level`, `manager_id`, `command_authorization_profile_id`, `shell_command_object_group_id`, `configured_user_id`, `user_id`, `user_group_id`, `owning_manager_id`, `acl_id`, `configuration_id`, `message`, `tacacs_daemon_id`, `department_id`, `archived_on`) VALUES(NULL, '2009-05-29 18:59:57', 1, '2009-05-29 18:59:57', 'admin', 'info', NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, 1, 'Undefined network_av from entry 20 of Author AVPair av1 within configuration backbone.', NULL, NULL, NULL)[0m
+  [4;36;1mManager Load (0.000159)[0m   [0;1mSELECT * FROM `managers` WHERE (is_local = true) LIMIT 1[0m
+  [4;35;1mSQL (0.005484)[0m   [0mCOMMIT[0m
+Redirected to http://localhost:3000/author_avpair_entries/3/edit
+Completed in 0.25676 (3 reqs/sec) | DB: 0.02043 (7%) | 302 Found [http://localhost/dynamic_avpairs/2]
+
+
+Processing AuthorAvpairEntriesController#edit (for 127.0.0.1 at 2009-05-29 13:59:57) [GET]
+  Session ID: 79e8d5cbc993b74990d98e428b98ddbb
+  Parameters: {"action"=>"edit", "id"=>"3", "controller"=>"author_avpair_entries"}
+  [4;36;1mUser Columns (0.001128)[0m   [0;1mSHOW FIELDS FROM `users`[0m
+  [4;35;1mUser Load (0.000127)[0m   [0mSELECT * FROM `users` WHERE (disabled = false and allow_web_login = true) AND (`users`.`id` = 1) LIMIT 1[0m
+  [4;36;1mManager Load (0.000175)[0m   [0;1mSELECT * FROM `managers` WHERE (is_local = true) LIMIT 1[0m
+  [4;35;1mConfiguredUser Load (0.000122)[0m   [0mSELECT * FROM `configured_users` WHERE (`configured_users`.user_id = 1) [0m
+  [4;36;1mAuthorAvpairEntry Columns (0.000845)[0m   [0;1mSHOW FIELDS FROM `author_avpair_entries`[0m
+  [4;35;1mAuthorAvpairEntry Load (0.000104)[0m   [0mSELECT * FROM `author_avpair_entries` WHERE (`author_avpair_entries`.`id` = 3) [0m
+  [4;36;1mAuthorAvpair Columns (0.000765)[0m   [0;1mSHOW FIELDS FROM `author_avpairs`[0m
+  [4;35;1mAuthorAvpair Load (0.000097)[0m   [0mSELECT * FROM `author_avpairs` WHERE (`author_avpairs`.`id` = 1) [0m
+  [4;36;1mConfiguration Columns (0.001178)[0m   [0;1mSHOW FIELDS FROM `configurations`[0m
+  [4;35;1mConfiguration Load (0.000121)[0m   [0mSELECT * FROM `configurations` WHERE (`configurations`.`id` = 1) [0m
+  [4;36;1mPasswordHistory Load (0.000121)[0m   [0;1mSELECT * FROM `password_histories` WHERE (`password_histories`.user_id = 1 AND (is_enable = false)) ORDER BY id desc LIMIT 1[0m
+  [4;35;1mPasswordHistory Load (0.000087)[0m   [0mSELECT * FROM `password_histories` WHERE (`password_histories`.user_id = 1 AND (is_enable = true)) ORDER BY id desc LIMIT 1[0m
+Rendering template within layouts/application
+Rendering author_avpair_entries/edit
+  [4;36;1mDynamicAvpair Load (0.000334)[0m   [0;1mSELECT * FROM `dynamic_avpairs` WHERE (`dynamic_avpairs`.author_avpair_entry_id = 3 AND (obj_type = 'network_av')) LIMIT 1[0m
+  [4;35;1mDynamicAvpair Load (0.000316)[0m   [0mSELECT * FROM `dynamic_avpairs` WHERE (`dynamic_avpairs`.author_avpair_entry_id = 3 AND (obj_type = 'shell_command_av')) LIMIT 1[0m
+  [4;36;1mAvpair Load (0.000123)[0m   [0;1mSELECT * FROM `avpairs` WHERE (`avpairs`.author_avpair_entry_id = 3) ORDER BY id[0m
+  [4;35;1mAcl Load (0.000120)[0m   [0mSELECT * FROM `acls` WHERE (`acls`.configuration_id = 1) ORDER BY name[0m
+  [4;36;1mAcl Columns (0.000729)[0m   [0;1mSHOW FIELDS FROM `acls`[0m
+  [4;35;1mDynamicAvpair Columns (0.000850)[0m   [0mSHOW FIELDS FROM `dynamic_avpairs`[0m
+  [4;36;1mDynamicAvpairValue Load (0.000311)[0m   [0;1mSELECT * FROM `dynamic_avpair_values` WHERE (`dynamic_avpair_values`.dynamic_avpair_id = 3) ORDER BY id[0m
+  [4;35;1mUserGroup Columns (0.000873)[0m   [0mSHOW FIELDS FROM `user_groups`[0m
+  [4;36;1mSQL (0.000113)[0m   [0;1mSELECT count(*) AS count_all FROM `user_groups` WHERE (`user_groups`.author_avpair_id = 1) [0m
+Rendered author_avpairs/_show_nav (0.01040)
+  [4;35;1mManager Columns (0.001595)[0m   [0mSHOW FIELDS FROM `managers`[0m
+Completed in 0.24745 (4 reqs/sec) | Rendering: 0.15295 (61%) | DB: 0.01056 (4%) | 200 OK [http://localhost/author_avpair_entries/3/edit]
+
+
+Processing DynamicAvpairsController#destroy (for 127.0.0.1 at 2009-05-29 13:59:59) [DELETE]
+  Session ID: 79e8d5cbc993b74990d98e428b98ddbb
+  Parameters: {"_method"=>"delete", "action"=>"destroy", "id"=>"3", "controller"=>"dynamic_avpairs"}
+  [4;36;1mUser Columns (0.001154)[0m   [0;1mSHOW FIELDS FROM `users`[0m
+  [4;35;1mUser Load (0.000127)[0m   [0mSELECT * FROM `users` WHERE (disabled = false and allow_web_login = true) AND (`users`.`id` = 1) LIMIT 1[0m
+  [4;36;1mManager Load (0.000151)[0m   [0;1mSELECT * FROM `managers` WHERE (is_local = true) LIMIT 1[0m
+  [4;35;1mConfiguredUser Load (0.000129)[0m   [0mSELECT * FROM `configured_users` WHERE (`configured_users`.user_id = 1) [0m
+  [4;36;1mDynamicAvpair Columns (0.000832)[0m   [0;1mSHOW FIELDS FROM `dynamic_avpairs`[0m
+  [4;35;1mDynamicAvpair Load (0.000342)[0m   [0mSELECT * FROM `dynamic_avpairs` WHERE (`dynamic_avpairs`.`id` = 3) [0m
+  [4;36;1mAuthorAvpairEntry Columns (0.000867)[0m   [0;1mSHOW FIELDS FROM `author_avpair_entries`[0m
+  [4;35;1mAuthorAvpairEntry Load (0.000113)[0m   [0mSELECT * FROM `author_avpair_entries` WHERE (`author_avpair_entries`.`id` = 3) [0m
+  [4;36;1mAuthorAvpair Columns (0.000766)[0m   [0;1mSHOW FIELDS FROM `author_avpairs`[0m
+  [4;35;1mAuthorAvpair Load (0.000099)[0m   [0mSELECT * FROM `author_avpairs` WHERE (`author_avpairs`.`id` = 1) [0m
+  [4;36;1mConfiguration Columns (0.001197)[0m   [0;1mSHOW FIELDS FROM `configurations`[0m
+  [4;35;1mConfiguration Load (0.000123)[0m   [0mSELECT * FROM `configurations` WHERE (`configurations`.`id` = 1) [0m
+  [4;36;1mPasswordHistory Load (0.000123)[0m   [0;1mSELECT * FROM `password_histories` WHERE (`password_histories`.user_id = 1 AND (is_enable = false)) ORDER BY id desc LIMIT 1[0m
+  [4;35;1mPasswordHistory Load (0.000087)[0m   [0mSELECT * FROM `password_histories` WHERE (`password_histories`.user_id = 1 AND (is_enable = true)) ORDER BY id desc LIMIT 1[0m
+  [4;36;1mManager Columns (0.001620)[0m   [0;1mSHOW FIELDS FROM `managers`[0m
+  [4;35;1mSQL (0.000114)[0m   [0mBEGIN[0m
+  [4;36;1mDynamicAvpairValue Load (0.000129)[0m   [0;1mSELECT * FROM `dynamic_avpair_values` WHERE (`dynamic_avpair_values`.dynamic_avpair_id = 3) ORDER BY id[0m
+  [4;35;1mDynamicAvpair Destroy (0.000250)[0m   [0m DELETE FROM `dynamic_avpairs`
+ WHERE `id` = 3
+[0m
+  [4;36;1mManager Load (0.000149)[0m   [0;1mSELECT * FROM `managers` WHERE (is_local = true) LIMIT 1[0m
+  [4;35;1mSQL (0.002540)[0m   [0mCOMMIT[0m
+  [4;36;1mSystemLog Columns (0.001906)[0m   [0;1mSHOW FIELDS FROM `system_logs`[0m
+  [4;35;1mSQL (0.000112)[0m   [0mBEGIN[0m
+  [4;36;1mSystemLog Create (0.000308)[0m   [0;1mINSERT INTO `system_logs` (`network_object_group_id`, `created_at`, `author_avpair_id`, `updated_at`, `username`, `level`, `manager_id`, `command_authorization_profile_id`, `shell_command_object_group_id`, `configured_user_id`, `user_id`, `user_group_id`, `owning_manager_id`, `acl_id`, `configuration_id`, `message`, `tacacs_daemon_id`, `department_id`, `archived_on`) VALUES(NULL, '2009-05-29 18:59:59', 1, '2009-05-29 18:59:59', 'admin', 'info', NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, 1, 'Undefined network_av from entry 20 of Author AVPair av1 within configuration backbone.', NULL, NULL, NULL)[0m
+  [4;35;1mManager Load (0.000150)[0m   [0mSELECT * FROM `managers` WHERE (is_local = true) LIMIT 1[0m
+  [4;36;1mSQL (0.000467)[0m   [0;1mCOMMIT[0m
+Redirected to http://localhost:3000/author_avpair_entries/3/edit
+Completed in 0.25784 (3 reqs/sec) | DB: 0.01419 (5%) | 302 Found [http://localhost/dynamic_avpairs/3]
+
+
+Processing AuthorAvpairEntriesController#edit (for 127.0.0.1 at 2009-05-29 13:59:59) [GET]
+  Session ID: 79e8d5cbc993b74990d98e428b98ddbb
+  Parameters: {"action"=>"edit", "id"=>"3", "controller"=>"author_avpair_entries"}
+  [4;35;1mUser Columns (0.001117)[0m   [0mSHOW FIELDS FROM `users`[0m
+  [4;36;1mUser Load (0.000126)[0m   [0;1mSELECT * FROM `users` WHERE (disabled = false and allow_web_login = true) AND (`users`.`id` = 1) LIMIT 1[0m
+  [4;35;1mManager Load (0.000146)[0m   [0mSELECT * FROM `managers` WHERE (is_local = true) LIMIT 1[0m
+  [4;36;1mConfiguredUser Load (0.000126)[0m   [0;1mSELECT * FROM `configured_users` WHERE (`configured_users`.user_id = 1) [0m
+  [4;35;1mAuthorAvpairEntry Columns (0.000821)[0m   [0mSHOW FIELDS FROM `author_avpair_entries`[0m
+  [4;36;1mAuthorAvpairEntry Load (0.000102)[0m   [0;1mSELECT * FROM `author_avpair_entries` WHERE (`author_avpair_entries`.`id` = 3) [0m
+  [4;35;1mAuthorAvpair Columns (0.000763)[0m   [0mSHOW FIELDS FROM `author_avpairs`[0m
+  [4;36;1mAuthorAvpair Load (0.000099)[0m   [0;1mSELECT * FROM `author_avpairs` WHERE (`author_avpairs`.`id` = 1) [0m
+  [4;35;1mConfiguration Columns (0.001154)[0m   [0mSHOW FIELDS FROM `configurations`[0m
+  [4;36;1mConfiguration Load (0.000115)[0m   [0;1mSELECT * FROM `configurations` WHERE (`configurations`.`id` = 1) [0m
+  [4;35;1mPasswordHistory Load (0.000123)[0m   [0mSELECT * FROM `password_histories` WHERE (`password_histories`.user_id = 1 AND (is_enable = false)) ORDER BY id desc LIMIT 1[0m
+  [4;36;1mPasswordHistory Load (0.000088)[0m   [0;1mSELECT * FROM `password_histories` WHERE (`password_histories`.user_id = 1 AND (is_enable = true)) ORDER BY id desc LIMIT 1[0m
+Rendering template within layouts/application
+Rendering author_avpair_entries/edit
+  [4;35;1mDynamicAvpair Load (0.000337)[0m   [0mSELECT * FROM `dynamic_avpairs` WHERE (`dynamic_avpairs`.author_avpair_entry_id = 3 AND (obj_type = 'network_av')) LIMIT 1[0m
+  [4;36;1mDynamicAvpair Load (0.000329)[0m   [0;1mSELECT * FROM `dynamic_avpairs` WHERE (`dynamic_avpairs`.author_avpair_entry_id = 3 AND (obj_type = 'shell_command_av')) LIMIT 1[0m
+  [4;35;1mAvpair Load (0.000123)[0m   [0mSELECT * FROM `avpairs` WHERE (`avpairs`.author_avpair_entry_id = 3) ORDER BY id[0m
+  [4;36;1mAcl Load (0.000099)[0m   [0;1mSELECT * FROM `acls` WHERE (`acls`.configuration_id = 1) ORDER BY name[0m
+  [4;35;1mAcl Columns (0.000708)[0m   [0mSHOW FIELDS FROM `acls`[0m
+  [4;36;1mDynamicAvpair Columns (0.000828)[0m   [0;1mSHOW FIELDS FROM `dynamic_avpairs`[0m
+  [4;35;1mDynamicAvpairValue Load (0.000313)[0m   [0mSELECT * FROM `dynamic_avpair_values` WHERE (`dynamic_avpair_values`.dynamic_avpair_id = 4) ORDER BY id[0m
+  [4;36;1mUserGroup Columns (0.000869)[0m   [0;1mSHOW FIELDS FROM `user_groups`[0m
+  [4;35;1mSQL (0.000109)[0m   [0mSELECT count(*) AS count_all FROM `user_groups` WHERE (`user_groups`.author_avpair_id = 1) [0m
+Rendered author_avpairs/_show_nav (0.01037)
+  [4;36;1mManager Columns (0.001619)[0m   [0;1mSHOW FIELDS FROM `managers`[0m
+Completed in 0.26236 (3 reqs/sec) | Rendering: 0.06425 (24%) | DB: 0.01043 (3%) | 200 OK [http://localhost/author_avpair_entries/3/edit]
+
+
+Processing DynamicAvpairsController#destroy (for 127.0.0.1 at 2009-05-29 14:00:01) [DELETE]
+  Session ID: 79e8d5cbc993b74990d98e428b98ddbb
+  Parameters: {"_method"=>"delete", "action"=>"destroy", "id"=>"4", "controller"=>"dynamic_avpairs"}
+  [4;35;1mUser Columns (0.001227)[0m   [0mSHOW FIELDS FROM `users`[0m
+  [4;36;1mUser Load (0.000135)[0m   [0;1mSELECT * FROM `users` WHERE (disabled = false and allow_web_login = true) AND (`users`.`id` = 1) LIMIT 1[0m
+  [4;35;1mManager Load (0.000164)[0m   [0mSELECT * FROM `managers` WHERE (is_local = true) LIMIT 1[0m
+  [4;36;1mConfiguredUser Load (0.034627)[0m   [0;1mSELECT * FROM `configured_users` WHERE (`configured_users`.user_id = 1) [0m
+  [4;35;1mDynamicAvpair Columns (0.000922)[0m   [0mSHOW FIELDS FROM `dynamic_avpairs`[0m
+  [4;36;1mDynamicAvpair Load (0.000318)[0m   [0;1mSELECT * FROM `dynamic_avpairs` WHERE (`dynamic_avpairs`.`id` = 4) [0m
+  [4;35;1mAuthorAvpairEntry Columns (0.000897)[0m   [0mSHOW FIELDS FROM `author_avpair_entries`[0m
+  [4;36;1mAuthorAvpairEntry Load (0.000114)[0m   [0;1mSELECT * FROM `author_avpair_entries` WHERE (`author_avpair_entries`.`id` = 3) [0m
+  [4;35;1mAuthorAvpair Columns (0.026917)[0m   [0mSHOW FIELDS FROM `author_avpairs`[0m
+  [4;36;1mAuthorAvpair Load (0.000105)[0m   [0;1mSELECT * FROM `author_avpairs` WHERE (`author_avpairs`.`id` = 1) [0m
+  [4;35;1mConfiguration Columns (0.001209)[0m   [0mSHOW FIELDS FROM `configurations`[0m
+  [4;36;1mConfiguration Load (0.000126)[0m   [0;1mSELECT * FROM `configurations` WHERE (`configurations`.`id` = 1) [0m
+  [4;35;1mPasswordHistory Load (0.000116)[0m   [0mSELECT * FROM `password_histories` WHERE (`password_histories`.user_id = 1 AND (is_enable = false)) ORDER BY id desc LIMIT 1[0m
+  [4;36;1mPasswordHistory Load (0.000089)[0m   [0;1mSELECT * FROM `password_histories` WHERE (`password_histories`.user_id = 1 AND (is_enable = true)) ORDER BY id desc LIMIT 1[0m
+  [4;35;1mManager Columns (0.001682)[0m   [0mSHOW FIELDS FROM `managers`[0m
+  [4;36;1mSQL (0.000112)[0m   [0;1mBEGIN[0m
+  [4;35;1mDynamicAvpairValue Load (0.000147)[0m   [0mSELECT * FROM `dynamic_avpair_values` WHERE (`dynamic_avpair_values`.dynamic_avpair_id = 4) ORDER BY id[0m
+  [4;36;1mDynamicAvpair Destroy (0.000252)[0m   [0;1m DELETE FROM `dynamic_avpairs`
+ WHERE `id` = 4
+[0m
+  [4;35;1mManager Load (0.000158)[0m   [0mSELECT * FROM `managers` WHERE (is_local = true) LIMIT 1[0m
+  [4;36;1mSQL (0.004039)[0m   [0;1mCOMMIT[0m
+  [4;35;1mSystemLog Columns (0.001268)[0m   [0mSHOW FIELDS FROM `system_logs`[0m
+  [4;36;1mSQL (0.000111)[0m   [0;1mBEGIN[0m
+  [4;35;1mSystemLog Create (0.000297)[0m   [0mINSERT INTO `system_logs` (`network_object_group_id`, `created_at`, `author_avpair_id`, `updated_at`, `username`, `level`, `manager_id`, `command_authorization_profile_id`, `shell_command_object_group_id`, `configured_user_id`, `user_id`, `user_group_id`, `owning_manager_id`, `acl_id`, `configuration_id`, `message`, `tacacs_daemon_id`, `department_id`, `archived_on`) VALUES(NULL, '2009-05-29 19:00:02', 1, '2009-05-29 19:00:02', 'admin', 'info', NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, 1, 'Undefined network_av from entry 20 of Author AVPair av1 within configuration backbone.', NULL, NULL, NULL)[0m
+  [4;36;1mManager Load (0.000155)[0m   [0;1mSELECT * FROM `managers` WHERE (is_local = true) LIMIT 1[0m
+  [4;35;1mSQL (0.000371)[0m   [0mCOMMIT[0m
+Redirected to http://localhost:3000/author_avpair_entries/3/edit
+Completed in 0.32939 (3 reqs/sec) | DB: 0.07588 (23%) | 302 Found [http://localhost/dynamic_avpairs/4]
+
+
+Processing AuthorAvpairEntriesController#edit (for 127.0.0.1 at 2009-05-29 14:00:02) [GET]
+  Session ID: 79e8d5cbc993b74990d98e428b98ddbb
+  Parameters: {"action"=>"edit", "id"=>"3", "controller"=>"author_avpair_entries"}
+  [4;36;1mUser Columns (0.001183)[0m   [0;1mSHOW FIELDS FROM `users`[0m
+  [4;35;1mUser Load (0.000125)[0m   [0mSELECT * FROM `users` WHERE (disabled = false and allow_web_login = true) AND (`users`.`id` = 1) LIMIT 1[0m
+  [4;36;1mManager Load (0.000151)[0m   [0;1mSELECT * FROM `managers` WHERE (is_local = true) LIMIT 1[0m
+  [4;35;1mConfiguredUser Load (0.000122)[0m   [0mSELECT * FROM `configured_users` WHERE (`configured_users`.user_id = 1) [0m
+  [4;36;1mAuthorAvpairEntry Columns (0.000874)[0m   [0;1mSHOW FIELDS FROM `author_avpair_entries`[0m
+  [4;35;1mAuthorAvpairEntry Load (0.000103)[0m   [0mSELECT * FROM `author_avpair_entries` WHERE (`author_avpair_entries`.`id` = 3) [0m
+  [4;36;1mAuthorAvpair Columns (0.000780)[0m   [0;1mSHOW FIELDS FROM `author_avpairs`[0m
+  [4;35;1mAuthorAvpair Load (0.000098)[0m   [0mSELECT * FROM `author_avpairs` WHERE (`author_avpairs`.`id` = 1) [0m
+  [4;36;1mConfiguration Columns (0.001261)[0m   [0;1mSHOW FIELDS FROM `configurations`[0m
+  [4;35;1mConfiguration Load (0.000122)[0m   [0mSELECT * FROM `configurations` WHERE (`configurations`.`id` = 1) [0m
+  [4;36;1mPasswordHistory Load (0.000130)[0m   [0;1mSELECT * FROM `password_histories` WHERE (`password_histories`.user_id = 1 AND (is_enable = false)) ORDER BY id desc LIMIT 1[0m
+  [4;35;1mPasswordHistory Load (0.000090)[0m   [0mSELECT * FROM `password_histories` WHERE (`password_histories`.user_id = 1 AND (is_enable = true)) ORDER BY id desc LIMIT 1[0m
+Rendering template within layouts/application
+Rendering author_avpair_entries/edit
+  [4;36;1mDynamicAvpair Load (0.000357)[0m   [0;1mSELECT * FROM `dynamic_avpairs` WHERE (`dynamic_avpairs`.author_avpair_entry_id = 3 AND (obj_type = 'network_av')) LIMIT 1[0m
+  [4;35;1mDynamicAvpair Load (0.000318)[0m   [0mSELECT * FROM `dynamic_avpairs` WHERE (`dynamic_avpairs`.author_avpair_entry_id = 3 AND (obj_type = 'shell_command_av')) LIMIT 1[0m
+  [4;36;1mAvpair Load (0.000144)[0m   [0;1mSELECT * FROM `avpairs` WHERE (`avpairs`.author_avpair_entry_id = 3) ORDER BY id[0m
+  [4;35;1mAcl Load (0.000120)[0m   [0mSELECT * FROM `acls` WHERE (`acls`.configuration_id = 1) ORDER BY name[0m
+  [4;36;1mAcl Columns (0.000732)[0m   [0;1mSHOW FIELDS FROM `acls`[0m
+  [4;35;1mDynamicAvpair Columns (0.000838)[0m   [0mSHOW FIELDS FROM `dynamic_avpairs`[0m
+  [4;36;1mDynamicAvpairValue Load (0.000313)[0m   [0;1mSELECT * FROM `dynamic_avpair_values` WHERE (`dynamic_avpair_values`.dynamic_avpair_id = 5) ORDER BY id[0m
+  [4;35;1mUserGroup Columns (0.001772)[0m   [0mSHOW FIELDS FROM `user_groups`[0m
+  [4;36;1mSQL (0.000109)[0m   [0;1mSELECT count(*) AS count_all FROM `user_groups` WHERE (`user_groups`.author_avpair_id = 1) [0m
+Rendered author_avpairs/_show_nav (0.01067)
+  [4;35;1mManager Columns (0.001718)[0m   [0mSHOW FIELDS FROM `managers`[0m
+Completed in 0.26069 (3 reqs/sec) | Rendering: 0.05984 (22%) | DB: 0.01178 (4%) | 200 OK [http://localhost/author_avpair_entries/3/edit]
+
+
+Processing DynamicAvpairsController#destroy (for 127.0.0.1 at 2009-05-29 14:00:03) [DELETE]
+  Session ID: 79e8d5cbc993b74990d98e428b98ddbb
+  Parameters: {"_method"=>"delete", "action"=>"destroy", "id"=>"5", "controller"=>"dynamic_avpairs"}
+  [4;36;1mUser Columns (0.001150)[0m   [0;1mSHOW FIELDS FROM `users`[0m
+  [4;35;1mUser Load (0.000123)[0m   [0mSELECT * FROM `users` WHERE (disabled = false and allow_web_login = true) AND (`users`.`id` = 1) LIMIT 1[0m
+  [4;36;1mManager Load (0.000149)[0m   [0;1mSELECT * FROM `managers` WHERE (is_local = true) LIMIT 1[0m
+  [4;35;1mConfiguredUser Load (0.000126)[0m   [0mSELECT * FROM `configured_users` WHERE (`configured_users`.user_id = 1) [0m
+  [4;36;1mDynamicAvpair Columns (0.000859)[0m   [0;1mSHOW FIELDS FROM `dynamic_avpairs`[0m
+  [4;35;1mDynamicAvpair Load (0.000304)[0m   [0mSELECT * FROM `dynamic_avpairs` WHERE (`dynamic_avpairs`.`id` = 5) [0m
+  [4;36;1mAuthorAvpairEntry Columns (0.000837)[0m   [0;1mSHOW FIELDS FROM `author_avpair_entries`[0m
+  [4;35;1mAuthorAvpairEntry Load (0.000106)[0m   [0mSELECT * FROM `author_avpair_entries` WHERE (`author_avpair_entries`.`id` = 3) [0m
+  [4;36;1mAuthorAvpair Columns (0.000855)[0m   [0;1mSHOW FIELDS FROM `author_avpairs`[0m
+  [4;35;1mAuthorAvpair Load (0.000107)[0m   [0mSELECT * FROM `author_avpairs` WHERE (`author_avpairs`.`id` = 1) [0m
+  [4;36;1mConfiguration Columns (0.001226)[0m   [0;1mSHOW FIELDS FROM `configurations`[0m
+  [4;35;1mConfiguration Load (0.000118)[0m   [0mSELECT * FROM `configurations` WHERE (`configurations`.`id` = 1) [0m
+  [4;36;1mPasswordHistory Load (0.000123)[0m   [0;1mSELECT * FROM `password_histories` WHERE (`password_histories`.user_id = 1 AND (is_enable = false)) ORDER BY id desc LIMIT 1[0m
+  [4;35;1mPasswordHistory Load (0.000088)[0m   [0mSELECT * FROM `password_histories` WHERE (`password_histories`.user_id = 1 AND (is_enable = true)) ORDER BY id desc LIMIT 1[0m
+  [4;36;1mManager Columns (0.001727)[0m   [0;1mSHOW FIELDS FROM `managers`[0m
+  [4;35;1mSQL (0.000112)[0m   [0mBEGIN[0m
+  [4;36;1mDynamicAvpairValue Load (0.000130)[0m   [0;1mSELECT * FROM `dynamic_avpair_values` WHERE (`dynamic_avpair_values`.dynamic_avpair_id = 5) ORDER BY id[0m
+  [4;35;1mDynamicAvpair Destroy (0.000265)[0m   [0m DELETE FROM `dynamic_avpairs`
+ WHERE `id` = 5
+[0m
+  [4;36;1mManager Load (0.000146)[0m   [0;1mSELECT * FROM `managers` WHERE (is_local = true) LIMIT 1[0m
+  [4;35;1mSQL (0.002337)[0m   [0mCOMMIT[0m
+  [4;36;1mSystemLog Columns (0.001260)[0m   [0;1mSHOW FIELDS FROM `system_logs`[0m
+  [4;35;1mSQL (0.000116)[0m   [0mBEGIN[0m
+  [4;36;1mSystemLog Create (0.000297)[0m   [0;1mINSERT INTO `system_logs` (`network_object_group_id`, `created_at`, `author_avpair_id`, `updated_at`, `username`, `level`, `manager_id`, `command_authorization_profile_id`, `shell_command_object_group_id`, `configured_user_id`, `user_id`, `user_group_id`, `owning_manager_id`, `acl_id`, `configuration_id`, `message`, `tacacs_daemon_id`, `department_id`, `archived_on`) VALUES(NULL, '2009-05-29 19:00:03', 1, '2009-05-29 19:00:03', 'admin', 'info', NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, 1, 'Undefined network_av from entry 20 of Author AVPair av1 within configuration backbone.', NULL, NULL, NULL)[0m
+  [4;35;1mManager Load (0.000173)[0m   [0mSELECT * FROM `managers` WHERE (is_local = true) LIMIT 1[0m
+  [4;36;1mSQL (0.000438)[0m   [0;1mCOMMIT[0m
+Redirected to http://localhost:3000/author_avpair_entries/3/edit
+Completed in 0.24623 (4 reqs/sec) | DB: 0.01349 (5%) | 302 Found [http://localhost/dynamic_avpairs/5]
+
+
+Processing AuthorAvpairEntriesController#edit (for 127.0.0.1 at 2009-05-29 14:00:03) [GET]
+  Session ID: 79e8d5cbc993b74990d98e428b98ddbb
+  Parameters: {"action"=>"edit", "id"=>"3", "controller"=>"author_avpair_entries"}
+  [4;35;1mUser Columns (0.001204)[0m   [0mSHOW FIELDS FROM `users`[0m
+  [4;36;1mUser Load (0.000123)[0m   [0;1mSELECT * FROM `users` WHERE (disabled = false and allow_web_login = true) AND (`users`.`id` = 1) LIMIT 1[0m
+  [4;35;1mManager Load (0.000150)[0m   [0mSELECT * FROM `managers` WHERE (is_local = true) LIMIT 1[0m
+  [4;36;1mConfiguredUser Load (0.000126)[0m   [0;1mSELECT * FROM `configured_users` WHERE (`configured_users`.user_id = 1) [0m
+  [4;35;1mAuthorAvpairEntry Columns (0.000863)[0m   [0mSHOW FIELDS FROM `author_avpair_entries`[0m
+  [4;36;1mAuthorAvpairEntry Load (0.000105)[0m   [0;1mSELECT * FROM `author_avpair_entries` WHERE (`author_avpair_entries`.`id` = 3) [0m
+  [4;35;1mAuthorAvpair Columns (0.000814)[0m   [0mSHOW FIELDS FROM `author_avpairs`[0m
+  [4;36;1mAuthorAvpair Load (0.000100)[0m   [0;1mSELECT * FROM `author_avpairs` WHERE (`author_avpairs`.`id` = 1) [0m
+  [4;35;1mConfiguration Columns (0.001203)[0m   [0mSHOW FIELDS FROM `configurations`[0m
+  [4;36;1mConfiguration Load (0.000123)[0m   [0;1mSELECT * FROM `configurations` WHERE (`configurations`.`id` = 1) [0m
+  [4;35;1mPasswordHistory Load (0.000123)[0m   [0mSELECT * FROM `password_histories` WHERE (`password_histories`.user_id = 1 AND (is_enable = false)) ORDER BY id desc LIMIT 1[0m
+  [4;36;1mPasswordHistory Load (0.000090)[0m   [0;1mSELECT * FROM `password_histories` WHERE (`password_histories`.user_id = 1 AND (is_enable = true)) ORDER BY id desc LIMIT 1[0m
+Rendering template within layouts/application
+Rendering author_avpair_entries/edit
+  [4;35;1mDynamicAvpair Load (0.000329)[0m   [0mSELECT * FROM `dynamic_avpairs` WHERE (`dynamic_avpairs`.author_avpair_entry_id = 3 AND (obj_type = 'network_av')) LIMIT 1[0m
+  [4;36;1mDynamicAvpair Load (0.000317)[0m   [0;1mSELECT * FROM `dynamic_avpairs` WHERE (`dynamic_avpairs`.author_avpair_entry_id = 3 AND (obj_type = 'shell_command_av')) LIMIT 1[0m
+  [4;35;1mAvpair Load (0.000120)[0m   [0mSELECT * FROM `avpairs` WHERE (`avpairs`.author_avpair_entry_id = 3) ORDER BY id[0m
+  [4;36;1mAcl Load (0.000118)[0m   [0;1mSELECT * FROM `acls` WHERE (`acls`.configuration_id = 1) ORDER BY name[0m
+  [4;35;1mAcl Columns (0.000732)[0m   [0mSHOW FIELDS FROM `acls`[0m
+  [4;36;1mDynamicAvpair Columns (0.000844)[0m   [0;1mSHOW FIELDS FROM `dynamic_avpairs`[0m
+  [4;35;1mDynamicAvpairValue Load (0.000317)[0m   [0mSELECT * FROM `dynamic_avpair_values` WHERE (`dynamic_avpair_values`.dynamic_avpair_id = 6) ORDER BY id[0m
+  [4;36;1mDynamicAvpairValue Columns (0.000787)[0m   [0;1mSHOW FIELDS FROM `dynamic_avpair_values`[0m
+  [4;35;1mNetworkObjectGroup Columns (0.000784)[0m   [0mSHOW FIELDS FROM `network_object_groups`[0m
+  [4;36;1mNetworkObjectGroup Load (0.000103)[0m   [0;1mSELECT * FROM `network_object_groups` WHERE (`network_object_groups`.`id` = 1) [0m
+  [4;35;1mUserGroup Columns (0.000893)[0m   [0mSHOW FIELDS FROM `user_groups`[0m
+  [4;36;1mSQL (0.000106)[0m   [0;1mSELECT count(*) AS count_all FROM `user_groups` WHERE (`user_groups`.author_avpair_id = 1) [0m
+Rendered author_avpairs/_show_nav (0.00982)
+  [4;35;1mManager Columns (0.001662)[0m   [0mSHOW FIELDS FROM `managers`[0m
+Completed in 0.27602 (3 reqs/sec) | Rendering: 0.07132 (25%) | DB: 0.01245 (4%) | 200 OK [http://localhost/author_avpair_entries/3/edit]
+
+
+Processing DynamicAvpairsController#destroy (for 127.0.0.1 at 2009-05-29 14:00:16) [DELETE]
+  Session ID: 79e8d5cbc993b74990d98e428b98ddbb
+  Parameters: {"_method"=>"delete", "action"=>"destroy", "id"=>"6", "controller"=>"dynamic_avpairs"}
+  [4;36;1mUser Columns (0.001222)[0m   [0;1mSHOW FIELDS FROM `users`[0m
+  [4;35;1mUser Load (0.000125)[0m   [0mSELECT * FROM `users` WHERE (disabled = false and allow_web_login = true) AND (`users`.`id` = 1) LIMIT 1[0m
+  [4;36;1mManager Load (0.000149)[0m   [0;1mSELECT * FROM `managers` WHERE (is_local = true) LIMIT 1[0m
+  [4;35;1mConfiguredUser Load (0.000126)[0m   [0mSELECT * FROM `configured_users` WHERE (`configured_users`.user_id = 1) [0m
+  [4;36;1mDynamicAvpair Columns (0.000848)[0m   [0;1mSHOW FIELDS FROM `dynamic_avpairs`[0m
+  [4;35;1mDynamicAvpair Load (0.000314)[0m   [0mSELECT * FROM `dynamic_avpairs` WHERE (`dynamic_avpairs`.`id` = 6) [0m
+  [4;36;1mAuthorAvpairEntry Columns (0.000849)[0m   [0;1mSHOW FIELDS FROM `author_avpair_entries`[0m
+  [4;35;1mAuthorAvpairEntry Load (0.000107)[0m   [0mSELECT * FROM `author_avpair_entries` WHERE (`author_avpair_entries`.`id` = 3) [0m
+  [4;36;1mAuthorAvpair Columns (0.000775)[0m   [0;1mSHOW FIELDS FROM `author_avpairs`[0m
+  [4;35;1mAuthorAvpair Load (0.000103)[0m   [0mSELECT * FROM `author_avpairs` WHERE (`author_avpairs`.`id` = 1) [0m
+  [4;36;1mConfiguration Columns (0.001238)[0m   [0;1mSHOW FIELDS FROM `configurations`[0m
+  [4;35;1mConfiguration Load (0.000122)[0m   [0mSELECT * FROM `configurations` WHERE (`configurations`.`id` = 1) [0m
+  [4;36;1mPasswordHistory Load (0.000123)[0m   [0;1mSELECT * FROM `password_histories` WHERE (`password_histories`.user_id = 1 AND (is_enable = false)) ORDER BY id desc LIMIT 1[0m
+  [4;35;1mPasswordHistory Load (0.000085)[0m   [0mSELECT * FROM `password_histories` WHERE (`password_histories`.user_id = 1 AND (is_enable = true)) ORDER BY id desc LIMIT 1[0m
+  [4;36;1mManager Columns (0.001656)[0m   [0;1mSHOW FIELDS FROM `managers`[0m
+  [4;35;1mSQL (0.000111)[0m   [0mBEGIN[0m
+  [4;36;1mDynamicAvpairValue Load (0.000133)[0m   [0;1mSELECT * FROM `dynamic_avpair_values` WHERE (`dynamic_avpair_values`.dynamic_avpair_id = 6) ORDER BY id[0m
+  [4;35;1mDynamicAvpairValue Columns (0.000760)[0m   [0mSHOW FIELDS FROM `dynamic_avpair_values`[0m
+  [4;36;1mDynamicAvpairValue Destroy (0.000328)[0m   [0;1m DELETE FROM `dynamic_avpair_values`
+ WHERE `id` = 1
+[0m
+  [4;35;1mManager Load (0.000149)[0m   [0mSELECT * FROM `managers` WHERE (is_local = true) LIMIT 1[0m
+  [4;36;1mDynamicAvpair Destroy (0.000261)[0m   [0;1m DELETE FROM `dynamic_avpairs`
+ WHERE `id` = 6
+[0m
+  [4;35;1mManager Load (0.000144)[0m   [0mSELECT * FROM `managers` WHERE (is_local = true) LIMIT 1[0m
+  [4;36;1mSQL (0.003680)[0m   [0;1mCOMMIT[0m
+  [4;35;1mSystemLog Columns (0.001203)[0m   [0mSHOW FIELDS FROM `system_logs`[0m
+  [4;36;1mSQL (0.000112)[0m   [0;1mBEGIN[0m
+  [4;35;1mSystemLog Create (0.000300)[0m   [0mINSERT INTO `system_logs` (`network_object_group_id`, `created_at`, `author_avpair_id`, `updated_at`, `username`, `level`, `manager_id`, `command_authorization_profile_id`, `shell_command_object_group_id`, `configured_user_id`, `user_id`, `user_group_id`, `owning_manager_id`, `acl_id`, `configuration_id`, `message`, `tacacs_daemon_id`, `department_id`, `archived_on`) VALUES(NULL, '2009-05-29 19:00:16', 1, '2009-05-29 19:00:16', 'admin', 'info', NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, 1, 'Undefined network_av from entry 20 of Author AVPair av1 within configuration backbone.', NULL, NULL, NULL)[0m
+  [4;36;1mManager Load (0.000150)[0m   [0;1mSELECT * FROM `managers` WHERE (is_local = true) LIMIT 1[0m
+  [4;35;1mSQL (0.000455)[0m   [0mCOMMIT[0m
+Redirected to http://localhost:3000/author_avpair_entries/3/edit
+Completed in 0.25591 (3 reqs/sec) | DB: 0.01594 (6%) | 302 Found [http://localhost/dynamic_avpairs/6]
+
+
+Processing AuthorAvpairEntriesController#edit (for 127.0.0.1 at 2009-05-29 14:00:16) [GET]
+  Session ID: 79e8d5cbc993b74990d98e428b98ddbb
+  Parameters: {"action"=>"edit", "id"=>"3", "controller"=>"author_avpair_entries"}
+  [4;36;1mUser Columns (0.001115)[0m   [0;1mSHOW FIELDS FROM `users`[0m
+  [4;35;1mUser Load (0.000127)[0m   [0mSELECT * FROM `users` WHERE (disabled = false and allow_web_login = true) AND (`users`.`id` = 1) LIMIT 1[0m
+  [4;36;1mManager Load (0.000145)[0m   [0;1mSELECT * FROM `managers` WHERE (is_local = true) LIMIT 1[0m
+  [4;35;1mConfiguredUser Load (0.000125)[0m   [0mSELECT * FROM `configured_users` WHERE (`configured_users`.user_id = 1) [0m
+  [4;36;1mAuthorAvpairEntry Columns (0.000856)[0m   [0;1mSHOW FIELDS FROM `author_avpair_entries`[0m
+  [4;35;1mAuthorAvpairEntry Load (0.000110)[0m   [0mSELECT * FROM `author_avpair_entries` WHERE (`author_avpair_entries`.`id` = 3) [0m
+  [4;36;1mAuthorAvpair Columns (0.000825)[0m   [0;1mSHOW FIELDS FROM `author_avpairs`[0m
+  [4;35;1mAuthorAvpair Load (0.000107)[0m   [0mSELECT * FROM `author_avpairs` WHERE (`author_avpairs`.`id` = 1) [0m
+  [4;36;1mConfiguration Columns (0.001297)[0m   [0;1mSHOW FIELDS FROM `configurations`[0m
+  [4;35;1mConfiguration Load (0.000123)[0m   [0mSELECT * FROM `configurations` WHERE (`configurations`.`id` = 1) [0m
+  [4;36;1mPasswordHistory Load (0.000117)[0m   [0;1mSELECT * FROM `password_histories` WHERE (`password_histories`.user_id = 1 AND (is_enable = false)) ORDER BY id desc LIMIT 1[0m
+  [4;35;1mPasswordHistory Load (0.000085)[0m   [0mSELECT * FROM `password_histories` WHERE (`password_histories`.user_id = 1 AND (is_enable = true)) ORDER BY id desc LIMIT 1[0m
+Rendering template within layouts/application
+Rendering author_avpair_entries/edit
+  [4;36;1mDynamicAvpair Load (0.000327)[0m   [0;1mSELECT * FROM `dynamic_avpairs` WHERE (`dynamic_avpairs`.author_avpair_entry_id = 3 AND (obj_type = 'network_av')) LIMIT 1[0m
+  [4;35;1mDynamicAvpair Load (0.000318)[0m   [0mSELECT * FROM `dynamic_avpairs` WHERE (`dynamic_avpairs`.author_avpair_entry_id = 3 AND (obj_type = 'shell_command_av')) LIMIT 1[0m
+  [4;36;1mAvpair Load (0.000122)[0m   [0;1mSELECT * FROM `avpairs` WHERE (`avpairs`.author_avpair_entry_id = 3) ORDER BY id[0m
+  [4;35;1mAcl Load (0.000118)[0m   [0mSELECT * FROM `acls` WHERE (`acls`.configuration_id = 1) ORDER BY name[0m
+  [4;36;1mAcl Columns (0.000711)[0m   [0;1mSHOW FIELDS FROM `acls`[0m
+  [4;35;1mUserGroup Columns (0.000895)[0m   [0mSHOW FIELDS FROM `user_groups`[0m
+  [4;36;1mSQL (0.000105)[0m   [0;1mSELECT count(*) AS count_all FROM `user_groups` WHERE (`user_groups`.author_avpair_id = 1) [0m
+Rendered author_avpairs/_show_nav (0.00993)
+  [4;35;1mManager Columns (0.001608)[0m   [0mSHOW FIELDS FROM `managers`[0m
+Completed in 0.24837 (4 reqs/sec) | Rendering: 0.04793 (19%) | DB: 0.00956 (3%) | 200 OK [http://localhost/author_avpair_entries/3/edit]
+^C
+]0;dspinhir@ds1: ~/dev/rubyforge/tacacs-plus/tacmandspinhir@ds1:~/dev/rubyforge/tacacs-plus/tacman$ 
+]0;dspinhir@ds1: ~/dev/rubyforge/tacacs-plus/tacmandspinhir@ds1:~/dev/rubyforge/tacacs-plus/tacman$ 
+]0;dspinhir@ds1: ~/dev/rubyforge/tacacs-plus/tacmandspinhir@ds1:~/dev/rubyforge/tacacs-plus/tacman$ 
+]0;dspinhir@ds1: ~/dev/rubyforge/tacacs-plus/tacmandspinhir@ds1:~/dev/rubyforge/tacacs-plus/tacman$ 
+]0;dspinhir@ds1: ~/dev/rubyforge/tacacs-plus/tacmandspinhir@ds1:~/dev/rubyforge/tacacs-plus/tacman$ 
+]0;dspinhir@ds1: ~/dev/rubyforge/tacacs-plus/tacmandspinhir@ds1:~/dev/rubyforge/tacacs-plus/tacman$ 
+]0;dspinhir@ds1: ~/dev/rubyforge/tacacs-plus/tacmandspinhir@ds1:~/dev/rubyforge/tacacs-plus/tacman$ 
+]0;dspinhir@ds1: ~/dev/rubyforge/tacacs-plus/tacmandspinhir@ds1:~/dev/rubyforge/tacacs-plus/tacman$ 
+]0;dspinhir@ds1: ~/dev/rubyforge/tacacs-plus/tacmandspinhir@ds1:~/dev/rubyforge/tacacs-plus/tacman$ tail -f  log/development.log [15Pscript/console
+Loading development environment (Rails 2.1.0)
+>> Dya[KnamicAvpair.count
+=> 0
+>> DynamicAvpair.count
+=> 0
+>> ]0;dspinhir@ds1: ~/dev/rubyforge/tacacs-plus/tacmandspinhir@ds1:~/dev/rubyforge/tacacs-plus/tacman$ exit
+There are stopped jobs.
+]0;dspinhir@ds1: ~/dev/rubyforge/tacacs-plus/tacmandspinhir@ds1:~/dev/rubyforge/tacacs-plus/tacman$ exit
+
+Script done on Fri 29 May 2009 03:46:34 PM CDT

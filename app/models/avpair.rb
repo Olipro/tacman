@@ -19,6 +19,14 @@ class Avpair < ActiveRecord::Base
          'nohangup', 'priv-lvl', 'timeout']
     end
 
+    def validate
+        if (self.attr == "service")
+            self.errors.add_to_base("Attribute 'service' may not be defined twice.")
+            return(false)
+        end
+        return(true)
+    end
+
     def avpair=(str)
         @avpair = str
         begin

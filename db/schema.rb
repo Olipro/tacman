@@ -170,6 +170,23 @@ ActiveRecord::Schema.define(:version => 20081120201615) do
     t.datetime "updated_at"
   end
 
+  create_table "dynamic_avpair_values", :force => true do |t|
+    t.integer  "dynamic_avpair_id",             :limit => 11
+    t.integer  "network_object_group_id",       :limit => 11
+    t.integer  "shell_command_object_group_id", :limit => 11
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "dynamic_avpairs", :force => true do |t|
+    t.integer  "author_avpair_entry_id", :limit => 11
+    t.string   "obj_type"
+    t.string   "attr"
+    t.string   "delimiter"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "locks", :force => true do |t|
     t.integer  "manager_id",       :limit => 11
     t.integer  "tacacs_daemon_id", :limit => 11

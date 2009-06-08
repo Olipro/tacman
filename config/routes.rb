@@ -1,4 +1,7 @@
 ActionController::Routing::Routes.draw do |map|
+
+  map.resources :dynamic_avpairs
+
   map.resources :aaa_reports,
                 :member => {:summary => :get}
 
@@ -6,7 +9,8 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :avpairs
 
-  map.resources :author_avpair_entries
+  map.resources :author_avpair_entries,
+                :member => {:create_dynamic_avpair => :post, :new_network_av => :get, :new_shell_command_av => :get}
 
   map.resources :author_avpairs,
                 :member => {:create_entry => :post, :resequence => :put,

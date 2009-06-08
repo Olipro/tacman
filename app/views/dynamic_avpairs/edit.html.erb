@@ -1,0 +1,41 @@
+<b style="font-size: 16px;">Edit <%= @title %> for author-avpair-list '<%=h @author_avpair.name %>'</b><br /><br />
+
+<%= error_messages_for :dynamic_avpair %>
+
+<%
+  in_use = {}
+  if (@dynamic_avpair.obj_type == 'network_av')
+    @dynamic_avpair.network_object_groups.each {|x| in_use[x.id] = x}
+  else
+    @dynamic_avpair.shell_command_object_groups.each {|x| in_use[x.id] = x}
+  end
+%>
+
+<% form_for(:dynamic_avpair, :url => dynamic_avpair_url(@dynamic_avpair), :html => {:method => :put} )  do |f| %>
+      <%= f.hidden_field :obj_type, :value => @dynamic_avpair.obj_type %>
+      <b>Attribute:</b> <%= f.text_field :attr, :size => 20 %><br />
+      <b>Delimiter:</b> <%= f.text_field :delimiter, :size => 3 %><br />
+      <b>Values:</b><br />
+      <% if (@dynamic_avpair.obj_type == 'network_av') %>
+        <% @configuration.network_object_groups.each do |o| %>
+          &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+          <% if ( in_use.has_key?(o.id) ) %>
+            <%= check_box_tag "object_groups[#{o.id}]", 1, true %> <%= o.name %><br />
+          <% else %>
+            <%= check_box_tag "object_groups[#{o.id}]" %> <%= o.name %><br />
+          <% end %>
+        <% end %>
+      <% else %>
+        <% @configuration.shell_command_object_groups.each do |o| %>
+          &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+          <% if ( in_use.has_key?(o.id) ) %>
+            <%= check_box_tag "object_groups[#{o.id}]", 1, true %> <%= o.name %><br />
+          <% else %>
+            <%= check_box_tag "object_groups[#{o.id}]" %> <%= o.name %><br />
+          <% end %>
+        <% end %>
+      <% end %>
+      <br /><br />
+      <%= submit_tag "Save" %>
+      <input type=button value="Cancel" onclick="window.location.href='<%= edit_author_avpair_entry_url(@author_avpair_entry) %>'" />
+<% end %>

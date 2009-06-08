@@ -31,6 +31,9 @@ class AuthorAvpair < ActiveRecord::Base
                 entry.avpairs.each {|x| avpairs.push(x.avpair)}
                 attrs[:avpairs] = avpairs
             end
+
+            attrs[:network_av] = entry.network_av.configuration_hash if (entry.network_av)
+            attrs[:shell_command_av] = entry.shell_command_av.configuration_hash if (entry.shell_command_av)
             config.push(attrs)
         end
         return(config)

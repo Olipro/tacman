@@ -3,6 +3,55 @@ class AuthorAvpairEntriesController < ApplicationController
     before_filter :authorize
     before_filter :force_pw_change
 
+    def create_dynamic_avpair
+        @dynamic_avpair = @author_avpair_entry.dynamic_avpairs.build(params[:dynamic_avpair])
+        object_groups = params[:object_groups]
+
+        respond_to do |format|
+            @nav = 'dynamic_avpair_nav'
+            if (@local_manager.slave?)
+                @dynamic_avpair.errors.add_to_base("This action is prohibited on slave systems.")
+                format.html {
+                    if (@dynamic_avpair.obj_type == 'network_av')
+                        render :action => "new_network_av"
+                    else
+                        render :action => "new_shell_command_av"
+                    end
+                }
+                format.xml  { render :xml => @dynamic_avpair.errors, :status => :not_acceptable }
+            else
+                begin
+                    DynamicAvpair.transaction do
+                        @dynamic_avpair.save!
+                        @dynamic_avpair.errors.add_to_base("no values have been specified")
+                        object_groups.keys.each do |x|
+                            if (@dynamic_avpair.obj_type == 'network_av')
+                                @dynamic_avpair.dynamic_avpair_values.create(:network_object_group_id => x)
+                            else
+                                @dynamic_avpair.dynamic_avpair_values.create(:shell_command_object_group_id => x)
+                            end
+                        end
+                    end
+                rescue
+                    format.html {
+                        if (@dynamic_avpair.obj_type == 'network_av')
+                            @title = 'network-av'
+                            render :template => 'author_avpair_entries/new_dynamic_avpair'
+                        else
+                            @title = 'shell-command-av'
+                            render :template => 'author_avpair_entries/new_dynamic_avpair'
+                        end
+                    }
+                    format.xml  { render :xml => @dynamic_avpair.errors, :status => :unprocessable_entity }
+                end
+
+                @local_manager.log(:username => @session_user.username, :configuration_id => @author_avpair.configuration_id, :author_avpair_id => @author_avpair.id, :message => "Defined #{@dynamic_avpair.obj_type} from entry #{@author_avpair_entry.sequence} of Author AVPair #{@author_avpair.name} within configuration #{@configuration.name}.")
+                format.html { redirect_to edit_author_avpair_entry_url(@author_avpair_entry) }
+                format.xml  { render :xml => @dynamic_avpair, :status => :created, :location => @dynamic_avpair }
+            end
+        end
+    end
+
     def destroy
         respond_to do |format|
             @nav = 'author_avpairs/show_nav'
@@ -24,6 +73,30 @@ class AuthorAvpairEntriesController < ApplicationController
     def edit
         respond_to do |format|
             format.html {@nav = 'author_avpairs/show_nav'}
+        end
+    end
+
+    def new_network_av
+        @author_avpair_entry = AuthorAvpairEntry.find(params[:id])
+        @dynamic_avpair = @author_avpair_entry.dynamic_avpairs.build(:obj_type => 'network_av')
+        respond_to do |format|
+            format.html {
+                @nav = 'dynamic_avpair_nav'
+                @title = "network-av"
+                render :template => 'author_avpair_entries/new_dynamic_avpair'
+            }
+        end
+    end
+
+    def new_shell_command_av
+        @author_avpair_entry = AuthorAvpairEntry.find(params[:id])
+        @dynamic_avpair = @author_avpair_entry.dynamic_avpairs.build(:obj_type => 'shell_command_av')
+        respond_to do |format|
+            format.html {
+                @nav = 'dynamic_avpair_nav'
+                @title = "shell-command-av"
+                render :template => 'author_avpair_entries/new_dynamic_avpair'
+            }
         end
     end
 

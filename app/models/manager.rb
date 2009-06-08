@@ -235,6 +235,8 @@ class Manager < ActiveRecord::Base
         xml << AuthorAvpair.find(:all).to_xml(:indent => 0, :skip_instruct => true)
         xml << AuthorAvpairEntry.find(:all).to_xml(:indent => 0, :skip_instruct => true)
         xml << Avpair.find(:all).to_xml(:indent => 0, :skip_instruct => true, :except => [:attr, :val], :methods => :avpair)
+        xml << DynamicAvpair.find(:all).to_xml(:indent => 0, :skip_instruct => true)
+        xml << DynamicAvpairValue.find(:all).to_xml(:indent => 0, :skip_instruct => true)
         xml << CommandAuthorizationWhitelistEntry.find(:all).to_xml(:indent => 0, :skip_instruct => true)
         xml << UserGroup.find(:all).to_xml(:indent => 0, :skip_instruct => true)
         xml << ConfiguredUser.find(:all).to_xml(:indent => 0, :skip_instruct => true)

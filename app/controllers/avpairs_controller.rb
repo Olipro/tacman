@@ -21,6 +21,30 @@ class AvpairsController < ApplicationController
         end
     end
 
+    def edit
+        respond_to do |format|
+            format.html {@nav = 'author_avpair_entries/dynamic_avpair_nav'}
+        end
+    end
+
+    def update
+        respond_to do |format|
+            @nav = 'author_avpair_entries/dynamic_avpair_nav'
+            if (@local_manager.slave?)
+                @avpair.errors.add_to_base("This action is prohibited on slave systems.")
+                format.html { render :action => "edit" }
+                format.xml  { render :xml => @avpair.errors, :status => :not_acceptable }
+            elsif @avpair.update_attributes(params[:avpair])
+                @local_manager.log(:username => @session_user.username, :configuration_id => @author_avpair.configuration_id, :author_avpair_id => @author_avpair.id, :message => "Updated AVPair for entry #{@author_avpair_entry.sequence} of #{@author_avpair.name} within configuration #{@configuration.name}.")
+                format.html { redirect_to edit_author_avpair_entry_url(@author_avpair_entry) }
+                format.xml  { head :ok }
+            else
+                format.html { render :action => "edit" }
+                format.xml  { render :xml => @avpair.errors, :status => :unprocessable_entity }
+            end
+        end
+    end
+
 private
 
     def authorize

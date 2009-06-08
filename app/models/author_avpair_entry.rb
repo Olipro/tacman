@@ -4,6 +4,9 @@ class AuthorAvpairEntry < ActiveRecord::Base
     belongs_to :acl
     belongs_to :author_avpair
     has_many :avpairs, :dependent => :destroy, :order => :id
+    has_many :dynamic_avpairs, :dependent => :destroy
+    has_one :network_av, :class_name => 'DynamicAvpair', :conditions => "obj_type = 'network_av'"
+    has_one :shell_command_av, :class_name => 'DynamicAvpair', :conditions => "obj_type = 'shell_command_av'"
 
     validates_presence_of :author_avpair_id
     validates_presence_of :service

@@ -10,48 +10,191 @@ function addAVPair() {
 }
 </script>
 
+<% net_av = @author_avpair_entry.network_av %>
+<% sc_av = @author_avpair_entry.shell_command_av %>
 
 
 <b style="font-size: 16px;">author-avpair-list '<%=h @author_avpair.name %>' <%=h @author_avpair_entry.sequence %></b><br /><br />
 
 <%= error_messages_for :author_avpair_entry %>
 
-<% in_use = {}
-   @author_avpair_entry.avpairs.each {|x| in_use[x.attr] = x}
-%>
+
 <b><u>Update Settings</u></b><br /><br />
 <% form_for(:author_avpair_entry, :url => author_avpair_entry_url(@author_avpair_entry), :html => {:method => :put} )  do |f| %>
       <%= f.hidden_field :author_avpair_id, :value => @author_avpair.id %>
 <div id="AvDiv">
-      <div>seq <%= f.text_field :sequence,:size => 2 %></div>
-      <div>match access-list <%= f.select :acl_id, @author_avpair.configuration.acls.collect {|p| [ p.name, p.id ] }, { :include_blank => true } %></div>
-      <div>set service= <%= f.text_field :service, :value => @author_avpair_entry.service, :size => 20 %></div>
+<div>seq <%= f.text_field :sequence,:size => 2 %></div>
+  <div>match access-list <%= f.select :acl_id, @author_avpair.configuration.acls.collect {|p| [ p.name, p.id ] }, { :include_blank => true } %></div>
+  <div>set service= <%= f.text_field :service, :value => @author_avpair_entry.service, :size => 20 %></div>
 
-  <% if (!in_use.has_key?('autocmd')) %><div>set autocmd=<%= text_field_tag 'avpairs[autocmd]',nil, :size => 15 %></div><% end %>
-  <% if (!in_use.has_key?('callback-line')) %><div>set callback-line=<%= text_field_tag 'avpairs[callback-line]',nil, :size => 10 %></div><% end %>
-  <% if (!in_use.has_key?('callback-rotary')) %><div>set callback-rotary=<%= text_field_tag 'avpairs[callback-rotary]',nil, :size => 10 %></div><% end %>
-  <% if (!in_use.has_key?('idletime')) %><div>set idletime=<%= text_field_tag 'avpairs[idletime]',nil, :size => 3 %></div><% end %>
-  <% if (!in_use.has_key?('nocallback-verify')) %><div>set nocallback-verify <%= check_box_tag 'avpairs[nocallback-verify]', true %></div><% end %>
-  <% if (!in_use.has_key?('noescape')) %><div>set noescape <%= check_box_tag 'avpairs[noescape]', true %></div><% end %>
-  <% if (!in_use.has_key?('nohangup')) %><div>set nohangup <%= check_box_tag 'avpairs[nohangup]', true %></div><% end %>
-  <% if (!in_use.has_key?('priv_lvl')) %><div>set priv_lvl=<%= select_tag 'avpairs[priv_lvl]', options_for_select([''].concat( (0..15). collect {|n| [n,n] }) ) %></div><% end %>
-  <% if (!in_use.has_key?('timeout')) %><div>set timeout=<%= text_field_tag 'avpairs[timeout]',nil, :size => 3 %></div><% end %>
+  <hr /><br />
+
+  <% @author_avpair_entry.avpairs.each do |avpair| %>
+    <%= link_to(image_tag('delete_button.png', :border => 'none'), avpair_url(avpair), :method => :delete) %>
+    <%= link_to(image_tag('edit_button.png', :border => 'none'), edit_avpair_url(avpair)) %>
+    set <%=h avpair.avpair %> <br />
+  <% end %>
+
+  <% if (net_av) %>
+    <%     str = "define network-av \"#{net_av.attr}\" delimiter \"#{net_av.delimiter}\" object-groups "; %>
+    <%     net_av.dynamic_avpair_values.each {|v| str << v.network_object_group.name + ' '} %>
+    <div>
+      <%= link_to(image_tag('delete_button.png', :border => 'none'), dynamic_avpair_url(net_av), :method => :delete) %>
+      <%= link_to(image_tag('edit_button.png', :border => 'none'), edit_dynamic_avpair_url(net_av)) %>
+      <%= str %>
+    </div>
+  <% end %>
+
+  <% if (sc_av) %>
+    <%     str = "define shell-command-av \"#{sc_av.attr}\" delimiter \"#{sc_av.delimiter}\" object-groups "; %>
+    <%     sc_av.dynamic_avpair_values.each {|v| str << v.shell_command_object_group.name + ' '} %>
+    <div>
+      <%= link_to(image_tag('delete_button.png', :border => 'none'), dynamic_avpair_url(sc_av), :method => :delete) %>
+      <%= link_to(image_tag('edit_button.png', :border => 'none'), edit_dynamic_avpair_url(sc_av)) %>
+      <%= str %>
+    </div>
+  <% end %>
+
+  <br />
+  <div id='AvDiv0'>set <%= text_field_tag "avpairs[custom0]", nil, :size => 50 %> <i>(eg. timeout=15)</i></div>
 </div>
 
 
-  <br />
-      <input type=button value="Custom AVPair" onclick="javascript:addAVPair()" />
-      &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-      <%= submit_tag "Save" %>
-      <input type=button value="Cancel" onclick="window.location.href='<%= author_avpair_url(@author_avpair) %>'" />
+
+  <a href="#" style="font-size:10px;" onclick="javascript:addAVPair()">add another</a> &nbsp&nbsp
+  <% if (!net_av) %><%= link_to "define network-av", new_network_av_author_avpair_entry_url(@author_avpair_entry), :style => "font-size:10px;" %>&nbsp&nbsp<% end %>
+  <% if (!sc_av) %><%= link_to "define shell-command-av", new_shell_command_av_author_avpair_entry_url(@author_avpair_entry), :style => "font-size:10px;" %><% end %>
+  <br /><br />
+  <%= submit_tag "Save" %>
+  <input type=button value="Finished" onclick="window.location.href='<%= author_avpair_url(@author_avpair) %>'" />
 <% end %>
 
+<br /><br /><br />
 
-<hr /><br />
-<b><u>Delete AVPairs</u></b><br /><br />
-<% @author_avpair_entry.avpairs.each do |avpair| %>
-  <%= link_to(image_tag('delete_button.png', :border => 'none'), avpair_url(avpair), :method => :delete) %> set <%=h avpair.avpair %> <br />
-<% end %>
- <br />
- <input type=button value="Finished" onclick="window.location.href='<%= author_avpair_url(@author_avpair) %>'" />
-<br /><br />
+<u>AVPair definitions (per rfc)</u>
+<pre>
+ For all boolean attributes, valid values are "true" or "false". A
+
+ value of NULL means an attribute with a zero length string for its value
+ i.e. cmd=NULL is actually transmitted as the string of 4 characters
+ "cmd=".
+
+ The attribute and the value are in a single
+ ascii string and are separated by either a "=" (0X3D) or a "*"
+ (0X2A). The equals sign indicates a mandatory argument. The asterisk
+ indicates an optional one.
+
+ Optional arguments are ones that may be disregarded by either client
+ or daemon. Mandatory arguments require that the receiving side under-
+ stands the attribute and will act on it. If the client receives a
+ mandatory argument that it cannot oblige or does not understand, it
+ MUST consider the authorization to have failed. It is legal to send
+ an attribute-value pair with a NULL (zero length) value.
+
+
+ cmd
+
+    a shell (exec) command. This indicates the command name for a shell
+    command that is to be run. This attribute MUST be specified if ser-
+    vice equals "shell". A NULL value indicates that the shell itself is
+    being referred to.
+
+ cmd-arg
+
+    an argument to a shell (exec) command. This indicates an argument for
+    the shell command that is to be run. Multiple cmd-arg attributes may
+    be specified, and they are order dependent.
+
+ acl
+
+    ASCII number representing a connection access list. Used only when
+    service=shell and cmd=NULL
+
+ inacl
+
+    ASCII identifier for an interface input access list.
+
+ outacl
+
+    ASCII identifier for an interface output access list.
+
+ zonelist
+
+    A numeric zonelist value. (Applicable to AppleTalk only).
+
+ addr
+
+    a network address
+
+ addr-pool
+
+    The identifier of an address pool from which the NAS should assign an
+    address.
+
+ routing
+
+    A boolean. Specifies whether routing information is to be propagated
+    to, and accepted from this interface.
+
+ route
+
+    Indicates a route that is to be applied to this interface. Values
+    MUST be of the form "<dst_address> <mask> [<routing_addr>]". If a
+
+ timeout
+
+    an absolute timer for the connection (in minutes). A value of zero
+    indicates no timeout.
+
+ idletime
+
+    an idle-timeout for the connection (in minutes). A value of zero
+    indicates no timeout.
+
+ autocmd
+
+    an auto-command to run. Used only when service=shell and cmd=NULL
+
+ noescape
+
+    Boolean. Prevents user from using an escape character. Used only when
+    service=shell and cmd=NULL
+
+ nohangup
+
+    Boolean. Do no disconnect after an automatic command. Used only when
+    service=shell and cmd=NULL
+
+ priv_lvl
+
+    privilege level to be assigned.
+
+ remote_user
+
+    remote userid (authen_method must have the value
+    TAC_PLUS_AUTHEN_METH_RCMD)
+
+ remote_host
+
+    remote host (authen_method must have the value
+    TAC_PLUS_AUTHEN_METH_RCMD)
+
+ callback-dialstring
+
+    Indicates that callback should be done. Value is NULL, or a dial-
+    string. A NULL value indicates that the service MAY choose to get the
+    dialstring through other means.
+
+ callback-line
+
+    The line number to use for a callback.
+
+ callback-rotary
+
+    The rotary number to use for a callback.
+
+ nocallback-verify
+
+    Do not require authentication after callback.
+
+</pre>

@@ -1,4 +1,17 @@
-<% 
+    <script language="javascript" type="text/javascript">
+        function toggle_td(){
+            var c = new Array();
+            c = document.getElementsByTagName('input');
+            val = document.getElementById('toggle_all');
+            for (var i = 0; i < c.length; i++){
+                if (c[i].type == 'checkbox'){
+                    c[i].checked = val.checked;
+                }
+            }
+        }
+    </script>
+
+<%
     managers_by_name = {}
     td_by_manager = {}
     @managers.each {|m| td_by_manager[m.id] = []; managers_by_name[m.name] = m}
@@ -13,18 +26,17 @@
         end
     end
 %>
-        <input type="button" value="Check All" onclick="toggle_check(true);" />
-        <input type="button" value="Uncheck All" onclick="toggle_check(false);" />
-        &nbsp&nbsp&nbsp
+
         <%= select_tag :command, '<option value="read">view status</option><option>start</option><option>stop</option><option>reload</option><option>restart</option>' %>
         <input type="submit" value="Go" />
         <br /><br /><br />
 
+        <input type="checkbox" id="toggle_all" onclick="toggle_td();" /> <br />
         <% for m_name in managers_by_name.keys.sort %>
         <% manager = managers_by_name[m_name] %>
         <% next if (td_by_manager[manager.id].length == 0) %>
         <b>
-          <%= manager.name %>
+          &nbsp &nbsp &nbsp &nbsp &nbsp <%= manager.name %>
           <% if (manager.errors.length > 0) %>
             <i style="color: #7B2024;"> - <%= manager.errors.full_messages.join(" ") %></i>
           <% end %>
