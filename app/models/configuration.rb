@@ -409,14 +409,6 @@ class Configuration < ActiveRecord::Base
                 if (entry.acl_id?)
                     acls[entry.acl.name] = []
                 end
-
-                if (entry.network_object_group_id?)
-                    network_object_groups[entry.network_object_group.name] = []
-                end
-
-                if (entry.shell_command_object_group_id?)
-                    shell_command_object_groups[entry.shell_command_object_group.name] = []
-                end
             end
             author_avpairs[author_avpair.name] = author_avpair.configuration_hash
         end
