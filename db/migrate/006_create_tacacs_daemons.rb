@@ -16,7 +16,7 @@ class CreateTacacsDaemons < ActiveRecord::Migration
       t.string :ip
       t.integer :port, :default => 4949
       t.integer :max_clients, :default => 30
-      t.integer :sock_timeout, :default => 100
+      t.integer :sock_timeout, :default => 30
 
       t.timestamps
     end
