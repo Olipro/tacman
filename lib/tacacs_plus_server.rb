@@ -1,7 +1,7 @@
 require 'getoptlong'
 require 'rubygems'
 require 'tacacs_plus'
-gem 'tacacs_plus', '= 1.0.0'
+gem 'tacacs_plus', '= 1.1.0'
 
 
 def cleanup_on_stop(pid_file,conf_file)

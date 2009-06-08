@@ -32,6 +32,7 @@
         <br /><br /><br />
 
         <input type="checkbox" id="toggle_all" onclick="toggle_td();" /> <br />
+        <hr />
         <% for m_name in managers_by_name.keys.sort %>
         <% manager = managers_by_name[m_name] %>
         <% next if (td_by_manager[manager.id].length == 0) %>
