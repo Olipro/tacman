@@ -77,7 +77,7 @@ def reload_daemon(pid_file)
 end
 
 
-def start_daemon(conf_file, dump_file, error_log, log_file, pid_file)
+def start_daemon(conf_file, dump_file, error_log, log_file, pid_file, stats_file)
     # initialize server
     begin
         config = process_config(conf_file, dump_file, log_file)
@@ -141,6 +141,17 @@ def start_daemon(conf_file, dump_file, error_log, log_file, pid_file)
                 server.restart_logger
             rescue Exception => error
                 STDERR.puts("#{Time.now.strftime("%Y-%m-%d %H:%M:%S %Z")} - Failed to reload TACACS+ server logger. #{error}")
+            end
+        end
+
+        trap("ALRM") do
+            # dump connection stats
+            begin
+                f = File.open(stats_file, 'a')
+                f.puts("#{Time.now.to_i}:#{server.client_connection_count!}")
+                f.close
+            rescue Exception => error
+                STDERR.puts("#{Time.now.strftime("%Y-%m-%d %H:%M:%S %Z")} - Failed to write stats_file. #{error}")
             end
         end
 
@@ -215,6 +226,7 @@ if (ARGV.length == 0)
     puts "--reload-logger - reload the logger."
     puts "--restart - restart the server with a new pid."
     puts "--start - start the server."
+    puts "--stats_file - the file into which client connection count information is dumped. format of file is 'time:count'"
     puts "--stop - stop the server."
     puts "--write - write the currently running configuration.\n\n"
     puts "Running with no start/stop directive will test the configuration file.\n\n"
@@ -231,6 +243,7 @@ opts = GetoptLong.new([ '--conf_file', GetoptLong::REQUIRED_ARGUMENT ],
                       [ '--reload-logger', GetoptLong::NO_ARGUMENT ],
                       [ '--restart', GetoptLong::NO_ARGUMENT ],
                       [ '--start', GetoptLong::NO_ARGUMENT ],
+                      [ '--stats_file', GetoptLong::REQUIRED_ARGUMENT ],
                       [ '--stop', GetoptLong::NO_ARGUMENT ],
                       [ '--write', GetoptLong::NO_ARGUMENT ])
 
@@ -239,6 +252,7 @@ dump_file = nil
 error_log = File.expand_path('error.log')
 log_file = File.expand_path('aaa.log')
 pid_file = File.expand_path('pid')
+stats_file = File.expand_path('stats.log')
 run_directive = nil
 begin
     opts.each do |opt, arg|
@@ -261,6 +275,8 @@ begin
                 run_directive = :restart
             when '--start'
                 run_directive = :start
+            when '--stats_file'
+                stats_file = arg
             when '--stop'
                 run_directive = :stop
             when '--write'
@@ -311,7 +327,7 @@ elsif (run_directive == :start)
     end
 
     redirect_io(error_log)
-    start_daemon(conf_file, dump_file, error_log, log_file, pid_file)
+    start_daemon(conf_file, dump_file, error_log, log_file, pid_file, stats_file)
 
 elsif (run_directive == :stop)
     redirect_io(error_log)
