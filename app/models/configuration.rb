@@ -538,12 +538,13 @@ class Configuration < ActiveRecord::Base
             if (fields[:msg_type] == 'TacacsPlus::Server' && fields.has_key?(:message) && fields.has_key?(:tacacs_daemon) )
                 message = fields[:message]
                 if (message =~ /^connections:/)
-                    count = message.split(':')[1].to_i
+                    count = message.split(':')[1]
                     connections += count
                     str = "#{Time.parse(fields[:timestamp]).to_i}:#{count}"
-                    td_rrd = self.tacacs_daemons.find_by_name(fields[:tacacs_daemon]).rrd_file
+                    td = self.tacacs_daemons.find_by_name(fields[:tacacs_daemon])
                     begin
-                        `rrdtool update #{td_rrd} #{str}`
+                        resp = `rrdtool update #{td.rrd_file} #{str}`
+                        Manager.local.log(:level => 'warn', :message => "Error updating rrdtool for #{td.name}: #{resp}") if ($?.exitstatus != 0)
                     rescue
                     end
                 end
