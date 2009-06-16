@@ -343,6 +343,11 @@ ActiveRecord::Schema.define(:version => 20081120201615) do
     t.integer  "sock_timeout",       :limit => 11, :default => 100
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "rrd_file"
+    t.string   "daily_graph"
+    t.string   "weekly_graph"
+    t.string   "monthly_graph"
+    t.string   "yearly_graph"
   end
 
   create_table "user_groups", :force => true do |t|

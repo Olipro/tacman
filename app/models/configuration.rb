@@ -453,6 +453,7 @@ class Configuration < ActiveRecord::Base
     end
 
     def import_aaa_logs(log)
+        connections = 0
         client_dns = {}
         users = {}
         login_times = {}
@@ -533,6 +534,21 @@ class Configuration < ActiveRecord::Base
                 end
             end
 
+            # update tacacs daemon rrd file
+            if (fields[:msg_type] == 'TacacsPlus::Server' && fields.has_key?(:message) && fields.has_key?(:tacacs_daemon) )
+                message = fields[:message]
+                if (message =~ /^connections:/)
+                    count = message.split(':')[1].to_i
+                    connections += count
+                    str = "#{Time.parse(fields[:timestamp]).to_i}:#{count}"
+                    td_rrd = self.tacacs_daemons.find_by_name(fields[:tacacs_daemon]).rrd_file
+                    begin
+                        `rrdtool update #{td_rrd} #{str}`
+                    rescue
+                    end
+                end
+            end
+
             # create aaa_log
             begin
                 self.aaa_logs.create!(fields) if (!user || !user.disable_aaa_log_import)
@@ -540,6 +556,15 @@ class Configuration < ActiveRecord::Base
                 self.errors.add_to_base("Error adding aaa_log /#{line}/: #{err}")
             end
 
+        end
+
+        # update configuration rrd file
+        if (connections > 0 )
+            str = "#{Time.now.to_i}:#{connections}"
+            begin
+                `rrdtool update #{self.rrd_file} #{str}`
+            rescue
+            end
         end
 
         # update user last_login
@@ -712,6 +737,7 @@ private
     def setup
         self.serial = Time.now.strftime("%Y%m%d-%H%M%S-") << self.id.to_s
         self.aaa_log_dir = File.expand_path("#{RAILS_ROOT}/log/aaa_logs/") + "/#{self.serial}/"
+
         create_on_remote_managers!
         self.save
 

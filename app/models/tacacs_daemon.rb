@@ -155,6 +155,24 @@ class TacacsDaemon < ActiveRecord::Base
         return(stat)
     end
 
+    def generate_graphs!
+        return(false) if (!self.local?)
+        five_min_ago = Time.now - 300
+        day = Date.today.to_s + " 00:00:00"
+        week = (Date.today-7).to_s + " 00:00:00"
+        month = (Date.today-30).to_s + " 00:00:00"
+        year = (Date.today-365).to_s + " 00:00:00"
+        {self.daily_graph => day, self.weekly_graph => week, self.monthly_graph => month, self.yearly_graph => year}.each_pair do |f,t|
+            if ( !File.exist?(f) || five_min_ago >= File.mtime(f) )
+                args = "graph #{f} --start #{Time.parse(t).to_i} --width 800 DEF:avg=#{self.rrd_file}:connections:AVERAGE LINE1:avg#217A2D:\"#{self.name}\""
+                begin
+                    `rrdtool #{args}`
+                rescue
+                end
+            end
+        end
+    end
+
     def migrate(manager)
         orig_manager = self.manager_id
         begin
@@ -409,6 +427,12 @@ private
                 File.delete(self.pid_file) if ( File.exists?(self.pid_file) )
                 File.delete(self.aaa_log_file) if ( File.exists?(self.aaa_log_file) )
                 File.delete(self.aaa_scratch_file) if ( File.exists?(self.aaa_scratch_file) )
+
+                File.delete(self.rrd_file) if ( File.exists?(self.rrd_file) )
+                File.delete(self.daily_graph) if ( File.exists?(self.daily_graph) )
+                File.delete(self.weekly_graph) if ( File.exists?(self.weekly_graph) )
+                File.delete(self.monthly_graph) if ( File.exists?(self.monthly_graph) )
+                File.delete(self.yearly_graph) if ( File.exists?(self.yearly_graph) )
             rescue Exception => err
                 self.errors.add_to_base("Error removing files: #{err}")
             end
@@ -534,9 +558,23 @@ private
         self.configuration_file = File.expand_path("#{RAILS_ROOT}/tmp/configurations/") + "/#{self.serial}"
         self.aaa_log_file = File.expand_path("#{RAILS_ROOT}/tmp/aaa_logs/") + "/#{self.serial}"
         self.aaa_scratch_file = File.expand_path("#{RAILS_ROOT}/tmp/aaa_logs_scratch/") + "/#{self.serial}"
+        self.rrd_file = File.expand_path("#{RAILS_ROOT}/log/rrd/tacacs_daemons") + "/#{self.serial}.rrd"
+        self.daily_graph = File.expand_path("#{RAILS_ROOT}/public/graphs/tacacs_daemons/#{self.serial}-daily.jpg")
+        self.weekly_graph = File.expand_path("#{RAILS_ROOT}/public/graphs/tacacs_daemons/#{self.serial}-weekly.jpg")
+        self.monthly_graph = File.expand_path("#{RAILS_ROOT}/public/graphs/tacacs_daemons/#{self.serial}-monthly.jpg")
+        self.yearly_graph = File.expand_path("#{RAILS_ROOT}/public/graphs/tacacs_daemons/#{self.serial}-yearly.jpg")
         create_on_remote_managers!
         self.save
         self.start if (self.local? && self.desire_start)
+
+        begin
+            args = "create #{self.rrd_file} --start #{Time.now.to_i} DS:connections:GAUGE:600:U:U " +
+                   "RRA:AVERAGE:0.5:1:600  RRA:AVERAGE:0.5:6:700  RRA:AVERAGE:0.5:24:775  RRA:AVERAGE:0.5:288:797 "
+            `rrdtool #{args}`
+        rescue Exception => err
+            self.errors.add_to_base("Error creating rrd file: #{err}")
+        end
+
     end
 
     def update_on_remote_managers!
