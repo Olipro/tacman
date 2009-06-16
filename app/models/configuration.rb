@@ -538,7 +538,7 @@ class Configuration < ActiveRecord::Base
             if (fields[:msg_type] == 'TacacsPlus::Server' && fields.has_key?(:message) && fields.has_key?(:tacacs_daemon) )
                 message = fields[:message]
                 if (message =~ /^connections:/)
-                    count = message.split(':')[1]
+                    count = message.split(':')[1].to_i
                     connections += count
                     str = "#{Time.parse(fields[:timestamp]).to_i}:#{count}"
                     td = self.tacacs_daemons.find_by_name(fields[:tacacs_daemon])
