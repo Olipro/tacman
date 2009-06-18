@@ -4,13 +4,15 @@ require 'time'
 require 'date'
 
 # get serials & pids for running tacacs daemons
-serials = Dir.glob("/var/tacman/tmp/pids/tacacs_daemon_pid_files/*")
+files = Dir.glob("/var/tacman/tmp/pids/tacacs_daemon_pid_files/*")
 pids = {}
-serials.each do |s|
+files.each do |f|
+    s = File.basename(f)
     begin
         pids[s] = File.open("/var/tacman/tmp/pids/tacacs_daemon_pid_files/#{s}").read
     rescue
     end
+puts "#{s}, #{pids[s]}"
 end
 
 # tell daemons to write their connection count data
