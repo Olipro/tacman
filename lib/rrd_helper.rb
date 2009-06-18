@@ -40,7 +40,7 @@ connections.each_pair do |s,c|
 
     # create rrd if non exist
     if ( !File.exists?(file) )
-        arg = "create #{file} --start -#{today} DS:connections:GAUGE:600:U:U " +
+        arg = "create #{file} --start #{today} DS:connections:GAUGE:600:U:U " +
               "RRA:AVERAGE:0.5:1:600 RRA:AVERAGE:0.5:6:700 RRA:AVERAGE:0.5:24:775 RRA:AVERAGE:0.5:288:797"
         `rrdtool #{arg}`
     end
@@ -50,13 +50,13 @@ connections.each_pair do |s,c|
     `rrdtool #{arg}`
 
     # generate graphs
-    arg = "graph #{graph_dir}#{s}-daily.jpg --start -#{today} DEF:connections=#{file}:connections:AVERAGE LINE1:connections#217A2D:\"Connections\""
+    arg = "graph #{graph_dir}#{s}-daily.jpg --start #{today} DEF:connections=#{file}:connections:AVERAGE LINE1:connections#217A2D:\"Connections\""
     `rrdtool #{arg}`
-    arg = "graph #{graph_dir}#{s}-weekly.jpg --start -#{week} DEF:connections=#{file}:connections:AVERAGE LINE1:connections#217A2D:\"Connections\""
+    arg = "graph #{graph_dir}#{s}-weekly.jpg --start #{week} DEF:connections=#{file}:connections:AVERAGE LINE1:connections#217A2D:\"Connections\""
     `rrdtool #{arg}`
-    arg = "graph #{graph_dir}#{s}-monthly.jpg --start -#{month} DEF:connections=#{file}:connections:AVERAGE LINE1:connections#217A2D:\"Connections\""
+    arg = "graph #{graph_dir}#{s}-monthly.jpg --start #{month} DEF:connections=#{file}:connections:AVERAGE LINE1:connections#217A2D:\"Connections\""
     `rrdtool #{arg}`
-    arg = "graph #{graph_dir}#{s}-yearly.jpg --start -#{year} DEF:connections=#{file}:connections:AVERAGE LINE1:connections#217A2D:\"Connections\""
+    arg = "graph #{graph_dir}#{s}-yearly.jpg --start #{year} DEF:connections=#{file}:connections:AVERAGE LINE1:connections#217A2D:\"Connections\""
     `rrdtool #{arg}`
 end
 
