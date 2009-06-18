@@ -496,6 +496,7 @@ exit $RETVAL
         <li> Install packages <br>
              <code>
                    yum install subversion http openssl httpd-devel mod_ssl <br />
+                   yum install rrdtool <br />
                    yum install httpd-devel mysql-server mysql-devel libxml2-devel <br />
                    yum install ruby ruby-devel ruby-libs ruby-irb ruby-rdoc ruby-tcltk subversion-ruby mysql-server mysql-devel gcc-c++ <br />
                 <br />
@@ -674,11 +675,12 @@ production:
     <br>
 
     <p>
-      <b>Set up cron to restart BackgrounDRb nightly.</b><br><br>
+      <b>Set up cron.</b><br><br>
       <code>crontab -u apache -e</code><br />
       <textarea cols="120" rows="7" readonly>
 # m h  dom mon dow   command
   4 4  *   *   *     /var/tacman/script/backgroundrb stop; /var/tacman/script/backgroundrb start -e production
+  2,7,12,17,22,27,32,37,42,47,52,57 *  *   *   *     ruby /var/tacman/lib/rrd_helper.rb
       </textarea>
 
     </p>

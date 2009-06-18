@@ -122,6 +122,13 @@ class TacacsDaemonsController < ApplicationController
         end
     end
 
+    def graphs
+        @tacacs_daemon = TacacsDaemon.find(params[:id])
+        respond_to do |format|
+            format.html {@nav = 'show_nav'}
+        end
+    end
+
     def import
         @data = params[:data]
         respond_to do |format|

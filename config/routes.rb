@@ -49,7 +49,7 @@ ActionController::Routing::Routes.draw do |map|
                 :member => {:activate => :put, :suspend => :put}
 
   map.resources :tacacs_daemons,
-                :member => {:aaa_log => :get, :changelog => :get, :error_log => :get,
+                :member => {:aaa_log => :get, :changelog => :get, :error_log => :get, :graphs => :get,
                             :clear_error_log => :put, :migrate => :get, :do_migrate => :post},
                 :collection => {:start_stop_selected => :put, :bulk_create => :get, :import => :post}
 
