@@ -148,7 +148,7 @@ def start_daemon(conf_file, dump_file, error_log, log_file, pid_file, stats_file
             # dump connection stats
             begin
                 f = File.open(stats_file, 'a')
-                f.puts("#{Time.now.to_i}:#{server.client_connection_count!}")
+                f.print("#{Time.now.to_i}:#{server.client_connection_count!}")
                 f.close
             rescue Exception => error
                 STDERR.puts("#{Time.now.strftime("%Y-%m-%d %H:%M:%S %Z")} - Failed to write stats_file. #{error}")
