@@ -147,7 +147,7 @@ def start_daemon(conf_file, dump_file, error_log, log_file, pid_file, stats_file
         trap("ALRM") do
             # dump connection stats
             begin
-                f = File.open(stats_file, 'a')
+                f = File.open(stats_file, 'w')
                 f.print("#{Time.now.to_i}:#{server.client_connection_count!}")
                 f.close
             rescue Exception => error

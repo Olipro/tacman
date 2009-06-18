@@ -12,11 +12,10 @@ files.each do |f|
         pids[s] = File.open("/var/tacman/tmp/pids/tacacs_daemon_pid_files/#{s}").read
     rescue
     end
-puts "#{s}, #{pids[s]}"
 end
 
 # tell daemons to write their connection count data
-pids.each_value { |p| Process.kill('ALRM', p) }
+pids.each_value { |p| Process.kill('ALRM', p.to_i) }
 
 # wait a moment for results
 sleep(3)
