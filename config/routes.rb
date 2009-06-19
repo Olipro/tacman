@@ -63,6 +63,7 @@ ActionController::Routing::Routes.draw do |map|
                             :command_authorization_profiles => :get, :new_command_authorization_profile => :get, :create_command_authorization_profile => :post,
                             :command_authorization_whitelist => :get, :new_command_authorization_whitelist_entry => :get,
                             :create_configured_user => :post, :new_configured_user => :get, :create_command_authorization_whitelist_entry => :post,
+                            :graphs => :get,
                             :network_object_groups => :get, :new_network_object_group => :get, :create_network_object_group => :post,
                             :shell_command_object_groups => :get, :new_shell_command_object_group => :get, :create_shell_command_object_group => :post,
                             :tacacs_daemons => :get, :tacacs_daemon_changelog => :get, :tacacs_daemon_control => :put, :tacacs_daemon_logs => :get,

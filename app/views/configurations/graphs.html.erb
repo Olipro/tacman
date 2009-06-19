@@ -1,0 +1,12 @@
+<b style="font-size: 16px;">TACACS+ Daemon Connections</b><br /><br /><br />
+
+<% @configuration.tacacs_daemons.each do |tacacs_daemon| %>
+<%= tacacs_daemon.name %><br />
+<% if (@session_user.admin?) %>
+<%=link_to "<img src = \"#{tacacs_daemon.graph_url}daily.jpg\">graphs_tacacs_daemon_url(tacacs_daemon) %><br /><br />
+<% else %>
+<img src = "<% tacacs_daemon.graph_url %>daily.jpg"><br /><br />
+<% end %>
+<% end %>
+
+
