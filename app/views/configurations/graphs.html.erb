@@ -3,7 +3,7 @@
 <% @configuration.tacacs_daemons.each do |tacacs_daemon| %>
 <%= tacacs_daemon.name %><br />
 <% if (@session_user.admin?) %>
-<%=link_to "<img src = \"#{tacacs_daemon.graph_url}daily.jpg\">" graphs_tacacs_daemon_url(tacacs_daemon) %><br /><br />
+<%=link_to "graph" graphs_tacacs_daemon_url(tacacs_daemon) %><br /><br />
 <% else %>
 <img src = "<% tacacs_daemon.graph_url %>daily.jpg"><br /><br />
 <% end %>
