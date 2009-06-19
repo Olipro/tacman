@@ -51,13 +51,17 @@ connections.each_pair do |s,c|
     `rrdtool #{arg}`
 
     # generate graphs
-    arg = "graph #{graph_dir}daily.jpg --start #{today} DEF:connections=#{file}:connections:AVERAGE LINE1:connections#217A2D:\"Connections\""
+    arg = "graph #{graph_dir}daily.jpg --start #{today} -t 24 hour -w 600" +
+          "DEF:connections=#{file}:connections:AVERAGE LINE1:connections#217A2D:\"Connections\""
     `rrdtool #{arg}`
-    arg = "graph #{graph_dir}weekly.jpg --start #{week} DEF:connections=#{file}:connections:AVERAGE LINE1:connections#217A2D:\"Connections\""
+    arg = "graph #{graph_dir}weekly.jpg --start #{week}  --tt 7 day -w 600" +
+          " DEF:connections=#{file}:connections:AVERAGE LINE1:connections#217A2D:\"Connections\""
     `rrdtool #{arg}`
-    arg = "graph #{graph_dir}monthly.jpg --start #{month} DEF:connections=#{file}:connections:AVERAGE LINE1:connections#217A2D:\"Connections\""
+    arg = "graph #{graph_dir}monthly.jpg --start #{month}  -t 30 day -w 600" +
+          " DEF:connections=#{file}:connections:AVERAGE LINE1:connections#217A2D:\"Connections\""
     `rrdtool #{arg}`
-    arg = "graph #{graph_dir}yearly.jpg --start #{year} DEF:connections=#{file}:connections:AVERAGE LINE1:connections#217A2D:\"Connections\""
+    arg = "graph #{graph_dir}yearly.jpg --start #{year}  -t 365 day -w 600" +
+          " DEF:connections=#{file}:connections:AVERAGE LINE1:connections#217A2D:\"Connections\""
     `rrdtool #{arg}`
 end
 
