@@ -158,7 +158,7 @@ class TacacsDaemon < ActiveRecord::Base
     def graph_url
         manager = self.manager
         url = "/graphs/tacacs_daemons/#{self.serial}/"
-        if (!manager.is_local)
+        if (manager)
             url = manager.base_url.sub('/managers', '') + url
         end
         return(url)
