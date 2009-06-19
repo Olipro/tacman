@@ -34,8 +34,9 @@ today = Time.parse( Date.today.to_s + " 00:00:00" ).to_i
 week =  Time.parse( (Date.today-7).to_s + " 00:00:00" ).to_i
 month =  Time.parse( (Date.today-30).to_s + " 00:00:00" ).to_i
 year =  Time.parse( (Date.today-365).to_s + " 00:00:00" ).to_i
-graph_dir = "/var/tacman/public/graphs/tacacs_daemons/"
+base_graph_dir = "/var/tacman/public/graphs/tacacs_daemons/"
 connections.each_pair do |s,c|
+    graph_dir = base_graph_dir + "#{s}/"
     file = "/var/tacman/log/rrdtool/tacacs_daemons/#{s}"
 
     # create rrd if non exist
@@ -50,13 +51,13 @@ connections.each_pair do |s,c|
     `rrdtool #{arg}`
 
     # generate graphs
-    arg = "graph #{graph_dir}#{s}-daily.jpg --start #{today} DEF:connections=#{file}:connections:AVERAGE LINE1:connections#217A2D:\"Connections\""
+    arg = "graph #{graph_dir}daily.jpg --start #{today} DEF:connections=#{file}:connections:AVERAGE LINE1:connections#217A2D:\"Connections\""
     `rrdtool #{arg}`
-    arg = "graph #{graph_dir}#{s}-weekly.jpg --start #{week} DEF:connections=#{file}:connections:AVERAGE LINE1:connections#217A2D:\"Connections\""
+    arg = "graph #{graph_dir}weekly.jpg --start #{week} DEF:connections=#{file}:connections:AVERAGE LINE1:connections#217A2D:\"Connections\""
     `rrdtool #{arg}`
-    arg = "graph #{graph_dir}#{s}-monthly.jpg --start #{month} DEF:connections=#{file}:connections:AVERAGE LINE1:connections#217A2D:\"Connections\""
+    arg = "graph #{graph_dir}monthly.jpg --start #{month} DEF:connections=#{file}:connections:AVERAGE LINE1:connections#217A2D:\"Connections\""
     `rrdtool #{arg}`
-    arg = "graph #{graph_dir}#{s}-yearly.jpg --start #{year} DEF:connections=#{file}:connections:AVERAGE LINE1:connections#217A2D:\"Connections\""
+    arg = "graph #{graph_dir}yearly.jpg --start #{year} DEF:connections=#{file}:connections:AVERAGE LINE1:connections#217A2D:\"Connections\""
     `rrdtool #{arg}`
 end
 

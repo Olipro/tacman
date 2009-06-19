@@ -1,14 +1,16 @@
-<b style="font-size: 16px;">TACACS+ Daemon <%=@tacacs_daemon.name %></b><br /><br /><br />
+<% url = @tacacs_daemon.graph_url%>
+
+<b style="font-size: 16px;">Client Connection Graphs for <%=@tacacs_daemon.name %></b><br /><br /><br />
 
 <b>Today</b><br />
-<img src = "/graphs/tacacs_daemons/<%=@tacacs_daemon.serial%>-daily.jpg"><br /><br />
+<img src = "<%=url%>daily.jpg"><br /><br />
 
 <b>7 Day</b><br />
-<img src = "/graphs/tacacs_daemons/<%=@tacacs_daemon.serial%>-weekly.jpg"><br /><br />
+<img src = "<%=url%>weekly.jpg"><br /><br />
 
 <b>30 Day</b><br />
-<img src = "/graphs/tacacs_daemons/<%=@tacacs_daemon.serial%>-monthly.jpg"><br /><br />
+<img src = "<%=url%>monthly.jpg"><br /><br />
 
 <b>365 Day</b><br />
-<img src = "/graphs/tacacs_daemons/<%=@tacacs_daemon.serial%>-yearly.jpg"><br /><br />
+<img src = "<%=url%>yearly.jpg"><br /><br />
 

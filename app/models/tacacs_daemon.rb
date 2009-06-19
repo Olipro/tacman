@@ -155,6 +155,15 @@ class TacacsDaemon < ActiveRecord::Base
         return(stat)
     end
 
+    def graph_url
+        manager = self.manager
+        url = "/graphs/tacacs_daemons/#{self.serial}/"
+        if (!manager.local?)
+            url = manager.base_url.sub('/managers', '') + url
+        end
+        return(url)
+    end
+
     def migrate(manager)
         orig_manager = self.manager_id
         begin
@@ -409,6 +418,13 @@ private
                 File.delete(self.pid_file) if ( File.exists?(self.pid_file) )
                 File.delete(self.aaa_log_file) if ( File.exists?(self.aaa_log_file) )
                 File.delete(self.aaa_scratch_file) if ( File.exists?(self.aaa_scratch_file) )
+                File.delete("#{RAILS_ROOT}/log/rrdtool/tacacs_daemon/#{self.serial}") if ( File.exists?("#{RAILS_ROOT}/log/rrdtool/tacacs_daemon/#{self.serial}") )
+                File.delete("#{RAILS_ROOT}/tmp/tacacs_daemon_stats/#{self.serial}") if ( File.exists?("#{RAILS_ROOT}/tmp/tacacs_daemon_stats/#{self.serial}") )
+                begin
+                    FileUtils.remove_entry_secure("#{RAILS_ROOT}/public/graphs/tacacs_daemons/#{self.serial}")
+                rescue Exception => err
+                    self.errors.add_to_base("Error removing graph dir: #{err}")
+                end
 
             rescue Exception => err
                 self.errors.add_to_base("Error removing files: #{err}")
@@ -536,18 +552,15 @@ private
         self.aaa_log_file = File.expand_path("#{RAILS_ROOT}/tmp/aaa_logs/") + "/#{self.serial}"
         self.aaa_scratch_file = File.expand_path("#{RAILS_ROOT}/tmp/aaa_logs_scratch/") + "/#{self.serial}"
 
+        begin
+            FileUtils.mkdir("#{RAILS_ROOT}/public/graphs/tacacs_daemons/#{self.serial}")
+        rescue Exception => err
+            self.errors.add_to_base("Error creating graph dir: #{err}")
+        end
+
         create_on_remote_managers!
         self.save
         self.start if (self.local? && self.desire_start)
-
-        begin
-            args = "create #{self.rrd_file} --start #{Time.now.to_i} DS:connections:GAUGE:600:U:U " +
-                   "RRA:AVERAGE:0.5:1:600  RRA:AVERAGE:0.5:6:700  RRA:AVERAGE:0.5:24:775  RRA:AVERAGE:0.5:288:797 "
-            `rrdtool #{args}`
-        rescue Exception => err
-            self.errors.add_to_base("Error creating rrd file: #{err}")
-        end
-
     end
 
     def update_on_remote_managers!

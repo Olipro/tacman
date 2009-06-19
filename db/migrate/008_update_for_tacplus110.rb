@@ -18,10 +18,29 @@ class UpdateForTacplus110 < ActiveRecord::Migration
       t.timestamps
     end
 
+    TacacsDaemon.find(:all).each do |t|
+        dir = "/var/tacman/public/graphs/tacacs_daemons/#{t.serial}"
+        begin
+            FileUtils.mkdir(dir)
+        rescue Exception => err
+            puts("Error creating directory #{dir}}: #{err}")
+        end
+    end
+
   end
 
   def self.down
     drop_table :dynamic_avpair_values
     drop_table :dynamic_avpairs
+
+    TacacsDaemon.find(:all).each do |t|
+        dir = "/var/tacman/public/graphs/tacacs_daemons/#{t.serial}"
+        begin
+            FileUtils.remove_entry_secure(dir)
+        rescue Exception => err
+            puts("Error deleting directory #{dir}}: #{err}")
+        end
+    end
+
   end
 end
