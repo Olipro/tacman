@@ -1,7 +1,6 @@
 #!/usr/bin/ruby
 
 require 'time'
-require 'date'
 
 # get serials & pids for running tacacs daemons
 files = Dir.glob("/var/tacman/tmp/pids/tacacs_daemon_pid_files/*")
@@ -30,10 +29,10 @@ pids.each_key do |s|
 end
 
 # update rrd
-today = Time.parse( Date.today.to_s + " 00:00:00" ).to_i
-week =  Time.parse( (Date.today-7).to_s + " 00:00:00" ).to_i
-month =  Time.parse( (Date.today-30).to_s + " 00:00:00" ).to_i
-year =  Time.parse( (Date.today-365).to_s + " 00:00:00" ).to_i
+today = ( Time.now - (60*60*24) ).to_i
+week =  ( Time.now - (60*60*24*7) ).to_s + " 00:00:00" ).to_i
+month = ( Time.now - (60*60*24*30) ).to_s + " 00:00:00" ).to_i
+year =  ( Time.now - (60*60*24*365) ).to_s + " 00:00:00" ).to_i
 base_graph_dir = "/var/tacman/public/graphs/tacacs_daemons/"
 connections.each_pair do |s,c|
     graph_dir = base_graph_dir + "#{s}/"
