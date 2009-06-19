@@ -30,9 +30,9 @@ end
 
 # update rrd
 today = ( Time.now - (60*60*24) ).to_i
-week =  ( Time.now - (60*60*24*7) ).to_s + " 00:00:00" ).to_i
-month = ( Time.now - (60*60*24*30) ).to_s + " 00:00:00" ).to_i
-year =  ( Time.now - (60*60*24*365) ).to_s + " 00:00:00" ).to_i
+week =  ( Time.now - (60*60*24*7) ).to_i
+month = ( Time.now - (60*60*24*30) ).to_i
+year =  ( Time.now - (60*60*24*365) ).to_i
 base_graph_dir = "/var/tacman/public/graphs/tacacs_daemons/"
 connections.each_pair do |s,c|
     graph_dir = base_graph_dir + "#{s}/"
