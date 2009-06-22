@@ -99,13 +99,13 @@ def start_daemon(conf_file, dump_file, error_log, log_file, pid_file, stats_file
 
         # setup signal trapping & start server
         trap("INT") do
-            server.log_client_connections!
+            server.client_connection_count!
             server.stop
             cleanup_on_stop(pid_file,conf_file)
         end
 
         trap("TERM") do
-            server.log_client_connections!
+            server.client_connection_count!
             server.stop
             cleanup_on_stop(pid_file,conf_file)
         end
@@ -114,7 +114,7 @@ def start_daemon(conf_file, dump_file, error_log, log_file, pid_file, stats_file
             # re-initialize server
             begin
                 config = process_config(conf_file, dump_file, log_file)
-                server.log_client_connections!
+                server.client_connection_count!
                 server.restart_with(config)
             rescue Exception => error
                 STDERR.puts("#{Time.now.strftime("%Y-%m-%d %H:%M:%S %Z")} - Failed to reload TACACS+ server. #{error}")
@@ -137,7 +137,7 @@ def start_daemon(conf_file, dump_file, error_log, log_file, pid_file, stats_file
         trap("USR2") do
             # re-initialize logger
             begin
-                server.log_client_connections!
+                server.client_connection_count!
                 server.restart_logger
             rescue Exception => error
                 STDERR.puts("#{Time.now.strftime("%Y-%m-%d %H:%M:%S %Z")} - Failed to reload TACACS+ server logger. #{error}")
