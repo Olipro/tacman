@@ -69,7 +69,7 @@ class SystemMessage < ActiveRecord::Base
                         User.delete_all
                         UserGroup.delete_all
                         CommandAuthorizationWhitelistEntry.delete_all
-                        DyanamicAvpairValue.delete_all
+                        DynamicAvpairValue.delete_all
                         DynamicAvpair.delete_all
                         Avpair.delete_all
                         AuthorAvpairEntry.delete_all

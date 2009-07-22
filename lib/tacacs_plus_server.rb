@@ -99,13 +99,11 @@ def start_daemon(conf_file, dump_file, error_log, log_file, pid_file, stats_file
 
         # setup signal trapping & start server
         trap("INT") do
-            server.client_connection_count!
             server.stop
             cleanup_on_stop(pid_file,conf_file)
         end
 
         trap("TERM") do
-            server.client_connection_count!
             server.stop
             cleanup_on_stop(pid_file,conf_file)
         end
@@ -114,7 +112,6 @@ def start_daemon(conf_file, dump_file, error_log, log_file, pid_file, stats_file
             # re-initialize server
             begin
                 config = process_config(conf_file, dump_file, log_file)
-                server.client_connection_count!
                 server.restart_with(config)
             rescue Exception => error
                 STDERR.puts("#{Time.now.strftime("%Y-%m-%d %H:%M:%S %Z")} - Failed to reload TACACS+ server. #{error}")
@@ -137,7 +134,6 @@ def start_daemon(conf_file, dump_file, error_log, log_file, pid_file, stats_file
         trap("USR2") do
             # re-initialize logger
             begin
-                server.client_connection_count!
                 server.restart_logger
             rescue Exception => error
                 STDERR.puts("#{Time.now.strftime("%Y-%m-%d %H:%M:%S %Z")} - Failed to reload TACACS+ server logger. #{error}")
@@ -230,6 +226,14 @@ if (ARGV.length == 0)
     puts "--stop - stop the server."
     puts "--write - write the currently running configuration.\n\n"
     puts "Running with no start/stop directive will test the configuration file.\n\n"
+    print "\n\n"
+    puts "Signaling:"
+    puts "SIGINT - shutdown"
+    puts "SIGTERM - shutdown"
+    puts "SIGHUP - reinitialize"
+    puts "SIGUSR1 - write configuration"
+    puts "SIGUSR2 - re-initialize logger"
+    puts "SIGALRM - write stats file\n\n"
     exit(0)
 end
 

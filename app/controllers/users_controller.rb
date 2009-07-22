@@ -260,7 +260,7 @@ class UsersController < ApplicationController
             else
                 @user.toggle_enable_expiry!
                 @user.toggle_enable_expiry!
-                @local_manager.log(:username => @session_user.username, :user_id=> @user.id, :message => "Extended enable password expiry to #{@user.enable_password_expired?} for user #{@user.username}.")
+                @local_manager.log(:username => @session_user.username, :user_id=> @user.id, :message => "Extended enable password expiry for user #{@user.username}.")
                 flash[:notice] = "You must publish this user before changes will take effect on TACACS+ daemons."
                 format.html { redirect_to user_url(@user) }
                 format.xml  { head :ok }
@@ -280,7 +280,7 @@ class UsersController < ApplicationController
             else
                 @user.toggle_password_expiry!
                 @user.toggle_password_expiry!
-                @local_manager.log(:username => @session_user.username, :user_id=> @user.id, :message => "Extended login password expiry to #{@user.login_password_expired?} for user #{@user.username}.")
+                @local_manager.log(:username => @session_user.username, :user_id=> @user.id, :message => "Extended login password expiry for user #{@user.username}.")
                 flash[:notice] = "You must publish this user before changes will take effect on TACACS+ daemons."
                 format.html { redirect_to user_url(@user) }
                 format.xml  { head :ok }
