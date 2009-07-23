@@ -476,6 +476,21 @@ exit $RETVAL
 </textarea>
 </p>
 
+<br /><br />
+<p>
+<b>Problem:</b> There appears to be memory leak with ruby for long running processes (such as the TACACS daemons). How can I fix this?
+
+<br /><br />
+
+<b>Solution:</b> You can't. The best thing to do is to set up a cron job to restart them from time to time.
+<br /><br />
+<code>crontab -u apache -e</code><br />
+      <textarea cols="120" rows="5" readonly>
+# m h  dom mon dow   command
+  0 0  *   *   7     /var/tacman/script/runner -e production 'TacacsDaemon.find(:all).each {|td| td.restart}'
+      </textarea>
+</p>
+
 
 
 <br /><br />
